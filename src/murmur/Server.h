@@ -118,6 +118,8 @@ public:
 	unsigned short usPort;
 	int iTimeout;
 	int iMaxBandwidth;
+	int iMaxVideoBandwidth;
+	int iMaxVideoBandwidthAggregate;
 	unsigned int iMaxUsers;
 	unsigned int iMaxUsersPerChannel;
 	unsigned int iDefaultChan;
@@ -189,6 +191,11 @@ public:
 	Mumble::Protocol::UDPPingEncoder< Mumble::Protocol::Role::Server > m_udpPingEncoder;
 	Mumble::Protocol::UDPAudioEncoder< Mumble::Protocol::Role::Server > m_udpAudioEncoder;
 	Mumble::Protocol::UDPAudioEncoder< Mumble::Protocol::Role::Server > m_tcpAudioEncoder;
+
+	/// Server-wide meter for relayed video egress (all senders, all receivers), checked against
+	/// iMaxVideoBandwidthAggregate to bound the blind relay's O(senders × receivers) amplification.
+	/// Guarded by qrwlVoiceThread like the rest of the UDP path state.
+	BandwidthRecord m_bwrVideoAggregate;
 
 	std::span< const Mumble::Protocol::byte >
 		handlePing(const Mumble::Protocol::UDPDecoder< Mumble::Protocol::Role::Server > &decoder,

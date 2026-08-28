@@ -8,6 +8,13 @@
 #include "MumbleProtocol.h"
 
 #ifdef USE_SCREEN_SHARING
+/// Hard cap on simultaneously buffered (incomplete) frames per sender. Completed frames are
+/// already cleaned up on delivery; this bounds the pathological case of a stream that never
+/// completes frames (loss, garbage, or a malicious sender).
+static constexpr std::size_t MAX_PENDING_FRAMES_PER_SENDER = 32;
+#endif
+
+#ifdef USE_SCREEN_SHARING
 /// Maps the protocol's Codec enum to the corresponding FFmpeg codec ID.
 /// To add support for a new codec: add the proto enum value in MumbleUDP.proto,
 /// then add a case here returning the appropriate AV_CODEC_ID_*.
@@ -58,7 +65,15 @@ void ScreenShareReceiver::handleVideoPacket(const Mumble::Protocol::VideoData &v
 	if (fragCount == 0 || fragIdx >= fragCount)
 		return;
 
-	PendingFrame &pf = m_fragmentBuffer[session][frameNum];
+	std::map< unsigned long long, PendingFrame > &pending = m_fragmentBuffer[session];
+
+	// Bound the reassembly window before inserting — evicts the oldest pending frame first.
+	// At 30 fps and GOP 5 this still covers several seconds of worst-case out-of-order arrival.
+	while (pending.size() >= MAX_PENDING_FRAMES_PER_SENDER) {
+		pending.erase(pending.begin());
+	}
+
+	PendingFrame &pf = pending[frameNum];
 
 	// Initialize frame on first fragment
 	if (pf.fragmentCount == 0) {

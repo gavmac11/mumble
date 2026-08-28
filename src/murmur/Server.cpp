@@ -340,6 +340,8 @@ void Server::readParams() {
 	usPort                             = static_cast< unsigned short >(Meta::mp->usPort + iServerNum);
 	iTimeout                           = Meta::mp->iTimeout;
 	iMaxBandwidth                      = Meta::mp->iMaxBandwidth;
+	iMaxVideoBandwidth                 = Meta::mp->iMaxVideoBandwidth;
+	iMaxVideoBandwidthAggregate        = Meta::mp->iMaxVideoBandwidthAggregate;
 	iMaxUsers                          = Meta::mp->iMaxUsers;
 	iMaxUsersPerChannel                = Meta::mp->iMaxUsersPerChannel;
 	iMaxTextMessageLength              = Meta::mp->iMaxTextMessageLength;
@@ -411,6 +413,8 @@ void Server::readParams() {
 	m_dbWrapper.getConfigurationTo(iServerNum, "port", usPort);
 	m_dbWrapper.getConfigurationTo(iServerNum, "timeout", iTimeout);
 	m_dbWrapper.getConfigurationTo(iServerNum, "bandwidth", iMaxBandwidth);
+	m_dbWrapper.getConfigurationTo(iServerNum, "videobandwidth", iMaxVideoBandwidth);
+	m_dbWrapper.getConfigurationTo(iServerNum, "videobandwidthaggregate", iMaxVideoBandwidthAggregate);
 	m_dbWrapper.getConfigurationTo(iServerNum, "users", iMaxUsers);
 	m_dbWrapper.getConfigurationTo(iServerNum, "usersperchannel", iMaxUsersPerChannel);
 	m_dbWrapper.getConfigurationTo(iServerNum, "textmessagelength", iMaxTextMessageLength);
@@ -500,6 +504,10 @@ void Server::setLiveConf(const QString &key, const QString &value) {
 		qsPassword = !v.isNull() ? v : Meta::mp->qsPassword;
 	else if (key == "timeout")
 		iTimeout = i ? i : Meta::mp->iTimeout;
+	else if (key == "videobandwidth")
+		iMaxVideoBandwidth = i ? i : Meta::mp->iMaxVideoBandwidth;
+	else if (key == "videobandwidthaggregate")
+		iMaxVideoBandwidthAggregate = i ? i : Meta::mp->iMaxVideoBandwidthAggregate;
 	else if (key == "bandwidth") {
 		int length = i ? i : Meta::mp->iMaxBandwidth;
 		if (length != iMaxBandwidth) {
@@ -1179,6 +1187,26 @@ void Server::processVideoMsg(ServerUser *u, const Mumble::Protocol::VideoData &v
 
 	if (u->sState != ServerUser::Authenticated || !u->bScreenSharing || !u->cChannel)
 		return;
+
+	// Rate-limit video independently of voice (BandwidthRecord semantics as in processMsg:
+	// packetsize covers IP + UDP + crypt header + payload; maxpersec is bytes/s).
+	{
+		const std::size_t packetsize = 20 + 8 + 4 + videoData.payload.size();
+		if (iMaxVideoBandwidth > 0
+			&& !u->bwrVideo.addFrame(static_cast< int >(packetsize), iMaxVideoBandwidth / 8)) {
+			return;
+		}
+
+		// Aggregate guard: each receiver gets its own copy, so charge the relayed egress.
+		if (iMaxVideoBandwidthAggregate > 0) {
+			const std::size_t receivers =
+				static_cast< std::size_t >(std::max< int >(static_cast< int >(u->cChannel->qlUsers.count()) - 1, 0));
+			if (receivers > 0 && !m_bwrVideoAggregate.addFrame(
+									  static_cast< int >(packetsize * receivers), iMaxVideoBandwidthAggregate / 8)) {
+				return;
+			}
+		}
+	}
 
 	QByteArray cache;
 
