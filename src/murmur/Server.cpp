@@ -1194,7 +1194,7 @@ void Server::processVideoMsg(ServerUser *u, const Mumble::Protocol::VideoData &v
 	videoMsg.set_is_keyframe(videoData.isKeyFrame);
 
 	videoMsg.set_video_data(reinterpret_cast< const char * >(videoData.payload.data()),
-							static_cast< int >(videoData.payload.size()));
+							videoData.payload.size());
 	const std::size_t size = videoMsg.ByteSizeLong();
 
 	if (size > static_cast< std::size_t >(std::numeric_limits< int >::max())) {

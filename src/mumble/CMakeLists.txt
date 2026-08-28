@@ -963,6 +963,13 @@ if(screen-sharing)
 												${LIBAVUTIL_INCLUDE_DIRS}
 								)
 
+		# Pass pkg-config's library dirs through so prefix-installed FFmpeg links correctly
+		target_link_directories(mumble_client_object_lib PUBLIC
+												${LIBAVCODEC_LIBRARY_DIRS}
+												${LIBSWSCALE_LIBRARY_DIRS}
+												${LIBAVUTIL_LIBRARY_DIRS}
+								)
+
 		target_link_libraries(mumble_client_object_lib PUBLIC
 												${LIBAVCODEC_LIBRARIES}
 												${LIBSWSCALE_LIBRARIES}
