@@ -17,6 +17,14 @@
 #		include <X11/Xlib.h>
 #	endif
 
+// V4L2 webcam enumeration (Linux).
+#	include <fcntl.h>
+#	include <sys/ioctl.h>
+#	include <unistd.h>
+#	include <linux/videodev2.h>
+#	include <QtCore/QStringList>
+#	include <cstring>
+
 static constexpr int THUMBNAIL_WIDTH  = 160;
 static constexpr int THUMBNAIL_HEIGHT = 90;
 
@@ -88,6 +96,39 @@ static QString getX11WindowTitle(Display *display, Window window) {
 
 QList< CaptureSource > listCaptureSources() {
 	QList< CaptureSource > sources;
+
+	// Webcams — V4L2 capture-capable device nodes (skips metadata nodes like /dev/video1).
+	// A UVC camera typically exposes several nodes; only the first capture node per card is listed.
+	QStringList listedCards;
+	for (int i = 0; i < 64; ++i) {
+		const QString node = QStringLiteral("/dev/video%1").arg(i);
+		const int fd       = open(node.toUtf8().constData(), O_RDWR | O_NONBLOCK);
+		if (fd < 0)
+			continue;
+
+		v4l2_capability caps;
+		memset(&caps, 0, sizeof(caps));
+		if (ioctl(fd, VIDIOC_QUERYCAP, &caps) == 0) {
+			// device_caps is only populated when V4L2_CAP_DEVICE_CAPS is set.
+			const __u32 capsFlags =
+				(caps.capabilities & V4L2_CAP_DEVICE_CAPS) ? caps.device_caps : caps.capabilities;
+			if (!(capsFlags & V4L2_CAP_VIDEO_CAPTURE) || (capsFlags & V4L2_CAP_META_CAPTURE)) {
+				close(fd);
+				continue;
+			}
+			const QString card = QString::fromUtf8(reinterpret_cast< const char * >(caps.card));
+			if (!listedCards.contains(card)) {
+				listedCards.append(card);
+				CaptureSource s;
+				s.type        = CaptureSource::Type::Webcam;
+				s.devicePath  = node;
+				// The device node keeps multiple distinct cameras distinguishable in the picker.
+				s.displayName = QObject::tr("Camera: %1 (%2)").arg(card, node);
+				sources.append(s);
+			}
+		}
+		close(fd);
+	}
 
 	// Screens — always available.
 	const QList< QScreen * > screens = QGuiApplication::screens();

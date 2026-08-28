@@ -25,6 +25,7 @@
 static constexpr int CAPTURE_INTERVAL_MS = 66;        // ~15 fps
 static constexpr int VIDEO_BITRATE       = 1'500'000; // 1.5 Mbps
 static constexpr int VIDEO_FPS           = 15;
+static constexpr int VIDEO_FPS_WEBCAM    = 30;
 static constexpr int VIDEO_GOP_SIZE      = 5; // keyframe every ~333 ms — limits UDP error propagation
 
 ScreenCapture::ScreenCapture(QObject *parent) : QObject(parent) {
@@ -35,6 +36,12 @@ ScreenCapture::ScreenCapture(QObject *parent) : QObject(parent) {
 
 ScreenCapture::~ScreenCapture() {
 	stopCapture();
+#ifdef USE_SCREEN_SHARING
+#	if defined(Q_OS_LINUX)
+	delete m_v4l2;
+	m_v4l2 = nullptr;
+#	endif
+#endif
 }
 
 void ScreenCapture::startCapture() {
@@ -46,6 +53,36 @@ void ScreenCapture::startCapture() {
 	if (m_capturing)
 		return;
 
+#	if defined(Q_OS_LINUX)
+	if (m_source.type == CaptureSource::Type::Webcam) {
+		m_frameNumber = 0;
+
+		QPointer< ScreenCapture > self = this;
+		auto onStarted                = [self]() {
+            if (!self)
+                return;
+            self->m_capturing = true;
+		};
+		auto onError = [self](QString error) {
+			if (!self)
+				return;
+			Global::get().l->log(Log::Warning, QObject::tr("Webcam capture failed: %1").arg(error));
+			self->m_capturing = false;
+			self->destroyEncoder();
+		};
+		auto onFrame = [self](int width, int height, const uint8_t *const data[4], const int linesize[4]) {
+			if (!self || !self->m_capturing)
+				return;
+			self->encodeYuvFrame(width, height, data, linesize);
+		};
+
+		if (!m_v4l2)
+			m_v4l2 = new V4L2Capture();
+		m_v4l2->start(m_source.devicePath, std::move(onStarted), std::move(onError), std::move(onFrame));
+		return;
+	}
+#	endif
+
 	m_frameNumber = 0;
 	m_capturing   = true;
 	m_captureTimer->start();
@@ -53,6 +90,16 @@ void ScreenCapture::startCapture() {
 }
 
 void ScreenCapture::stopCapture() {
+#ifdef USE_SCREEN_SHARING
+#	if defined(Q_OS_LINUX)
+	// Always stop the camera first — it may still be starting up with m_capturing == false,
+	// and the worker thread must be joined before the encoder it uses is torn down.
+	if (m_v4l2) {
+		m_v4l2->stop();
+	}
+#	endif
+#endif
+
 	if (!m_capturing)
 		return;
 
@@ -172,6 +219,44 @@ void ScreenCapture::encodeImage(const QImage &srcImage) {
 	++m_frameNumber;
 }
 
+void ScreenCapture::encodeYuvFrame(int width, int height, const uint8_t *const data[4],
+								   const int linesize[4]) {
+	if (width <= 0 || height <= 0 || !data[0])
+		return;
+
+	// (Re-)initialise the encoder when the resolution changes.
+	if (!m_codecCtx || m_encoderWidth != width || m_encoderHeight != height) {
+		destroyEncoder();
+		if (!initEncoder(width, height, VIDEO_FPS_WEBCAM))
+			return;
+	}
+
+	m_swsCtx = sws_getCachedContext(m_swsCtx, width, height, AV_PIX_FMT_YUV420P, width, height,
+									AV_PIX_FMT_YUV420P, SWS_BILINEAR, nullptr, nullptr, nullptr);
+	if (!m_swsCtx)
+		return;
+
+	if (av_frame_make_writable(m_frame) < 0)
+		return;
+
+	// Plane copy into the encoder's frame (kept for buffer-lifecycle consistency with encodeImage).
+	sws_scale(m_swsCtx, data, linesize, 0, height, m_frame->data, m_frame->linesize);
+
+	m_frame->pts = static_cast< int64_t >(m_frameNumber);
+
+	if (avcodec_send_frame(m_codecCtx, m_frame) < 0)
+		return;
+
+	while (avcodec_receive_packet(m_codecCtx, m_packet) == 0) {
+		QByteArray encodedData(reinterpret_cast< const char * >(m_packet->data), m_packet->size);
+		const bool isKey = (m_packet->flags & AV_PKT_FLAG_KEY) != 0;
+		emit frameEncoded(encodedData, m_frameNumber, isKey);
+		av_packet_unref(m_packet);
+	}
+
+	++m_frameNumber;
+}
+
 #endif // USE_SCREEN_SHARING
 
 void ScreenCapture::captureFrame() {
@@ -190,7 +275,7 @@ void ScreenCapture::captureFrame() {
 }
 
 #ifdef USE_SCREEN_SHARING
-bool ScreenCapture::initEncoder(int width, int height) {
+bool ScreenCapture::initEncoder(int width, int height, int fps) {
 	// To use hardware-accelerated encoding (e.g. h264_videotoolbox on macOS,
 	// h264_nvenc on NVIDIA), replace "libx264" with the appropriate encoder name
 	// and add any codec-specific option calls below.
@@ -210,7 +295,7 @@ bool ScreenCapture::initEncoder(int width, int height) {
 
 	m_codecCtx->width     = width;
 	m_codecCtx->height    = height;
-	m_codecCtx->time_base = { 1, VIDEO_FPS };
+	m_codecCtx->time_base = { 1, fps };
 	m_codecCtx->pix_fmt   = AV_PIX_FMT_YUV420P;
 	m_codecCtx->bit_rate  = VIDEO_BITRATE;
 	m_codecCtx->gop_size  = VIDEO_GOP_SIZE;

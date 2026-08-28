@@ -13,6 +13,9 @@
 
 #ifdef USE_SCREEN_SHARING
 #	include "CaptureSource.h"
+#	if defined(Q_OS_LINUX)
+#		include "V4L2Capture.h"
+#	endif
 extern "C" {
 #	include <libavcodec/avcodec.h>
 #	include <libavutil/opt.h>
@@ -71,9 +74,11 @@ private slots:
 
 private:
 #ifdef USE_SCREEN_SHARING
-	bool initEncoder(int width, int height);
+	bool initEncoder(int width, int height, int fps = 15);
 	void destroyEncoder();
 	void encodeImage(const QImage &srcImage); ///< Shared encode path used by both capture modes.
+	/// Encode a planar YUV 4:2:0 frame supplied by the V4L2 webcam capture thread.
+	void encodeYuvFrame(int width, int height, const uint8_t *const data[4], const int linesize[4]);
 
 	CaptureSource m_source; ///< Defaults to EntireScreen, screenIndex=0 (primary display).
 
@@ -83,6 +88,10 @@ private:
 	SwsContext *m_swsCtx       = nullptr;
 	int m_encoderWidth         = 0;
 	int m_encoderHeight        = 0;
+
+#	if defined(Q_OS_LINUX)
+	V4L2Capture *m_v4l2 = nullptr; ///< Webcam capture; worker thread invokes encodeYuvFrame().
+#	endif
 #endif
 
 	QTimer *m_captureTimer = nullptr;

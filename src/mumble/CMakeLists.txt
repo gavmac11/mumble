@@ -956,11 +956,16 @@ if(screen-sharing)
 		pkg_check_modules(LIBAVCODEC REQUIRED libavcodec)
 		pkg_check_modules(LIBSWSCALE REQUIRED libswscale)
 		pkg_check_modules(LIBAVUTIL  REQUIRED libavutil)
+		# V4L2 webcam capture goes through FFmpeg's device layer (avdevice/avformat).
+		pkg_check_modules(LIBAVDEVICE REQUIRED libavdevice)
+		pkg_check_modules(LIBAVFORMAT REQUIRED libavformat)
 
 		target_include_directories(mumble_client_object_lib SYSTEM PUBLIC
 												${LIBAVCODEC_INCLUDE_DIRS}
 												${LIBSWSCALE_INCLUDE_DIRS}
 												${LIBAVUTIL_INCLUDE_DIRS}
+												${LIBAVDEVICE_INCLUDE_DIRS}
+												${LIBAVFORMAT_INCLUDE_DIRS}
 								)
 
 		# Pass pkg-config's library dirs through so prefix-installed FFmpeg links correctly
@@ -968,13 +973,24 @@ if(screen-sharing)
 												${LIBAVCODEC_LIBRARY_DIRS}
 												${LIBSWSCALE_LIBRARY_DIRS}
 												${LIBAVUTIL_LIBRARY_DIRS}
+												${LIBAVDEVICE_LIBRARY_DIRS}
+												${LIBAVFORMAT_LIBRARY_DIRS}
 								)
 
 		target_link_libraries(mumble_client_object_lib PUBLIC
 												${LIBAVCODEC_LIBRARIES}
 												${LIBSWSCALE_LIBRARIES}
 												${LIBAVUTIL_LIBRARIES}
+												${LIBAVDEVICE_LIBRARIES}
+												${LIBAVFORMAT_LIBRARIES}
 								)
+
+		if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+			target_sources(mumble_client_object_lib PRIVATE
+																"V4L2Capture.h"
+																"V4L2Capture_unix.cpp"
+			)
+		endif()
 
 		target_compile_definitions(mumble_client_object_lib PUBLIC "USE_SCREEN_SHARING")
 		if(APPLE)
