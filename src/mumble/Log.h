@@ -10,6 +10,7 @@
 
 #include <QSystemTrayIcon>
 #include <QtCore/QDate>
+#include <QtCore/QHash>
 #include <QtCore/QMutex>
 #include <QtCore/QVector>
 #include <QtGui/QTextCursor>
@@ -21,6 +22,8 @@
 #ifndef USE_NO_TTS
 class TextToSpeech;
 #endif
+
+class QMovie;
 
 class LogConfig : public ConfigWidget, public Ui::LogConfig {
 private:
@@ -202,9 +205,32 @@ class LogDocument : public QTextDocument {
 private:
 	Q_OBJECT
 	Q_DISABLE_COPY(LogDocument)
+
+	/// Maximum number of images animated at the same time. Once reached, the animation of the oldest
+	/// image is stopped (freezing it at its current frame).
+	static constexpr int MAX_ANIMATED_IMAGES = 16;
+
+	/// Whether animated images (currently: GIFs) in this document should be played
+	bool m_animateImages;
+	/// The movies of the currently animated images, keyed by their data-URL
+	QHash< QUrl, QMovie * > m_qmAnimatedImages;
+	/// The URLs of m_qmAnimatedImages in the order in which their animation was started (oldest first)
+	QList< QUrl > m_qlAnimatedImageOrder;
+
+	/// Stops the animation that was started first, freezing the image at its current frame
+	void stopOldestAnimation();
+	/// Creates a QMovie playing the given (animated GIF) image data under the given URL
+	/// @return The started movie or nullptr, if the data turned out not to be animated
+	QMovie *createAnimation(const QUrl &url, const QByteArray &imageData);
+
 public:
-	LogDocument(QObject *p = nullptr);
+	LogDocument(QObject *p = nullptr, bool animateImages = false);
 	QVariant loadResource(int, const QUrl &) Q_DECL_OVERRIDE;
+
+signals:
+	/// Emitted whenever an animated image advanced a frame, so that the widget displaying this
+	/// document has to be repainted
+	void animationFrameChanged();
 };
 
 class NotificationSoundBlocker {

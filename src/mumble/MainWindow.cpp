@@ -503,8 +503,12 @@ void MainWindow::setupGui() {
 	qteLog->setFrameStyle(QFrame::NoFrame);
 #endif
 
-	LogDocument *ld = new LogDocument(qteLog);
+	LogDocument *ld = new LogDocument(qteLog, true);
 	qteLog->setDocument(ld);
+	// Animated images replace their frame in the document's resource cache whenever the animation
+	// advances, so the log (its viewport, to be precise) has to be repainted to show the new frame.
+	QObject::connect(ld, &LogDocument::animationFrameChanged, qteLog,
+					 [this]() { qteLog->viewport()->update(); });
 
 	qteLog->document()->setMaximumBlockCount(Global::get().s.iMaxLogBlocks);
 	qteLog->document()->setDefaultStyleSheet(qApp->styleSheet());

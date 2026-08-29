@@ -1049,7 +1049,58 @@ LogMessage::LogMessage(Log::MsgType mt, const QString &console, const QString &t
 	: mt(mt), console(console), terse(terse), ownMessage(ownMessage), overrideTTS(overrideTTS), ignoreTTS(ignoreTTS) {
 }
 
-LogDocument::LogDocument(QObject *p) : QTextDocument(p) {
+LogDocument::LogDocument(QObject *p, bool animateImages) : QTextDocument(p), m_animateImages(animateImages) {
+}
+
+void LogDocument::stopOldestAnimation() {
+	if (m_qlAnimatedImageOrder.isEmpty()) {
+		return;
+	}
+
+	const QUrl url = m_qlAnimatedImageOrder.takeFirst();
+	QMovie *movie  = m_qmAnimatedImages.take(url);
+
+	// Stop the animation but leave the last frame cached as a static resource, so that the image
+	// keeps being displayed.
+	movie->stop();
+	movie->deleteLater();
+}
+
+QMovie *LogDocument::createAnimation(const QUrl &url, const QByteArray &imageData) {
+	QBuffer *device = new QBuffer();
+	device->setData(imageData);
+	if (!device->open(QIODevice::ReadOnly)) {
+		delete device;
+		return nullptr;
+	}
+
+	QMovie *movie = new QMovie(device, QByteArray("gif"), this);
+	// QMovie does not take ownership of its device
+	device->setParent(movie);
+
+	// QTextImageHandler fetches the image for a given resource name from the document on every paint,
+	// so replacing the cached frame and triggering a repaint is enough to advance the animation. All
+	// frames of a GIF have the same size, therefore no re-layout is needed.
+	QObject::connect(movie, &QMovie::frameChanged, this, [this, url, movie]() {
+		addResource(QTextDocument::ImageResource, url, movie->currentImage());
+		emit animationFrameChanged();
+	});
+
+	if (movie->jumpToFrame(0) && movie->frameCount() > 1) {
+		while (m_qmAnimatedImages.size() >= MAX_ANIMATED_IMAGES) {
+			stopOldestAnimation();
+		}
+
+		m_qmAnimatedImages.insert(url, movie);
+		m_qlAnimatedImageOrder.append(url);
+		movie->start();
+
+		return movie;
+	}
+
+	// Not an animated GIF after all - no point in keeping the movie around
+	movie->deleteLater();
+	return nullptr;
 }
 
 QVariant LogDocument::loadResource(int type, const QUrl &url) {
@@ -1062,6 +1113,28 @@ QVariant LogDocument::loadResource(int type, const QUrl &url) {
 
 	// Only accept data URLs, not external resources
 	if (url.isValid() && url.scheme() == QLatin1String("data")) {
+		if (m_animateImages) {
+			if (QMovie *movie = m_qmAnimatedImages.value(url)) {
+				// The image is already being animated. The document's resource cache may have been
+				// cleared in the meantime, so make sure the current frame is cached again and the
+				// animation keeps running.
+				const QImage frame = movie->currentImage();
+				addResource(type, url, frame);
+				return frame;
+			}
+
+			QByteArray imageFormat;
+			const QByteArray imageData = Log::imageDataFromDataUrl(url, imageFormat);
+			if (!imageData.isEmpty() && imageFormat == QByteArray("gif")) {
+				QMovie *movie = createAnimation(url, imageData);
+				if (movie) {
+					const QImage frame = movie->currentImage();
+					addResource(type, url, frame);
+					return frame;
+				}
+			}
+		}
+
 		return QTextDocument::loadResource(type, url);
 	}
 
