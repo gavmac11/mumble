@@ -23,7 +23,8 @@ if ($expected.Count -eq 0) {
 $extractDirectory = Join-Path $installerDirectory "ffmpeg-payload-check"
 New-Item -ItemType Directory -Force $extractDirectory | Out-Null
 
-& msiexec.exe /a $msi.FullName /qn "TARGETDIR=$extractDirectory"
+$msiexec = Join-Path $env:SystemRoot "System32/msiexec.exe"
+& $msiexec /a $msi.FullName /qn "TARGETDIR=$extractDirectory"
 if ($LASTEXITCODE -ne 0) {
 	throw "Administrative MSI extraction failed with exit code $LASTEXITCODE."
 }
