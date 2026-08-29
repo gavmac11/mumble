@@ -12,6 +12,7 @@
 #include <QtCore/QObject>
 #include <QtGui/QImage>
 
+#include <cstddef>
 #include <cstdint>
 #include <map>
 #include <vector>
@@ -51,6 +52,7 @@ private:
 	struct PendingFrame {
 		quint32 fragmentCount = 0;
 		std::vector< QByteArray > fragments;
+		std::size_t receivedBytes      = 0;
 		bool isKeyFrame               = false;
 		quint32 width                 = 0;
 		quint32 height                = 0;

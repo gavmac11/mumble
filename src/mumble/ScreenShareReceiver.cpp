@@ -7,11 +7,17 @@
 
 #include "MumbleProtocol.h"
 
+#include <utility>
+
 #ifdef USE_SCREEN_SHARING
 /// Hard cap on simultaneously buffered (incomplete) frames per sender. Completed frames are
 /// already cleaned up on delivery; this bounds the pathological case of a stream that never
 /// completes frames (loss, garbage, or a malicious sender).
 static constexpr std::size_t MAX_PENDING_FRAMES_PER_SENDER = 32;
+/// A 1.5 Mbps stream should remain far below these limits even for a large keyframe. The caps
+/// prevent hostile fragment metadata from causing unbounded allocations during reassembly.
+static constexpr quint32 MAX_FRAGMENTS_PER_FRAME     = 4096;
+static constexpr std::size_t MAX_ENCODED_FRAME_BYTES = 4 * 1024 * 1024;
 #endif
 
 #ifdef USE_SCREEN_SHARING
@@ -62,26 +68,37 @@ void ScreenShareReceiver::handleVideoPacket(const Mumble::Protocol::VideoData &v
 	const quint32 fragIdx   = videoData.fragmentIndex;
 	const quint32 fragCount = videoData.fragmentCount;
 
-	if (fragCount == 0 || fragIdx >= fragCount)
+	if (fragCount == 0 || fragCount > MAX_FRAGMENTS_PER_FRAME || fragIdx >= fragCount
+		|| videoData.payload.empty())
 		return;
 
 	std::map< unsigned long long, PendingFrame > &pending = m_fragmentBuffer[session];
 
-	// Bound the reassembly window before inserting — evicts the oldest pending frame first.
-	// At 30 fps and GOP 5 this still covers several seconds of worst-case out-of-order arrival.
-	while (pending.size() >= MAX_PENDING_FRAMES_PER_SENDER) {
-		pending.erase(pending.begin());
-	}
+	auto frameIt = pending.find(frameNum);
+	if (frameIt == pending.end()) {
+		// Bound the reassembly window only when inserting a new frame. At 15 fps this still
+		// covers more than two seconds of out-of-order arrival.
+		while (pending.size() >= MAX_PENDING_FRAMES_PER_SENDER) {
+			pending.erase(pending.begin());
+		}
 
-	PendingFrame &pf = pending[frameNum];
-
-	// Initialize frame on first fragment
-	if (pf.fragmentCount == 0) {
+		PendingFrame pf;
 		pf.fragmentCount = fragCount;
 		pf.fragments.resize(fragCount);
 		pf.width  = videoData.width;
 		pf.height = videoData.height;
 		pf.codec  = videoData.codec;
+		frameIt   = pending.emplace(frameNum, std::move(pf)).first;
+	}
+
+	PendingFrame &pf = frameIt->second;
+
+	// Every fragment for a frame must agree on its immutable metadata. In particular, this
+	// keeps fragIdx valid for the vector sized by the first fragment.
+	if (pf.fragmentCount != fragCount || pf.width != videoData.width || pf.height != videoData.height
+		|| pf.codec != videoData.codec) {
+		pending.erase(frameIt);
+		return;
 	}
 
 	// OR keyframe flag (UDP fragments may arrive out of order)
@@ -89,8 +106,15 @@ void ScreenShareReceiver::handleVideoPacket(const Mumble::Protocol::VideoData &v
 
 	// Store fragment (copy once per fragment, unavoidable unless lifetime guaranteed)
 	if (pf.fragments[fragIdx].isEmpty()) {
+		const std::size_t payloadSize = videoData.payload.size();
+		if (payloadSize > MAX_ENCODED_FRAME_BYTES - pf.receivedBytes) {
+			pending.erase(frameIt);
+			return;
+		}
+
 		pf.fragments[fragIdx] = QByteArray(reinterpret_cast< const char * >(videoData.payload.data()),
-										   static_cast< int >(videoData.payload.size()));
+										   static_cast< int >(payloadSize));
+		pf.receivedBytes += payloadSize;
 	}
 
 	// Early exit until complete
@@ -99,13 +123,8 @@ void ScreenShareReceiver::handleVideoPacket(const Mumble::Protocol::VideoData &v
 			return;
 	}
 
-	// Compute total size once
-	size_t totalSize = 0;
-	for (const QByteArray &frag : pf.fragments)
-		totalSize += static_cast< size_t >(frag.size());
-
 	QByteArray complete;
-	complete.resize(static_cast< int >(totalSize));
+	complete.resize(static_cast< int >(pf.receivedBytes));
 
 	char *dst = complete.data();
 	for (const QByteArray &frag : pf.fragments) {
