@@ -1291,6 +1291,8 @@ if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
 			"os_macx.mm"
 			"TextToSpeech_macx.mm"
 			"CoreAudio.mm"
+			"CaptureSourceLister_macx.mm"
+			"SCKitCapture_macx.mm"
 			PROPERTIES
 				SKIP_UNITY_BUILD_INCLUSION TRUE
 		)
