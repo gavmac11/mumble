@@ -9,13 +9,13 @@
 #include "MumbleProtocol.h"
 #include "MumbleUDP.pb.h"
 
-#include <QtCore/QMutex>
 #include <QtCore/QObject>
 #include <QtGui/QImage>
 
 #include <cstddef>
 #include <cstdint>
 #include <map>
+#include <mutex>
 #include <vector>
 
 #ifdef USE_SCREEN_SHARING
@@ -75,7 +75,7 @@ private:
 	/// ServerHandler thread while resetSender() (and the destructor) tear state
 	/// down from the GUI thread. Without it, a sender stopping their share frees
 	/// a decoder that is still in use and corrupts the heap.
-	QMutex m_mutex;
+	std::mutex m_mutex;
 
 	struct DecoderState {
 		AVCodecContext *codecCtx      = nullptr;
