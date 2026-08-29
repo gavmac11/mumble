@@ -18,6 +18,17 @@ There are two modules in Mumble; the client (mumble) and the server (mumble-serv
 The client works on Windows, Linux, FreeBSD, OpenBSD, and macOS,
 while the server should work on anything Qt can be installed on.
 
+## Preview builds
+
+Installable previews of the latest successfully built `master` commit are available for
+[Windows x64](https://github.com/gavmac11/mumble/releases/download/master-preview/Mumble-Master-Preview-Windows-x64.exe)
+and [macOS ARM64](https://github.com/gavmac11/mumble/releases/download/master-preview/Mumble-Master-Preview-macOS-arm64.zip).
+Checksums and the exact source commit are published in the
+[rolling master preview release](https://github.com/gavmac11/mumble/releases/tag/master-preview).
+
+These builds are intended for testing and may be unstable. The Windows installer is unsigned, and the macOS application is ad-hoc signed and not
+notarized, so the operating system may display a security warning.
+
 The documentation of the project can be found on [the website](https://www.mumble.info/documentation/).
 
 
