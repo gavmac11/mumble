@@ -23,7 +23,21 @@ std::filesystem::path getRuntimeDirectory() {
 	if (xdgRuntimeDir != nullptr && xdgRuntimeDir[0] != '\0') {
 		runtimeDir = std::filesystem::path(xdgRuntimeDir) / "info.mumble.Mumble";
 	} else {
+#	ifdef __APPLE__
+		const std::size_t pathLength = confstr(_CS_DARWIN_USER_TEMP_DIR, nullptr, 0);
+		if (pathLength > 0) {
+			std::string path(pathLength, '\0');
+			if (confstr(_CS_DARWIN_USER_TEMP_DIR, path.data(), path.size()) > 0) {
+				runtimeDir = std::filesystem::path(path.c_str()) / "info.mumble.Mumble";
+			}
+		}
+
+		if (runtimeDir.empty()) {
+			runtimeDir = std::filesystem::temp_directory_path() / ("info.mumble.Mumble-" + std::to_string(getuid()));
+		}
+#	else
 		runtimeDir = std::filesystem::path("/run/user") / std::to_string(getuid()) / "info.mumble.Mumble";
+#	endif
 	}
 
 	std::filesystem::create_directories(runtimeDir);

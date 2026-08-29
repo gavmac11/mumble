@@ -13,6 +13,7 @@
 namespace Mumble {
 
 /// The directory Mumble places its IPC endpoints in. It is created if it doesn't exist yet.
+/// Uses XDG_RUNTIME_DIR when set, the per-user temporary directory on macOS, and /run/user on other Unix systems.
 /// Since on Windows named pipes aren't part of the fs, it returns an empty path.
 /// @throws std::filesystem::filesystem_error if the directory doesn't exist and can't be created.
 std::filesystem::path getRuntimeDirectory();
