@@ -335,13 +335,16 @@ void ServerHandler::handleVideoPacket(const Mumble::Protocol::VideoData &videoDa
 }
 
 void ServerHandler::sendMessage(const unsigned char *data, int len, bool force) {
-	static std::vector< unsigned char > crypto;
-	crypto.resize(static_cast< std::size_t >(len + 4));
-
 	QMutexLocker qml(&qmUdp);
 
 	if (!qusUdp)
 		return;
+
+	// Note that this buffer may only be accessed while holding qmUdp: this function is called
+	// from several threads (e.g. the audio input thread and the GUI thread for video frames),
+	// so resizing it outside of the lock is a data race that corrupts the heap.
+	static std::vector< unsigned char > crypto;
+	crypto.resize(static_cast< std::size_t >(len + 4));
 
 	ConnectionPtr connection(cConnection);
 	if (!connection || !connection->csCrypt->isValid())

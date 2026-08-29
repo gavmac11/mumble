@@ -15,6 +15,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <map>
+#include <mutex>
 #include <vector>
 
 #ifdef USE_SCREEN_SHARING
@@ -69,6 +70,12 @@ private:
 
 	/// sender_session -> frame_number -> pending fragment data
 	std::map< quint32, std::map< quint64, PendingFrame > > m_fragmentBuffer;
+
+	/// Guards m_fragmentBuffer and m_decoders: handleVideoPacket() runs on the
+	/// ServerHandler thread while resetSender() (and the destructor) tear state
+	/// down from the GUI thread. Without it, a sender stopping their share frees
+	/// a decoder that is still in use and corrupts the heap.
+	std::mutex m_mutex;
 
 	struct DecoderState {
 		AVCodecContext *codecCtx      = nullptr;
