@@ -518,6 +518,8 @@ void Server::msgAuthenticate(ServerUser *uSource, MumbleProto::Authenticate &msg
 			mpus.set_priority_speaker(true);
 		if (u->bRecording)
 			mpus.set_recording(true);
+		if (u->bScreenSharing)
+			mpus.set_screen_sharing(true);
 		if (u->bSelfDeaf)
 			mpus.set_self_deaf(true);
 		else if (u->bSelfMute)
