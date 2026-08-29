@@ -39,6 +39,14 @@ The reason for that is that we auto-generate these style files using [Sass](http
 Thus in order to make changes to the QSS files, you have to edit the Sass sources and then regenerate the sources using an appropriate Sass compiler.
 We recommend the usage of the [Sass command line](https://sass-lang.com/install) tool.
 
+Since the sources of the themes shipped with Mumble only use `@import` and `$variable` interpolation, the
+`generate-qss.py` script in this directory can be used instead of installing the Sass toolchain:
+
+```bash
+python3 themes/generate-qss.py                  # regenerate the QSS of every theme
+python3 themes/generate-qss.py themes/Nord/     # regenerate the QSS of a single theme
+```
+
 For legacy reasons it is also possible to use the [Prepros](https://prepros.io/) tool. Its support for Mumble themes is no longer actively maintained
 and might get removed in the future though.
 

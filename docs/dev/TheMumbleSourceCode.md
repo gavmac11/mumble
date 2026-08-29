@@ -82,8 +82,9 @@ Your main focus should lie on the `src` directory as this is where the bulk of M
 that are used by the Mumble client as well as by the server that live in `src/mumble` and `src/murmur` respectively. The remaining directories within
 `src` should be somewhat self-explanatory.
 
-The `themes` directory contains all built-in themes that are currently shipped with Mumble. At this point there is only one theme available: the
-`Default` theme (note that it contains the Lite and the Dark theme variant). If you want to customize any kind of icons within Mumble, this is the
+The `themes` directory contains all built-in themes that are currently shipped with Mumble. Besides the `Default` theme (which contains the Lite and
+the Dark theme variant), a selection of additional light and dark themes is shipped (e.g. Nord, Dracula and Solarized Light). If you want to customize
+any kind of icons within Mumble, this is the
 place to check out. It contains its own documentation, so you are encouraged to have a read.
 
 
