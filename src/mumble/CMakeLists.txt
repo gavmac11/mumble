@@ -1355,6 +1355,13 @@ if(packaging AND WIN32)
 		"--vc-redist-required" "${VC_REDIST_VERSION}"
 	)
 
+	foreach(ffmpeg_runtime_library IN LISTS FFMPEG_RUNTIME_LIBRARIES)
+		get_filename_component(ffmpeg_runtime_library_name "${ffmpeg_runtime_library}" NAME)
+		list(APPEND installer_vars
+			"--ffmpeg-runtime-library" "${ffmpeg_runtime_library_name}"
+		)
+	endforeach()
+
 	if(overlay)
 		list(APPEND installer_vars
 			"--overlay"

@@ -70,6 +70,10 @@ jobs:
           MUMBLE_BUILD_NUMBER: ${{ github.run_number }}
         run: .github/workflows/build.sh "windows-2025-vs2026" "static" "x86_64"
 
+      - name: Verify FFmpeg installer payload
+        shell: pwsh
+        run: .github/workflows/verify_windows_ffmpeg_installer.ps1 -Workspace "${{ github.workspace }}"
+
       - name: Restore native Windows tool paths
         shell: pwsh
         run: |
