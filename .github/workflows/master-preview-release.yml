@@ -1,0 +1,171 @@
+name: Publish master preview
+
+on:
+  workflow_run:
+    workflows:
+      - Windows video client
+      - macOS ARM client
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: master-preview-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Refresh rolling preview release
+    if: >-
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'master' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PREVIEW_TAG: master-preview
+      PREVIEW_SHA: ${{ github.event.workflow_run.head_sha }}
+
+    steps:
+      - name: Find successful builds for this commit
+        id: builds
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          find_successful_run() {
+            local workflow="$1"
+            gh api --method GET \
+              "repos/${GITHUB_REPOSITORY}/actions/workflows/${workflow}/runs" \
+              -f event=push \
+              -f branch=master \
+              -f head_sha="${PREVIEW_SHA}" \
+              -F per_page=100 \
+              --jq '.workflow_runs
+                | map(select(.status == "completed" and .conclusion == "success"))
+                | first
+                | .id // empty'
+          }
+
+          windows_run_id="$(find_successful_run windows-video-release.yml)"
+          macos_run_id="$(find_successful_run macos-arm-client.yml)"
+
+          if [[ -z "${windows_run_id}" || -z "${macos_run_id}" ]]; then
+            echo "Both required workflows have not succeeded for ${PREVIEW_SHA}; skipping."
+            echo "ready=false" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          echo "ready=true" >> "${GITHUB_OUTPUT}"
+          echo "windows_run_id=${windows_run_id}" >> "${GITHUB_OUTPUT}"
+          echo "macos_run_id=${macos_run_id}" >> "${GITHUB_OUTPUT}"
+
+      - name: Download install artifacts
+        if: steps.builds.outputs.ready == 'true'
+        env:
+          WINDOWS_RUN_ID: ${{ steps.builds.outputs.windows_run_id }}
+          MACOS_RUN_ID: ${{ steps.builds.outputs.macos_run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh run download "${WINDOWS_RUN_ID}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --name Mumble-Video-Windows-x64 \
+            --dir artifacts/windows
+          gh run download "${MACOS_RUN_ID}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --name Mumble-macOS-arm64 \
+            --dir artifacts/macos-arm64
+
+      - name: Stage preview downloads
+        if: steps.builds.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+
+          windows_installer="$(find artifacts/windows -type f -name 'Mumble-Video-Windows-x64.exe' -print -quit)"
+          macos_archive="$(find artifacts/macos-arm64 -type f -name 'Mumble-macOS-arm64.zip' -print -quit)"
+
+          if [[ -z "${windows_installer}" ]]; then
+            echo "The Windows client installer was not found in the Windows artifact." >&2
+            exit 1
+          fi
+          if [[ -z "${macos_archive}" ]]; then
+            echo "The macOS ARM64 archive was not found in the macOS artifact." >&2
+            exit 1
+          fi
+
+          cp "${windows_installer}" dist/Mumble-Master-Preview-Windows-x64.exe
+          cp "${macos_archive}" dist/Mumble-Master-Preview-macOS-arm64.zip
+          (
+            cd dist
+            sha256sum \
+              Mumble-Master-Preview-Windows-x64.exe \
+              Mumble-Master-Preview-macOS-arm64.zip \
+              > SHA256SUMS.txt
+          )
+
+      - name: Refresh rolling prerelease
+        if: steps.builds.outputs.ready == 'true'
+        env:
+          WINDOWS_RUN_ID: ${{ steps.builds.outputs.windows_run_id }}
+          MACOS_RUN_ID: ${{ steps.builds.outputs.macos_run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${PREVIEW_TAG}" >/dev/null 2>&1; then
+            gh api --method PATCH \
+              "repos/${GITHUB_REPOSITORY}/git/refs/tags/${PREVIEW_TAG}" \
+              -f sha="${PREVIEW_SHA}" \
+              -F force=true \
+              >/dev/null
+          else
+            gh api --method POST \
+              "repos/${GITHUB_REPOSITORY}/git/refs" \
+              -f ref="refs/tags/${PREVIEW_TAG}" \
+              -f sha="${PREVIEW_SHA}" \
+              >/dev/null
+          fi
+
+          short_sha="${PREVIEW_SHA:0:8}"
+          commit_url="https://github.com/${GITHUB_REPOSITORY}/commit/${PREVIEW_SHA}"
+          windows_url="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${WINDOWS_RUN_ID}"
+          macos_url="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${MACOS_RUN_ID}"
+
+          cat > release-notes.md <<EOF
+          Automated preview of \`master\` at [\`${short_sha}\`](${commit_url}).
+
+          - [Windows x64 installer build](${windows_url})
+          - [macOS ARM64 build](${macos_url})
+
+          These preview builds are for testing and may be unstable. The Windows installer is unsigned, so Windows SmartScreen may display a warning. The macOS application is ad-hoc signed and is not notarized.
+
+          Verify downloads with \`SHA256SUMS.txt\`.
+          EOF
+
+          if gh release view "${PREVIEW_TAG}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            gh release edit "${PREVIEW_TAG}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "Mumble master preview (${short_sha})" \
+              --notes-file release-notes.md \
+              --prerelease \
+              --latest=false
+          else
+            gh release create "${PREVIEW_TAG}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --verify-tag \
+              --title "Mumble master preview (${short_sha})" \
+              --notes-file release-notes.md \
+              --prerelease \
+              --latest=false
+          fi
+
+          gh release upload "${PREVIEW_TAG}" dist/* \
+            --repo "${GITHUB_REPOSITORY}" \
+            --clobber

@@ -3,7 +3,7 @@ name: Windows video client
 on:
   push:
     branches:
-      - fix/windows-screen-sharing
+      - master
     tags:
       - windows-video-v*
   workflow_dispatch:
