@@ -349,6 +349,7 @@ set(MUMBLE_SOURCES
 
 	"mumble.qrc"
 	"${CMAKE_SOURCE_DIR}/themes/DefaultTheme.qrc"
+	"${CMAKE_SOURCE_DIR}/themes/ExtraThemes.qrc"
 )
 
 add_library(smallft STATIC "${3RDPARTY_DIR}/smallft/smallft.cpp")
