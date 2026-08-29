@@ -54,6 +54,13 @@ bool MouseWheelEventObserver::eventFilter(QObject *obj, QEvent *event) {
 		return false;
 	}
 
+	// The cast below is only valid for actual wheel events. Casting any other event type
+	// reads memory beyond the (possibly smaller) event object - caught by ASan as a
+	// heap-buffer-overflow / use-after-free when e.g. a posted QEvent passes by.
+	if (event->type() != QEvent::Wheel) {
+		return false;
+	}
+
 	QWheelEvent *wheelEvent = static_cast< QWheelEvent * >(event);
 
 	if (!wheelEvent) {
