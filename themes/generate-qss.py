@@ -6,7 +6,7 @@
 # interpolation. Therefore the full Sass compiler is not needed and this script is
 # enough to (re-)generate the QSS files:
 #
-#   python3 themes/generate-qss.py                       # regenerate every theme
+#   python3 themes/generate-qss.py                       # regenerate additional themes
 #   python3 themes/generate-qss.py themes/Nord/source/   # regenerate a single theme
 #
 # It is intentionally kept in sync with the workflow described in themes/README.md.
@@ -20,8 +20,8 @@ IMPORT_STATEMENT     = re.compile(r"^\s*@import\s+['\"]([^'\"]+)['\"]\s*;\s*$")
 VARIABLE_REFERENCE   = re.compile(r"\$([A-Za-z0-9_-]+)")
 
 # A number as it can appear in a Sass arithmetic expression (e.g. "4px", "1.5", "-3")
-ARITHMETIC_NUMBER   = r"-?(?:\d+\.\d*|\.\d+|\d+)(?:px|pt|em|%)?"
-ARITHMETIC_TOKEN    = re.compile(rf"({ARITHMETIC_NUMBER})|([-+*/])")
+UNSIGNED_ARITHMETIC_NUMBER = r"(?:\d+\.\d*|\.\d+|\d+)(?:px|pt|em|%)?"
+ARITHMETIC_NUMBER          = rf"[+-]?{UNSIGNED_ARITHMETIC_NUMBER}"
 # Expressions like "$base-padding - 3" or "$base-padding*4+4". A variable reference is required so
 # that value lists like "1px -2px" are never mistaken for arithmetic.
 VARIABLE_EXPRESSION = re.compile(
@@ -37,22 +37,36 @@ def format_number(value: float, unit: str) -> str:
 def evaluate_arithmetic(expression: str) -> str:
     """Evaluate a Sass arithmetic expression like "4px*4+4"; returns the input unchanged if it does
     not fully consist of numbers and operators."""
-    tokens = ARITHMETIC_TOKEN.findall(expression)
-    numbers = [token for token, _ in tokens]
-    if "".join(expression.split()) == "" or not numbers:
-        return expression
-    # Validate the structure: numbers and operators have to alternate
-    consumed = "".join(part for pair in tokens for part in pair if part)
-    if consumed.replace(" ", "") != expression.replace(" ", ""):
+    tokens = []
+    position = 0
+    expect_number = True
+    while position < len(expression):
+        if expression[position].isspace():
+            position += 1
+            continue
+        if expect_number:
+            match = re.match(ARITHMETIC_NUMBER, expression[position:])
+            if not match:
+                return expression
+            tokens.append(match.group(0))
+            position += len(match.group(0))
+        else:
+            if expression[position] not in "-+*/":
+                return expression
+            tokens.append(expression[position])
+            position += 1
+        expect_number = not expect_number
+
+    if not tokens or expect_number:
         return expression
 
     def split_unit(token: str):
-        match = re.fullmatch(rf"(-?(?:\d+\.\d*|\.\d+|\d+))(px|pt|em|%)?", token)
+        match = re.fullmatch(r"([+-]?(?:\d+\.\d*|\.\d+|\d+))(px|pt|em|%)?", token)
         return float(match.group(1)), match.group(2) or ""
 
     # First pass: * and / bind tighter than + and -
-    unit = next((split_unit(token)[1] for token, is_operator in tokens if not is_operator and split_unit(token)[1]), "")
-    values = [split_unit(token)[0] if not is_operator else is_operator for token, is_operator in tokens]
+    unit = next((split_unit(token)[1] for token in tokens[::2] if split_unit(token)[1]), "")
+    values = [split_unit(token)[0] if index % 2 == 0 else token for index, token in enumerate(tokens)]
 
     for precedence in ("*/", "+-"):
         index = 1
@@ -86,13 +100,12 @@ def canonical(name: str) -> str:
 
 
 def lookup(variables: dict, name: str):
-    if name in variables:
-        return variables[name]
     return variables.get(canonical(name))
 
 
 def resolve(definition: dict) -> dict:
     """Resolve variables that reference other variables."""
+    definition = {canonical(name): value for name, value in definition.items()}
     resolved = {}
     for _ in range(len(definition) + 1):
         changed = False
@@ -147,7 +160,7 @@ def parse(source_file: Path):
             continue
         match = VARIABLE_DECLARATION.match(line)
         if match:
-            variables[match.group(1)] = match.group(2).rstrip(";").strip()
+            variables[canonical(match.group(1))] = match.group(2).rstrip(";").strip()
             continue
         if line.strip():
             body.append(line)
@@ -181,7 +194,11 @@ def theme_sources(path: Path):
     """
     if path.is_file():
         return iter([path])
-    return iter(sorted(path.glob("source/*.scss")) + sorted(path.glob("*/source/*.scss")))
+    sources = sorted(path.glob("*.scss"))
+    sources += sorted(path.glob("source/*.scss"))
+    sources += sorted(candidate for candidate in path.glob("*/source/*.scss")
+                      if candidate.parent.parent.name != "Default")
+    return iter(sources)
 
 
 def main(argv):

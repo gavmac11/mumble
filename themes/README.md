@@ -10,6 +10,9 @@ A theme consists of the following components:
 The heart of a theme is its corresponding `.qrc` file. This file contains the Icon-Mapping and also a mapping for the QSS files. It is responsible of
 bringing all required resources into the final binary and making these resources available under the name chosen in it.
 
+Palette-only built-in themes can share a `.qrc` file and omit their own icons. Missing `skin:` resources then use the existing
+fallback mappings from the `Default` theme.
+
 
 ## Editing icons
 
@@ -43,9 +46,13 @@ Since the sources of the themes shipped with Mumble only use `@import` and `$var
 `generate-qss.py` script in this directory can be used instead of installing the Sass toolchain:
 
 ```bash
-python3 themes/generate-qss.py                  # regenerate the QSS of every theme
-python3 themes/generate-qss.py themes/Nord/     # regenerate the QSS of a single theme
+python3 themes/generate-qss.py                  # regenerate all additional themes
+python3 themes/generate-qss.py themes/Nord/     # regenerate a single additional theme
 ```
+
+The no-argument form intentionally leaves the four legacy `Default` QSS assets unchanged: their Sass compiler output is not
+byte-for-byte reproducible with this lightweight generator. Pass a specific source file or directory when working on a
+custom theme.
 
 For legacy reasons it is also possible to use the [Prepros](https://prepros.io/) tool. Its support for Mumble themes is no longer actively maintained
 and might get removed in the future though.
@@ -68,4 +75,3 @@ sass Lite.scss ../Lite.qss
 
 To make sure you did not forget to regenerate the QSS for one of the variants, we recommend to simply always regenerate _all_ variants to make sure
 they are all updated as needed.
-
