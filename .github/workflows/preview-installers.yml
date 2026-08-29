@@ -1,0 +1,372 @@
+name: Preview installers
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: preview-installers-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BUILD_TYPE: Release
+  CMAKE_OPTIONS: >-
+    -Dclient=ON
+    -Dserver=OFF
+    -Dtests=OFF
+    -Dsymbols=OFF
+    -Dwarnings-as-errors=OFF
+    -Dscreen-sharing=ON
+    -Ddisplay-install-paths=ON
+    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+    -DCMAKE_C_COMPILER_LAUNCHER=ccache
+
+jobs:
+  windows:
+    name: Windows x64
+    runs-on: windows-2025-vs2026
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Set build environment
+        shell: bash
+        run: .github/workflows/set_environment_variables.sh "windows-2025-vs2026" "static" "x86_64" "${{ github.workspace }}"
+
+      - name: Restore dependency cache
+        id: dependency-cache
+        uses: actions/cache/restore@v5
+        with:
+          path: ${{ env.MUMBLE_ENVIRONMENT_DIR }}
+          key: ${{ env.MUMBLE_ENVIRONMENT_VERSION }}
+
+      - name: Restore compiler cache
+        uses: hendrikmuhs/ccache-action@v1.2.23
+        with:
+          key: preview.windows.${{ github.ref_name }}
+          save: ${{ github.event_name != 'pull_request' }}
+          append-timestamp: false
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-dependencies
+        with:
+          type: static
+          os: windows-2025-vs2026
+          arch: x86_64
+
+      - name: Build installer
+        shell: bash
+        env:
+          MUMBLE_BUILD_NUMBER: ${{ github.run_number }}
+        run: .github/workflows/build.sh "windows-2025-vs2026" "static" "x86_64"
+
+      - name: Verify FFmpeg installer payload
+        shell: pwsh
+        run: .github/workflows/verify_windows_ffmpeg_installer.ps1 -Workspace "${{ github.workspace }}"
+
+      - name: Stage client installer
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem "${{ github.workspace }}/build/installer/client" -Filter "mumble_client-*.exe" -File | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if (-not $installer) { throw "The Windows client installer was not produced." }
+          New-Item -ItemType Directory -Force "${{ github.workspace }}/dist" | Out-Null
+          $destination = "${{ github.workspace }}/dist/Mumble-Windows-x64.exe"
+          Copy-Item $installer.FullName $destination
+          $hash = (Get-FileHash $destination -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  Mumble-Windows-x64.exe" | Set-Content "${{ github.workspace }}/dist/Mumble-Windows-x64.exe.sha256" -Encoding ascii
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v7
+        with:
+          name: Mumble-Windows-x64
+          compression-level: 9
+          if-no-files-found: error
+          path: |
+            dist/Mumble-Windows-x64.exe
+            dist/Mumble-Windows-x64.exe.sha256
+
+      - name: Save dependency cache
+        if: github.event_name != 'pull_request' && steps.dependency-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: ${{ env.MUMBLE_ENVIRONMENT_DIR }}
+          key: ${{ env.MUMBLE_ENVIRONMENT_VERSION }}
+
+  macos:
+    name: macOS ARM64
+    runs-on: macos-15
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Install build and packaging tools
+        run: brew install bash dylibbundler
+
+      - name: Set build environment
+        shell: bash
+        run: .github/workflows/set_environment_variables.sh "macos-15" "static" "arm64" "${{ github.workspace }}"
+
+      - name: Restore dependency cache
+        id: dependency-cache
+        uses: actions/cache/restore@v5
+        with:
+          path: ${{ env.MUMBLE_ENVIRONMENT_DIR }}
+          key: ${{ env.MUMBLE_ENVIRONMENT_VERSION }}
+
+      - name: Restore compiler cache
+        uses: hendrikmuhs/ccache-action@v1.2.23
+        with:
+          key: preview.macos.${{ github.ref_name }}
+          save: ${{ github.event_name != 'pull_request' }}
+          append-timestamp: false
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-dependencies
+        with:
+          type: static
+          os: macos-15
+          arch: arm64
+
+      - name: Build native ARM64 client
+        shell: bash
+        env:
+          MUMBLE_BUILD_NUMBER: ${{ github.run_number }}
+        run: .github/workflows/build.sh "macos-15" "static" "arm64"
+
+      - name: Prepare portable application bundle
+        shell: bash
+        run: |
+          version="$(./scripts/mumble-version.py).${GITHUB_RUN_NUMBER}"
+          python3 macx/scripts/osxdist.py \
+            --source-dir "${GITHUB_WORKSPACE}" \
+            --binary-dir "${GITHUB_WORKSPACE}/build" \
+            --only-appbundle \
+            --version "${version}"
+
+          app="${GITHUB_WORKSPACE}/build/Mumble.app"
+          /usr/libexec/PlistBuddy -c 'Set :LSMinimumSystemVersion 15.0' "${app}/Contents/Info.plist"
+
+          executable_name="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "${app}/Contents/Info.plist")"
+          executable="${app}/Contents/MacOS/${executable_name}"
+
+          fix_files=(--fix-file "${executable}")
+          while IFS= read -r -d '' candidate; do
+            if [[ "${candidate}" != "${executable}" ]] && file "${candidate}" | grep -q 'Mach-O'; then
+              fix_files+=(--fix-file "${candidate}")
+            fi
+          done < <(find "${app}" -type f -print0)
+
+          dylibbundler \
+            --bundle-deps \
+            --create-dir \
+            --overwrite-files \
+            --no-codesign \
+            "${fix_files[@]}" \
+            --dest-dir "${app}/Contents/Frameworks" \
+            --install-path '@executable_path/../Frameworks/'
+
+          while IFS= read -r -d '' candidate; do
+            if file "${candidate}" | grep -q 'Mach-O'; then
+              codesign --force --sign - "${candidate}"
+            fi
+          done < <(find "${app}" -type f -print0)
+
+          codesign --force --sign - "${app}"
+          codesign --verify --deep --strict --verbose=2 "${app}"
+
+      - name: Verify architecture and runtime dependencies
+        shell: bash
+        run: |
+          app="${GITHUB_WORKSPACE}/build/Mumble.app"
+          executable_name="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "${app}/Contents/Info.plist")"
+          executable="${app}/Contents/MacOS/${executable_name}"
+
+          archs="$(lipo -archs "${executable}")"
+          echo "Mumble executable architectures: ${archs}"
+          if [[ " ${archs} " != *" arm64 "* || " ${archs} " == *" x86_64 "* ]]; then
+            echo "Expected an ARM64-only executable, got: ${archs}" >&2
+            exit 1
+          fi
+
+          arch -arm64 "${executable}" --version
+
+          invalid=0
+          while IFS= read -r -d '' candidate; do
+            if ! file "${candidate}" | grep -q 'Mach-O'; then
+              continue
+            fi
+
+            file "${candidate}"
+            if ! lipo "${candidate}" -verify_arch arm64; then
+              echo "Non-ARM64 Mach-O file: ${candidate}" >&2
+              invalid=1
+            fi
+
+            while IFS= read -r dependency; do
+              case "${dependency}" in
+                @*|/usr/lib/*|/System/Library/*)
+                  ;;
+                *)
+                  echo "Unbundled dependency in ${candidate}: ${dependency}" >&2
+                  invalid=1
+                  ;;
+              esac
+            done < <(otool -L "${candidate}" | tail -n +2 | awk '{ print $1 }')
+
+            while IFS= read -r runtime_path; do
+              case "${runtime_path}" in
+                @*|/usr/lib/*|/System/Library/*)
+                  ;;
+                *)
+                  echo "Build-machine runtime path in ${candidate}: ${runtime_path}" >&2
+                  invalid=1
+                  ;;
+              esac
+            done < <(otool -l "${candidate}" | awk '
+              $1 == "cmd" && $2 == "LC_RPATH" { in_rpath = 1; next }
+              in_rpath && $1 == "path" { print $2; in_rpath = 0 }
+            ')
+          done < <(find "${app}" -type f -print0)
+
+          exit "${invalid}"
+
+      - name: Stage client archive
+        shell: bash
+        run: |
+          mkdir -p "${GITHUB_WORKSPACE}/dist"
+          archive="${GITHUB_WORKSPACE}/dist/Mumble-macOS-arm64.zip"
+          ditto -c -k --sequesterRsrc --keepParent \
+            "${GITHUB_WORKSPACE}/build/Mumble.app" \
+            "${archive}"
+          (
+            cd "${GITHUB_WORKSPACE}/dist"
+            shasum -a 256 "$(basename "${archive}")" > "$(basename "${archive}").sha256"
+          )
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v7
+        with:
+          name: Mumble-macOS-arm64
+          compression-level: 0
+          if-no-files-found: error
+          path: |
+            dist/Mumble-macOS-arm64.zip
+            dist/Mumble-macOS-arm64.zip.sha256
+
+      - name: Save dependency cache
+        if: github.event_name != 'pull_request' && steps.dependency-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: ${{ env.MUMBLE_ENVIRONMENT_DIR }}
+          key: ${{ env.MUMBLE_ENVIRONMENT_VERSION }}
+
+  publish:
+    name: Publish rolling preview
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs:
+      - windows
+      - macos
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PREVIEW_TAG: master-preview
+
+    steps:
+      - name: Download Windows installer
+        uses: actions/download-artifact@v8
+        with:
+          name: Mumble-Windows-x64
+          path: artifacts/windows
+
+      - name: Download macOS installer
+        uses: actions/download-artifact@v8
+        with:
+          name: Mumble-macOS-arm64
+          path: artifacts/macos
+
+      - name: Stage preview downloads
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp artifacts/windows/Mumble-Windows-x64.exe dist/Mumble-Master-Preview-Windows-x64.exe
+          cp artifacts/macos/Mumble-macOS-arm64.zip dist/Mumble-Master-Preview-macOS-arm64.zip
+          (
+            cd dist
+            sha256sum \
+              Mumble-Master-Preview-Windows-x64.exe \
+              Mumble-Master-Preview-macOS-arm64.zip \
+              > SHA256SUMS.txt
+          )
+
+      - name: Refresh rolling prerelease
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${PREVIEW_TAG}" >/dev/null 2>&1; then
+            gh api --method PATCH \
+              "repos/${GITHUB_REPOSITORY}/git/refs/tags/${PREVIEW_TAG}" \
+              -f sha="${GITHUB_SHA}" \
+              -F force=true \
+              >/dev/null
+          else
+            gh api --method POST \
+              "repos/${GITHUB_REPOSITORY}/git/refs" \
+              -f ref="refs/tags/${PREVIEW_TAG}" \
+              -f sha="${GITHUB_SHA}" \
+              >/dev/null
+          fi
+
+          short_sha="${GITHUB_SHA:0:8}"
+          commit_url="https://github.com/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
+          workflow_url="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+          cat > release-notes.md <<EOF
+          Automated preview of \`master\` at [\`${short_sha}\`](${commit_url}).
+
+          - [Windows x64 and macOS ARM64 installer build](${workflow_url})
+
+          These preview builds are for testing and may be unstable. The Windows installer is unsigned, so Windows SmartScreen may display a warning. The macOS application is ad-hoc signed and is not notarized.
+
+          Verify downloads with \`SHA256SUMS.txt\`.
+          EOF
+
+          if gh release view "${PREVIEW_TAG}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            gh release edit "${PREVIEW_TAG}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "Mumble master preview (${short_sha})" \
+              --notes-file release-notes.md \
+              --prerelease \
+              --latest=false
+          else
+            gh release create "${PREVIEW_TAG}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --verify-tag \
+              --title "Mumble master preview (${short_sha})" \
+              --notes-file release-notes.md \
+              --prerelease \
+              --latest=false
+          fi
+
+          gh release upload "${PREVIEW_TAG}" dist/* \
+            --repo "${GITHUB_REPOSITORY}" \
+            --clobber
