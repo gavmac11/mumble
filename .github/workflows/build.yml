@@ -46,13 +46,13 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            os: [ubuntu-24.04, windows-2025-vs2026, macos-15]
+            os: [ubuntu-24.04, windows-2025-vs2026, macos-15-intel]
             type: [static, shared]
             arch: [x86_64]
             exclude:
               - os: windows-2025-vs2026
                 type: shared
-              - os: macos-15
+              - os: macos-15-intel
                 type: shared
             
     runs-on: ${{ matrix.os }}
