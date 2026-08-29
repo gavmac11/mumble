@@ -33,7 +33,7 @@ public class ClientInstaller : MumbleInstall {
 		return System.IO.Path.GetFullPath(System.IO.Path.Combine(Environment.CurrentDirectory, "mumble_client-" + new Version(version) + "-" + arch) + ".msi");
 	}
 
-	public ClientInstaller(string version, string arch, Features features) {
+	public ClientInstaller(string version, string arch, Features features, List<string> ffmpegRuntimeLibraries) {
 		List<string> binaries = new List<string>();
 		string[] plugins = {
 			"amongus.dll",
@@ -139,14 +139,10 @@ public class ClientInstaller : MumbleInstall {
 			}
 		}
 
-		// FFmpeg runtime libraries (screen sharing) are copied next to mumble.exe by the build.
-		// Their file names carry the ABI version (e.g. avcodec-62.dll), so discover them instead
-		// of hardcoding — otherwise the installed client fails to start with
-		// "avcodec-XX.dll was not found".
-		foreach (string pattern in new string[] { "avcodec-*.dll", "avutil-*.dll", "swscale-*.dll" }) {
-			foreach (string dll in System.IO.Directory.GetFiles(@"..\..", pattern)) {
-				binaries.Add(System.IO.Path.GetFileName(dll));
-			}
+		// CMake discovers and copies the complete runtime DLL set from the configured FFmpeg
+		// bundle. Package that same set instead of maintaining a second, incomplete list here.
+		foreach (string dll in ffmpegRuntimeLibraries) {
+			binaries.Add(dll);
 		}
 
 		this.Name = ClientInstaller.s_Name;
@@ -223,6 +219,7 @@ class BuildInstaller
 		string vcRedistRequired = "";
 		bool isAllLangs = false;
 		Features features = new Features();
+		List<string> ffmpegRuntimeLibraries = new List<string>();
 		bool skipMSIRebuild = false;
 
 		for (int i = 0; i < args.Length; i++) {
@@ -254,6 +251,10 @@ class BuildInstaller
 				features.rnnoise = true;
 			}
 
+			if (args[i] == "--ffmpeg-runtime-library") {
+				ffmpegRuntimeLibraries.Add(args[i + 1]);
+			}
+
 			if (args[i] == "--skip-msi-rebuild") {
 				skipMSIRebuild = true;
 			}
@@ -263,7 +264,7 @@ class BuildInstaller
 			string msiPath;
 
 			if (!skipMSIRebuild) {
-				var clInstaller = new ClientInstaller(version, arch, features);
+				var clInstaller = new ClientInstaller(version, arch, features, ffmpegRuntimeLibraries);
 				clInstaller.Version = new Version(version);
 				msiPath = isAllLangs
 							? clInstaller.BuildMultilanguageMsi()
