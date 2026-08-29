@@ -24,4 +24,20 @@
     <file alias="theme.ini">Synthwave/theme.ini</file>
     <file alias="Dark.qss">Synthwave/Dark.qss</file>
 </qresource>
+<qresource prefix="themes/NinetiesNet">
+    <file alias="theme.ini">NinetiesNet/theme.ini</file>
+    <file alias="Light.qss">NinetiesNet/Light.qss</file>
+</qresource>
+<qresource prefix="themes/OldSchool">
+    <file alias="theme.ini">OldSchool/theme.ini</file>
+    <file alias="Light.qss">OldSchool/Light.qss</file>
+</qresource>
+<qresource prefix="themes/SolarizedLight">
+    <file alias="theme.ini">SolarizedLight/theme.ini</file>
+    <file alias="Light.qss">SolarizedLight/Light.qss</file>
+</qresource>
+<qresource prefix="themes/CatppuccinLatte">
+    <file alias="theme.ini">CatppuccinLatte/theme.ini</file>
+    <file alias="Light.qss">CatppuccinLatte/Light.qss</file>
+</qresource>
 </RCC>
