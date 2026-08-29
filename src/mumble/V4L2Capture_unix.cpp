@@ -94,7 +94,7 @@ void V4L2Capture::run(const QString &devicePath, StartedCallback onStarted, Erro
 	std::call_once(deviceInitOnce, []() { avdevice_register_all(); });
 
 	AVFormatContext *fmtCtx = nullptr;
-	const AVInputFormat *iformat = av_find_input_format("video4linux2");
+	auto *iformat = av_find_input_format("video4linux2");
 	if (!iformat) {
 		if (onError)
 			onError(QStringLiteral("FFmpeg was built without the video4linux2 input device"));
