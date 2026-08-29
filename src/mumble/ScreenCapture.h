@@ -16,11 +16,19 @@
 #	if defined(Q_OS_LINUX)
 #		include "V4L2Capture.h"
 #	endif
+#	if defined(__APPLE__) && defined(__clang__)
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wsign-conversion"
+#		pragma clang diagnostic ignored "-Wimplicit-int-conversion"
+#	endif
 extern "C" {
 #	include <libavcodec/avcodec.h>
 #	include <libavutil/opt.h>
 #	include <libswscale/swscale.h>
 }
+#	if defined(__APPLE__) && defined(__clang__)
+#		pragma clang diagnostic pop
+#	endif
 #endif
 
 /// Captures a selected screen or window at ~15 fps and emits encoded video frames via frameEncoded().

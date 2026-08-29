@@ -18,10 +18,18 @@
 #include <vector>
 
 #ifdef USE_SCREEN_SHARING
+#	if defined(__APPLE__) && defined(__clang__)
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wsign-conversion"
+#		pragma clang diagnostic ignored "-Wimplicit-int-conversion"
+#	endif
 extern "C" {
 #	include <libavcodec/avcodec.h>
 #	include <libswscale/swscale.h>
 }
+#	if defined(__APPLE__) && defined(__clang__)
+#		pragma clang diagnostic pop
+#	endif
 #endif
 
 /// Reassembles UDP video fragments and decodes video frames.

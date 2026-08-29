@@ -15,8 +15,31 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QScreen>
 
+#include <cstring>
+#include <dlfcn.h>
+
 static constexpr int THUMBNAIL_WIDTH = 160;
 static constexpr int THUMBNAIL_HEIGHT = 90;
+
+using LegacyWindowCaptureFunction =
+    CGImageRef (*)(CGRect, CGWindowListOption, CGWindowID, CGWindowImageOption);
+
+/// CGWindowListCreateImage was obsoleted in the macOS 15 SDK, but remains the fallback
+/// for systems older than macOS 14 where ScreenCaptureKit's native picker is unavailable.
+static CGImageRef createLegacyWindowImage(CGWindowID windowId) {
+  static const LegacyWindowCaptureFunction captureFunction = []() {
+    void *symbol = dlsym(RTLD_DEFAULT, "CGWindowListCreateImage");
+    LegacyWindowCaptureFunction function = nullptr;
+    static_assert(sizeof(function) == sizeof(symbol));
+    std::memcpy(&function, &symbol, sizeof(function));
+    return function;
+  }();
+
+  if (!captureFunction)
+    return nullptr;
+  return captureFunction(CGRectNull, kCGWindowListOptionIncludingWindow,
+                         windowId, kCGWindowImageDefault);
+}
 
 /// Convert a CoreGraphics image to a QImage using a CGBitmapContext.
 /// The result uses Format_ARGB32_Premultiplied (BGRA / premultiplied alpha).
@@ -150,9 +173,8 @@ QList<CaptureSource> listCaptureSources() {
       displayName += QLatin1String(" - ") + windowName;
 
     // Thumbnail via CoreGraphics window capture.
-    CGImageRef cgImg = CGWindowListCreateImage(
-        CGRectNull, kCGWindowListOptionIncludingWindow,
-        static_cast<CGWindowID>(windowId), kCGWindowImageDefault);
+    CGImageRef cgImg =
+        createLegacyWindowImage(static_cast<CGWindowID>(windowId));
     QPixmap thumbnail = pixmapFromCGImage(cgImg);
     if (cgImg)
       CGImageRelease(cgImg);
@@ -183,9 +205,8 @@ QImage grabCaptureSource(const CaptureSource &source) {
   // Window capture — must use CoreGraphics on macOS.
   // Qt's QScreen::grabWindow(WId) does NOT capture specific windows on macOS
   // because WId is an NSView pointer, not a CGWindowID.
-  CGImageRef cgImage = CGWindowListCreateImage(
-      CGRectNull, kCGWindowListOptionIncludingWindow,
-      static_cast<CGWindowID>(source.nativeWindowId), kCGWindowImageDefault);
+  CGImageRef cgImage =
+      createLegacyWindowImage(static_cast<CGWindowID>(source.nativeWindowId));
   if (!cgImage)
     return {};
 
