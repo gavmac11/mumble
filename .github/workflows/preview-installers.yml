@@ -398,7 +398,12 @@ jobs:
       - name: Build Debian package
         shell: bash
         run: |
-          version="$(./scripts/mumble-version.py).${GITHUB_RUN_NUMBER}~master+git${GITHUB_SHA:0:8}"
+          project_version="$(sed -n 's/^CMAKE_PROJECT_VERSION:STATIC=//p' build/CMakeCache.txt)"
+          if [[ -z "${project_version}" ]]; then
+            echo "Unable to read the project version from build/CMakeCache.txt" >&2
+            exit 1
+          fi
+          version="${project_version}~master+git${GITHUB_SHA:0:8}"
           .github/workflows/package_debian_server.sh "${GITHUB_WORKSPACE}" "${version}" amd64
 
       - name: Upload Debian package
