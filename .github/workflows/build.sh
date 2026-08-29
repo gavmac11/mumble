@@ -23,6 +23,11 @@ case "$os" in
 		OS_SPECIFIC_CMAKE_OPTIONS="$OS_SPECIFIC_CMAKE_OPTIONS -Ddatabase-mysql-tests=ON"
 		OS_SPECIFIC_CMAKE_OPTIONS="$OS_SPECIFIC_CMAKE_OPTIONS -Ddatabase-postgresql-tests=ON"
 		;;
+	"debian")
+		OS_SPECIFIC_CMAKE_OPTIONS="$OS_SPECIFIC_CMAKE_OPTIONS -Ddatabase-sqlite-tests=ON"
+		OS_SPECIFIC_CMAKE_OPTIONS="$OS_SPECIFIC_CMAKE_OPTIONS -Ddatabase-mysql-tests=OFF"
+		OS_SPECIFIC_CMAKE_OPTIONS="$OS_SPECIFIC_CMAKE_OPTIONS -Ddatabase-postgresql-tests=OFF"
+		;;
 	"windows")
 		if ! [[ "$arch" = "x86_64" ]]; then
 			echo "Unsupported architecture '$arch'"
@@ -84,4 +89,3 @@ cmake -G Ninja \
 
 # Actually build
 cmake --build . --config $BUILD_TYPE
-
