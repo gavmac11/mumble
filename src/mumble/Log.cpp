@@ -23,6 +23,7 @@
 #include "Global.h"
 
 #include <limits>
+#include <memory>
 #include <type_traits>
 
 #include <QSignalBlocker>
@@ -35,6 +36,7 @@
 #include <QtGui/QScreen>
 #include <QtGui/QTextBlock>
 #include <QtGui/QTextDocumentFragment>
+#include <QtGui/QTextFragment>
 #include <QtNetwork/QNetworkReply>
 
 const QString LogConfig::name = QLatin1String("LogConfig");
@@ -1050,6 +1052,9 @@ LogMessage::LogMessage(Log::MsgType mt, const QString &console, const QString &t
 }
 
 LogDocument::LogDocument(QObject *p, bool animateImages) : QTextDocument(p), m_animateImages(animateImages) {
+	if (m_animateImages) {
+		QObject::connect(this, &QTextDocument::contentsChanged, this, &LogDocument::removeUnreferencedAnimations);
+	}
 }
 
 void LogDocument::stopOldestAnimation() {
@@ -1062,26 +1067,48 @@ void LogDocument::stopOldestAnimation() {
 
 	// Stop the animation but leave the last frame cached as a static resource, so that the image
 	// keeps being displayed.
-	movie->stop();
-	movie->deleteLater();
+	std::unique_ptr< QMovie > ownedMovie(movie);
+	ownedMovie->stop();
+}
+
+void LogDocument::removeUnreferencedAnimations() {
+	if (m_qmAnimatedImages.isEmpty()) {
+		return;
+	}
+
+	QSet< QUrl > referencedUrls;
+	for (QTextBlock block = begin(); block.isValid(); block = block.next()) {
+		for (auto it = block.begin(); !it.atEnd(); ++it) {
+			const QTextFragment fragment = it.fragment();
+			if (fragment.isValid() && fragment.charFormat().isImageFormat()) {
+				referencedUrls.insert(QUrl(fragment.charFormat().toImageFormat().name()));
+			}
+		}
+	}
+
+	const QList< QUrl > animatedUrls = m_qmAnimatedImages.keys();
+	for (const QUrl &url : animatedUrls) {
+		if (!referencedUrls.contains(url)) {
+			m_qlAnimatedImageOrder.removeOne(url);
+			std::unique_ptr< QMovie > movie(m_qmAnimatedImages.take(url));
+			movie->stop();
+		}
+	}
 }
 
 QMovie *LogDocument::createAnimation(const QUrl &url, const QByteArray &imageData) {
-	QBuffer *device = new QBuffer();
+	auto device = std::make_unique< QBuffer >();
 	device->setData(imageData);
 	if (!device->open(QIODevice::ReadOnly)) {
-		delete device;
 		return nullptr;
 	}
 
-	QMovie *movie = new QMovie(device, QByteArray("gif"), this);
-	// QMovie does not take ownership of its device
-	device->setParent(movie);
+	auto movie = std::make_unique< QMovie >(device.get(), QByteArray("gif"), this);
 
 	// QTextImageHandler fetches the image for a given resource name from the document on every paint,
 	// so replacing the cached frame and triggering a repaint is enough to advance the animation. All
 	// frames of a GIF have the same size, therefore no re-layout is needed.
-	QObject::connect(movie, &QMovie::frameChanged, this, [this, url, movie]() {
+	QObject::connect(movie.get(), &QMovie::frameChanged, this, [this, url, movie = movie.get()]() {
 		addResource(QTextDocument::ImageResource, url, movie->currentImage());
 		emit animationFrameChanged();
 	});
@@ -1091,15 +1118,19 @@ QMovie *LogDocument::createAnimation(const QUrl &url, const QByteArray &imageDat
 			stopOldestAnimation();
 		}
 
-		m_qmAnimatedImages.insert(url, movie);
+		// QMovie does not take ownership of its device, so transfer the device to Qt's parent-child
+		// ownership before releasing both smart pointers.
+		device->setParent(movie.get());
+		QMovie *moviePtr = movie.release();
+		device.release();
+		m_qmAnimatedImages.insert(url, moviePtr);
 		m_qlAnimatedImageOrder.append(url);
-		movie->start();
+		moviePtr->start();
 
-		return movie;
+		return moviePtr;
 	}
 
 	// Not an animated GIF after all - no point in keeping the movie around
-	movie->deleteLater();
 	return nullptr;
 }
 

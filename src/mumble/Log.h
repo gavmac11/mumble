@@ -219,6 +219,8 @@ private:
 
 	/// Stops the animation that was started first, freezing the image at its current frame
 	void stopOldestAnimation();
+	/// Stops animations whose URL is no longer referenced by an image in the document
+	void removeUnreferencedAnimations();
 	/// Creates a QMovie playing the given (animated GIF) image data under the given URL
 	/// @return The started movie or nullptr, if the data turned out not to be animated
 	QMovie *createAnimation(const QUrl &url, const QByteArray &imageData);

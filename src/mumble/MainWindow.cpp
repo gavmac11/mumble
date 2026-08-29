@@ -103,6 +103,7 @@
 #endif
 
 #include <algorithm>
+#include <memory>
 #include <optional>
 
 #include "widgets/EventFilters.h"
@@ -503,12 +504,12 @@ void MainWindow::setupGui() {
 	qteLog->setFrameStyle(QFrame::NoFrame);
 #endif
 
-	LogDocument *ld = new LogDocument(qteLog, true);
-	qteLog->setDocument(ld);
+	auto ld = std::make_unique< LogDocument >(qteLog, true);
+	qteLog->setDocument(ld.get());
 	// Animated images replace their frame in the document's resource cache whenever the animation
 	// advances, so the log (its viewport, to be precise) has to be repainted to show the new frame.
-	QObject::connect(ld, &LogDocument::animationFrameChanged, qteLog,
-					 [this]() { qteLog->viewport()->update(); });
+	QObject::connect(ld.get(), &LogDocument::animationFrameChanged, qteLog, [this]() { qteLog->viewport()->update(); });
+	ld.release();
 
 	qteLog->document()->setMaximumBlockCount(Global::get().s.iMaxLogBlocks);
 	qteLog->document()->setDefaultStyleSheet(qApp->styleSheet());

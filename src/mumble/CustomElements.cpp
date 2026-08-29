@@ -174,7 +174,8 @@ void ChatbarTextEdit::applyPlaceholder() {
 }
 
 bool ChatbarTextEdit::canInsertFromMimeData(const QMimeData *source) const {
-	return (QTextEdit::canInsertFromMimeData(source) || source->hasImage() || source->hasUrls());
+	return (QTextEdit::canInsertFromMimeData(source) || source->hasImage() || source->hasUrls()
+			|| source->hasFormat(QLatin1String("image/gif")));
 }
 
 void ChatbarTextEdit::insertFromMimeData(const QMimeData *source) {
@@ -192,6 +193,9 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 				// The raw data is required in order to preserve the animation of animated GIFs. It is
 				// only available if the source provides it (e.g. a file manager or an image editor).
 				QByteArray rawImage = source->data(QLatin1String("image/gif"));
+				if (image.isNull() && !rawImage.isEmpty()) {
+					image.loadFromData(rawImage, "GIF");
+				}
 				if (emitPastedImage(image, rawImage)) {
 					return true;
 				} else {

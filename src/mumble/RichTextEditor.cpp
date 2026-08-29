@@ -86,7 +86,10 @@ void RichTextHtmlEdit::insertFromMimeData(const QMimeData *source) {
 	if (source->hasImage() || source->hasFormat(QLatin1String("image/gif"))) {
 		QImage img        = qvariant_cast< QImage >(source->imageData());
 		QByteArray rawImg = source->data(QLatin1String("image/gif"));
-		QString html      = Log::imageToImg(rawImg, img, static_cast< int >(Global::get().uiImageLength));
+		if (img.isNull() && !rawImg.isEmpty()) {
+			img.loadFromData(rawImg, "GIF");
+		}
+		QString html = Log::imageToImg(rawImg, img, static_cast< int >(Global::get().uiImageLength));
 		if (!html.isEmpty())
 			insertHtml(html);
 		return;
