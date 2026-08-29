@@ -103,6 +103,7 @@
 #endif
 
 #include <algorithm>
+#include <memory>
 #include <optional>
 
 #include "widgets/EventFilters.h"
@@ -503,8 +504,12 @@ void MainWindow::setupGui() {
 	qteLog->setFrameStyle(QFrame::NoFrame);
 #endif
 
-	LogDocument *ld = new LogDocument(qteLog);
-	qteLog->setDocument(ld);
+	auto ld = std::make_unique< LogDocument >(qteLog, true);
+	qteLog->setDocument(ld.get());
+	// Animated images replace their frame in the document's resource cache whenever the animation
+	// advances, so the log (its viewport, to be precise) has to be repainted to show the new frame.
+	QObject::connect(ld.get(), &LogDocument::animationFrameChanged, qteLog, [this]() { qteLog->viewport()->update(); });
+	ld.release();
 
 	qteLog->document()->setMaximumBlockCount(Global::get().s.iMaxLogBlocks);
 	qteLog->document()->setDefaultStyleSheet(qApp->styleSheet());
@@ -1100,24 +1105,41 @@ void MainWindow::on_qteLog_customContextMenuRequested(const QPoint &mpos) {
 }
 
 void MainWindow::saveImageAs() {
-	QDateTime now = QDateTime::currentDateTime();
+	QDateTime now   = QDateTime::currentDateTime();
+	QString resName = qtcSaveImageCursor.charFormat().toImageFormat().name();
+	bool isGif      = resName.startsWith(QLatin1String("data:image/gif;"), Qt::CaseInsensitive);
 	QString defaultFname =
-		QString::fromLatin1("Mumble-%1.jpg").arg(now.toString(QString::fromLatin1("yyyy-MM-dd-HHmmss")));
+		QString::fromLatin1("Mumble-%1.%2").arg(now.toString(QString::fromLatin1("yyyy-MM-dd-HHmmss"))).arg(
+			isGif ? QLatin1String("gif") : QLatin1String("jpg"));
 
 	QString fname = QFileDialog::getSaveFileName(this, tr("Save Image File"), getImagePath(defaultFname),
-												 tr("Images (*.png *.jpg *.jpeg)"));
+												 tr("Images (*.png *.jpg *.jpeg *.gif)"));
 	if (fname.isNull()) {
 		return;
 	}
 
-	QString resName = qtcSaveImageCursor.charFormat().toImageFormat().name();
-	QVariant res    = qteLog->document()->resource(QTextDocument::ImageResource, resName);
-	QImage img      = res.value< QImage >();
-	bool ok         = img.save(fname);
+	// Animated GIFs are displayed frame by frame, so the cached resource only ever contains a single
+	// frame. Save the raw data instead in order to preserve the animation.
+	bool ok = false;
+	if (isGif) {
+		QByteArray imageFormat;
+		const QByteArray rawData = Log::imageDataFromDataUrl(QUrl(resName), imageFormat);
+
+		if (!rawData.isEmpty()) {
+			QFile f(fname);
+			ok = f.open(QIODevice::WriteOnly) && f.write(rawData) == rawData.size();
+		}
+	}
+
 	if (!ok) {
-		// In case fname did not contain a file extension, try saving with an
-		// explicit format.
-		ok = img.save(fname, "PNG");
+		QVariant res = qteLog->document()->resource(QTextDocument::ImageResource, resName);
+		QImage img   = res.value< QImage >();
+		ok           = img.save(fname);
+		if (!ok) {
+			// In case fname did not contain a file extension, try saving with an
+			// explicit format.
+			ok = img.save(fname, "PNG");
+		}
 	}
 
 	updateImagePath(fname);
@@ -4015,8 +4037,8 @@ void MainWindow::context_triggered() {
 QPair< QByteArray, QImage > MainWindow::openImageFile() {
 	QPair< QByteArray, QImage > retval;
 
-	QString fname =
-		QFileDialog::getOpenFileName(this, tr("Choose image file"), getImagePath(), tr("Images (*.png *.jpg *.jpeg)"));
+	QString fname = QFileDialog::getOpenFileName(this, tr("Choose image file"), getImagePath(),
+												 tr("Images (*.png *.jpg *.jpeg *.gif)"));
 
 	if (fname.isNull())
 		return retval;

@@ -23,15 +23,20 @@
 #include "Global.h"
 
 #include <limits>
+#include <memory>
 #include <type_traits>
 
 #include <QSignalBlocker>
+#include <QtCore/QBuffer>
 #include <QtCore/QMutexLocker>
 #include <QtCore/QRegularExpression>
+#include <QtGui/QImageReader>
 #include <QtGui/QImageWriter>
+#include <QtGui/QMovie>
 #include <QtGui/QScreen>
 #include <QtGui/QTextBlock>
 #include <QtGui/QTextDocumentFragment>
+#include <QtGui/QTextFragment>
 #include <QtNetwork/QNetworkReply>
 
 const QString LogConfig::name = QLatin1String("LogConfig");
@@ -639,6 +644,79 @@ QString Log::imageToImg(QImage img, int maxSize) {
 	return QString();
 }
 
+/// Returns whether the given image data is a GIF consisting of more than a single frame
+static bool isAnimatedGif(const QByteArray &imageData) {
+	if (!imageData.startsWith("GIF87a") && !imageData.startsWith("GIF89a")) {
+		return false;
+	}
+
+	QBuffer buffer;
+	buffer.setData(imageData);
+	if (!buffer.open(QIODevice::ReadOnly)) {
+		return false;
+	}
+
+	QImageReader reader(&buffer, QByteArray("gif"));
+	return reader.imageCount() > 1;
+}
+
+QString Log::imageToImg(const QByteArray &rawImageData, const QImage &image, int maxSize) {
+	// Animated GIFs cannot be re-encoded without losing their animation, so the raw data is embedded
+	// as-is - but only if the generated HTML fits into the message size limit. Note that the size
+	// check deliberately measures the final HTML string (including base64 and percent-encoding),
+	// exactly like the JPEG path in imageToImg(QImage, int) and the server do.
+	if (!rawImageData.isEmpty() && isAnimatedGif(rawImageData)) {
+		const QString animatedHtml = imageToImg(QByteArray("gif"), rawImageData);
+		if (maxSize == 0 || animatedHtml.length() < maxSize) {
+			return animatedHtml;
+		}
+
+		Log::logOrDefer(Log::Information,
+						tr("Image too large to be sent with its animation. It has been sent as a static "
+						   "image instead."));
+	}
+
+	if (image.isNull()) {
+		return QString();
+	}
+
+	return imageToImg(image, maxSize);
+}
+
+QByteArray Log::imageDataFromDataUrl(const QUrl &url, QByteArray &imageFormat) {
+	imageFormat.clear();
+
+	if (url.scheme() != QLatin1String("data") || !url.host().isEmpty()) {
+		return QByteArray();
+	}
+
+	// Note: this mirrors how Qt itself decodes data-URLs (including the percent-encoded and
+	// line-wrapped base64 payload that imageToImg generates).
+	QByteArray data =
+		QByteArray::fromPercentEncoding(url.toString(QUrl::FullyEncoded | QUrl::RemoveScheme).toLatin1());
+
+	const int comma = static_cast< int >(data.indexOf(','));
+	if (comma == -1) {
+		return QByteArray();
+	}
+
+	QByteArray payload = data.mid(comma + 1);
+	data.truncate(comma);
+	data               = data.trimmed();
+
+	if (data.endsWith(";base64")) {
+		payload = QByteArray::fromBase64(payload);
+		data.chop(7);
+	}
+
+	const int slash = static_cast< int >(data.indexOf('/'));
+	if (slash != -1) {
+		imageFormat = data.mid(slash + 1).toLower();
+	}
+
+	return payload;
+}
+
 QString Log::validHtml(const QString &html, QTextCursor *tc) {
 	LogDocument qtd;
 
@@ -973,7 +1051,87 @@ LogMessage::LogMessage(Log::MsgType mt, const QString &console, const QString &t
 	: mt(mt), console(console), terse(terse), ownMessage(ownMessage), overrideTTS(overrideTTS), ignoreTTS(ignoreTTS) {
 }
 
-LogDocument::LogDocument(QObject *p) : QTextDocument(p) {
+LogDocument::LogDocument(QObject *p, bool animateImages) : QTextDocument(p), m_animateImages(animateImages) {
+	if (m_animateImages) {
+		QObject::connect(this, &QTextDocument::contentsChanged, this, &LogDocument::removeUnreferencedAnimations);
+	}
+}
+
+void LogDocument::stopOldestAnimation() {
+	if (m_qlAnimatedImageOrder.isEmpty()) {
+		return;
+	}
+
+	const QUrl url = m_qlAnimatedImageOrder.takeFirst();
+	QMovie *movie  = m_qmAnimatedImages.take(url);
+
+	// Stop the animation but leave the last frame cached as a static resource, so that the image
+	// keeps being displayed.
+	std::unique_ptr< QMovie > ownedMovie(movie);
+	ownedMovie->stop();
+}
+
+void LogDocument::removeUnreferencedAnimations() {
+	if (m_qmAnimatedImages.isEmpty()) {
+		return;
+	}
+
+	QSet< QUrl > referencedUrls;
+	for (QTextBlock block = begin(); block.isValid(); block = block.next()) {
+		for (auto it = block.begin(); !it.atEnd(); ++it) {
+			const QTextFragment fragment = it.fragment();
+			if (fragment.isValid() && fragment.charFormat().isImageFormat()) {
+				referencedUrls.insert(QUrl(fragment.charFormat().toImageFormat().name()));
+			}
+		}
+	}
+
+	const QList< QUrl > animatedUrls = m_qmAnimatedImages.keys();
+	for (const QUrl &url : animatedUrls) {
+		if (!referencedUrls.contains(url)) {
+			m_qlAnimatedImageOrder.removeOne(url);
+			std::unique_ptr< QMovie > movie(m_qmAnimatedImages.take(url));
+			movie->stop();
+		}
+	}
+}
+
+QMovie *LogDocument::createAnimation(const QUrl &url, const QByteArray &imageData) {
+	auto device = std::make_unique< QBuffer >();
+	device->setData(imageData);
+	if (!device->open(QIODevice::ReadOnly)) {
+		return nullptr;
+	}
+
+	auto movie = std::make_unique< QMovie >(device.get(), QByteArray("gif"), this);
+
+	// QTextImageHandler fetches the image for a given resource name from the document on every paint,
+	// so replacing the cached frame and triggering a repaint is enough to advance the animation. All
+	// frames of a GIF have the same size, therefore no re-layout is needed.
+	QObject::connect(movie.get(), &QMovie::frameChanged, this, [this, url, movie = movie.get()]() {
+		addResource(QTextDocument::ImageResource, url, movie->currentImage());
+		emit animationFrameChanged();
+	});
+
+	if (movie->jumpToFrame(0) && movie->frameCount() > 1) {
+		while (m_qmAnimatedImages.size() >= MAX_ANIMATED_IMAGES) {
+			stopOldestAnimation();
+		}
+
+		// QMovie does not take ownership of its device, so transfer the device to Qt's parent-child
+		// ownership before releasing both smart pointers.
+		device->setParent(movie.get());
+		QMovie *moviePtr = movie.release();
+		device.release();
+		m_qmAnimatedImages.insert(url, moviePtr);
+		m_qlAnimatedImageOrder.append(url);
+		moviePtr->start();
+
+		return moviePtr;
+	}
+
+	// Not an animated GIF after all - no point in keeping the movie around
+	return nullptr;
 }
 
 QVariant LogDocument::loadResource(int type, const QUrl &url) {
@@ -986,6 +1144,28 @@ QVariant LogDocument::loadResource(int type, const QUrl &url) {
 
 	// Only accept data URLs, not external resources
 	if (url.isValid() && url.scheme() == QLatin1String("data")) {
+		if (m_animateImages) {
+			if (QMovie *movie = m_qmAnimatedImages.value(url)) {
+				// The image is already being animated. The document's resource cache may have been
+				// cleared in the meantime, so make sure the current frame is cached again and the
+				// animation keeps running.
+				const QImage frame = movie->currentImage();
+				addResource(type, url, frame);
+				return frame;
+			}
+
+			QByteArray imageFormat;
+			const QByteArray imageData = Log::imageDataFromDataUrl(url, imageFormat);
+			if (!imageData.isEmpty() && imageFormat == QByteArray("gif")) {
+				QMovie *movie = createAnimation(url, imageData);
+				if (movie) {
+					const QImage frame = movie->currentImage();
+					addResource(type, url, frame);
+					return frame;
+				}
+			}
+		}
+
 		return QTextDocument::loadResource(type, url);
 	}
 

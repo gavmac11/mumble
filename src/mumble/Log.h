@@ -10,6 +10,7 @@
 
 #include <QSystemTrayIcon>
 #include <QtCore/QDate>
+#include <QtCore/QHash>
 #include <QtCore/QMutex>
 #include <QtCore/QVector>
 #include <QtGui/QTextCursor>
@@ -21,6 +22,8 @@
 #ifndef USE_NO_TTS
 class TextToSpeech;
 #endif
+
+class QMovie;
 
 class LogConfig : public ConfigWidget, public Ui::LogConfig {
 private:
@@ -145,6 +148,22 @@ public:
 	static QString validHtml(const QString &html, QTextCursor *tc = nullptr);
 	static QString imageToImg(const QByteArray &format, const QByteArray &image);
 	static QString imageToImg(QImage img, int maxSize = 0);
+	/// Creates an HTML image tag for the given image. If rawImageData contains an animated GIF and the
+	/// generated HTML fits into maxSize, the raw data is embedded as-is, thereby preserving the
+	/// animation. Otherwise (and for all other images), the image is re-encoded as JPEG, stepping the
+	/// quality down until it fits into maxSize (see the imageToImg overloads above).
+	/// In case an animated GIF had to be converted to a static image because it was too large, this is
+	/// logged as an information entry.
+	/// @param rawImageData The raw image data the given image was created from, if available
+	/// @param image The decoded image corresponding to rawImageData
+	/// @param maxSize The maximum length of the generated HTML string
+	/// @return The image HTML or an empty string, if the image could not be processed
+	static QString imageToImg(const QByteArray &rawImageData, const QImage &image, int maxSize);
+	/// Extracts the raw image data from a data-URL as it is created by the imageToImg functions above.
+	/// @param url The data-URL to extract the image data from
+	/// @param imageFormat Receives the image format declared in the URL (e.g. "gif")
+	/// @return The raw image data or an empty byte array, if the URL could not be parsed
+	static QByteArray imageDataFromDataUrl(const QUrl &url, QByteArray &imageFormat);
 	static QString msgColor(const QString &text, LogColorType t);
 	static QString formatClientUser(ClientUser *cu, LogColorType t, const QString &displayName = QString());
 	static QString formatChannel(::Channel *c);
@@ -186,9 +205,34 @@ class LogDocument : public QTextDocument {
 private:
 	Q_OBJECT
 	Q_DISABLE_COPY(LogDocument)
+
+	/// Maximum number of images animated at the same time. Once reached, the animation of the oldest
+	/// image is stopped (freezing it at its current frame).
+	static constexpr int MAX_ANIMATED_IMAGES = 16;
+
+	/// Whether animated images (currently: GIFs) in this document should be played
+	bool m_animateImages;
+	/// The movies of the currently animated images, keyed by their data-URL
+	QHash< QUrl, QMovie * > m_qmAnimatedImages;
+	/// The URLs of m_qmAnimatedImages in the order in which their animation was started (oldest first)
+	QList< QUrl > m_qlAnimatedImageOrder;
+
+	/// Stops the animation that was started first, freezing the image at its current frame
+	void stopOldestAnimation();
+	/// Stops animations whose URL is no longer referenced by an image in the document
+	void removeUnreferencedAnimations();
+	/// Creates a QMovie playing the given (animated GIF) image data under the given URL
+	/// @return The started movie or nullptr, if the data turned out not to be animated
+	QMovie *createAnimation(const QUrl &url, const QByteArray &imageData);
+
 public:
-	LogDocument(QObject *p = nullptr);
+	LogDocument(QObject *p = nullptr, bool animateImages = false);
 	QVariant loadResource(int, const QUrl &) Q_DECL_OVERRIDE;
+
+signals:
+	/// Emitted whenever an animated image advanced a frame, so that the widget displaying this
+	/// document has to be repainted
+	void animationFrameChanged();
 };
 
 class NotificationSoundBlocker {
