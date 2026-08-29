@@ -331,20 +331,19 @@ jobs:
         -Dplugins=OFF
         -Doverlay=OFF
         -Dtests=ON
-        -Dpackaging=ON
+        -Dpackaging=OFF
         -Dsymbols=OFF
         -Dwarnings-as-errors=OFF
         -Ddisplay-install-paths=ON
-        -DCMAKE_INSTALL_PREFIX=/
-        -DMUMBLE_INSTALL_EXECUTABLEDIR=usr/bin
-        -DMUMBLE_INSTALL_MANDIR=usr/share/man/man1
-        -DMUMBLE_INSTALL_DOCDIR=usr/share/doc/mumble-server
-        -DMUMBLE_INSTALL_LICENSEDIR=usr/share/doc/mumble-server
-        -DMUMBLE_INSTALL_SYSCONFDIR=etc/mumble
-        -DMUMBLE_INSTALL_SERVICEFILEDIR=usr/lib/systemd/system
-        -DMUMBLE_INSTALL_SYSUSERSDIR=usr/lib/sysusers.d
-        -DMUMBLE_INSTALL_TMPFILESDIR=usr/lib/tmpfiles.d
-        -DMUMBLE_INSTALL_SERVER_SHAREDIR=usr/share/mumble-server
+        -DMUMBLE_INSTALL_EXECUTABLEDIR=/usr/bin
+        -DMUMBLE_INSTALL_MANDIR=/usr/share/man/man1
+        -DMUMBLE_INSTALL_DOCDIR=/usr/share/doc/mumble-server
+        -DMUMBLE_INSTALL_LICENSEDIR=/usr/share/doc/mumble-server
+        -DMUMBLE_INSTALL_SYSCONFDIR=/etc/mumble
+        -DMUMBLE_INSTALL_SERVICEFILEDIR=/usr/lib/systemd/system
+        -DMUMBLE_INSTALL_SYSUSERSDIR=/usr/lib/sysusers.d
+        -DMUMBLE_INSTALL_TMPFILESDIR=/usr/lib/tmpfiles.d
+        -DMUMBLE_INSTALL_SERVER_SHAREDIR=/usr/share/mumble-server
 
     steps:
       - name: Bootstrap checkout and packaging tools
