@@ -64,6 +64,10 @@ MetaParams::MetaParams() {
 	// (restricted by the maximum bitrate Opus supports)
 	// 558000 = 510000 (Opus) + 9600 (position) + 38400 (TCP overhead)
 	iMaxBandwidth              = 558000;
+	// Video defaults: one 720p30 H.264 stream (~2 Mbps) per user; aggregate assumes a small
+	// group on a typical home uplink.
+	iMaxVideoBandwidth         = 2500000;
+	iMaxVideoBandwidthAggregate = 20000000;
 	iMaxUsers                  = 1000;
 	iMaxUsersPerChannel        = 0;
 	iMaxListenersPerChannel    = -1;
@@ -285,6 +289,8 @@ void MetaParams::read(QString fname) {
 	kdfIterations              = typeCheckedFromSettings("kdfiterations", -1);
 	bAllowHTML                 = typeCheckedFromSettings("allowhtml", bAllowHTML);
 	iMaxBandwidth              = typeCheckedFromSettings("bandwidth", iMaxBandwidth);
+	iMaxVideoBandwidth         = typeCheckedFromSettings("videobandwidth", iMaxVideoBandwidth);
+	iMaxVideoBandwidthAggregate = typeCheckedFromSettings("videobandwidthaggregate", iMaxVideoBandwidthAggregate);
 	iDefaultChan               = typeCheckedFromSettings("defaultchannel", iDefaultChan);
 	bRememberChan              = typeCheckedFromSettings("rememberchannel", bRememberChan);
 	iRememberChanDuration      = typeCheckedFromSettings("rememberchannelduration", iRememberChanDuration);
@@ -411,6 +417,8 @@ void MetaParams::read(QString fname) {
 	qmConfig.insert(QLatin1String("kdfiterations"), QString::number(kdfIterations));
 	qmConfig.insert(QLatin1String("allowhtml"), bAllowHTML ? QLatin1String("true") : QLatin1String("false"));
 	qmConfig.insert(QLatin1String("bandwidth"), QString::number(iMaxBandwidth));
+	qmConfig.insert(QLatin1String("videobandwidth"), QString::number(iMaxVideoBandwidth));
+	qmConfig.insert(QLatin1String("videobandwidthaggregate"), QString::number(iMaxVideoBandwidthAggregate));
 	qmConfig.insert(QLatin1String("users"), QString::number(iMaxUsers));
 	qmConfig.insert(QLatin1String("defaultchannel"), QString::number(iDefaultChan));
 	qmConfig.insert(QLatin1String("rememberchannel"), bRememberChan ? QLatin1String("true") : QLatin1String("false"));

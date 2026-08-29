@@ -340,6 +340,8 @@ void Server::readParams() {
 	usPort                             = static_cast< unsigned short >(Meta::mp->usPort + iServerNum);
 	iTimeout                           = Meta::mp->iTimeout;
 	iMaxBandwidth                      = Meta::mp->iMaxBandwidth;
+	iMaxVideoBandwidth                 = Meta::mp->iMaxVideoBandwidth;
+	iMaxVideoBandwidthAggregate        = Meta::mp->iMaxVideoBandwidthAggregate;
 	iMaxUsers                          = Meta::mp->iMaxUsers;
 	iMaxUsersPerChannel                = Meta::mp->iMaxUsersPerChannel;
 	iMaxTextMessageLength              = Meta::mp->iMaxTextMessageLength;
@@ -411,6 +413,8 @@ void Server::readParams() {
 	m_dbWrapper.getConfigurationTo(iServerNum, "port", usPort);
 	m_dbWrapper.getConfigurationTo(iServerNum, "timeout", iTimeout);
 	m_dbWrapper.getConfigurationTo(iServerNum, "bandwidth", iMaxBandwidth);
+	m_dbWrapper.getConfigurationTo(iServerNum, "videobandwidth", iMaxVideoBandwidth);
+	m_dbWrapper.getConfigurationTo(iServerNum, "videobandwidthaggregate", iMaxVideoBandwidthAggregate);
 	m_dbWrapper.getConfigurationTo(iServerNum, "users", iMaxUsers);
 	m_dbWrapper.getConfigurationTo(iServerNum, "usersperchannel", iMaxUsersPerChannel);
 	m_dbWrapper.getConfigurationTo(iServerNum, "textmessagelength", iMaxTextMessageLength);
@@ -500,6 +504,10 @@ void Server::setLiveConf(const QString &key, const QString &value) {
 		qsPassword = !v.isNull() ? v : Meta::mp->qsPassword;
 	else if (key == "timeout")
 		iTimeout = i ? i : Meta::mp->iTimeout;
+	else if (key == "videobandwidth")
+		iMaxVideoBandwidth = i ? i : Meta::mp->iMaxVideoBandwidth;
+	else if (key == "videobandwidthaggregate")
+		iMaxVideoBandwidthAggregate = i ? i : Meta::mp->iMaxVideoBandwidthAggregate;
 	else if (key == "bandwidth") {
 		int length = i ? i : Meta::mp->iMaxBandwidth;
 		if (length != iMaxBandwidth) {
@@ -1027,6 +1035,11 @@ void Server::run() {
 							}
 							break;
 						}
+						case Mumble::Protocol::UDPMessageType::Video: {
+							Mumble::Protocol::VideoData videoData = m_udpDecoder.getVideoData();
+							processVideoMsg(u, videoData);
+							break;
+						}
 					}
 				}
 #ifdef Q_OS_UNIX
@@ -1166,6 +1179,71 @@ void Server::addListener(QHash< ServerUser *, VolumeAdjustment > &listeners, Ser
 
 	if (it == listeners.end() || it->factor < volumeAdjustment.factor) {
 		listeners[&user] = volumeAdjustment;
+	}
+}
+
+void Server::processVideoMsg(ServerUser *u, const Mumble::Protocol::VideoData &videoData) {
+	ZoneScoped;
+
+	if (u->sState != ServerUser::Authenticated || !u->bScreenSharing || !u->cChannel)
+		return;
+
+	// Rate-limit video independently of voice (BandwidthRecord semantics as in processMsg:
+	// packetsize covers IP + UDP + crypt header + payload; maxpersec is bytes/s).
+	{
+		const std::size_t packetsize = 20 + 8 + 4 + videoData.payload.size();
+		if (iMaxVideoBandwidth > 0
+			&& !u->bwrVideo.addFrame(static_cast< int >(packetsize), iMaxVideoBandwidth / 8)) {
+			return;
+		}
+
+		// Aggregate guard: each receiver gets its own copy, so charge the relayed egress.
+		if (iMaxVideoBandwidthAggregate > 0) {
+			const std::size_t receivers =
+				static_cast< std::size_t >(std::max< int >(static_cast< int >(u->cChannel->qlUsers.count()) - 1, 0));
+			if (receivers > 0 && !m_bwrVideoAggregate.addFrame(
+									  static_cast< int >(packetsize * receivers), iMaxVideoBandwidthAggregate / 8)) {
+				return;
+			}
+		}
+	}
+
+	QByteArray cache;
+
+	MumbleUDP::Video videoMsg;
+
+	videoMsg.set_sender_session(u->uiSession);
+	videoMsg.set_codec(videoData.codec);
+	videoMsg.set_width(videoData.width);
+	videoMsg.set_height(videoData.height);
+	videoMsg.set_frame_number(videoData.frameNumber);
+	videoMsg.set_fragment_index(videoData.fragmentIndex);
+	videoMsg.set_fragment_count(videoData.fragmentCount);
+	videoMsg.set_is_keyframe(videoData.isKeyFrame);
+
+	videoMsg.set_video_data(reinterpret_cast< const char * >(videoData.payload.data()),
+							videoData.payload.size());
+	const std::size_t size = videoMsg.ByteSizeLong();
+
+	if (size > static_cast< std::size_t >(std::numeric_limits< int >::max())) {
+		return;
+	}
+
+	std::vector< unsigned char > packet(size + 1);
+	packet[0] = static_cast< unsigned char >(Mumble::Protocol::UDPMessageType::Video);
+
+	if (!videoMsg.SerializeToArray(packet.data() + 1, static_cast< int >(size))) {
+		return;
+	}
+
+	// Broadcast packet to all users in channel
+	for (User *p : u->cChannel->qlUsers) {
+		ServerUser *dst = static_cast< ServerUser * >(p);
+
+		if (dst == u)
+			continue;
+
+		sendMessage(*dst, packet.data(), static_cast< int >(packet.size()), cache);
 	}
 }
 
@@ -1756,6 +1834,9 @@ void Server::message(Mumble::Protocol::TCPMessageType type, const QByteArray &qb
 
 					processMsg(u, std::move(audioData), m_tcpAudioReceivers, m_tcpAudioEncoder);
 				}
+			} else if (m_tcpTunnelDecoder.getMessageType() == Mumble::Protocol::UDPMessageType::Video) {
+				Mumble::Protocol::VideoData videoData = m_tcpTunnelDecoder.getVideoData();
+				processVideoMsg(u, videoData);
 			}
 		}
 

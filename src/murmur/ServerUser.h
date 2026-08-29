@@ -151,6 +151,8 @@ public:
 	SOCKET sUdpSocket;
 #endif
 	BandwidthRecord bwr;
+	/// Video traffic is metered separately from voice (bwr) so one cannot starve the other.
+	BandwidthRecord bwrVideo;
 	struct sockaddr_storage saiUdpAddress;
 	struct sockaddr_storage saiTcpLocalAddress;
 	ServerUser(Server *parent, QSslSocket *socket);

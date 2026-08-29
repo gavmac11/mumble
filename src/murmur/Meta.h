@@ -42,6 +42,12 @@ public:
 	unsigned short usPort;
 	int iTimeout;
 	int iMaxBandwidth;
+	/// Per-user ceiling for screen share / webcam video traffic (bits/s), enforced separately
+	/// from voice so that video can never starve the voice quota.
+	int iMaxVideoBandwidth;
+	/// Server-wide ceiling for relayed video egress (bits/s) — bounds the O(senders × receivers)
+	/// amplification of the blind relay. 0 disables video relaying.
+	int iMaxVideoBandwidthAggregate;
 	unsigned int iMaxUsers;
 	unsigned int iMaxUsersPerChannel;
 	int iMaxListenersPerChannel;
