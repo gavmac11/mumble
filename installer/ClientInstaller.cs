@@ -139,6 +139,16 @@ public class ClientInstaller : MumbleInstall {
 			}
 		}
 
+		// FFmpeg runtime libraries (screen sharing) are copied next to mumble.exe by the build.
+		// Their file names carry the ABI version (e.g. avcodec-62.dll), so discover them instead
+		// of hardcoding — otherwise the installed client fails to start with
+		// "avcodec-XX.dll was not found".
+		foreach (string pattern in new string[] { "avcodec-*.dll", "avutil-*.dll", "swscale-*.dll" }) {
+			foreach (string dll in System.IO.Directory.GetFiles(@"..\..", pattern)) {
+				binaries.Add(System.IO.Path.GetFileName(dll));
+			}
+		}
+
 		this.Name = ClientInstaller.s_Name;
 		this.UpgradeCode = Guid.Parse(ClientInstaller.s_UpgradeGuid);
 		this.Version = new Version(version);
