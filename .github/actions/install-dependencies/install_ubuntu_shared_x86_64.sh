@@ -37,6 +37,8 @@ sudo apt -y install \
 	libpoco-dev \
 	libsqlite3-dev \
 	libavcodec-dev \
+	libavdevice-dev \
+	libavformat-dev \
 	libswscale-dev \
 	libavutil-dev
 

@@ -946,10 +946,35 @@ if(screen-sharing)
 			set(FFMPEG_DIR "${3RDPARTY_DIR}/ffmpeg")
 		endif()
 
+		target_sources(mumble_client_object_lib PRIVATE "CaptureSourceLister_win.cpp")
+
+		find_library(FFMPEG_AVCODEC_LIBRARY NAMES avcodec PATHS "${FFMPEG_DIR}/lib" NO_DEFAULT_PATH REQUIRED)
+		find_library(FFMPEG_AVUTIL_LIBRARY NAMES avutil PATHS "${FFMPEG_DIR}/lib" NO_DEFAULT_PATH REQUIRED)
+		find_library(FFMPEG_SWSCALE_LIBRARY NAMES swscale PATHS "${FFMPEG_DIR}/lib" NO_DEFAULT_PATH REQUIRED)
+
 		target_compile_definitions(mumble_client_object_lib PUBLIC "USE_SCREEN_SHARING")
 		target_include_directories(mumble_client_object_lib
 				SYSTEM PUBLIC
 					"${FFMPEG_DIR}/include"
+		)
+		target_link_libraries(mumble_client_object_lib PUBLIC
+				${FFMPEG_AVCODEC_LIBRARY}
+				${FFMPEG_AVUTIL_LIBRARY}
+				${FFMPEG_SWSCALE_LIBRARY}
+		)
+
+		file(GLOB FFMPEG_RUNTIME_LIBRARIES CONFIGURE_DEPENDS "${FFMPEG_DIR}/bin/*.dll")
+		if(NOT FFMPEG_RUNTIME_LIBRARIES)
+			message(FATAL_ERROR "No FFmpeg runtime libraries found in ${FFMPEG_DIR}/bin")
+		endif()
+
+		add_custom_command(TARGET mumble
+			POST_BUILD
+			COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+				${FFMPEG_RUNTIME_LIBRARIES}
+				"$<TARGET_FILE_DIR:mumble>"
+			COMMAND_EXPAND_LISTS
+			COMMENT "Copying FFmpeg runtime libraries"
 		)
 	else()
 		find_package(PkgConfig REQUIRED)

@@ -26,7 +26,7 @@ extern "C" {
 /// Captures a selected screen or window at ~15 fps and emits encoded video frames via frameEncoded().
 ///
 /// On macOS 14+, startCaptureNative() shows the OS-native SCContentSharingPicker and streams
-/// frames via SCStream; captureStarted() / captureAborted() signals report the async outcome.
+/// frames via SCStream; captureStarted() / captureAborted() signals report the outcome.
 /// On Linux under Wayland, startCaptureNative() uses the xdg-desktop-portal ScreenCast interface
 /// and delivers frames via a PipeWire stream.
 /// On other platforms (or macOS < 14, or X11), use setSource() + startCapture() with ScreenPickerDialog.
@@ -62,20 +62,24 @@ signals:
 	/// Emitted for every successfully encoded frame.
 	void frameEncoded(QByteArray encodedData, quint64 frameNumber, bool isKeyFrame);
 
-#if defined(USE_SCREEN_SHARING) && (defined(Q_OS_MAC) || defined(HAS_WAYLAND_PORTAL))
-	/// Emitted on the main thread when the native stream starts delivering frames.
+#ifdef USE_SCREEN_SHARING
+	/// Emitted immediately before the first successfully encoded frame.
 	void captureStarted();
-	/// Emitted on the main thread when the native picker is cancelled or the stream fails.
+	/// Emitted when source selection is cancelled or capture/encoding fails.
 	void captureAborted();
 #endif
 
 private slots:
 	void captureFrame();
+#ifdef USE_SCREEN_SHARING
+	void abortCapture();
+#endif
 
 private:
 #ifdef USE_SCREEN_SHARING
 	bool initEncoder(int width, int height, int fps = 15);
 	void destroyEncoder();
+	void scheduleCaptureAbort();
 	void encodeImage(const QImage &srcImage); ///< Shared encode path used by both capture modes.
 	/// Encode a planar YUV 4:2:0 frame supplied by the V4L2 webcam capture thread.
 	void encodeYuvFrame(int width, int height, const uint8_t *const data[4], const int linesize[4]);
@@ -88,6 +92,7 @@ private:
 	SwsContext *m_swsCtx       = nullptr;
 	int m_encoderWidth         = 0;
 	int m_encoderHeight        = 0;
+	bool m_reportedCaptureStarted = false;
 
 #	if defined(Q_OS_LINUX)
 	V4L2Capture *m_v4l2 = nullptr; ///< Webcam capture; worker thread invokes encodeYuvFrame().

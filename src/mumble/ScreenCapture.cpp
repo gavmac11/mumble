@@ -53,6 +53,8 @@ void ScreenCapture::startCapture() {
 	if (m_capturing)
 		return;
 
+	m_reportedCaptureStarted = false;
+
 #	if defined(Q_OS_LINUX)
 	if (m_source.type == CaptureSource::Type::Webcam) {
 		m_frameNumber = 0;
@@ -69,6 +71,7 @@ void ScreenCapture::startCapture() {
 			Global::get().l->log(Log::Warning, QObject::tr("Webcam capture failed: %1").arg(error));
 			self->m_capturing = false;
 			self->destroyEncoder();
+			emit self->captureAborted();
 		};
 		auto onFrame = [self](int width, int height, const uint8_t *const data[4], const int linesize[4]) {
 			if (!self || !self->m_capturing)
@@ -132,6 +135,8 @@ void ScreenCapture::startCaptureNative() {
 	if (m_capturing)
 		return;
 
+	m_reportedCaptureStarted = false;
+
 	// Keep a safe pointer — the lambdas below must not capture `this` without guard.
 	QPointer< ScreenCapture > self = this;
 
@@ -140,7 +145,6 @@ void ScreenCapture::startCaptureNative() {
 			return;
 		self->m_capturing   = true;
 		self->m_frameNumber = 0;
-		emit self->captureStarted();
 	};
 	auto onCancelled = [self]() {
 		if (!self)
@@ -171,34 +175,44 @@ void ScreenCapture::startCaptureNative() {
 
 void ScreenCapture::encodeImage(const QImage &srcImage) {
 	// Caller must supply a non-null Format_RGB888 image.
-	if (srcImage.isNull())
+	if (srcImage.isNull()) {
+		scheduleCaptureAbort();
 		return;
+	}
 
 	// Convert to Format_RGBA8888 for mapping to AV_PIX_FMT_RGB24.
 	QImage image = srcImage.convertToFormat(QImage::Format_RGBA8888);
 	// libx264 (YUV420P) requires even dimensions — crop one pixel if needed.
 	const int width  = image.width() & ~1;
 	const int height = image.height() & ~1;
-	if (width <= 0 || height <= 0)
+	if (width <= 0 || height <= 0) {
+		scheduleCaptureAbort();
 		return;
+	}
 	if (width != image.width() || height != image.height())
 		image = image.copy(0, 0, width, height);
 
 	// (Re-)initialise the encoder when the resolution changes.
 	if (!m_codecCtx || m_encoderWidth != width || m_encoderHeight != height) {
 		destroyEncoder();
-		if (!initEncoder(width, height))
+		if (!initEncoder(width, height)) {
+			scheduleCaptureAbort();
 			return;
+		}
 	}
 
 	// Colour-space conversion: RGBA24 to YUV420P.
 	m_swsCtx = sws_getCachedContext(m_swsCtx, width, height, AV_PIX_FMT_RGBA, width, height, AV_PIX_FMT_YUV420P,
 									SWS_BICUBIC, nullptr, nullptr, nullptr);
-	if (!m_swsCtx)
+	if (!m_swsCtx) {
+		scheduleCaptureAbort();
 		return;
+	}
 
-	if (av_frame_make_writable(m_frame) < 0)
+	if (av_frame_make_writable(m_frame) < 0) {
+		scheduleCaptureAbort();
 		return;
+	}
 
 	const uint8_t *srcData[1] = { image.constBits() };
 	int srcLinesize[1]        = { static_cast< int >(image.bytesPerLine()) };
@@ -206,12 +220,18 @@ void ScreenCapture::encodeImage(const QImage &srcImage) {
 
 	m_frame->pts = static_cast< int64_t >(m_frameNumber);
 
-	if (avcodec_send_frame(m_codecCtx, m_frame) < 0)
+	if (avcodec_send_frame(m_codecCtx, m_frame) < 0) {
+		scheduleCaptureAbort();
 		return;
+	}
 
 	while (avcodec_receive_packet(m_codecCtx, m_packet) == 0) {
 		QByteArray encodedData(reinterpret_cast< const char * >(m_packet->data), m_packet->size);
 		const bool isKey = (m_packet->flags & AV_PKT_FLAG_KEY) != 0;
+		if (!m_reportedCaptureStarted) {
+			m_reportedCaptureStarted = true;
+			emit captureStarted();
+		}
 		emit frameEncoded(encodedData, m_frameNumber, isKey);
 		av_packet_unref(m_packet);
 	}
@@ -221,35 +241,49 @@ void ScreenCapture::encodeImage(const QImage &srcImage) {
 
 void ScreenCapture::encodeYuvFrame(int width, int height, const uint8_t *const data[4],
 								   const int linesize[4]) {
-	if (width <= 0 || height <= 0 || !data[0])
+	if (width <= 0 || height <= 0 || !data[0]) {
+		scheduleCaptureAbort();
 		return;
+	}
 
 	// (Re-)initialise the encoder when the resolution changes.
 	if (!m_codecCtx || m_encoderWidth != width || m_encoderHeight != height) {
 		destroyEncoder();
-		if (!initEncoder(width, height, VIDEO_FPS_WEBCAM))
+		if (!initEncoder(width, height, VIDEO_FPS_WEBCAM)) {
+			scheduleCaptureAbort();
 			return;
+		}
 	}
 
 	m_swsCtx = sws_getCachedContext(m_swsCtx, width, height, AV_PIX_FMT_YUV420P, width, height,
 									AV_PIX_FMT_YUV420P, SWS_BILINEAR, nullptr, nullptr, nullptr);
-	if (!m_swsCtx)
+	if (!m_swsCtx) {
+		scheduleCaptureAbort();
 		return;
+	}
 
-	if (av_frame_make_writable(m_frame) < 0)
+	if (av_frame_make_writable(m_frame) < 0) {
+		scheduleCaptureAbort();
 		return;
+	}
 
 	// Plane copy into the encoder's frame (kept for buffer-lifecycle consistency with encodeImage).
 	sws_scale(m_swsCtx, data, linesize, 0, height, m_frame->data, m_frame->linesize);
 
 	m_frame->pts = static_cast< int64_t >(m_frameNumber);
 
-	if (avcodec_send_frame(m_codecCtx, m_frame) < 0)
+	if (avcodec_send_frame(m_codecCtx, m_frame) < 0) {
+		scheduleCaptureAbort();
 		return;
+	}
 
 	while (avcodec_receive_packet(m_codecCtx, m_packet) == 0) {
 		QByteArray encodedData(reinterpret_cast< const char * >(m_packet->data), m_packet->size);
 		const bool isKey = (m_packet->flags & AV_PKT_FLAG_KEY) != 0;
+		if (!m_reportedCaptureStarted) {
+			m_reportedCaptureStarted = true;
+			emit captureStarted();
+		}
 		emit frameEncoded(encodedData, m_frameNumber, isKey);
 		av_packet_unref(m_packet);
 	}
@@ -265,7 +299,7 @@ void ScreenCapture::captureFrame() {
 	QImage image = grabCaptureSource(m_source);
 	if (image.isNull()) {
 		Global::get().l->log(Log::Warning, QObject::tr("Screen capture failed."));
-		stopCapture();
+		abortCapture();
 		return;
 	}
 
@@ -275,6 +309,18 @@ void ScreenCapture::captureFrame() {
 }
 
 #ifdef USE_SCREEN_SHARING
+void ScreenCapture::scheduleCaptureAbort() {
+	QMetaObject::invokeMethod(this, &ScreenCapture::abortCapture, Qt::QueuedConnection);
+}
+
+void ScreenCapture::abortCapture() {
+	if (!m_capturing)
+		return;
+
+	stopCapture();
+	emit captureAborted();
+}
+
 bool ScreenCapture::initEncoder(int width, int height, int fps) {
 	// To use hardware-accelerated encoding (e.g. h264_videotoolbox on macOS,
 	// h264_nvenc on NVIDIA), replace "libx264" with the appropriate encoder name
@@ -309,7 +355,12 @@ bool ScreenCapture::initEncoder(int width, int height, int fps) {
 		return false;
 	}
 
-	m_frame         = av_frame_alloc();
+	m_frame = av_frame_alloc();
+	if (!m_frame) {
+		avcodec_free_context(&m_codecCtx);
+		return false;
+	}
+
 	m_frame->format = AV_PIX_FMT_YUV420P;
 	m_frame->width  = width;
 	m_frame->height = height;
@@ -320,6 +371,11 @@ bool ScreenCapture::initEncoder(int width, int height, int fps) {
 	}
 
 	m_packet = av_packet_alloc();
+	if (!m_packet) {
+		av_frame_free(&m_frame);
+		avcodec_free_context(&m_codecCtx);
+		return false;
+	}
 
 	m_encoderWidth  = width;
 	m_encoderHeight = height;

@@ -1,0 +1,122 @@
+name: Windows video client
+
+on:
+  push:
+    branches:
+      - fix/windows-screen-sharing
+    tags:
+      - windows-video-v*
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: windows-video-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+env:
+  BUILD_TYPE: Release
+  CMAKE_OPTIONS: >-
+    -Dclient=ON
+    -Dserver=OFF
+    -Dtests=OFF
+    -Dsymbols=OFF
+    -Dwarnings-as-errors=OFF
+    -Ddisplay-install-paths=ON
+    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+    -DCMAKE_C_COMPILER_LAUNCHER=ccache
+
+jobs:
+  build-windows-client:
+    name: Build Windows x64 installer
+    runs-on: windows-2025-vs2026
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Set build environment
+        shell: bash
+        run: .github/workflows/set_environment_variables.sh "windows-2025-vs2026" "static" "x86_64" "${{ github.workspace }}"
+
+      - name: Restore dependency cache
+        id: dependency-cache
+        uses: actions/cache/restore@v5
+        with:
+          path: ${{ env.MUMBLE_ENVIRONMENT_DIR }}
+          key: ${{ env.MUMBLE_ENVIRONMENT_VERSION }}
+
+      - name: Restore compiler cache
+        uses: hendrikmuhs/ccache-action@v1.2.23
+        with:
+          key: windows-video.${{ github.ref_name }}
+          save: true
+          append-timestamp: false
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-dependencies
+        with:
+          type: static
+          os: windows-2025-vs2026
+          arch: x86_64
+
+      - name: Build installer
+        shell: bash
+        env:
+          MUMBLE_BUILD_NUMBER: ${{ github.run_number }}
+        run: .github/workflows/build.sh "windows-2025-vs2026" "static" "x86_64"
+
+      - name: Restore native Windows tool paths
+        shell: pwsh
+        run: |
+          "C:\Program Files\Git\bin" | Out-File $env:GITHUB_PATH -Encoding utf8 -Append
+          "C:\Program Files\GitHub CLI" | Out-File $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Stage client installer
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem "${{ github.workspace }}/build/installer/client" -Filter "mumble_client-*.exe" -File | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if (-not $installer) { throw "The Windows client installer was not produced." }
+          New-Item -ItemType Directory -Force "${{ github.workspace }}/dist" | Out-Null
+          $destination = "${{ github.workspace }}/dist/Mumble-Video-Windows-x64.exe"
+          Copy-Item $installer.FullName $destination
+          $hash = (Get-FileHash $destination -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  Mumble-Video-Windows-x64.exe" | Set-Content "${{ github.workspace }}/dist/Mumble-Video-Windows-x64.exe.sha256" -Encoding ascii
+
+      - name: Upload Actions artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Mumble-Video-Windows-x64
+          compression-level: 9
+          if-no-files-found: error
+          path: |
+            dist/Mumble-Video-Windows-x64.exe
+            dist/Mumble-Video-Windows-x64.exe.sha256
+
+      - name: Save dependency cache
+        if: github.event_name != 'pull_request' && steps.dependency-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: ${{ env.MUMBLE_ENVIRONMENT_DIR }}
+          key: ${{ env.MUMBLE_ENVIRONMENT_VERSION }}
+
+      - name: Publish GitHub prerelease
+        if: startsWith(github.ref, 'refs/tags/windows-video-v')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $gh = "C:\Program Files\GitHub CLI\gh.exe"
+          if (-not (Test-Path $gh)) { throw "GitHub CLI was not found at $gh" }
+          $tag = "${{ github.ref_name }}"
+          $installer = "dist/Mumble-Video-Windows-x64.exe"
+          $checksum = "dist/Mumble-Video-Windows-x64.exe.sha256"
+          if (& $gh release view $tag --repo "${{ github.repository }}" 2>$null) {
+            & $gh release upload $tag $installer $checksum --clobber --repo "${{ github.repository }}"
+          } else {
+            & $gh release create $tag $installer $checksum --verify-tag --prerelease --latest=false --title "Mumble Windows screen sharing $tag" --notes "Unsigned preview build of the Mumble client with Windows screen sharing. Windows SmartScreen may warn because this test installer is not code-signed. Use it with a server built from the video branch."
+          }
