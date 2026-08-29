@@ -172,6 +172,49 @@ jobs:
 
           exit "${invalid}"
 
+      - name: Smoke test packaged application launch
+        shell: bash
+        run: |
+          app="${GITHUB_WORKSPACE}/build/Mumble.app"
+          executable_name="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "${app}/Contents/Info.plist")"
+          executable="${app}/Contents/MacOS/${executable_name}"
+          smoke_dir="${RUNNER_TEMP}/mumble-launch-smoke"
+          settings_file="${smoke_dir}/settings.json"
+          log_file="${smoke_dir}/mumble.log"
+          mkdir -p "${smoke_dir}"
+          printf '%s\n' '{"settings_version":1,"misc":{"audio_wizard_has_been_shown":true}}' > "${settings_file}"
+
+          env -u XDG_RUNTIME_DIR arch -arm64 "${executable}" \
+            --config "${settings_file}" \
+            --no-identity \
+            --no-window-states \
+            --skip-settings-backup-prompt \
+            > "${log_file}" 2>&1 &
+          mumble_pid=$!
+
+          cleanup() {
+            if kill -0 "${mumble_pid}" 2>/dev/null; then
+              kill "${mumble_pid}"
+            fi
+            wait "${mumble_pid}" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          for attempt in 1 2 3 4 5; do
+            sleep 1
+            if ! kill -0 "${mumble_pid}" 2>/dev/null; then
+              set +e
+              wait "${mumble_pid}"
+              exit_code=$?
+              set -e
+              cat "${log_file}"
+              echo "Mumble exited during launch smoke test with code ${exit_code}." >&2
+              exit 1
+            fi
+          done
+
+          echo "Mumble remained alive through the launch smoke test."
+
       - name: Stage client archive
         shell: bash
         run: |
