@@ -40,6 +40,7 @@ ScreenShareReceiver::ScreenShareReceiver(QObject *parent) : QObject(parent) {
 ScreenShareReceiver::~ScreenShareReceiver() {
 #ifdef USE_SCREEN_SHARING
 	// Tear down all decoders.
+	QMutexLocker lock(&m_mutex);
 	for (std::pair< const unsigned int, DecoderState > &kv : m_decoders) {
 		DecoderState &ds = kv.second;
 		if (ds.swsCtx) {
@@ -63,6 +64,11 @@ void ScreenShareReceiver::handleVideoPacket(const Mumble::Protocol::VideoData &v
 #ifndef USE_SCREEN_SHARING
 	Q_UNUSED(videoData);
 #else
+	// Runs on the ServerHandler thread and may race resetSender() on the GUI
+	// thread. The whole reassembly/decode path is guarded because it mutates
+	// m_fragmentBuffer and m_decoders (including the FFmpeg objects inside).
+	QMutexLocker lock(&m_mutex);
+
 	const quint32 session   = videoData.senderSession;
 	const quint64 frameNum  = videoData.frameNumber;
 	const quint32 fragIdx   = videoData.fragmentIndex;
@@ -155,6 +161,7 @@ void ScreenShareReceiver::handleVideoPacket(const Mumble::Protocol::VideoData &v
 
 void ScreenShareReceiver::resetSender(quint32 senderSession) {
 #ifdef USE_SCREEN_SHARING
+	QMutexLocker lock(&m_mutex);
 	m_fragmentBuffer.erase(senderSession);
 	destroyDecoder(senderSession);
 #else

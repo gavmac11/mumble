@@ -9,6 +9,7 @@
 #include "MumbleProtocol.h"
 #include "MumbleUDP.pb.h"
 
+#include <QtCore/QMutex>
 #include <QtCore/QObject>
 #include <QtGui/QImage>
 
@@ -69,6 +70,12 @@ private:
 
 	/// sender_session -> frame_number -> pending fragment data
 	std::map< quint32, std::map< quint64, PendingFrame > > m_fragmentBuffer;
+
+	/// Guards m_fragmentBuffer and m_decoders: handleVideoPacket() runs on the
+	/// ServerHandler thread while resetSender() (and the destructor) tear state
+	/// down from the GUI thread. Without it, a sender stopping their share frees
+	/// a decoder that is still in use and corrupts the heap.
+	QMutex m_mutex;
 
 	struct DecoderState {
 		AVCodecContext *codecCtx      = nullptr;
