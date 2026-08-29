@@ -4015,8 +4015,8 @@ void MainWindow::context_triggered() {
 QPair< QByteArray, QImage > MainWindow::openImageFile() {
 	QPair< QByteArray, QImage > retval;
 
-	QString fname =
-		QFileDialog::getOpenFileName(this, tr("Choose image file"), getImagePath(), tr("Images (*.png *.jpg *.jpeg)"));
+	QString fname = QFileDialog::getOpenFileName(this, tr("Choose image file"), getImagePath(),
+												 tr("Images (*.png *.jpg *.jpeg *.gif)"));
 
 	if (fname.isNull())
 		return retval;

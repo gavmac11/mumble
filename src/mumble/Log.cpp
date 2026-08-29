@@ -26,9 +26,12 @@
 #include <type_traits>
 
 #include <QSignalBlocker>
+#include <QtCore/QBuffer>
 #include <QtCore/QMutexLocker>
 #include <QtCore/QRegularExpression>
+#include <QtGui/QImageReader>
 #include <QtGui/QImageWriter>
+#include <QtGui/QMovie>
 #include <QtGui/QScreen>
 #include <QtGui/QTextBlock>
 #include <QtGui/QTextDocumentFragment>
@@ -637,6 +640,79 @@ QString Log::imageToImg(QImage img, int maxSize) {
 		quality -= 10;
 	}
 	return QString();
+}
+
+/// Returns whether the given image data is a GIF consisting of more than a single frame
+static bool isAnimatedGif(const QByteArray &imageData) {
+	if (!imageData.startsWith("GIF87a") && !imageData.startsWith("GIF89a")) {
+		return false;
+	}
+
+	QBuffer buffer;
+	buffer.setData(imageData);
+	if (!buffer.open(QIODevice::ReadOnly)) {
+		return false;
+	}
+
+	QImageReader reader(&buffer, QByteArray("gif"));
+	return reader.imageCount() > 1;
+}
+
+QString Log::imageToImg(const QByteArray &rawImageData, const QImage &image, int maxSize) {
+	// Animated GIFs cannot be re-encoded without losing their animation, so the raw data is embedded
+	// as-is - but only if the generated HTML fits into the message size limit. Note that the size
+	// check deliberately measures the final HTML string (including base64 and percent-encoding),
+	// exactly like the JPEG path in imageToImg(QImage, int) and the server do.
+	if (!rawImageData.isEmpty() && isAnimatedGif(rawImageData)) {
+		const QString animatedHtml = imageToImg(QByteArray("gif"), rawImageData);
+		if (maxSize == 0 || animatedHtml.length() < maxSize) {
+			return animatedHtml;
+		}
+
+		Log::logOrDefer(Log::Information,
+						tr("Image too large to be sent with its animation. It has been sent as a static "
+						   "image instead."));
+	}
+
+	if (image.isNull()) {
+		return QString();
+	}
+
+	return imageToImg(image, maxSize);
+}
+
+QByteArray Log::imageDataFromDataUrl(const QUrl &url, QByteArray &imageFormat) {
+	imageFormat.clear();
+
+	if (url.scheme() != QLatin1String("data") || !url.host().isEmpty()) {
+		return QByteArray();
+	}
+
+	// Note: this mirrors how Qt itself decodes data-URLs (including the percent-encoded and
+	// line-wrapped base64 payload that imageToImg generates).
+	QByteArray data =
+		QByteArray::fromPercentEncoding(url.toString(QUrl::FullyEncoded | QUrl::RemoveScheme).toLatin1());
+
+	const int comma = static_cast< int >(data.indexOf(','));
+	if (comma == -1) {
+		return QByteArray();
+	}
+
+	QByteArray payload = data.mid(comma + 1);
+	data.truncate(comma);
+	data               = data.trimmed();
+
+	if (data.endsWith(";base64")) {
+		payload = QByteArray::fromBase64(payload);
+		data.chop(7);
+	}
+
+	const int slash = static_cast< int >(data.indexOf('/'));
+	if (slash != -1) {
+		imageFormat = data.mid(slash + 1).toLower();
+	}
+
+	return payload;
 }
 
 QString Log::validHtml(const QString &html, QTextCursor *tc) {

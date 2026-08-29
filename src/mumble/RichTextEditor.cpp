@@ -83,9 +83,10 @@ void RichTextHtmlEdit::insertFromMimeData(const QMimeData *source) {
 	qWarning() << "RichTextHtmlEdit::insertFromMimeData" << source->formats();
 #endif
 
-	if (source->hasImage()) {
-		QImage img   = qvariant_cast< QImage >(source->imageData());
-		QString html = Log::imageToImg(img, static_cast< int >(Global::get().uiImageLength));
+	if (source->hasImage() || source->hasFormat(QLatin1String("image/gif"))) {
+		QImage img        = qvariant_cast< QImage >(source->imageData());
+		QByteArray rawImg = source->data(QLatin1String("image/gif"));
+		QString html      = Log::imageToImg(rawImg, img, static_cast< int >(Global::get().uiImageLength));
 		if (!html.isEmpty())
 			insertHtml(html);
 		return;
@@ -238,11 +239,12 @@ void RichTextEditor::on_qaLink_triggered() {
 }
 
 void RichTextEditor::on_qaImage_triggered() {
-	QImage img = Global::get().mw->openImageFile().second;
-	if (img.isNull()) {
+	QPair< QByteArray, QImage > img = Global::get().mw->openImageFile();
+	if (img.second.isNull()) {
 		return;
 	}
-	QString processedImage = Log::imageToImg(img, static_cast< int >(Global::get().uiImageLength));
+	QString processedImage =
+		Log::imageToImg(img.first, img.second, static_cast< int >(Global::get().uiImageLength));
 	if (processedImage.length() > 0) {
 		qteRichText->insertHtml(processedImage);
 	} else {

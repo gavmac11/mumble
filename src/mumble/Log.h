@@ -145,6 +145,22 @@ public:
 	static QString validHtml(const QString &html, QTextCursor *tc = nullptr);
 	static QString imageToImg(const QByteArray &format, const QByteArray &image);
 	static QString imageToImg(QImage img, int maxSize = 0);
+	/// Creates an HTML image tag for the given image. If rawImageData contains an animated GIF and the
+	/// generated HTML fits into maxSize, the raw data is embedded as-is, thereby preserving the
+	/// animation. Otherwise (and for all other images), the image is re-encoded as JPEG, stepping the
+	/// quality down until it fits into maxSize (see the imageToImg overloads above).
+	/// In case an animated GIF had to be converted to a static image because it was too large, this is
+	/// logged as an information entry.
+	/// @param rawImageData The raw image data the given image was created from, if available
+	/// @param image The decoded image corresponding to rawImageData
+	/// @param maxSize The maximum length of the generated HTML string
+	/// @return The image HTML or an empty string, if the image could not be processed
+	static QString imageToImg(const QByteArray &rawImageData, const QImage &image, int maxSize);
+	/// Extracts the raw image data from a data-URL as it is created by the imageToImg functions above.
+	/// @param url The data-URL to extract the image data from
+	/// @param imageFormat Receives the image format declared in the URL (e.g. "gif")
+	/// @return The raw image data or an empty byte array, if the URL could not be parsed
+	static QByteArray imageDataFromDataUrl(const QUrl &url, QByteArray &imageFormat);
 	static QString msgColor(const QString &text, LogColorType t);
 	static QString formatClientUser(ClientUser *cu, LogColorType t, const QString &displayName = QString());
 	static QString formatChannel(::Channel *c);

@@ -13,6 +13,7 @@
 #include "Global.h"
 
 #include <QMimeData>
+#include <QtCore/QFile>
 #include <QtCore/QTimer>
 #include <QtGui/QAbstractTextDocumentLayout>
 #include <QtGui/QClipboard>
@@ -183,12 +184,15 @@ void ChatbarTextEdit::insertFromMimeData(const QMimeData *source) {
 }
 
 bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
-	if ((source->hasImage() || source->hasUrls())) {
+	if ((source->hasImage() || source->hasUrls() || source->hasFormat(QLatin1String("image/gif")))) {
 		if (Global::get().bAllowHTML) {
-			if (source->hasImage()) {
+			if (source->hasImage() || source->hasFormat(QLatin1String("image/gif"))) {
 				// Process the image pasted onto the chatbar.
 				QImage image = qvariant_cast< QImage >(source->imageData());
-				if (emitPastedImage(image)) {
+				// The raw data is required in order to preserve the animation of animated GIFs. It is
+				// only available if the source provides it (e.g. a file manager or an image editor).
+				QByteArray rawImage = source->data(QLatin1String("image/gif"));
+				if (emitPastedImage(image, rawImage)) {
 					return true;
 				} else {
 					Global::get().l->log(Log::Information, tr("Unable to send image: too large."));
@@ -202,11 +206,18 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 				int count = 0;
 				for (int i = 0; i < urlList.size(); ++i) {
 					QString path = urlList[i].toLocalFile();
+					QByteArray rawImage;
+					if (path.endsWith(QLatin1String(".gif"), Qt::CaseInsensitive)) {
+						QFile file(path);
+						if (file.open(QIODevice::ReadOnly)) {
+							rawImage = file.readAll();
+						}
+					}
 					QImage image(path);
 
-					if (image.isNull())
+					if (image.isNull() && rawImage.isEmpty())
 						continue;
-					if (emitPastedImage(image)) {
+					if (emitPastedImage(image, rawImage)) {
 						++count;
 					} else {
 						Global::get().l->log(Log::Information, tr("Unable to send image %1: too large.").arg(path));
@@ -222,8 +233,8 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 	return false;
 }
 
-bool ChatbarTextEdit::emitPastedImage(QImage image) {
-	QString processedImage = Log::imageToImg(image, static_cast< int >(Global::get().uiImageLength));
+bool ChatbarTextEdit::emitPastedImage(const QImage &image, const QByteArray &rawImage) {
+	QString processedImage = Log::imageToImg(rawImage, image, static_cast< int >(Global::get().uiImageLength));
 	if (processedImage.length() > 0) {
 		QString imgHtml = QLatin1String("<br />") + processedImage;
 		emit pastedImage(imgHtml);

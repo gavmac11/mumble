@@ -52,7 +52,7 @@ protected:
 	bool canInsertFromMimeData(const QMimeData *source) const Q_DECL_OVERRIDE;
 	void insertFromMimeData(const QMimeData *source) Q_DECL_OVERRIDE;
 	bool sendImagesFromMimeData(const QMimeData *source);
-	bool emitPastedImage(QImage image);
+	bool emitPastedImage(const QImage &image, const QByteArray &rawImage);
 
 public:
 	void setDefaultText(const QString &, bool = false);
