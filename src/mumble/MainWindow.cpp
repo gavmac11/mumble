@@ -1104,24 +1104,41 @@ void MainWindow::on_qteLog_customContextMenuRequested(const QPoint &mpos) {
 }
 
 void MainWindow::saveImageAs() {
-	QDateTime now = QDateTime::currentDateTime();
+	QDateTime now   = QDateTime::currentDateTime();
+	QString resName = qtcSaveImageCursor.charFormat().toImageFormat().name();
+	bool isGif      = resName.startsWith(QLatin1String("data:image/gif;"), Qt::CaseInsensitive);
 	QString defaultFname =
-		QString::fromLatin1("Mumble-%1.jpg").arg(now.toString(QString::fromLatin1("yyyy-MM-dd-HHmmss")));
+		QString::fromLatin1("Mumble-%1.%2").arg(now.toString(QString::fromLatin1("yyyy-MM-dd-HHmmss"))).arg(
+			isGif ? QLatin1String("gif") : QLatin1String("jpg"));
 
 	QString fname = QFileDialog::getSaveFileName(this, tr("Save Image File"), getImagePath(defaultFname),
-												 tr("Images (*.png *.jpg *.jpeg)"));
+												 tr("Images (*.png *.jpg *.jpeg *.gif)"));
 	if (fname.isNull()) {
 		return;
 	}
 
-	QString resName = qtcSaveImageCursor.charFormat().toImageFormat().name();
-	QVariant res    = qteLog->document()->resource(QTextDocument::ImageResource, resName);
-	QImage img      = res.value< QImage >();
-	bool ok         = img.save(fname);
+	// Animated GIFs are displayed frame by frame, so the cached resource only ever contains a single
+	// frame. Save the raw data instead in order to preserve the animation.
+	bool ok = false;
+	if (isGif) {
+		QByteArray imageFormat;
+		const QByteArray rawData = Log::imageDataFromDataUrl(QUrl(resName), imageFormat);
+
+		if (!rawData.isEmpty()) {
+			QFile f(fname);
+			ok = f.open(QIODevice::WriteOnly) && f.write(rawData) == rawData.size();
+		}
+	}
+
 	if (!ok) {
-		// In case fname did not contain a file extension, try saving with an
-		// explicit format.
-		ok = img.save(fname, "PNG");
+		QVariant res = qteLog->document()->resource(QTextDocument::ImageResource, resName);
+		QImage img   = res.value< QImage >();
+		ok           = img.save(fname);
+		if (!ok) {
+			// In case fname did not contain a file extension, try saving with an
+			// explicit format.
+			ok = img.save(fname, "PNG");
+		}
 	}
 
 	updateImagePath(fname);
