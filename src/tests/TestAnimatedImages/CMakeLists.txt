@@ -12,3 +12,4 @@ target_include_directories(TestAnimatedImages PRIVATE "${CMAKE_SOURCE_DIR}/src/m
 target_link_libraries(TestAnimatedImages PRIVATE mumble_client_object_lib Qt6::Test)
 
 add_test(NAME TestAnimatedImages COMMAND $<TARGET_FILE:TestAnimatedImages>)
+set_tests_properties(TestAnimatedImages PROPERTIES TIMEOUT 60)

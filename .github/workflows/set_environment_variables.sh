@@ -79,7 +79,7 @@ echo "VCPKG_CMAKE_OPTIONS=$VCPKG_CMAKE_OPTIONS" >> "$GITHUB_ENV"
 echo "MUMBLE_VCPKG_TRIPLET=$VCPKG_TARGET_TRIPLET" >> "$GITHUB_ENV"
 echo "QT_DEBUG_PLUGINS=1" >> "$GITHUB_ENV"
 
-if [[ "$os" = "ubuntu" || "$os" = "debian" ]]; then
-	# Setting this is necessary in order to be able to run tests on the CLI
+if [[ "$os" = "ubuntu" || "$os" = "debian" || "$os" = windows* ]]; then
+	# Setting this is necessary in order to run Qt GUI tests without a display.
 	echo "QT_QPA_PLATFORM=offscreen" >> "$GITHUB_ENV"
 fi
