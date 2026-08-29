@@ -473,7 +473,8 @@ public:
 	void toggleSelfPrioritySpeaker();
 	void recording();
 	void screenShare();
-	void sendScreenShareFrame(QByteArray encodedData, quint64 frameNumber, bool isKeyFrame);
+	void sendScreenShareFrame(QByteArray encodedData, quint64 frameNumber, quint32 width, quint32 height,
+							  bool isKeyFrame);
 	void onRemoteFrameDecoded(quint32 senderSession, QImage frame);
 	void onRemoteScreenShareStopped(quint32 senderSession);
 	void openSelfCommentDialog();

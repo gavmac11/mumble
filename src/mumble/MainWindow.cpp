@@ -66,6 +66,7 @@
 #include "UserModel.h"
 #include "Utils.h"
 #include "VersionCheck.h"
+#include "VideoFramePacketizer.h"
 #include "ViewCert.h"
 #include "VoiceRecorderDialog.h"
 #include "Global.h"
@@ -4308,45 +4309,17 @@ void MainWindow::screenShare() {
 	}
 }
 
-void MainWindow::sendScreenShareFrame(QByteArray encodedData, quint64 frameNumber, bool isKeyFrame) {
+void MainWindow::sendScreenShareFrame(QByteArray encodedData, quint64 frameNumber, quint32 width, quint32 height,
+									  bool isKeyFrame) {
 	ServerHandlerPtr sh = Global::get().sh;
 	ClientUser *p       = ClientUser::get(Global::get().uiSession);
 	if (!p || !sh || encodedData.isEmpty())
 		return;
 
-	// Fragment the encoded frame into UDP-safe chunks and send each as a MumbleUDP::Video message.
-	// 900 is a bit of a hardcoded arbitrary data. But it seems like a safe value for most MTU
-	static constexpr int MAX_FRAGMENT_BYTES = 900;
-	const int dataSize                      = static_cast< int >(encodedData.size());
-	const int fragmentCount                 = (dataSize + MAX_FRAGMENT_BYTES - 1) / MAX_FRAGMENT_BYTES;
-
-	QScreen *screen  = QGuiApplication::primaryScreen();
-	const int width  = screen ? screen->size().width() : 0;
-	const int height = screen ? screen->size().height() : 0;
-
-	for (int i = 0; i < fragmentCount; ++i) {
-		const int offset    = i * MAX_FRAGMENT_BYTES;
-		const int chunkSize = std::min(MAX_FRAGMENT_BYTES, dataSize - offset);
-
-		MumbleUDP::Video videoMsg;
-		videoMsg.set_sender_session(p->uiSession);
-		videoMsg.set_codec(MumbleUDP::Video_Codec_H264);
-		videoMsg.set_width(static_cast< std::uint32_t >(width));
-		videoMsg.set_height(static_cast< std::uint32_t >(height));
-		videoMsg.set_frame_number(frameNumber);
-		videoMsg.set_fragment_index(static_cast< std::uint32_t >(i));
-		videoMsg.set_fragment_count(static_cast< std::uint32_t >(fragmentCount));
-		videoMsg.set_video_data(encodedData.constData() + offset, static_cast< std::size_t >(chunkSize));
-		videoMsg.set_is_keyframe(isKeyFrame && i == 0);
-
-		const int msgSize = static_cast< int >(videoMsg.ByteSizeLong());
-		std::vector< unsigned char > packet(static_cast< std::size_t >(msgSize + 1));
-		packet[0] = static_cast< unsigned char >(Mumble::Protocol::UDPMessageType::Video);
-		if (!videoMsg.SerializeToArray(packet.data() + 1, msgSize))
-			continue;
-
+	const std::vector< std::vector< unsigned char > > packets =
+		Mumble::Video::packetizeFrame(p->uiSession, encodedData, frameNumber, width, height, isKeyFrame);
+	for (const std::vector< unsigned char > &packet : packets)
 		sh->sendMessage(packet.data(), static_cast< int >(packet.size()));
-	}
 }
 
 void MainWindow::onRemoteFrameDecoded(quint32 senderSession, QImage frame) {

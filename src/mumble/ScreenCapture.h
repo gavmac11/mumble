@@ -13,6 +13,7 @@
 
 #ifdef USE_SCREEN_SHARING
 #	include "CaptureSource.h"
+#	include "VideoQualityProfile.h"
 #	if defined(Q_OS_LINUX)
 #		include "V4L2Capture.h"
 #	endif
@@ -31,7 +32,8 @@ extern "C" {
 #	endif
 #endif
 
-/// Captures a selected screen or window at ~15 fps and emits encoded video frames via frameEncoded().
+/// Captures screen content at up to 1080p15 or webcam content at up to 720p30 and emits
+/// encoded video frames via frameEncoded().
 ///
 /// On macOS 14+, startCaptureNative() shows the OS-native SCContentSharingPicker and streams
 /// frames via SCStream; captureStarted() / captureAborted() signals report the outcome.
@@ -68,7 +70,7 @@ public:
 
 signals:
 	/// Emitted for every successfully encoded frame.
-	void frameEncoded(QByteArray encodedData, quint64 frameNumber, bool isKeyFrame);
+	void frameEncoded(QByteArray encodedData, quint64 frameNumber, quint32 width, quint32 height, bool isKeyFrame);
 
 #ifdef USE_SCREEN_SHARING
 	/// Emitted immediately before the first successfully encoded frame.
@@ -85,7 +87,7 @@ private slots:
 
 private:
 #ifdef USE_SCREEN_SHARING
-	bool initEncoder(int width, int height, int fps = 15);
+	bool initEncoder(int width, int height, const Mumble::VideoQuality::Profile &profile);
 	void destroyEncoder();
 	void scheduleCaptureAbort();
 	void encodeImage(const QImage &srcImage); ///< Shared encode path used by both capture modes.

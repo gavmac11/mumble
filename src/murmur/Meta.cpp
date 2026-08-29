@@ -64,8 +64,8 @@ MetaParams::MetaParams() {
 	// (restricted by the maximum bitrate Opus supports)
 	// 558000 = 510000 (Opus) + 9600 (position) + 38400 (TCP overhead)
 	iMaxBandwidth              = 558000;
-	// Video defaults: one 720p30 H.264 stream (~2 Mbps) per user; aggregate assumes a small
-	// group on a typical home uplink.
+	// Video defaults cover one 720p30 webcam or 1080p15 screen-content stream per user;
+	// aggregate assumes a small group on a typical home uplink.
 	iMaxVideoBandwidth         = 2500000;
 	iMaxVideoBandwidthAggregate = 20000000;
 	iMaxUsers                  = 1000;
