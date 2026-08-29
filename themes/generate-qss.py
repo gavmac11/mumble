@@ -80,6 +80,17 @@ def strip_line_comment(line: str) -> str:
     return re.sub(r"//.*$", "", line)
 
 
+def canonical(name: str) -> str:
+    # Like Sass, "-" and "_" are interchangeable within variable names
+    return name.replace("_", "-")
+
+
+def lookup(variables: dict, name: str):
+    if name in variables:
+        return variables[name]
+    return variables.get(canonical(name))
+
+
 def resolve(definition: dict) -> dict:
     """Resolve variables that reference other variables."""
     resolved = {}
@@ -94,10 +105,15 @@ def resolve(definition: dict) -> dict:
         definition = {name: resolved.get(name, definition[name]) for name in definition}
         for name, value in definition.items():
             if name not in resolved:
-                definition[name] = VARIABLE_REFERENCE.sub(lambda m: resolved.get(m.group(1), m.group(0)), value)
+                definition[name] = VARIABLE_REFERENCE.sub(
+                    lambda m: lookup(resolved, m.group(1)) or m.group(0), value)
         if not changed:
             break
-    unresolved = [name for name, value in definition.items() if VARIABLE_REFERENCE.search(value)]
+    unresolved = []
+    for name, value in definition.items():
+        match = VARIABLE_REFERENCE.search(value)
+        if match and lookup(resolved, match.group(1)) is None:
+            unresolved.append(name)
     if unresolved:
         raise RuntimeError(f"Unresolvable variables: {unresolved}")
     return definition
@@ -145,14 +161,14 @@ def generate(source_file: Path) -> str:
     variables = resolve(variables)
 
     def substitute(expression: str) -> str:
-        substituted = VARIABLE_REFERENCE.sub(lambda m: variables.get(m.group(1), m.group(0)), expression)
+        substituted = VARIABLE_REFERENCE.sub(lambda m: lookup(variables, m.group(1)) or m.group(0), expression)
         if substituted != expression:
             return evaluate_arithmetic(substituted)
         return expression
 
     def substitute_line(line: str) -> str:
         line = VARIABLE_EXPRESSION.sub(lambda m: substitute(m.group(0)), line)
-        return VARIABLE_REFERENCE.sub(lambda m: variables.get(m.group(1), m.group(0)), line)
+        return VARIABLE_REFERENCE.sub(lambda m: lookup(variables, m.group(1)) or m.group(0), line)
 
     # Like Sass, drop a trailing comma of a selector list (e.g. "selector, {")
     return re.sub(r",(\s*\{)", r"\1", "\n".join(substitute_line(line) for line in body)) + "\n"
