@@ -20,13 +20,7 @@
 
 #include "Global.h"
 
-// These values are still hardcoded. This should probably be a setting.
-// For now these values seem alright for testing
-static constexpr int CAPTURE_INTERVAL_MS = 66;        // ~15 fps
-static constexpr int VIDEO_BITRATE       = 1'500'000; // 1.5 Mbps
-static constexpr int VIDEO_FPS           = 15;
-static constexpr int VIDEO_FPS_WEBCAM    = 30;
-static constexpr int VIDEO_GOP_SIZE      = 5; // keyframe every ~333 ms — limits UDP error propagation
+static constexpr int CAPTURE_INTERVAL_MS = 66; // ~15 fps
 
 ScreenCapture::ScreenCapture(QObject *parent) : QObject(parent) {
 	m_captureTimer = new QTimer(this);
@@ -174,28 +168,30 @@ void ScreenCapture::startCaptureNative() {
 #	endif // Q_OS_MAC || HAS_WAYLAND_PORTAL
 
 void ScreenCapture::encodeImage(const QImage &srcImage) {
-	// Caller must supply a non-null Format_RGB888 image.
 	if (srcImage.isNull()) {
 		scheduleCaptureAbort();
 		return;
 	}
 
-	// Convert to Format_RGBA8888 for mapping to AV_PIX_FMT_RGB24.
-	QImage image = srcImage.convertToFormat(QImage::Format_RGBA8888);
-	// libx264 (YUV420P) requires even dimensions — crop one pixel if needed.
-	const int width  = image.width() & ~1;
-	const int height = image.height() & ~1;
-	if (width <= 0 || height <= 0) {
+	const Mumble::VideoQuality::Profile &profile = Mumble::VideoQuality::screenShareProfile();
+	const QSize encodedSize                      = Mumble::VideoQuality::constrainedFrameSize(srcImage.size(), profile);
+	if (!encodedSize.isValid()) {
 		scheduleCaptureAbort();
 		return;
 	}
-	if (width != image.width() || height != image.height())
-		image = image.copy(0, 0, width, height);
+
+	QImage image = srcImage;
+	if (image.size() != encodedSize)
+		image = image.scaled(encodedSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+	// Convert to RGBA for mapping to AV_PIX_FMT_RGBA.
+	image            = image.convertToFormat(QImage::Format_RGBA8888);
+	const int width  = image.width();
+	const int height = image.height();
 
 	// (Re-)initialise the encoder when the resolution changes.
 	if (!m_codecCtx || m_encoderWidth != width || m_encoderHeight != height) {
 		destroyEncoder();
-		if (!initEncoder(width, height)) {
+		if (!initEncoder(width, height, profile)) {
 			scheduleCaptureAbort();
 			return;
 		}
@@ -232,7 +228,8 @@ void ScreenCapture::encodeImage(const QImage &srcImage) {
 			m_reportedCaptureStarted = true;
 			emit captureStarted();
 		}
-		emit frameEncoded(encodedData, m_frameNumber, isKey);
+		emit frameEncoded(encodedData, m_frameNumber, static_cast< quint32 >(m_encoderWidth),
+						  static_cast< quint32 >(m_encoderHeight), isKey);
 		av_packet_unref(m_packet);
 	}
 
@@ -246,17 +243,24 @@ void ScreenCapture::encodeYuvFrame(int width, int height, const uint8_t *const d
 		return;
 	}
 
-	// (Re-)initialise the encoder when the resolution changes.
-	if (!m_codecCtx || m_encoderWidth != width || m_encoderHeight != height) {
+	const Mumble::VideoQuality::Profile &profile = Mumble::VideoQuality::webcamProfile();
+	const QSize encodedSize = Mumble::VideoQuality::constrainedFrameSize(QSize(width, height), profile);
+	if (!encodedSize.isValid()) {
+		scheduleCaptureAbort();
+		return;
+	}
+
+	// (Re-)initialise the encoder when the captured or constrained resolution changes.
+	if (!m_codecCtx || m_encoderWidth != encodedSize.width() || m_encoderHeight != encodedSize.height()) {
 		destroyEncoder();
-		if (!initEncoder(width, height, VIDEO_FPS_WEBCAM)) {
+		if (!initEncoder(encodedSize.width(), encodedSize.height(), profile)) {
 			scheduleCaptureAbort();
 			return;
 		}
 	}
 
-	m_swsCtx = sws_getCachedContext(m_swsCtx, width, height, AV_PIX_FMT_YUV420P, width, height,
-									AV_PIX_FMT_YUV420P, SWS_BILINEAR, nullptr, nullptr, nullptr);
+	m_swsCtx = sws_getCachedContext(m_swsCtx, width, height, AV_PIX_FMT_YUV420P, encodedSize.width(),
+									encodedSize.height(), AV_PIX_FMT_YUV420P, SWS_BILINEAR, nullptr, nullptr, nullptr);
 	if (!m_swsCtx) {
 		scheduleCaptureAbort();
 		return;
@@ -284,7 +288,8 @@ void ScreenCapture::encodeYuvFrame(int width, int height, const uint8_t *const d
 			m_reportedCaptureStarted = true;
 			emit captureStarted();
 		}
-		emit frameEncoded(encodedData, m_frameNumber, isKey);
+		emit frameEncoded(encodedData, m_frameNumber, static_cast< quint32 >(m_encoderWidth),
+						  static_cast< quint32 >(m_encoderHeight), isKey);
 		av_packet_unref(m_packet);
 	}
 
@@ -321,7 +326,7 @@ void ScreenCapture::abortCapture() {
 	emit captureAborted();
 }
 
-bool ScreenCapture::initEncoder(int width, int height, int fps) {
+bool ScreenCapture::initEncoder(int width, int height, const Mumble::VideoQuality::Profile &profile) {
 	// To use hardware-accelerated encoding (e.g. h264_videotoolbox on macOS,
 	// h264_nvenc on NVIDIA), replace "libx264" with the appropriate encoder name
 	// and add any codec-specific option calls below.
@@ -339,12 +344,14 @@ bool ScreenCapture::initEncoder(int width, int height, int fps) {
 	if (!m_codecCtx)
 		return false;
 
-	m_codecCtx->width     = width;
-	m_codecCtx->height    = height;
-	m_codecCtx->time_base = { 1, fps };
-	m_codecCtx->pix_fmt   = AV_PIX_FMT_YUV420P;
-	m_codecCtx->bit_rate  = VIDEO_BITRATE;
-	m_codecCtx->gop_size  = VIDEO_GOP_SIZE;
+	m_codecCtx->width          = width;
+	m_codecCtx->height         = height;
+	m_codecCtx->time_base      = { 1, profile.framesPerSecond };
+	m_codecCtx->pix_fmt        = AV_PIX_FMT_YUV420P;
+	m_codecCtx->bit_rate       = profile.bitRate;
+	m_codecCtx->rc_max_rate    = profile.bitRate;
+	m_codecCtx->rc_buffer_size = profile.bitRate;
+	m_codecCtx->gop_size       = profile.keyFrameInterval;
 
 	// Minimise encoding latency. These could maybe be settings?
 	av_opt_set(m_codecCtx->priv_data, "preset", "superfast", 0);
