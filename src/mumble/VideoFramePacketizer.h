@@ -7,7 +7,7 @@
 #define MUMBLE_MUMBLE_VIDEOFRAMEPACKETIZER_H_
 
 #include <QtCore/QByteArray>
-#include <QtCore/QtTypes>
+#include <QtGlobal>
 
 #include <vector>
 
