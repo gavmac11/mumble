@@ -21,8 +21,9 @@ while the server should work on anything Qt can be installed on.
 ## Preview builds
 
 Installable previews of the latest successfully built `master` commit are available for
-[Windows x64](https://github.com/gavmac11/mumble/releases/download/master-preview/Mumble-Master-Preview-Windows-x64.exe)
+[Windows x64](https://github.com/gavmac11/mumble/releases/download/master-preview/Mumble-Master-Preview-Windows-x64.exe),
 [macOS ARM64](https://github.com/gavmac11/mumble/releases/download/master-preview/Mumble-Master-Preview-macOS-arm64.zip),
+[Ubuntu 24.04 amd64](https://github.com/gavmac11/mumble/releases/download/master-preview/Mumble-Master-Preview-Ubuntu-24.04-amd64.deb),
 and the [Debian 12 amd64 server](https://github.com/gavmac11/mumble/releases/download/master-preview/Mumble-Master-Preview-Debian-12-amd64.deb).
 Checksums and the exact source commit are published in the
 [rolling master preview release](https://github.com/gavmac11/mumble/releases/tag/master-preview).
