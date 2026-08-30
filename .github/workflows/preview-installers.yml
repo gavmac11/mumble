@@ -407,8 +407,9 @@ jobs:
             bash -euxo pipefail -c '
               apt-get update
               apt-get install -y /dist/Mumble-Ubuntu-24.04-amd64.deb
+              apt-get install -y xvfb
               dpkg-query --show --showformat="\${Package} \${Version} \${Architecture}\n" mumble
-              mumble --version
+              xvfb-run -a env QT_QPA_PLATFORM=xcb mumble --version
               test -f /usr/share/applications/info.mumble.Mumble.desktop
               test -f /usr/share/icons/hicolor/scalable/apps/mumble.svg
               find /usr/lib/mumble/plugins -type f -name "*.so" -print -quit | grep -q .
@@ -424,7 +425,7 @@ jobs:
             ldd /usr/bin/mumble
             exit 1
           fi
-          mumble --version
+          xvfb-run -a env QT_QPA_PLATFORM=xcb mumble --version
           test -f /usr/share/applications/info.mumble.Mumble.desktop
           test -f /usr/share/icons/hicolor/scalable/apps/mumble.svg
           find /usr/lib/mumble/plugins -type f -name '*.so' -print -quit | grep -q .
