@@ -24,9 +24,14 @@ $extractDirectory = Join-Path $installerDirectory "ffmpeg-payload-check"
 New-Item -ItemType Directory -Force $extractDirectory | Out-Null
 
 $msiexec = Join-Path $env:SystemRoot "System32/msiexec.exe"
-& $msiexec /a $msi.FullName /qn "TARGETDIR=$extractDirectory"
-if ($LASTEXITCODE -ne 0) {
-	throw "Administrative MSI extraction failed with exit code $LASTEXITCODE."
+$extraction = Start-Process -FilePath $msiexec -ArgumentList @(
+	"/a"
+	"`"$($msi.FullName)`""
+	"/qn"
+	"TARGETDIR=`"$extractDirectory`""
+) -Wait -PassThru -NoNewWindow
+if ($extraction.ExitCode -ne 0) {
+	throw "Administrative MSI extraction failed with exit code $($extraction.ExitCode)."
 }
 
 $installed = @(Get-ChildItem $extractDirectory -Filter "*.dll" -File -Recurse | ForEach-Object Name)
