@@ -51,10 +51,6 @@ jobs:
         matrix:
             include:
               - os: ubuntu-24.04
-                type: static
-                arch: x86_64
-                tests: 'OFF'
-              - os: ubuntu-24.04
                 type: shared
                 arch: x86_64
                 tests: 'ON'

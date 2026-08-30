@@ -319,6 +319,178 @@ jobs:
           path: ${{ env.MUMBLE_ENVIRONMENT_DIR }}
           key: ${{ env.MUMBLE_ENVIRONMENT_VERSION }}
 
+  ubuntu:
+    name: Ubuntu 24.04 client (amd64)
+    runs-on: ubuntu-24.04
+    env:
+      CMAKE_OPTIONS: >-
+        -Dclient=ON
+        -Dserver=OFF
+        -Dtests=OFF
+        -Dpackaging=OFF
+        -Dsymbols=OFF
+        -Dwarnings-as-errors=OFF
+        -Dscreen-sharing=ON
+        -Ddisplay-install-paths=ON
+        -DCMAKE_INSTALL_PREFIX=/usr
+        -DMUMBLE_INSTALL_EXECUTABLEDIR=/usr/bin
+        -DMUMBLE_INSTALL_LIBDIR=/usr/lib/mumble
+        -DMUMBLE_INSTALL_PLUGINDIR=/usr/lib/mumble/plugins
+        -DMUMBLE_INSTALL_SCRIPTDIR=/usr/bin
+        -DMUMBLE_INSTALL_MANDIR=/usr/share/man/man1
+        -DMUMBLE_INSTALL_DOCDIR=/usr/share/doc/mumble
+        -DMUMBLE_INSTALL_LICENSEDIR=/usr/share/doc/mumble
+        -DMUMBLE_INSTALL_METADATADIR=/usr/share/metainfo
+        -DMUMBLE_INSTALL_APPLICATIONSDIR=/usr/share/applications
+        -DMUMBLE_INSTALL_CLIENT_SHAREDIR=/usr/share/mumble
+        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+        -DCMAKE_C_COMPILER_LAUNCHER=ccache
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Set build environment
+        shell: bash
+        run: .github/workflows/set_environment_variables.sh "ubuntu-24.04" "static" "x86_64" "${GITHUB_WORKSPACE}"
+
+      - name: Restore dependency cache
+        id: dependency-cache
+        uses: actions/cache/restore@v5
+        with:
+          path: ${{ env.MUMBLE_ENVIRONMENT_DIR }}
+          key: ${{ env.MUMBLE_ENVIRONMENT_VERSION }}
+
+      - name: Restore compiler cache
+        uses: hendrikmuhs/ccache-action@v1.2.23
+        with:
+          key: preview.ubuntu.${{ github.ref_name }}
+          save: ${{ github.event_name != 'pull_request' }}
+          append-timestamp: false
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-dependencies
+        with:
+          type: static
+          os: ubuntu-24.04
+          arch: x86_64
+
+      - name: Install packaging tools
+        run: sudo apt-get install -y dpkg-dev file xvfb
+
+      - name: Build client
+        shell: bash
+        env:
+          MUMBLE_BUILD_NUMBER: ${{ github.run_number }}
+        run: .github/workflows/build.sh "ubuntu-24.04" "static" "x86_64"
+
+      - name: Build Ubuntu package
+        shell: bash
+        run: |
+          project_version="$(sed -n 's/^CMAKE_PROJECT_VERSION:STATIC=//p' build/CMakeCache.txt)"
+          if [[ -z "${project_version}" ]]; then
+            echo "Unable to read the project version from build/CMakeCache.txt" >&2
+            exit 1
+          fi
+          version="${project_version}~master+git${GITHUB_SHA:0:8}"
+          .github/workflows/package_ubuntu_client.sh "${GITHUB_WORKSPACE}" "${version}" amd64
+
+      - name: Test clean Ubuntu package installation
+        shell: bash
+        run: |
+          docker run --rm \
+            --volume "${GITHUB_WORKSPACE}/dist:/dist:ro" \
+            ubuntu:24.04 \
+            bash -euxo pipefail -c '
+              apt-get update
+              apt-get install -y /dist/Mumble-Ubuntu-24.04-amd64.deb
+              dpkg-query --show --showformat="\${Package} \${Version} \${Architecture}\n" mumble
+              mumble --version
+              test -f /usr/share/applications/info.mumble.Mumble.desktop
+              test -f /usr/share/icons/hicolor/scalable/apps/mumble.svg
+              find /usr/lib/mumble/plugins -type f -name "*.so" -print -quit | grep -q .
+            '
+
+      - name: Test Ubuntu package installation
+        shell: bash
+        run: |
+          sudo apt-get install -y ./dist/Mumble-Ubuntu-24.04-amd64.deb
+          dpkg-query --show --showformat='${Package} ${Version} ${Architecture}\n' mumble
+          file /usr/bin/mumble | grep -q 'ELF 64-bit.*x86-64'
+          if ldd /usr/bin/mumble | grep -q 'not found'; then
+            ldd /usr/bin/mumble
+            exit 1
+          fi
+          mumble --version
+          test -f /usr/share/applications/info.mumble.Mumble.desktop
+          test -f /usr/share/icons/hicolor/scalable/apps/mumble.svg
+          find /usr/lib/mumble/plugins -type f -name '*.so' -print -quit | grep -q .
+
+      - name: Smoke test installed client launch
+        shell: bash
+        run: |
+          smoke_dir="${RUNNER_TEMP}/mumble-ubuntu-launch-smoke"
+          runtime_dir="${smoke_dir}/runtime"
+          settings_file="${smoke_dir}/settings.json"
+          log_file="${smoke_dir}/mumble.log"
+          mkdir -p "${runtime_dir}"
+          chmod 0700 "${runtime_dir}"
+          printf '%s\n' '{"settings_version":1,"misc":{"audio_wizard_has_been_shown":true}}' > "${settings_file}"
+
+          xvfb-run -a env \
+            XDG_RUNTIME_DIR="${runtime_dir}" \
+            QT_QPA_PLATFORM=xcb \
+            mumble \
+              --config "${settings_file}" \
+              --no-identity \
+              --no-window-states \
+              --skip-settings-backup-prompt \
+              > "${log_file}" 2>&1 &
+          mumble_pid=$!
+
+          cleanup() {
+            if kill -0 "${mumble_pid}" 2>/dev/null; then
+              kill "${mumble_pid}"
+            fi
+            wait "${mumble_pid}" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          for attempt in 1 2 3 4 5; do
+            sleep 1
+            if ! kill -0 "${mumble_pid}" 2>/dev/null; then
+              set +e
+              wait "${mumble_pid}"
+              exit_code=$?
+              set -e
+              cat "${log_file}"
+              echo "Mumble exited during launch smoke test with code ${exit_code}." >&2
+              exit 1
+            fi
+          done
+
+          echo "The installed Ubuntu client remained alive through the launch smoke test."
+
+      - name: Upload Ubuntu package
+        uses: actions/upload-artifact@v7
+        with:
+          name: Mumble-Ubuntu-24.04-amd64
+          compression-level: 0
+          if-no-files-found: error
+          path: |
+            dist/Mumble-Ubuntu-24.04-amd64.deb
+            dist/Mumble-Ubuntu-24.04-amd64.deb.sha256
+
+      - name: Save dependency cache
+        if: github.event_name != 'pull_request' && steps.dependency-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: ${{ env.MUMBLE_ENVIRONMENT_DIR }}
+          key: ${{ env.MUMBLE_ENVIRONMENT_VERSION }}
+
   debian:
     name: Debian 12 server (amd64)
     runs-on: ubuntu-24.04
@@ -431,6 +603,7 @@ jobs:
     needs:
       - windows
       - macos
+      - ubuntu
       - debian
     runs-on: ubuntu-latest
     permissions:
@@ -458,6 +631,12 @@ jobs:
           name: Mumble-Debian-12-amd64
           path: artifacts/debian
 
+      - name: Download Ubuntu package
+        uses: actions/download-artifact@v8
+        with:
+          name: Mumble-Ubuntu-24.04-amd64
+          path: artifacts/ubuntu
+
       - name: Stage preview downloads
         shell: bash
         run: |
@@ -465,12 +644,14 @@ jobs:
           mkdir -p dist
           cp artifacts/windows/Mumble-Windows-x64.exe dist/Mumble-Master-Preview-Windows-x64.exe
           cp artifacts/macos/Mumble-macOS-arm64.zip dist/Mumble-Master-Preview-macOS-arm64.zip
+          cp artifacts/ubuntu/Mumble-Ubuntu-24.04-amd64.deb dist/Mumble-Master-Preview-Ubuntu-24.04-amd64.deb
           cp artifacts/debian/Mumble-Debian-12-amd64.deb dist/Mumble-Master-Preview-Debian-12-amd64.deb
           (
             cd dist
             sha256sum \
               Mumble-Master-Preview-Windows-x64.exe \
               Mumble-Master-Preview-macOS-arm64.zip \
+              Mumble-Master-Preview-Ubuntu-24.04-amd64.deb \
               Mumble-Master-Preview-Debian-12-amd64.deb \
               > SHA256SUMS.txt
           )
@@ -501,9 +682,9 @@ jobs:
           cat > release-notes.md <<EOF
           Automated preview of \`master\` at [\`${short_sha}\`](${commit_url}).
 
-          - [Windows x64, macOS ARM64, and Debian 12 server package build](${workflow_url})
+          - [Windows x64, macOS ARM64, Ubuntu 24.04 client, and Debian 12 server package build](${workflow_url})
 
-          These preview builds are for testing and may be unstable. The Windows installer is unsigned, so Windows SmartScreen may display a warning. The macOS application is ad-hoc signed and is not notarized. The Debian package contains the server only and targets Debian 12 amd64.
+          These preview builds are for testing and may be unstable. The Windows installer is unsigned, so Windows SmartScreen may display a warning. The macOS application is ad-hoc signed and is not notarized. The Linux packages target amd64 systems; the Ubuntu package contains the client and the Debian package contains the server.
 
           Verify downloads with \`SHA256SUMS.txt\`.
           EOF
