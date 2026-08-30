@@ -92,4 +92,7 @@ chmod 0755 "${package_root}/DEBIAN/postinst" "${package_root}/DEBIAN/postrm"
 dpkg-deb --root-owner-group --build "${package_root}" "${dist_dir}/${artifact_name}"
 dpkg-deb --info "${dist_dir}/${artifact_name}"
 dpkg-deb --contents "${dist_dir}/${artifact_name}"
-sha256sum "${dist_dir}/${artifact_name}" > "${dist_dir}/${artifact_name}.sha256"
+(
+	cd "${dist_dir}"
+	sha256sum "${artifact_name}" > "${artifact_name}.sha256"
+)

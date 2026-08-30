@@ -406,6 +406,15 @@ jobs:
           version="${project_version}~master+git${GITHUB_SHA:0:8}"
           .github/workflows/package_debian_server.sh "${GITHUB_WORKSPACE}" "${version}" amd64
 
+      - name: Test Debian package installation
+        shell: bash
+        run: |
+          apt-get install -y ./dist/Mumble-Debian-12-amd64.deb
+          dpkg-query --show --showformat='${Package} ${Version} ${Architecture}\n' mumble-server
+          mumble-server --version
+          test -f /etc/mumble/mumble-server.ini
+          test -f /usr/lib/systemd/system/mumble-server.service
+
       - name: Upload Debian package
         uses: actions/upload-artifact@v7
         with:
