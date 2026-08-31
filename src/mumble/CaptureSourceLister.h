@@ -13,7 +13,7 @@
 #	include <QtCore/QList>
 #	include <QtGui/QImage>
 
-/// Returns all available capture sources — screens first, then visible application windows.
+/// Returns all available capture sources — cameras, screens, then visible application windows.
 /// Thumbnails are populated. Must be called on the GUI thread.
 QList< CaptureSource > listCaptureSources();
 

@@ -1027,6 +1027,8 @@ if(screen-sharing)
 		target_compile_definitions(mumble_client_object_lib PUBLIC "USE_SCREEN_SHARING")
 		if(APPLE)
 			target_sources(mumble_client_object_lib PRIVATE
+																"AVFCapture.h"
+																"AVFCapture_macx.mm"
 																"CaptureSourceLister_macx.mm"
 																"SCKitCapture.h"
 																"SCKitCapture_macx.mm"
@@ -1050,6 +1052,11 @@ if(screen-sharing)
 			find_library(LIB_COREVIDEO CoreVideo)
 			if(LIB_COREVIDEO)
 				target_link_libraries(mumble_client_object_lib PUBLIC ${LIB_COREVIDEO})
+			endif()
+
+			find_library(LIB_AVFOUNDATION AVFoundation)
+			if(LIB_AVFOUNDATION)
+				target_link_libraries(mumble_client_object_lib PUBLIC ${LIB_AVFOUNDATION})
 			endif()
 
 		else()

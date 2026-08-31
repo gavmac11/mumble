@@ -35,6 +35,10 @@
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Mumble uses your microphone to allow you to talk to other people</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Mumble uses your camera when you choose to share webcam video</string>
+	<key>NSCameraUseContinuityCameraDeviceType</key>
+	<true/>
 	<key>NSScreenCaptureUsageDescription</key>
 	<string>Mumble uses screen recording access when you choose to share a display or window</string>
 	<key>NSAccessibilityUsageDescription</key>

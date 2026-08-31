@@ -5,10 +5,12 @@
 
 #ifdef USE_SCREEN_SHARING
 
+#import <AVFoundation/AVFoundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
 
 #include "CaptureSourceLister.h"
+#include "SCKitCapture.h"
 
 #include <QtGui/QGuiApplication>
 #include <QtGui/QImage>
@@ -100,6 +102,44 @@ static QString cfStringToQString(CFStringRef str) {
 
 QList<CaptureSource> listCaptureSources() {
   QList<CaptureSource> sources;
+
+  // --- Webcams (AVFoundation) ---
+  // Device enumeration does not require camera permission. Permission is requested only
+  // after the user chooses a camera and capture starts.
+  NSMutableArray<AVCaptureDeviceType> *deviceTypes =
+      [NSMutableArray arrayWithObject:AVCaptureDeviceTypeBuiltInWideAngleCamera];
+  if (@available(macOS 13.0, *))
+    [deviceTypes addObject:AVCaptureDeviceTypeDeskViewCamera];
+  if (@available(macOS 14.0, *)) {
+    [deviceTypes addObject:AVCaptureDeviceTypeExternal];
+    [deviceTypes addObject:AVCaptureDeviceTypeContinuityCamera];
+  } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    [deviceTypes addObject:AVCaptureDeviceTypeExternalUnknown];
+#pragma clang diagnostic pop
+  }
+  AVCaptureDeviceDiscoverySession *discovery =
+      [AVCaptureDeviceDiscoverySession discoverySessionWithDeviceTypes:deviceTypes
+                                                              mediaType:AVMediaTypeVideo
+                                                               position:AVCaptureDevicePositionUnspecified];
+  for (AVCaptureDevice *camera in discovery.devices) {
+    CaptureSource s;
+    s.type = CaptureSource::Type::Webcam;
+    s.devicePath = QString::fromNSString(camera.uniqueID);
+    s.displayName = QObject::tr("Camera: %1").arg(QString::fromNSString(camera.localizedName));
+    sources.append(s);
+  }
+
+  // ScreenCaptureKit owns the screen/window selection UI on macOS 14+. Represent it
+  // as one source beside the cameras so users can choose the capture mode first.
+  if (sckit_isNativePickerAvailable()) {
+    CaptureSource s;
+    s.type = CaptureSource::Type::NativePicker;
+    s.displayName = QObject::tr("Screen or window…");
+    sources.append(s);
+    return sources;
+  }
 
   // --- Screens ---
   const QList<QScreen *> screens = QGuiApplication::screens();
