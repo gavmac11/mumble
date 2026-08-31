@@ -133,6 +133,9 @@ public:
 	SelfSharePreview *m_selfSharePreview = nullptr;
 	/// Source type of the current/last own share, for titling the preview.
 	bool m_selfShareIsWebcam = false;
+	/// Whether this client announced the current share to the server. Kept separately from
+	/// ClientUser::bScreenSharing because that flag is only updated after the server echoes it.
+	bool m_selfShareAnnounced = false;
 
 	MumbleProto::Reject_RejectType rtLast;
 	bool bRetryServer;

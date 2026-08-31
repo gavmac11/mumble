@@ -4272,6 +4272,7 @@ void MainWindow::screenShare() {
 						mpus.set_session(session);
 						mpus.set_screen_sharing(true);
 						Global::get().sh->sendMessage(mpus);
+						m_selfShareAnnounced = true;
 					}
 					// Auto-open the self-preview once frames are really flowing (a failed or
 					// cancelled capture should never flash an empty window).
@@ -4391,15 +4392,17 @@ void MainWindow::onSelfShareStopped() {
 
 	qaScreenShare->setChecked(false);
 
-	// Retract the share from the server, but only if it was ever announced (a failure before
-	// captureStarted never sent screen_sharing=true) and only while a connection still exists.
+	// Retract the share if this client announced it, even if the server has not echoed the start
+	// yet. The true/false messages share an ordered connection, so a quick stop still leaves the
+	// server in the correct final state. A failure before captureStarted never sets this flag.
 	ClientUser *self = ClientUser::get(Global::get().uiSession);
-	if (self && self->bScreenSharing && Global::get().sh) {
+	if (m_selfShareAnnounced && self && Global::get().sh) {
 		MumbleProto::UserState mpus;
 		mpus.set_session(self->uiSession);
 		mpus.set_screen_sharing(false);
 		Global::get().sh->sendMessage(mpus);
 	}
+	m_selfShareAnnounced = false;
 }
 
 void MainWindow::onSelfPreviewFrame(QImage frame) {
