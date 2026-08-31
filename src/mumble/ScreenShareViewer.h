@@ -6,41 +6,49 @@
 #ifndef MUMBLE_MUMBLE_SCREENSHAREVIEWER_H_
 #define MUMBLE_MUMBLE_SCREENSHAREVIEWER_H_
 
+#include <QtCore/QMap>
 #include <QtGui/QImage>
 #include <QtWidgets/QDialog>
 
-class QLabel;
-class QScrollArea;
+class QGridLayout;
+class ScreenShareTile;
 
-/// Floating window that displays the screen share stream from a single remote user.
+/// Floating gallery that displays shared video from remote users.
+/// A single stream fills the window; additional streams are arranged in a responsive grid.
 class ScreenShareViewer : public QDialog {
 private:
 	Q_OBJECT
 	Q_DISABLE_COPY(ScreenShareViewer)
 
 public:
-	explicit ScreenShareViewer(quint32 senderSession, const QString &senderName, QWidget *parent = nullptr);
+	explicit ScreenShareViewer(QWidget *parent = nullptr);
 
 	/// Returns true once the user has explicitly closed the window.
-	/// While dismissed, new frames update the stored image but do not reopen the window.
+	/// While dismissed, new frames update the tiles but do not reopen the window.
 	bool isDismissed() const;
-	/// Show the window and repaint with the last stored frame.
-	void showAndRefresh();
+	/// Show the gallery, adding a waiting tile for the requested sender when necessary.
+	void showAndRefresh(quint32 senderSession, const QString &senderName);
+	/// Remove a sender's tile after their stream ends.
+	void removeStream(quint32 senderSession);
+	/// Remove all tiles, for example after disconnecting from a server.
+	void clearStreams();
 
 public slots:
-	void updateFrame(QImage frame);
+	void updateFrame(quint32 senderSession, const QString &senderName, QImage frame);
 
 protected:
 	void resizeEvent(QResizeEvent *event) override;
 	void closeEvent(QCloseEvent *event) override;
 
 private:
-	void updateImageDisplay();
+	ScreenShareTile *ensureTile(quint32 senderSession, const QString &senderName);
+	void reflowTiles();
+	void updateWindowTitle();
 
-	QLabel *m_imageLabel;
-	quint32 m_senderSession;
-	QImage m_currentFrame;
-	bool m_dismissed = false;
+	QGridLayout *m_gridLayout;
+	QMap< quint32, ScreenShareTile * > m_tiles;
+	bool m_dismissed  = false;
+	int m_columnCount = 0;
 };
 
 #endif // MUMBLE_MUMBLE_SCREENSHAREVIEWER_H_

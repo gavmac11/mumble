@@ -897,8 +897,11 @@ void MainWindow::msgUserRemove(const MumbleProto::UserRemove &msg) {
 								  Q_ARG(unsigned int, pDst->uiSession));
 	}
 
-	if (pDst != pSelf)
+	if (pDst != pSelf) {
+		if (pDst->bScreenSharing)
+			Global::get().mw->onRemoteScreenShareStopped(pDst->uiSession);
 		pmModel->removeUser(pDst);
+	}
 }
 
 /// This message is being received when the server informs the local client about channel properties (either during

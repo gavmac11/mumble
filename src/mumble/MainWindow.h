@@ -128,7 +128,7 @@ public:
 	Tokens *tokenEdit;
 
 	VoiceRecorderDialog *voiceRecorderDialog;
-	QMap< quint32, ScreenShareViewer * > m_screenShareViewers;
+	ScreenShareViewer *m_screenShareViewer = nullptr;
 	/// Local always-on-top preview of the user's own share; created on first use.
 	SelfSharePreview *m_selfSharePreview = nullptr;
 	/// Source type of the current/last own share, for titling the preview.

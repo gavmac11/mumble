@@ -232,9 +232,11 @@ MainWindow::MainWindow(QWidget *p)
 
 	// Create the screen-share receiver and connect its frameDecoded signal so that decoded
 	// frames from remote users are delivered on the GUI thread (queued connection).
+	m_screenShareViewer = new ScreenShareViewer(this);
 	Global::get().screenShareReceiver = new ScreenShareReceiver(this);
 	connect(Global::get().screenShareReceiver, &ScreenShareReceiver::frameDecoded, this,
 			&MainWindow::onRemoteFrameDecoded, Qt::QueuedConnection);
+	connect(this, &MainWindow::disconnectedFromServer, m_screenShareViewer, &ScreenShareViewer::clearStreams);
 }
 
 // Loading a state that was stored by a different version of Qt can lead to a crash.
@@ -4365,16 +4367,11 @@ void MainWindow::onRemoteFrameDecoded(quint32 senderSession, QImage frame) {
 	ClientUser *sender = ClientUser::get(senderSession);
 	const QString name = sender ? sender->qsName : tr("Unknown");
 
-	if (!m_screenShareViewers.contains(senderSession)) {
-		ScreenShareViewer *viewer = new ScreenShareViewer(senderSession, name, this);
-		m_screenShareViewers.insert(senderSession, viewer);
-	}
-
-	ScreenShareViewer *viewer = m_screenShareViewers[senderSession];
-	// Always store the latest frame, but never reopen a window the user closed.
-	// Ideally, the user should subcribe to the server. Otherwise, when a user doesn't have the stream open
-	// it will use bandwith for no reason
-	viewer->updateFrame(frame);
+	// Always store the latest frame and add it to the shared gallery, but never reopen
+	// a gallery the user closed.
+	// Ideally, the user should subscribe to the server. Otherwise, when a user doesn't have the stream open,
+	// it will use bandwidth for no reason.
+	m_screenShareViewer->updateFrame(senderSession, name, frame);
 }
 
 void MainWindow::on_qaUserViewScreenShare_triggered() {
@@ -4382,14 +4379,8 @@ void MainWindow::on_qaUserViewScreenShare_triggered() {
 	if (!p || !p->bScreenSharing)
 		return;
 
-	if (!m_screenShareViewers.contains(p->uiSession)) {
-		ScreenShareViewer *viewer = new ScreenShareViewer(p->uiSession, p->qsName, this);
-		m_screenShareViewers.insert(p->uiSession, viewer);
-	}
-
-	ScreenShareViewer *viewer = m_screenShareViewers[p->uiSession];
-	// Clears dismissed flag, shows, raises, and repaints with the last frame.
-	viewer->showAndRefresh();
+	// Clears the dismissed flag and opens one gallery containing every active shared video.
+	m_screenShareViewer->showAndRefresh(p->uiSession, p->qsName);
 }
 
 void MainWindow::showSelfSharePreview(bool isWebcam) {
@@ -4448,11 +4439,7 @@ void MainWindow::onRemoteScreenShareStopped(quint32 senderSession) {
 	if (Global::get().screenShareReceiver)
 		Global::get().screenShareReceiver->resetSender(senderSession);
 
-	if (m_screenShareViewers.contains(senderSession)) {
-		ScreenShareViewer *viewer = m_screenShareViewers.take(senderSession);
-		viewer->close();
-		viewer->deleteLater();
-	}
+	m_screenShareViewer->removeStream(senderSession);
 }
 
 void MainWindow::openSelfCommentDialog() {
