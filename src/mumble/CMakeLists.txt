@@ -1304,6 +1304,7 @@ if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
 			"os_macx.mm"
 			"TextToSpeech_macx.mm"
 			"CoreAudio.mm"
+			"AVFCapture_macx.mm"
 			"CaptureSourceLister_macx.mm"
 			"SCKitCapture_macx.mm"
 			PROPERTIES
