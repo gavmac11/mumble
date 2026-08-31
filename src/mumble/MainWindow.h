@@ -36,6 +36,7 @@ class BanEditor;
 class UserEdit;
 class ServerHandler;
 class ScreenShareViewer;
+class SelfSharePreview;
 class GlobalShortcut;
 class TextToSpeech;
 class UserModel;
@@ -128,6 +129,10 @@ public:
 
 	VoiceRecorderDialog *voiceRecorderDialog;
 	QMap< quint32, ScreenShareViewer * > m_screenShareViewers;
+	/// Local always-on-top preview of the user's own share; created on first use.
+	SelfSharePreview *m_selfSharePreview = nullptr;
+	/// Source type of the current/last own share, for titling the preview.
+	bool m_selfShareIsWebcam = false;
 
 	MumbleProto::Reject_RejectType rtLast;
 	bool bRetryServer;
@@ -274,6 +279,7 @@ public slots:
 	void on_qaUserRegister_triggered();
 	void on_qaUserInformation_triggered();
 	void on_qaUserViewScreenShare_triggered();
+	void on_qaSelfSharePreview_triggered();
 	void on_qaUserFriendAdd_triggered();
 	void on_qaUserFriendRemove_triggered();
 	void on_qaUserFriendUpdate_triggered();
@@ -477,6 +483,9 @@ public:
 							  bool isKeyFrame);
 	void onRemoteFrameDecoded(quint32 senderSession, QImage frame);
 	void onRemoteScreenShareStopped(quint32 senderSession);
+	void showSelfSharePreview(bool isWebcam);
+	void hideSelfSharePreview();
+	void onSelfPreviewFrame(QImage frame);
 	void openSelfCommentDialog();
 	void changeServerTexture();
 	void removeServerTexture();

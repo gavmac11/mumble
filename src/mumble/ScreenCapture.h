@@ -9,6 +9,8 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
+#include <QtGui/QImage>
+#include <chrono>
 #include <cstdint>
 
 #ifdef USE_SCREEN_SHARING
@@ -71,6 +73,13 @@ public:
 signals:
 	/// Emitted for every successfully encoded frame.
 	void frameEncoded(QByteArray encodedData, quint64 frameNumber, quint32 width, quint32 height, bool isKeyFrame);
+	/// A source frame for the local "what am I sending" preview, throttled to a few frames per
+	/// second. Emitted on the GUI thread for screen capture and on the V4L2 worker thread for
+	/// webcams, so use an auto/queued connection when handing it to UI code.
+	void previewFrame(QImage frame);
+	/// Emitted whenever capture has actually stopped: user stop, disconnect, abort or capture
+	/// failure. Emitted after any capture worker thread has been joined.
+	void captureStopped();
 
 #ifdef USE_SCREEN_SHARING
 	/// Emitted immediately before the first successfully encoded frame.
@@ -93,6 +102,12 @@ private:
 	void encodeImage(const QImage &srcImage); ///< Shared encode path used by both capture modes.
 	/// Encode a planar YUV 4:2:0 frame supplied by the V4L2 webcam capture thread.
 	void encodeYuvFrame(int width, int height, const uint8_t *const data[4], const int linesize[4]);
+	/// Converts a planar YUV 4:2:0 frame to a scaled RGBA QImage for previewFrame(). Only ever
+	/// called from the same thread as the encoders' frame input (worker for webcams, GUI otherwise).
+	QImage convertPreviewFrame(int width, int height, const uint8_t *const data[4], const int linesize[4]);
+	/// Throttle for previewFrame() emission; resets whenever a capture (re)starts.
+	bool previewFrameDue();
+	void freePreviewScaler();
 
 	CaptureSource m_source; ///< Defaults to EntireScreen, screenIndex=0 (primary display).
 
@@ -103,6 +118,15 @@ private:
 	int m_encoderWidth         = 0;
 	int m_encoderHeight        = 0;
 	bool m_reportedCaptureStarted = false;
+
+	/// Preview scaler, deliberately independent of m_swsCtx: destroyEncoder() may free that one
+	/// from the worker thread mid-stream, while the preview context is only ever freed from
+	/// stopCapture() / the destructor, i.e. after the worker has been joined.
+	SwsContext *m_previewSwsCtx = nullptr;
+	int m_previewWidth          = 0;
+	int m_previewHeight         = 0;
+	/// Time of the last previewFrame() emission; default-constructed means "emit immediately".
+	std::chrono::steady_clock::time_point m_lastPreviewEmit {};
 
 #	if defined(Q_OS_LINUX)
 	V4L2Capture *m_v4l2 = nullptr; ///< Webcam capture; worker thread invokes encodeYuvFrame().
