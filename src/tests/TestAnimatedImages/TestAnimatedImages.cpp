@@ -11,7 +11,10 @@
 #include <QtCore/QMimeData>
 #include <QtCore/QTemporaryDir>
 #include <QtGui/QMovie>
+#include <QtGui/QTextBlock>
 #include <QtGui/QTextCursor>
+#include <QtGui/QTextFragment>
+#include <QtGui/QTextImageFormat>
 #include <QtTest/QtTest>
 
 // Global.h defines the global macro g and therefore has to be the final include.
@@ -37,6 +40,19 @@ QUrl animatedImageUrl() {
 	return QUrl(html.mid(10, html.size() - 14));
 }
 
+QTextImageFormat firstImageFormat(const QTextDocument &document) {
+	for (QTextBlock block = document.begin(); block.isValid(); block = block.next()) {
+		for (auto it = block.begin(); !it.atEnd(); ++it) {
+			const QTextFragment fragment = it.fragment();
+			if (fragment.isValid() && fragment.charFormat().isImageFormat()) {
+				return fragment.charFormat().toImageFormat();
+			}
+		}
+	}
+
+	return QTextImageFormat();
+}
+
 void loadAnimatedResource(LogDocument &document, const QUrl &url) {
 	QVERIFY(document.resource(QTextDocument::ImageResource, url).canConvert< QImage >());
 	QCOMPARE(document.findChildren< QMovie * >().size(), 1);
@@ -55,6 +71,8 @@ private slots:
 	void releasesAnimationOnClear();
 	void retainsAnimationUntilLastReferenceIsRemoved();
 	void releasesAnimationOnMaximumBlockEviction();
+	void scalesStaticImageWithChatWindow();
+	void scalesAnimatedGifWithoutStoppingAnimation();
 
 private:
 	std::unique_ptr< QTemporaryDir > m_configDir;
@@ -153,6 +171,50 @@ void TestAnimatedImages::releasesAnimationOnMaximumBlockEviction() {
 	cursor.insertText(QLatin1String("evict image block"));
 	QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
 	QCOMPARE(document.findChildren< QMovie * >().size(), 0);
+}
+
+void TestAnimatedImages::scalesStaticImageWithChatWindow() {
+	QImage image(600, 300, QImage::Format_RGB32);
+	image.fill(Qt::blue);
+
+	LogTextBrowser browser;
+	browser.resize(240, 160);
+	browser.setHtml(Log::imageToImg(image));
+	browser.resizeImagesToFit();
+
+	QTextImageFormat format = firstImageFormat(*browser.document());
+	QVERIFY(format.isValid());
+	QVERIFY(format.width() <= browser.viewport()->width());
+	QVERIFY(format.height() <= browser.viewport()->height());
+	QCOMPARE(format.width() / format.height(), 2.0);
+	const QImage storedImage =
+		browser.document()->resource(QTextDocument::ImageResource, QUrl(format.name())).value< QImage >();
+	QCOMPARE(storedImage.size(), image.size());
+
+	browser.resize(800, 500);
+	browser.resizeImagesToFit();
+	format = firstImageFormat(*browser.document());
+	QCOMPARE(format.width(), 600.0);
+	QCOMPARE(format.height(), 300.0);
+}
+
+void TestAnimatedImages::scalesAnimatedGifWithoutStoppingAnimation() {
+	QString html = animatedImageHtml();
+	html.replace(QLatin1String(" />"), QLatin1String(" width=\"600\" height=\"300\" />"));
+
+	LogTextBrowser browser;
+	browser.resize(240, 160);
+	auto document = new LogDocument(&browser, true);
+	browser.setDocument(document);
+	browser.setHtml(html);
+	browser.resizeImagesToFit();
+
+	const QTextImageFormat format = firstImageFormat(*document);
+	QVERIFY(format.isValid());
+	QVERIFY(format.width() <= browser.viewport()->width());
+	QVERIFY(format.height() <= browser.viewport()->height());
+	QCOMPARE(format.width() / format.height(), 2.0);
+	QCOMPARE(document->findChildren< QMovie * >().size(), 1);
 }
 
 QTEST_MAIN(TestAnimatedImages)

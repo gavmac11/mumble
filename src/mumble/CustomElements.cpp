@@ -19,9 +19,105 @@
 #include <QtGui/QClipboard>
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QKeyEvent>
+#include <QtGui/QTextBlock>
+#include <QtGui/QTextFragment>
+#include <QtGui/QTextImageFormat>
 #include <QtWidgets/QScrollBar>
 
+namespace {
+constexpr int ORIGINAL_IMAGE_SIZE_PROPERTY = QTextFormat::UserProperty + 1;
+}
+
 LogTextBrowser::LogTextBrowser(QWidget *p) : QTextBrowser(p) {
+}
+
+void LogTextBrowser::resizeEvent(QResizeEvent *event) {
+	QTextBrowser::resizeEvent(event);
+	resizeImagesToFit();
+}
+
+void LogTextBrowser::resizeImagesToFit() {
+	struct ImageUpdate {
+		int position;
+		int length;
+		QTextImageFormat format;
+	};
+
+	const qreal documentMargins = document()->documentMargin() * 2.0;
+	const QSizeF availableSize(viewport()->width() - documentMargins, viewport()->height() - documentMargins);
+	if (availableSize.width() <= 0.0 || availableSize.height() <= 0.0) {
+		return;
+	}
+
+	const bool wasAtBottom = isScrolledToBottom();
+	const int oldScroll    = getLogScroll();
+	QList< ImageUpdate > updates;
+
+	for (QTextBlock block = document()->begin(); block.isValid(); block = block.next()) {
+		for (auto it = block.begin(); !it.atEnd(); ++it) {
+			const QTextFragment fragment = it.fragment();
+			if (!fragment.isValid() || !fragment.charFormat().isImageFormat()) {
+				continue;
+			}
+
+			QTextImageFormat imageFormat = fragment.charFormat().toImageFormat();
+			QSizeF originalSize = imageFormat.property(ORIGINAL_IMAGE_SIZE_PROPERTY).toSizeF();
+			if (!originalSize.isValid() || originalSize.isEmpty()) {
+				const QVariant resource = document()->resource(QTextDocument::ImageResource, QUrl(imageFormat.name()));
+				const QImage image       = resource.value< QImage >();
+				originalSize             = image.size();
+				const bool hasWidth = imageFormat.hasProperty(QTextFormat::ImageWidth) && imageFormat.width() > 0.0;
+				const bool hasHeight =
+					imageFormat.hasProperty(QTextFormat::ImageHeight) && imageFormat.height() > 0.0;
+
+				// Honor dimensions explicitly supplied in the message while filling in any missing
+				// dimension from the decoded image's aspect ratio.
+				if (hasWidth && hasHeight) {
+					originalSize = QSizeF(imageFormat.width(), imageFormat.height());
+				} else if (hasWidth && originalSize.width() > 0.0) {
+					originalSize.setHeight(imageFormat.width() * originalSize.height() / originalSize.width());
+					originalSize.setWidth(imageFormat.width());
+				} else if (hasHeight && originalSize.height() > 0.0) {
+					originalSize.setWidth(imageFormat.height() * originalSize.width() / originalSize.height());
+					originalSize.setHeight(imageFormat.height());
+				}
+
+				if (!originalSize.isValid() || originalSize.isEmpty()) {
+					continue;
+				}
+				imageFormat.setProperty(ORIGINAL_IMAGE_SIZE_PROPERTY, originalSize);
+			}
+
+			QSizeF displaySize = originalSize;
+			if (displaySize.width() > availableSize.width() || displaySize.height() > availableSize.height()) {
+				displaySize.scale(availableSize, Qt::KeepAspectRatio);
+			}
+			if (qFuzzyCompare(imageFormat.width(), displaySize.width())
+				&& qFuzzyCompare(imageFormat.height(), displaySize.height())) {
+				continue;
+			}
+
+			imageFormat.setWidth(displaySize.width());
+			imageFormat.setHeight(displaySize.height());
+			updates.append({ fragment.position(), fragment.length(), imageFormat });
+		}
+	}
+
+	// Changing a character format can invalidate QTextBlock iterators, so apply the collected
+	// updates only after traversal is complete.
+	if (!updates.isEmpty()) {
+		QTextCursor imageCursor(document());
+		imageCursor.beginEditBlock();
+		for (const ImageUpdate &update : updates) {
+			imageCursor.setPosition(update.position);
+			imageCursor.setPosition(update.position + update.length, QTextCursor::KeepAnchor);
+			imageCursor.setCharFormat(update.format);
+		}
+		imageCursor.endEditBlock();
+	}
+
+	verticalScrollBar()->setValue(wasAtBottom ? verticalScrollBar()->maximum()
+											: std::min(oldScroll, verticalScrollBar()->maximum()));
 }
 
 int LogTextBrowser::getLogScroll() {
