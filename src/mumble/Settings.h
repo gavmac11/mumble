@@ -37,6 +37,9 @@
 
 enum class StyleType { Auto, Light, Dark };
 
+/// How remote shared video (screen shares and webcams) is presented to the user
+enum class VideoDisplayMode { Gallery, SeparateWindows };
+
 class QSettings;
 struct MigratedPath;
 
@@ -415,6 +418,9 @@ struct Settings {
 	/// Name of the style to use from theme. @see Themes
 	QString themeDarkStyleName = QStringLiteral("Dark");
 
+	/// How remote shared video is displayed: one tiled gallery window or one window per sharer
+	VideoDisplayMode videoDisplayMode = VideoDisplayMode::Gallery;
+
 	QByteArray qbaMainWindowGeometry     = {};
 	QByteArray qbaMainWindowState        = {};
 	QByteArray qbaMinimalViewGeometry    = {};
@@ -567,6 +573,8 @@ struct Settings {
 	bool requireRestartToApply = false;
 	/// If true settings in this structure require a client redraw
 	bool requireThemeApplication = false;
+	/// If true the video display mode changed and the running presentation must be migrated
+	bool requireVideoDisplaySwitch = false;
 	QString settingsLocation     = {};
 	/// A flag indicating whether the current Mumble session has already backed up the settings it was started with,
 	/// before writing new ones.

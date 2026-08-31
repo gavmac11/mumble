@@ -170,6 +170,8 @@ def getDefaultValueForType(dataType):
         return "Settings::RecordingMultichannel"
     elif dataType in ["StyleType"]:
         return "StyleType::Dark"
+    elif dataType in ["VideoDisplayMode"]:
+        return "VideoDisplayMode::SeparateWindows"
     elif dataType.startswith("QMap") or dataType.startswith("QHash"):
         types = getTemplateArguments(dataType)
 

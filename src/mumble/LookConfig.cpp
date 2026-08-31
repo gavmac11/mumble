@@ -72,6 +72,9 @@ LookConfig::LookConfig(Settings &st) : ConfigWidget(st) {
 	qcbUserDrag->insertItem(Settings::DoNothing, tr("Do Nothing"), Settings::DoNothing);
 	qcbUserDrag->insertItem(Settings::Move, tr("Move"), Settings::Move);
 
+	qcbVideoDisplay->addItem(tr("Gallery"), static_cast< int >(VideoDisplayMode::Gallery));
+	qcbVideoDisplay->addItem(tr("Separate windows"), static_cast< int >(VideoDisplayMode::SeparateWindows));
+
 	connect(qrbLCustom, SIGNAL(toggled(bool)), qcbLockLayout, SLOT(setEnabled(bool)));
 	connect(qbClearBackgroundColor, &QPushButton::clicked, this, &LookConfig::talkinguiBackgroundCleared);
 	connect(qbBackgroundColor, &QPushButton::clicked, this, &LookConfig::qbBackgroundColor_clicked);
@@ -232,6 +235,13 @@ void LookConfig::load(const Settings &r) {
 
 	loadComboBox(qcbQuitBehavior, static_cast< int >(r.quitBehavior));
 
+	for (int i = 0; i < qcbVideoDisplay->count(); i++) {
+		if (qcbVideoDisplay->itemData(i).toInt() == static_cast< int >(r.videoDisplayMode)) {
+			loadComboBox(qcbVideoDisplay, i);
+			break;
+		}
+	}
+
 	loadCheckBox(qcbEnableDeveloperMenu, r.bEnableDeveloperMenu);
 	loadCheckBox(qcbLockLayout, (r.wlWindowLayout == Settings::LayoutCustom) && r.bLockLayout);
 	loadCheckBox(qcbRestoreWindowState, !r.preventWindowStates);
@@ -328,6 +338,12 @@ void LookConfig::save() const {
 	}
 	s.styleType = styleType;
 
+	VideoDisplayMode videoDisplayMode = getVideoDisplayMode();
+	if (s.videoDisplayMode != videoDisplayMode) {
+		s.requireVideoDisplaySwitch = true;
+	}
+	s.videoDisplayMode = videoDisplayMode;
+
 	QVariant themeData = qcbLightTheme->itemData(qcbLightTheme->currentIndex());
 	if (themeData.isNull()) {
 		s.requireThemeApplication |= Themes::setConfiguredStyle(s, std::nullopt);
@@ -381,6 +397,10 @@ StyleType LookConfig::getStyleType() const {
 	qWarning() << "Something went wrong fetching the StyleType, resorting to Auto";
 	assert(false);
 	return StyleType::Auto;
+}
+
+VideoDisplayMode LookConfig::getVideoDisplayMode() const {
+	return static_cast< VideoDisplayMode >(qcbVideoDisplay->currentData().toInt());
 }
 
 void LookConfig::setStyleType(StyleType styleType) const {

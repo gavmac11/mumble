@@ -49,6 +49,7 @@
 #endif
 #include "ScreenShareReceiver.h"
 #include "ScreenShareViewer.h"
+#include "ScreenShareWindow.h"
 #include "SelfSharePreview.h"
 #include "SearchDialog.h"
 #include "ServerHandler.h"
@@ -233,10 +234,14 @@ MainWindow::MainWindow(QWidget *p)
 	// Create the screen-share receiver and connect its frameDecoded signal so that decoded
 	// frames from remote users are delivered on the GUI thread (queued connection).
 	m_screenShareViewer = new ScreenShareViewer(this);
+	m_activeVideoDisplayMode = Global::get().s.videoDisplayMode;
 	Global::get().screenShareReceiver = new ScreenShareReceiver(this);
 	connect(Global::get().screenShareReceiver, &ScreenShareReceiver::frameDecoded, this,
 			&MainWindow::onRemoteFrameDecoded, Qt::QueuedConnection);
-	connect(this, &MainWindow::disconnectedFromServer, m_screenShareViewer, &ScreenShareViewer::clearStreams);
+	connect(this, &MainWindow::disconnectedFromServer, this, [this]() {
+		m_screenShareViewer->clearStreams();
+		clearScreenShareWindows();
+	});
 }
 
 // Loading a state that was stored by a different version of Qt can lead to a crash.
@@ -4367,11 +4372,19 @@ void MainWindow::onRemoteFrameDecoded(quint32 senderSession, QImage frame) {
 	ClientUser *sender = ClientUser::get(senderSession);
 	const QString name = sender ? sender->qsName : tr("Unknown");
 
-	// Always store the latest frame and add it to the shared gallery, but never reopen
-	// a gallery the user closed.
+	// Always store the latest frame, but never reopen a window or gallery the user closed.
 	// Ideally, the user should subscribe to the server. Otherwise, when a user doesn't have the stream open,
 	// it will use bandwidth for no reason.
-	m_screenShareViewer->updateFrame(senderSession, name, frame);
+	if (m_activeVideoDisplayMode == VideoDisplayMode::SeparateWindows) {
+		ScreenShareWindow *window = m_screenShareWindows.value(senderSession);
+		if (!window) {
+			window = new ScreenShareWindow(senderSession, name, this);
+			m_screenShareWindows.insert(senderSession, window);
+		}
+		window->updateFrame(frame);
+	} else {
+		m_screenShareViewer->updateFrame(senderSession, name, frame);
+	}
 }
 
 void MainWindow::on_qaUserViewScreenShare_triggered() {
@@ -4379,8 +4392,17 @@ void MainWindow::on_qaUserViewScreenShare_triggered() {
 	if (!p || !p->bScreenSharing)
 		return;
 
-	// Clears the dismissed flag and opens one gallery containing every active shared video.
-	m_screenShareViewer->showAndRefresh(p->uiSession, p->qsName);
+	if (m_activeVideoDisplayMode == VideoDisplayMode::SeparateWindows) {
+		ScreenShareWindow *window = m_screenShareWindows.value(p->uiSession);
+		if (!window) {
+			window = new ScreenShareWindow(p->uiSession, p->qsName, this);
+			m_screenShareWindows.insert(p->uiSession, window);
+		}
+		window->showAndRefresh();
+	} else {
+		// Clears the dismissed flag and opens one gallery containing every active shared video.
+		m_screenShareViewer->showAndRefresh(p->uiSession, p->qsName);
+	}
 }
 
 void MainWindow::showSelfSharePreview(bool isWebcam) {
@@ -4440,6 +4462,53 @@ void MainWindow::onRemoteScreenShareStopped(quint32 senderSession) {
 		Global::get().screenShareReceiver->resetSender(senderSession);
 
 	m_screenShareViewer->removeStream(senderSession);
+	if (ScreenShareWindow *window = m_screenShareWindows.take(senderSession)) {
+		window->close();
+		window->deleteLater();
+	}
+}
+
+void MainWindow::applyVideoDisplayMode() {
+	const VideoDisplayMode target = Global::get().s.videoDisplayMode;
+	if (target == m_activeVideoDisplayMode)
+		return;
+
+	if (target == VideoDisplayMode::SeparateWindows) {
+		const QList< ScreenShareViewer::StreamInfo > streams = m_screenShareViewer->streams();
+		const bool galleryVisible = m_screenShareViewer->isVisible();
+		for (const ScreenShareViewer::StreamInfo &stream : streams) {
+			ScreenShareWindow *window = new ScreenShareWindow(stream.session, stream.name, this);
+			// A null frame leaves the window on its placeholder, exactly like a tile
+			// that has not seen its first frame yet.
+			window->updateFrame(stream.frame);
+			m_screenShareWindows.insert(stream.session, window);
+			if (galleryVisible)
+				window->show();
+		}
+		m_screenShareViewer->clearStreams();
+	} else {
+		bool anyVisible = false;
+		for (auto it = m_screenShareWindows.cbegin(); it != m_screenShareWindows.cend(); ++it) {
+			m_screenShareViewer->addStream(it.key(), it.value()->senderName(), it.value()->currentFrame());
+			anyVisible = anyVisible || it.value()->isVisible();
+			it.value()->close();
+			it.value()->deleteLater();
+		}
+		m_screenShareWindows.clear();
+
+		const QList< ScreenShareViewer::StreamInfo > streams = m_screenShareViewer->streams();
+		if (anyVisible && !streams.isEmpty())
+			m_screenShareViewer->showAndRefresh(streams.constFirst().session, streams.constFirst().name);
+	}
+	m_activeVideoDisplayMode = target;
+}
+
+void MainWindow::clearScreenShareWindows() {
+	for (ScreenShareWindow *window : m_screenShareWindows) {
+		window->close();
+		window->deleteLater();
+	}
+	m_screenShareWindows.clear();
 }
 
 void MainWindow::openSelfCommentDialog() {
@@ -4527,6 +4596,12 @@ void MainWindow::openConfigDialog() {
 	QObject::connect(dlg, &ConfigDialog::settingsAccepted, []() {
 		if (Global::get().s.requireThemeApplication) {
 			Themes::apply();
+		}
+	});
+	QObject::connect(dlg, &ConfigDialog::settingsAccepted, Global::get().mw, []() {
+		if (Global::get().s.requireVideoDisplaySwitch) {
+			Global::get().s.requireVideoDisplaySwitch = false;
+			Global::get().mw->applyVideoDisplayMode();
 		}
 	});
 

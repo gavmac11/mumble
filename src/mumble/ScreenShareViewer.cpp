@@ -33,6 +33,8 @@ public:
 		update();
 	}
 
+	const QImage &frame() const { return m_frame; }
+
 protected:
 	void paintEvent(QPaintEvent *) override {
 		QPainter painter(this);
@@ -99,6 +101,9 @@ public:
 
 	void setFrame(const QImage &frame) { m_video->setFrame(frame); }
 
+	QString senderName() const { return m_name->text(); }
+	QImage frame() const { return m_video->frame(); }
+
 	void refresh() { m_video->update(); }
 
 private:
@@ -121,6 +126,20 @@ ScreenShareViewer::ScreenShareViewer(QWidget *parent) : QDialog(parent, Qt::Wind
 
 bool ScreenShareViewer::isDismissed() const {
 	return m_dismissed;
+}
+
+void ScreenShareViewer::addStream(quint32 senderSession, const QString &senderName, const QImage &frame) {
+	ScreenShareTile *tile = ensureTile(senderSession, senderName);
+	if (!frame.isNull())
+		tile->setFrame(frame);
+}
+
+QList< ScreenShareViewer::StreamInfo > ScreenShareViewer::streams() const {
+	QList< StreamInfo > result;
+	for (auto it = m_tiles.cbegin(); it != m_tiles.cend(); ++it) {
+		result.append({ it.key(), it.value()->senderName(), it.value()->frame() });
+	}
+	return result;
 }
 
 ScreenShareTile *ScreenShareViewer::ensureTile(quint32 senderSession, const QString &senderName) {

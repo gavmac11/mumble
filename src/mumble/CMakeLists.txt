@@ -226,6 +226,8 @@ set(MUMBLE_SOURCES
 	"ScreenShareReceiver.h"
 	"ScreenShareViewer.cpp"
 	"ScreenShareViewer.h"
+	"ScreenShareWindow.cpp"
+	"ScreenShareWindow.h"
 	"SelfSharePreview.cpp"
 	"SelfSharePreview.h"
 	"VideoFramePacketizer.cpp"

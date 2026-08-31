@@ -7,6 +7,8 @@
 #define MUMBLE_MUMBLE_SCREENSHAREVIEWER_H_
 
 #include <QtCore/QMap>
+#include <QtCore/QList>
+#include <QtCore/QString>
 #include <QtGui/QImage>
 #include <QtWidgets/QDialog>
 
@@ -21,6 +23,14 @@ private:
 	Q_DISABLE_COPY(ScreenShareViewer)
 
 public:
+	/// A single stream currently known to the gallery.
+	struct StreamInfo {
+		quint32 session;
+		QString name;
+		/// Latest decoded frame; null while the tile waits for its first frame.
+		QImage frame;
+	};
+
 	explicit ScreenShareViewer(QWidget *parent = nullptr);
 
 	/// Returns true once the user has explicitly closed the window.
@@ -32,6 +42,12 @@ public:
 	void removeStream(quint32 senderSession);
 	/// Remove all tiles, for example after disconnecting from a server.
 	void clearStreams();
+	/// Ensure a tile for the given sender exists without showing the gallery. Used to
+	/// migrate streams from the separate-windows display mode; \p frame may be null.
+	void addStream(quint32 senderSession, const QString &senderName, const QImage &frame = QImage());
+	/// Snapshot of every stream the gallery currently knows about. Sessions can exist
+	/// without a frame yet (tile waiting for its first frame).
+	QList< StreamInfo > streams() const;
 
 public slots:
 	void updateFrame(quint32 senderSession, const QString &senderName, QImage frame);
