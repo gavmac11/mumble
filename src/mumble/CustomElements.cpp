@@ -32,8 +32,14 @@ LogTextBrowser::LogTextBrowser(QWidget *p) : QTextBrowser(p) {
 }
 
 void LogTextBrowser::resizeEvent(QResizeEvent *event) {
+	const bool wasAtBottom = isScrolledToBottom();
+	const int oldScroll    = getLogScroll();
+
 	QTextBrowser::resizeEvent(event);
 	resizeImagesToFit();
+
+	verticalScrollBar()->setValue(wasAtBottom ? verticalScrollBar()->maximum()
+											: std::min(oldScroll, verticalScrollBar()->maximum()));
 }
 
 void LogTextBrowser::resizeImagesToFit() {
@@ -49,8 +55,6 @@ void LogTextBrowser::resizeImagesToFit() {
 		return;
 	}
 
-	const bool wasAtBottom = isScrolledToBottom();
-	const int oldScroll    = getLogScroll();
 	QList< ImageUpdate > updates;
 
 	for (QTextBlock block = document()->begin(); block.isValid(); block = block.next()) {
@@ -115,9 +119,6 @@ void LogTextBrowser::resizeImagesToFit() {
 		}
 		imageCursor.endEditBlock();
 	}
-
-	verticalScrollBar()->setValue(wasAtBottom ? verticalScrollBar()->maximum()
-											: std::min(oldScroll, verticalScrollBar()->maximum()));
 }
 
 int LogTextBrowser::getLogScroll() {
