@@ -484,7 +484,9 @@ public:
 	void onRemoteFrameDecoded(quint32 senderSession, QImage frame);
 	void onRemoteScreenShareStopped(quint32 senderSession);
 	void showSelfSharePreview(bool isWebcam);
-	void hideSelfSharePreview();
+	/// Single cleanup path for every way the local share ends (user stop, failure, disconnect):
+	/// hides the preview, unchecks the toggle and retracts screen_sharing from the server.
+	void onSelfShareStopped();
 	void onSelfPreviewFrame(QImage frame);
 	void openSelfCommentDialog();
 	void changeServerTexture();

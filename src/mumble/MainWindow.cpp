@@ -1856,8 +1856,13 @@ void MainWindow::qmUser_aboutToShow() {
 		qmUser->addAction(qaUserViewScreenShare);
 	}
 
-	if (p && isSelf && p->bScreenSharing) {
+	// Base both the visibility and the enabled state on the actual capture state rather than
+	// the (server-acknowledged, potentially stale) bScreenSharing flag: starting a share never
+	// re-runs on_qmSelf_aboutToShow(), so an action left disabled there would show up greyed
+	// out here until the Self menu happened to be opened again.
+	if (p && isSelf && Global::get().sc && Global::get().sc->isCapturing()) {
 		qmUser->addSeparator();
+		qaSelfSharePreview->setEnabled(true);
 		qmUser->addAction(qaSelfSharePreview);
 	}
 
@@ -4248,7 +4253,7 @@ void MainWindow::screenShare() {
 			// ~ScreenCapture while shutting down, and a queued metacall to a receiver that is
 			// already gone is simply dropped instead of running on a half-destroyed MainWindow.
 			connect(Global::get().sc, &ScreenCapture::previewFrame, this, &MainWindow::onSelfPreviewFrame);
-			connect(Global::get().sc, &ScreenCapture::captureStopped, this, &MainWindow::hideSelfSharePreview,
+			connect(Global::get().sc, &ScreenCapture::captureStopped, this, &MainWindow::onSelfShareStopped,
 					Qt::QueuedConnection);
 		}
 
@@ -4319,12 +4324,11 @@ void MainWindow::screenShare() {
 		qaScreenShare->setChecked(false);
 #endif
 	} else {
+		// Deliberately no state cleanup here: stopCapture() emits captureStopped, and
+		// onSelfShareStopped() — the same handler that covers mid-share failures — clears the
+		// toggle, hides the preview and retracts screen_sharing from the server. Doing it in
+		// exactly one place is what keeps a failed share from looking still-active.
 		Global::get().sc->stopCapture();
-
-		MumbleProto::UserState mpus;
-		mpus.set_session(p->uiSession);
-		mpus.set_screen_sharing(false);
-		Global::get().sh->sendMessage(mpus);
 	}
 }
 
@@ -4378,9 +4382,24 @@ void MainWindow::showSelfSharePreview(bool isWebcam) {
 	m_selfSharePreview->startSharing(isWebcam);
 }
 
-void MainWindow::hideSelfSharePreview() {
+void MainWindow::onSelfShareStopped() {
+	// Single funnel for every way the local share can end: the user toggling Share Screen off,
+	// a mid-share capture/encoder failure (whose error paths bypass the toggle logic), and
+	// disconnect-triggered stops. Everything that tracked the share is reset here.
 	if (m_selfSharePreview)
 		m_selfSharePreview->hide();
+
+	qaScreenShare->setChecked(false);
+
+	// Retract the share from the server, but only if it was ever announced (a failure before
+	// captureStarted never sent screen_sharing=true) and only while a connection still exists.
+	ClientUser *self = ClientUser::get(Global::get().uiSession);
+	if (self && self->bScreenSharing && Global::get().sh) {
+		MumbleProto::UserState mpus;
+		mpus.set_session(self->uiSession);
+		mpus.set_screen_sharing(false);
+		Global::get().sh->sendMessage(mpus);
+	}
 }
 
 void MainWindow::onSelfPreviewFrame(QImage frame) {
