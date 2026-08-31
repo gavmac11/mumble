@@ -16,8 +16,12 @@ private:
 	Q_OBJECT
 	Q_DISABLE_COPY(LogTextBrowser)
 
+protected:
+	void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+
 public:
 	LogTextBrowser(QWidget *p = nullptr);
+	void resizeImagesToFit();
 
 	int getLogScroll();
 	void setLogScroll(int scroll_pos);

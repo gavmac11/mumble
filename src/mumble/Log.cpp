@@ -884,6 +884,7 @@ void Log::log(MsgType mt, const QString &console, const QString &terse, bool own
 		tc.insertHtml(Log::msgColor(QString::fromLatin1("[%1] ").arg(timeString.toHtmlEscaped()), Log::Time));
 
 		validHtml(console, &tc);
+		tlog->resizeImagesToFit();
 		tc.movePosition(QTextCursor::End);
 		Global::get().mw->qteLog->setTextCursor(tc);
 
