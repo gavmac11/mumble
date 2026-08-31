@@ -12,6 +12,7 @@
 #	include <QtCore/QPointer>
 #	include <QtGui/QImage>
 #	ifdef Q_OS_MAC
+#		include "AVFCapture.h"
 #		include "SCKitCapture.h"
 #	elif defined(HAS_WAYLAND_PORTAL)
 #		include "XdgPortalCapture.h"
@@ -92,6 +93,32 @@ void ScreenCapture::startCapture() {
 	}
 #	endif
 
+	if (m_source.type == CaptureSource::Type::Webcam) {
+#	if defined(Q_OS_MAC)
+		m_frameNumber     = 0;
+		m_lastPreviewEmit = {};
+		m_capturing       = true;
+		QPointer< ScreenCapture > self = this;
+		auto onStarted                = [self]() {
+			if (self)
+				self->m_capturing = true;
+		};
+		auto onError = [self](QString error) {
+			if (!self)
+				return;
+			Global::get().l->log(Log::Warning, QObject::tr("Webcam capture failed: %1").arg(error));
+			self->stopCapture();
+			emit self->captureAborted();
+		};
+		auto onFrame = [self](QImage frame) {
+			if (self && self->m_capturing)
+				self->encodeImage(frame);
+		};
+		avf_startCamera(m_source.devicePath, std::move(onStarted), std::move(onError), std::move(onFrame));
+		return;
+#	endif
+	}
+
 	m_frameNumber     = 0;
 	m_lastPreviewEmit = {};
 	m_capturing       = true;
@@ -101,6 +128,10 @@ void ScreenCapture::startCapture() {
 
 void ScreenCapture::stopCapture() {
 #ifdef USE_SCREEN_SHARING
+#	if defined(Q_OS_MAC)
+	// Always invalidate camera callbacks first; permission or session startup may still be pending.
+	avf_stopCamera();
+#	endif
 #	if defined(Q_OS_LINUX)
 	// Always stop the camera first — it may still be starting up with m_capturing == false,
 	// and the worker thread must be joined before the encoder it uses is torn down.
@@ -198,7 +229,9 @@ void ScreenCapture::encodeImage(const QImage &srcImage) {
 	if (previewFrameDue())
 		emit previewFrame(srcImage);
 
-	const Mumble::VideoQuality::Profile &profile = Mumble::VideoQuality::screenShareProfile();
+	const Mumble::VideoQuality::Profile &profile = m_source.type == CaptureSource::Type::Webcam
+														 ? Mumble::VideoQuality::webcamProfile()
+														 : Mumble::VideoQuality::screenShareProfile();
 	const QSize encodedSize                      = Mumble::VideoQuality::constrainedFrameSize(srcImage.size(), profile);
 	if (!encodedSize.isValid()) {
 		scheduleCaptureAbort();

@@ -29,7 +29,7 @@ ScreenPickerDialog::ScreenPickerDialog(QWidget *parent) : QDialog(parent) {
 	m_list->setSelectionMode(QAbstractItemView::SingleSelection);
 	connect(m_list, &QListWidget::itemDoubleClicked, this, &ScreenPickerDialog::onItemDoubleClicked);
 
-	auto *hint = new QLabel(tr("Select a screen or window to share, then click Share."), this);
+	auto *hint = new QLabel(tr("Select a camera, screen, or window to share, then click Share."), this);
 	hint->setWordWrap(true);
 
 	auto *buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);

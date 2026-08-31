@@ -14,12 +14,12 @@
 
 /// Identifies a single capture source — an entire screen/monitor, a specific window, or a webcam.
 struct CaptureSource {
-	enum class Type { EntireScreen, Window, Webcam };
+	enum class Type { EntireScreen, Window, Webcam, NativePicker };
 
 	Type type               = Type::EntireScreen;
 	int screenIndex         = 0; ///< Index into QGuiApplication::screens() — used when type == EntireScreen.
 	quintptr nativeWindowId = 0; ///< Platform window handle: CGWindowID on macOS, XID on X11, HWND on Windows.
-	QString devicePath;         ///< V4L2 device node — used when type == Webcam (e.g. "/dev/video0").
+	QString devicePath;         ///< Camera identifier: V4L2 device node on Linux, AVCaptureDevice unique ID on macOS.
 
 	QString displayName; ///< Human-readable label shown in the picker (e.g. "Display 1 (2560×1440)").
 	QPixmap thumbnail;   ///< Scaled preview (≈160×90), populated by listCaptureSources().

@@ -4292,17 +4292,32 @@ void MainWindow::screenShare() {
 				Qt::SingleShotConnection);
 		};
 
-#	if defined(Q_OS_MAC) || defined(HAS_WAYLAND_PORTAL)
-		{
-			bool useNativePicker = false;
 #	ifdef Q_OS_MAC
-			useNativePicker = sckit_isNativePickerAvailable();
-#	else
-			useNativePicker = xdg_portal_isNativePickerAvailable();
-#	endif
+		// ScreenCaptureKit's picker cannot select cameras, so first present Mumble's
+		// source-mode picker. A camera starts directly; screen/window selection is
+		// delegated to the native privacy-preserving picker on macOS 14+.
+		{
+			ScreenPickerDialog dlg(this);
+			if (dlg.exec() != QDialog::Accepted) {
+				qaScreenShare->setChecked(false);
+				return;
+			}
+
+			const CaptureSource source = dlg.selectedSource();
+			sc->setSource(source);
+			waitForCapture(source.type == CaptureSource::Type::Webcam);
+			if (source.type == CaptureSource::Type::NativePicker) {
+				sc->startCaptureNative();
+			} else {
+				sc->startCapture();
+			}
+			return;
+		}
+#	elif defined(HAS_WAYLAND_PORTAL)
+		{
+			const bool useNativePicker = xdg_portal_isNativePickerAvailable();
 			if (useNativePicker) {
-				// Async path: show native OS picker (SCContentSharingPicker on macOS,
-				// xdg-desktop-portal on Wayland Linux).
+				// Async path: show the xdg-desktop-portal picker on Wayland Linux.
 				// The picker is a non-blocking overlay; we return immediately and wait for signals.
 				waitForCapture(false);
 				sc->startCaptureNative();
@@ -4311,7 +4326,7 @@ void MainWindow::screenShare() {
 		}
 #	endif
 
-		// Sync path: show ScreenPickerDialog (non-macOS or macOS < 14).
+		// Sync path: show ScreenPickerDialog on platforms without a native picker.
 		ScreenPickerDialog dlg(this);
 		if (dlg.exec() != QDialog::Accepted) {
 			qaScreenShare->setChecked(false);
@@ -4389,6 +4404,15 @@ void MainWindow::onSelfShareStopped() {
 	// disconnect-triggered stops. Everything that tracked the share is reset here.
 	if (m_selfSharePreview)
 		m_selfSharePreview->hide();
+#ifdef USE_SCREEN_SHARING
+	if (Global::get().sc) {
+		// A camera permission request may be stopped before captureStarted has removed
+		// these one-shot handlers. Clear them in the common stop funnel so they cannot
+		// fire during a later share attempt.
+		disconnect(Global::get().sc, &ScreenCapture::captureStarted, this, nullptr);
+		disconnect(Global::get().sc, &ScreenCapture::captureAborted, this, nullptr);
+	}
+#endif
 
 	qaScreenShare->setChecked(false);
 
