@@ -55,9 +55,8 @@ jobs:
       - name: Restore compiler cache
         uses: hendrikmuhs/ccache-action@v1.2.23
         with:
-          key: preview.windows.${{ github.ref_name }}
+          key: preview.windows.${{ github.base_ref || github.ref_name }}
           save: ${{ github.event_name != 'pull_request' }}
-          append-timestamp: false
 
       - name: Install dependencies
         uses: ./.github/actions/install-dependencies
@@ -70,7 +69,9 @@ jobs:
         shell: bash
         env:
           MUMBLE_BUILD_NUMBER: ${{ github.run_number }}
-        run: .github/workflows/build.sh "windows-2025-vs2026" "static" "x86_64"
+        run: |
+          CMAKE_OPTIONS="${CMAKE_OPTIONS} -Dtranslations=OFF" \
+            .github/workflows/build.sh "windows-2025-vs2026" "static" "x86_64"
 
       - name: Verify FFmpeg installer payload
         shell: pwsh
