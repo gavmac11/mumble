@@ -21,6 +21,11 @@
 #include "Global.h"
 
 static constexpr int CAPTURE_INTERVAL_MS = 66; // ~15 fps
+/// Self-preview frame pacing and size cap. The preview is for framing, not monitoring, so a
+/// few frames per second at a modest resolution are plenty — and keep the webcam worker
+/// thread's extra conversion cheap.
+static constexpr int PREVIEW_FRAME_INTERVAL_MS = 100; // ~10 fps
+static constexpr int PREVIEW_MAX_WIDTH         = 640;
 
 ScreenCapture::ScreenCapture(QObject *parent) : QObject(parent) {
 	m_captureTimer = new QTimer(this);
@@ -31,6 +36,9 @@ ScreenCapture::ScreenCapture(QObject *parent) : QObject(parent) {
 ScreenCapture::~ScreenCapture() {
 	stopCapture();
 #ifdef USE_SCREEN_SHARING
+	// stopCapture() early-returns when nothing was capturing (e.g. after a webcam error), so the
+	// preview scaler has to be released here as well.
+	freePreviewScaler();
 #	if defined(Q_OS_LINUX)
 	delete m_v4l2;
 	m_v4l2 = nullptr;
@@ -51,7 +59,8 @@ void ScreenCapture::startCapture() {
 
 #	if defined(Q_OS_LINUX)
 	if (m_source.type == CaptureSource::Type::Webcam) {
-		m_frameNumber = 0;
+		m_frameNumber     = 0;
+		m_lastPreviewEmit = {};
 
 		QPointer< ScreenCapture > self = this;
 		auto onStarted                = [self]() {
@@ -66,6 +75,9 @@ void ScreenCapture::startCapture() {
 			self->m_capturing = false;
 			self->destroyEncoder();
 			emit self->captureAborted();
+			// This path bypasses stopCapture() (the worker cannot join itself), so announce the
+			// stop here as well for anything tracking capture state, e.g. the self-share preview.
+			emit self->captureStopped();
 		};
 		auto onFrame = [self](int width, int height, const uint8_t *const data[4], const int linesize[4]) {
 			if (!self || !self->m_capturing)
@@ -80,8 +92,9 @@ void ScreenCapture::startCapture() {
 	}
 #	endif
 
-	m_frameNumber = 0;
-	m_capturing   = true;
+	m_frameNumber     = 0;
+	m_lastPreviewEmit = {};
+	m_capturing       = true;
 	m_captureTimer->start();
 #endif
 }
@@ -110,7 +123,11 @@ void ScreenCapture::stopCapture() {
 	xdg_portal_stop();
 #	endif
 	destroyEncoder();
+	// Safe to release here: any capture worker (V4L2) has been joined above, so nothing can be
+	// inside convertPreviewFrame() anymore.
+	freePreviewScaler();
 #endif
+	emit captureStopped();
 }
 
 bool ScreenCapture::isCapturing() const {
@@ -137,8 +154,9 @@ void ScreenCapture::startCaptureNative() {
 	auto onStarted = [self]() {
 		if (!self)
 			return;
-		self->m_capturing   = true;
-		self->m_frameNumber = 0;
+		self->m_capturing      = true;
+		self->m_frameNumber    = 0;
+		self->m_lastPreviewEmit = {};
 	};
 	auto onCancelled = [self]() {
 		if (!self)
@@ -152,6 +170,8 @@ void ScreenCapture::startCaptureNative() {
 		self->m_capturing = false;
 		self->destroyEncoder();
 		emit self->captureAborted();
+		// Bypasses stopCapture() for the same reason as the webcam error path above.
+		emit self->captureStopped();
 	};
 	auto onFrame = [self](QImage frame) {
 		if (!self || !self->m_capturing)
@@ -172,6 +192,11 @@ void ScreenCapture::encodeImage(const QImage &srcImage) {
 		scheduleCaptureAbort();
 		return;
 	}
+
+	// Local self-preview tap: the source frame before any profile scaling or encoding. Runs on
+	// the GUI thread (timer and native paths both funnel through here).
+	if (previewFrameDue())
+		emit previewFrame(srcImage);
 
 	const Mumble::VideoQuality::Profile &profile = Mumble::VideoQuality::screenShareProfile();
 	const QSize encodedSize                      = Mumble::VideoQuality::constrainedFrameSize(srcImage.size(), profile);
@@ -250,6 +275,14 @@ void ScreenCapture::encodeYuvFrame(int width, int height, const uint8_t *const d
 		return;
 	}
 
+	// Local self-preview tap (V4L2 worker thread). Throttle before converting so a dropped
+	// frame costs nothing — a full YUV->RGBA conversion at capture rate would be pure waste.
+	if (previewFrameDue()) {
+		const QImage preview = convertPreviewFrame(width, height, data, linesize);
+		if (!preview.isNull())
+			emit previewFrame(preview);
+	}
+
 	// (Re-)initialise the encoder when the captured or constrained resolution changes.
 	if (!m_codecCtx || m_encoderWidth != encodedSize.width() || m_encoderHeight != encodedSize.height()) {
 		destroyEncoder();
@@ -294,6 +327,53 @@ void ScreenCapture::encodeYuvFrame(int width, int height, const uint8_t *const d
 	}
 
 	++m_frameNumber;
+}
+
+bool ScreenCapture::previewFrameDue() {
+	// steady_clock is immune to wall-clock adjustments, which would otherwise stall or flood
+	// the preview. Called from whichever single thread feeds the encoder for this capture
+	// (GUI for screen paths, the V4L2 worker for webcams) — never both for one instance,
+	// because the source type is fixed for the lifetime of a capture.
+	const auto now = std::chrono::steady_clock::now();
+	if (m_lastPreviewEmit.time_since_epoch().count() != 0
+		&& now - m_lastPreviewEmit < std::chrono::milliseconds(PREVIEW_FRAME_INTERVAL_MS)) {
+		return false;
+	}
+	m_lastPreviewEmit = now;
+	return true;
+}
+
+QImage ScreenCapture::convertPreviewFrame(int width, int height, const uint8_t *const data[4],
+										 const int linesize[4]) {
+	// Scale down (never up) to keep the conversion cheap and the shipped QImage small; sws
+	// wants even dimensions on the destination.
+	int dstW = qMin(width, PREVIEW_MAX_WIDTH) & ~1;
+	int dstH = qRound(double(height) * dstW / double(width)) & ~1;
+	if (dstW < 2 || dstH < 2)
+		return {};
+
+	m_previewSwsCtx = sws_getCachedContext(m_previewSwsCtx, width, height, AV_PIX_FMT_YUV420P, dstW, dstH,
+										   AV_PIX_FMT_RGBA, SWS_BILINEAR, nullptr, nullptr, nullptr);
+	if (!m_previewSwsCtx)
+		return {};
+
+	QImage img(dstW, dstH, QImage::Format_RGBA8888);
+	uint8_t *dstData[1] = { img.bits() };
+	int dstStride[1]    = { static_cast< int >(img.bytesPerLine()) };
+	sws_scale(m_previewSwsCtx, data, linesize, 0, height, dstData, dstStride);
+
+	m_previewWidth  = dstW;
+	m_previewHeight = dstH;
+	return img;
+}
+
+void ScreenCapture::freePreviewScaler() {
+	if (m_previewSwsCtx) {
+		sws_freeContext(m_previewSwsCtx);
+		m_previewSwsCtx = nullptr;
+	}
+	m_previewWidth  = 0;
+	m_previewHeight = 0;
 }
 
 #endif // USE_SCREEN_SHARING

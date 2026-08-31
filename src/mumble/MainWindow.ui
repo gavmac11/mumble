@@ -83,6 +83,7 @@
     <addaction name="separator"/>
     <addaction name="qaRecording"/>
     <addaction name="qaScreenShare"/>
+    <addaction name="qaSelfSharePreview"/>
     <addaction name="separator"/>
     <addaction name="qaSelfComment"/>
     <addaction name="qaServerTexture"/>
@@ -1055,6 +1056,27 @@ the channel's context menu.</string>
    </property>
    <property name="whatsThis">
     <string>Captures and streams your primary screen as H.264 video to all users in the current channel.</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="qaSelfSharePreview">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>skin:actions/screenshare.svg</normaloff>skin:actions/screenshare.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Preview &amp;My Share</string>
+   </property>
+   <property name="toolTip">
+    <string>Show a small always-on-top preview of what you are sharing</string>
+   </property>
+   <property name="whatsThis">
+    <string>Opens a compact window showing the frames you are currently sending, so you can check your webcam framing or screen contents while sharing.</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>true</bool>

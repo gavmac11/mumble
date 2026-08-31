@@ -49,6 +49,7 @@
 #endif
 #include "ScreenShareReceiver.h"
 #include "ScreenShareViewer.h"
+#include "SelfSharePreview.h"
 #include "SearchDialog.h"
 #include "ServerHandler.h"
 #include "ServerInformation.h"
@@ -1701,6 +1702,7 @@ void MainWindow::on_qmSelf_aboutToShow() {
 
 	qaServerTexture->setEnabled(user != nullptr);
 	qaSelfComment->setEnabled(user != nullptr);
+	qaSelfSharePreview->setEnabled(user != nullptr && Global::get().sc && Global::get().sc->isCapturing());
 
 	qaServerTextureRemove->setEnabled(user && !user->qbaTextureHash.isEmpty());
 
@@ -1852,6 +1854,16 @@ void MainWindow::qmUser_aboutToShow() {
 	if (p && !isSelf && p->bScreenSharing) {
 		qmUser->addSeparator();
 		qmUser->addAction(qaUserViewScreenShare);
+	}
+
+	// Base both the visibility and the enabled state on the actual capture state rather than
+	// the (server-acknowledged, potentially stale) bScreenSharing flag: starting a share never
+	// re-runs on_qmSelf_aboutToShow(), so an action left disabled there would show up greyed
+	// out here until the Self menu happened to be opened again.
+	if (p && isSelf && Global::get().sc && Global::get().sc->isCapturing()) {
+		qmUser->addSeparator();
+		qaSelfSharePreview->setEnabled(true);
+		qmUser->addAction(qaSelfSharePreview);
 	}
 
 	qmUser->addAction(qaUserTextMessage);
@@ -4235,16 +4247,24 @@ void MainWindow::screenShare() {
 		if (!Global::get().sc) {
 			Global::get().sc = new ScreenCapture(this);
 			connect(Global::get().sc, &ScreenCapture::frameEncoded, this, &MainWindow::sendScreenShareFrame);
+			// Local self-preview. previewFrame uses an auto connection so the webcam's
+			// worker-thread emission is queued to the GUI thread (same pattern as frameEncoded
+			// above). captureStopped is queued explicitly: stopCapture() is also reached from
+			// ~ScreenCapture while shutting down, and a queued metacall to a receiver that is
+			// already gone is simply dropped instead of running on a half-destroyed MainWindow.
+			connect(Global::get().sc, &ScreenCapture::previewFrame, this, &MainWindow::onSelfPreviewFrame);
+			connect(Global::get().sc, &ScreenCapture::captureStopped, this, &MainWindow::onSelfShareStopped,
+					Qt::QueuedConnection);
 		}
 
 #ifdef USE_SCREEN_SHARING
 		const quint32 session = p->uiSession;
 		auto *sc              = Global::get().sc;
-		auto waitForCapture   = [this, session, sc]() {
+		auto waitForCapture   = [this, session, sc](bool isWebcam) {
 			// Tell the server only after capture has produced encoded data.
 			connect(
 				sc, &ScreenCapture::captureStarted, this,
-				[this, session, sc]() {
+				[this, session, sc, isWebcam]() {
 					disconnect(sc, &ScreenCapture::captureStarted, this, nullptr);
 					disconnect(sc, &ScreenCapture::captureAborted, this, nullptr);
 					if (Global::get().sh) {
@@ -4252,7 +4272,12 @@ void MainWindow::screenShare() {
 						mpus.set_session(session);
 						mpus.set_screen_sharing(true);
 						Global::get().sh->sendMessage(mpus);
+						m_selfShareAnnounced = true;
 					}
+					// Auto-open the self-preview once frames are really flowing (a failed or
+					// cancelled capture should never flash an empty window).
+					m_selfShareIsWebcam = isWebcam;
+					showSelfSharePreview(isWebcam);
 				},
 				Qt::SingleShotConnection);
 
@@ -4279,7 +4304,7 @@ void MainWindow::screenShare() {
 				// Async path: show native OS picker (SCContentSharingPicker on macOS,
 				// xdg-desktop-portal on Wayland Linux).
 				// The picker is a non-blocking overlay; we return immediately and wait for signals.
-				waitForCapture();
+				waitForCapture(false);
 				sc->startCaptureNative();
 				return; // Don't send UserState yet — wait for captureStarted.
 			}
@@ -4293,19 +4318,18 @@ void MainWindow::screenShare() {
 			return;
 		}
 		sc->setSource(dlg.selectedSource());
-		waitForCapture();
+		waitForCapture(dlg.selectedSource().type == CaptureSource::Type::Webcam);
 		sc->startCapture();
 #else
 		Global::get().sc->startCapture();
 		qaScreenShare->setChecked(false);
 #endif
 	} else {
+		// Deliberately no state cleanup here: stopCapture() emits captureStopped, and
+		// onSelfShareStopped() — the same handler that covers mid-share failures — clears the
+		// toggle, hides the preview and retracts screen_sharing from the server. Doing it in
+		// exactly one place is what keeps a failed share from looking still-active.
 		Global::get().sc->stopCapture();
-
-		MumbleProto::UserState mpus;
-		mpus.set_session(p->uiSession);
-		mpus.set_screen_sharing(false);
-		Global::get().sh->sendMessage(mpus);
 	}
 }
 
@@ -4351,6 +4375,49 @@ void MainWindow::on_qaUserViewScreenShare_triggered() {
 	ScreenShareViewer *viewer = m_screenShareViewers[p->uiSession];
 	// Clears dismissed flag, shows, raises, and repaints with the last frame.
 	viewer->showAndRefresh();
+}
+
+void MainWindow::showSelfSharePreview(bool isWebcam) {
+	if (!m_selfSharePreview)
+		m_selfSharePreview = new SelfSharePreview(this);
+	m_selfSharePreview->startSharing(isWebcam);
+}
+
+void MainWindow::onSelfShareStopped() {
+	// Single funnel for every way the local share can end: the user toggling Share Screen off,
+	// a mid-share capture/encoder failure (whose error paths bypass the toggle logic), and
+	// disconnect-triggered stops. Everything that tracked the share is reset here.
+	if (m_selfSharePreview)
+		m_selfSharePreview->hide();
+
+	qaScreenShare->setChecked(false);
+
+	// Retract the share if this client announced it, even if the server has not echoed the start
+	// yet. The true/false messages share an ordered connection, so a quick stop still leaves the
+	// server in the correct final state. A failure before captureStarted never sets this flag.
+	ClientUser *self = ClientUser::get(Global::get().uiSession);
+	if (m_selfShareAnnounced && self && Global::get().sh) {
+		MumbleProto::UserState mpus;
+		mpus.set_session(self->uiSession);
+		mpus.set_screen_sharing(false);
+		Global::get().sh->sendMessage(mpus);
+	}
+	m_selfShareAnnounced = false;
+}
+
+void MainWindow::onSelfPreviewFrame(QImage frame) {
+	if (m_selfSharePreview)
+		m_selfSharePreview->updateFrame(frame);
+}
+
+void MainWindow::on_qaSelfSharePreview_triggered() {
+	if (!Global::get().sc || !Global::get().sc->isCapturing())
+		return;
+
+	if (m_selfSharePreview)
+		m_selfSharePreview->showAndRefresh();
+	else
+		showSelfSharePreview(m_selfShareIsWebcam);
 }
 
 void MainWindow::onRemoteScreenShareStopped(quint32 senderSession) {

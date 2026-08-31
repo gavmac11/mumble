@@ -36,6 +36,7 @@ class BanEditor;
 class UserEdit;
 class ServerHandler;
 class ScreenShareViewer;
+class SelfSharePreview;
 class GlobalShortcut;
 class TextToSpeech;
 class UserModel;
@@ -128,6 +129,13 @@ public:
 
 	VoiceRecorderDialog *voiceRecorderDialog;
 	QMap< quint32, ScreenShareViewer * > m_screenShareViewers;
+	/// Local always-on-top preview of the user's own share; created on first use.
+	SelfSharePreview *m_selfSharePreview = nullptr;
+	/// Source type of the current/last own share, for titling the preview.
+	bool m_selfShareIsWebcam = false;
+	/// Whether this client announced the current share to the server. Kept separately from
+	/// ClientUser::bScreenSharing because that flag is only updated after the server echoes it.
+	bool m_selfShareAnnounced = false;
 
 	MumbleProto::Reject_RejectType rtLast;
 	bool bRetryServer;
@@ -274,6 +282,7 @@ public slots:
 	void on_qaUserRegister_triggered();
 	void on_qaUserInformation_triggered();
 	void on_qaUserViewScreenShare_triggered();
+	void on_qaSelfSharePreview_triggered();
 	void on_qaUserFriendAdd_triggered();
 	void on_qaUserFriendRemove_triggered();
 	void on_qaUserFriendUpdate_triggered();
@@ -477,6 +486,11 @@ public:
 							  bool isKeyFrame);
 	void onRemoteFrameDecoded(quint32 senderSession, QImage frame);
 	void onRemoteScreenShareStopped(quint32 senderSession);
+	void showSelfSharePreview(bool isWebcam);
+	/// Single cleanup path for every way the local share ends (user stop, failure, disconnect):
+	/// hides the preview, unchecks the toggle and retracts screen_sharing from the server.
+	void onSelfShareStopped();
+	void onSelfPreviewFrame(QImage frame);
 	void openSelfCommentDialog();
 	void changeServerTexture();
 	void removeServerTexture();
