@@ -609,16 +609,23 @@ void MainWindow::msgUserState(const MumbleProto::UserState &msg) {
 				} else {
 					Global::get().l->log(Log::Information, tr("Screen sharing stopped."));
 				}
-			} else if (pDst->cChannel == pSelf->cChannel || pDst->cChannel->allLinks().contains(pSelf->cChannel)) {
-				if (pDst->bScreenSharing) {
-					Global::get().l->log(
-						Log::Information,
-						tr("%1 started sharing their screen.").arg(Log::formatClientUser(pDst, Log::Source)));
-				} else {
-					Global::get().l->log(
-						Log::Information,
-						tr("%1 stopped sharing their screen.").arg(Log::formatClientUser(pDst, Log::Source)));
+			} else {
+				// Tear the presentation down regardless of channel relationships: a stop from
+				// an unlinked channel must not leave stale tiles or windows behind. The log
+				// message stays channel-gated.
+				if (!pDst->bScreenSharing)
 					Global::get().mw->onRemoteScreenShareStopped(pDst->uiSession);
+
+				if (pDst->cChannel == pSelf->cChannel || pDst->cChannel->allLinks().contains(pSelf->cChannel)) {
+					if (pDst->bScreenSharing) {
+						Global::get().l->log(
+							Log::Information,
+							tr("%1 started sharing their screen.").arg(Log::formatClientUser(pDst, Log::Source)));
+					} else {
+						Global::get().l->log(
+							Log::Information,
+							tr("%1 stopped sharing their screen.").arg(Log::formatClientUser(pDst, Log::Source)));
+					}
 				}
 			}
 		}
@@ -898,8 +905,9 @@ void MainWindow::msgUserRemove(const MumbleProto::UserRemove &msg) {
 	}
 
 	if (pDst != pSelf) {
-		if (pDst->bScreenSharing)
-			Global::get().mw->onRemoteScreenShareStopped(pDst->uiSession);
+		// Unconditional: the leaving user's screen_sharing flag may never have been echoed
+		// (or already reset), and stale presentations must not survive the removal.
+		Global::get().mw->onRemoteScreenShareStopped(pDst->uiSession);
 		pmModel->removeUser(pDst);
 	}
 }

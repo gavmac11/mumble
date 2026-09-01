@@ -19,9 +19,27 @@
 
 namespace {
 
-/// Paints a video frame directly into the available area without allocating a newly scaled
-/// pixmap for every incoming frame. Letterboxing keeps screen content and camera feeds uncropped.
-class VideoFrameWidget : public QWidget {
+int columnCountFor(int tileCount, const QSize &availableSize) {
+	if (tileCount <= 1)
+		return 1;
+
+	// Keep pairs side-by-side in a typical landscape window. In a narrow or portrait window,
+	// one column gives each feed enough width to remain legible.
+	if (tileCount == 2)
+		return availableSize.width() >= availableSize.height() ? 2 : 1;
+
+	const int squareGridColumns = static_cast< int >(std::ceil(std::sqrt(static_cast< double >(tileCount))));
+	return availableSize.width() >= availableSize.height() ? squareGridColumns : std::max(2, squareGridColumns - 1);
+}
+
+} // namespace
+
+class ScreenShareTile : public QFrame {
+private:
+	/// Paints a video frame directly into the available area without allocating a newly scaled
+	/// pixmap for every incoming frame. Letterboxing keeps screen content and camera feeds
+	/// uncropped. Nested inside ScreenShareTile so both share its linkage.
+	class VideoFrameWidget : public QWidget {
 public:
 	explicit VideoFrameWidget(QWidget *parent = nullptr) : QWidget(parent) {
 		setMinimumSize(240, 135);
@@ -59,22 +77,6 @@ private:
 	QImage m_frame;
 };
 
-int columnCountFor(int tileCount, const QSize &availableSize) {
-	if (tileCount <= 1)
-		return 1;
-
-	// Keep pairs side-by-side in a typical landscape window. In a narrow or portrait window,
-	// one column gives each feed enough width to remain legible.
-	if (tileCount == 2)
-		return availableSize.width() >= availableSize.height() ? 2 : 1;
-
-	const int squareGridColumns = static_cast< int >(std::ceil(std::sqrt(static_cast< double >(tileCount))));
-	return availableSize.width() >= availableSize.height() ? squareGridColumns : std::max(2, squareGridColumns - 1);
-}
-
-} // namespace
-
-class ScreenShareTile : public QFrame {
 public:
 	explicit ScreenShareTile(const QString &senderName, QWidget *parent = nullptr) : QFrame(parent) {
 		setFrameStyle(QFrame::StyledPanel | QFrame::Plain);

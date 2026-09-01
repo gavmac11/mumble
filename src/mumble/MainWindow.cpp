@@ -4370,7 +4370,13 @@ void MainWindow::sendScreenShareFrame(QByteArray encodedData, quint64 frameNumbe
 
 void MainWindow::onRemoteFrameDecoded(quint32 senderSession, QImage frame) {
 	ClientUser *sender = ClientUser::get(senderSession);
-	const QString name = sender ? sender->qsName : tr("Unknown");
+	// Frames queued before a stop, removal or disconnect can still be delivered after the
+	// presentation was torn down; presenting them would recreate a stale tile or window
+	// under an "Unknown" name, so drop them instead.
+	if (!sender || !sender->bScreenSharing)
+		return;
+
+	const QString name = sender->qsName;
 
 	// Always store the latest frame, but never reopen a window or gallery the user closed.
 	// Ideally, the user should subscribe to the server. Otherwise, when a user doesn't have the stream open,
