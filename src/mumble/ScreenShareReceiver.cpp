@@ -10,6 +10,10 @@
 #include <utility>
 
 #ifdef USE_SCREEN_SHARING
+#	include "PaddedImage.h"
+#endif
+
+#ifdef USE_SCREEN_SHARING
 /// Hard cap on simultaneously buffered (incomplete) frames per sender. Completed frames are
 /// already cleaned up on delivery; this bounds the pathological case of a stream that never
 /// completes frames (loss, garbage, or a malicious sender).
@@ -268,7 +272,12 @@ void ScreenShareReceiver::decodeCompleteFrame(quint32 session, const QByteArray 
 		if (!ds.swsCtx)
 			continue;
 
-		QImage img(dw, dh, QImage::Format_RGBA8888);
+		// The destination is allocated with padded rows and tail slack: swscale's SIMD
+		// tails can overshoot the last row for some widths, which would corrupt the heap
+		// with a plain QImage (see PaddedImage.h).
+		QImage img = allocatePaddedRGBAImage(dw, dh);
+		if (img.isNull())
+			continue;
 		uint8_t *dstData[1] = { img.bits() };
 		int dstStride[1]    = { static_cast< int >(img.bytesPerLine()) };
 		sws_scale(ds.swsCtx, ds.frame->data, ds.frame->linesize, 0, dh, dstData, dstStride);
