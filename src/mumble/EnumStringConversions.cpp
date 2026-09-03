@@ -93,6 +93,10 @@
 	PROCESS(StyleType, Light, "Light") \
 	PROCESS(StyleType, Dark, "Dark")
 
+#define VIDEO_DISPLAY_MODE_VALUES                          \
+	PROCESS(VideoDisplayMode, Gallery, "Gallery")          \
+	PROCESS(VideoDisplayMode, SeparateWindows, "SeparateWindows")
+
 #define SEARCH_USER_ACTION_VALUES                           \
 	PROCESS(Search::SearchDialog::UserAction, NONE, "None") \
 	PROCESS(Search::SearchDialog::UserAction, JOIN, "Join")
@@ -204,6 +208,9 @@
 	BEFORE_CODE(StyleType)                             \
 	STYLETYPE_VALUES                                   \
 	AFTER_CODE                                         \
+	BEFORE_CODE(VideoDisplayMode)                      \
+	VIDEO_DISPLAY_MODE_VALUES                          \
+	AFTER_CODE                                         \
 	BEFORE_CODE(Search::SearchDialog::UserAction)      \
 	SEARCH_USER_ACTION_VALUES                          \
 	AFTER_CODE                                         \
@@ -272,6 +279,7 @@ PROCESS_ALL_ENUMS
 #undef SEARCH_USER_ACTION_VALUES
 #undef RECORDING_MODE_VALUES
 #undef STYLETYPE_VALUES
+#undef VIDEO_DISPLAY_MODE_VALUES
 #undef WINDOW_LAYOUT_VALUES
 #undef ALWAYS_ON_TOP_VALUES
 #undef QUIT_VALUES

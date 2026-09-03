@@ -9,6 +9,7 @@
 
 #ifdef USE_SCREEN_SHARING
 #	include "CaptureSourceLister.h"
+#	include "PaddedImage.h"
 #	include <QtCore/QPointer>
 #	include <QtGui/QImage>
 #	ifdef Q_OS_MAC
@@ -390,7 +391,12 @@ QImage ScreenCapture::convertPreviewFrame(int width, int height, const uint8_t *
 	if (!m_previewSwsCtx)
 		return {};
 
-	QImage img(dstW, dstH, QImage::Format_RGBA8888);
+	// Padded destination: swscale's SIMD tails can overshoot the last row for some
+	// widths, which would corrupt the heap with a plain QImage (see PaddedImage.h).
+	QImage img = allocatePaddedRGBAImage(dstW, dstH);
+	if (img.isNull())
+		return {};
+
 	uint8_t *dstData[1] = { img.bits() };
 	int dstStride[1]    = { static_cast< int >(img.bytesPerLine()) };
 	sws_scale(m_previewSwsCtx, data, linesize, 0, height, dstData, dstStride);

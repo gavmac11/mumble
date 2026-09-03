@@ -36,6 +36,7 @@ class BanEditor;
 class UserEdit;
 class ServerHandler;
 class ScreenShareViewer;
+class ScreenShareWindow;
 class SelfSharePreview;
 class GlobalShortcut;
 class TextToSpeech;
@@ -128,7 +129,12 @@ public:
 	Tokens *tokenEdit;
 
 	VoiceRecorderDialog *voiceRecorderDialog;
-	QMap< quint32, ScreenShareViewer * > m_screenShareViewers;
+	ScreenShareViewer *m_screenShareViewer = nullptr;
+	/// One window per remote sharer; only populated while the display mode is SeparateWindows.
+	QMap< quint32, ScreenShareWindow * > m_screenShareWindows;
+	/// Display mode the containers above currently present. Tracked separately from the
+	/// setting so runtime switches can migrate the running presentation.
+	VideoDisplayMode m_activeVideoDisplayMode = VideoDisplayMode::Gallery;
 	/// Local always-on-top preview of the user's own share; created on first use.
 	SelfSharePreview *m_selfSharePreview = nullptr;
 	/// Source type of the current/last own share, for titling the preview.
@@ -486,6 +492,10 @@ public:
 							  bool isKeyFrame);
 	void onRemoteFrameDecoded(quint32 senderSession, QImage frame);
 	void onRemoteScreenShareStopped(quint32 senderSession);
+	/// Migrates the remote-share presentation to Settings::videoDisplayMode at runtime.
+	void applyVideoDisplayMode();
+	/// Closes and deletes every per-sharer window (used for disconnect and mode switches).
+	void clearScreenShareWindows();
 	void showSelfSharePreview(bool isWebcam);
 	/// Single cleanup path for every way the local share ends (user stop, failure, disconnect):
 	/// hides the preview, unchecks the toggle and retracts screen_sharing from the server.

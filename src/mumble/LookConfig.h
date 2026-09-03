@@ -42,6 +42,7 @@ public slots:
 						 const std::optional< ThemeInfo::StyleInfo > configuredDarkStyle);
 	void setStyleType(StyleType styleType) const;
 	StyleType getStyleType() const;
+	VideoDisplayMode getVideoDisplayMode() const;
 	void themeDirectoryChanged();
 	void on_qcbAbbreviateChannelNames_stateChanged(int state);
 	void on_qcbUsersAlwaysVisible_stateChanged(int state);

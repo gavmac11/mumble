@@ -147,6 +147,7 @@
 	PROCESS(ui, THEME_DARK_KEY, themeDarkName)                                   \
 	PROCESS(ui, THEME_DARK_STYLE_KEY, themeDarkStyleName)                        \
 	PROCESS(ui, THEME_METHOD_KEY, styleType)                                     \
+	PROCESS(ui, VIDEO_DISPLAY_MODE_KEY, videoDisplayMode)                        \
 	PROCESS(ui, CHANNEL_EXPANSION_MODE_KEY, ceExpand)                            \
 	PROCESS(ui, CHANNEL_DRAG_MODE_KEY, ceChannelDrag)                            \
 	PROCESS(ui, USER_DRAG_MODE_KEY, ceUserDrag)                                  \
