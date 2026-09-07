@@ -4,6 +4,7 @@
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "ScreenShareWindow.h"
+#include "VideoViewUi.h"
 
 #include <QtGui/QResizeEvent>
 #include <QtGui/QShowEvent>
@@ -12,17 +13,28 @@
 
 ScreenShareWindow::ScreenShareWindow(quint32 senderSession, const QString &senderName, QWidget *parent)
 	: QDialog(parent, Qt::Window), m_senderSession(senderSession), m_senderName(senderName) {
-	setWindowTitle(tr("%1's screen").arg(senderName));
+	setWindowTitle(tr("%1 — shared video").arg(senderName));
+	VideoViewUi::style(this);
 
 	m_imageLabel = new QLabel(this);
 	m_imageLabel->setAlignment(Qt::AlignCenter);
 	m_imageLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	m_imageLabel->setMinimumSize(320, 240);
-	m_imageLabel->setText(tr("Waiting for first frame…"));
+	m_imageLabel->setMinimumSize(320, 180);
+	m_imageLabel->setText(tr("Connecting to video…"));
 
 	QVBoxLayout *layout = new QVBoxLayout(this);
-	layout->setContentsMargins(0, 0, 0, 0);
-	layout->addWidget(m_imageLabel);
+	layout->setContentsMargins(12, 12, 12, 12);
+	layout->setSpacing(12);
+	auto *toolbar = new QHBoxLayout;
+	auto *name    = new QLabel(senderName, this);
+	name->setTextFormat(Qt::PlainText);
+	name->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
+	name->setToolTip(senderName);
+	name->setObjectName(QStringLiteral("videoHeading"));
+	toolbar->addWidget(name, 1);
+	toolbar->addWidget(VideoViewUi::fullscreenButton(this));
+	layout->addLayout(toolbar);
+	layout->addWidget(m_imageLabel, 1);
 
 	resize(800, 600);
 }
@@ -46,11 +58,10 @@ void ScreenShareWindow::updateImageDisplay() {
 	if (m_currentFrame.isNull())
 		return;
 
-	QSize areaSize = size();
+	QSize areaSize = m_imageLabel->contentsRect().size();
 	QPixmap scaled = QPixmap::fromImage(m_currentFrame).scaled(areaSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 	m_imageLabel->setPixmap(scaled);
-	m_imageLabel->resize(scaled.size());
 }
 
 void ScreenShareWindow::resizeEvent(QResizeEvent *event) {

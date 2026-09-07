@@ -1049,13 +1049,13 @@ the channel's context menu.</string>
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Share &amp;Screen</string>
+    <string>Share vi&amp;deo…</string>
    </property>
    <property name="toolTip">
-    <string>Start or stop sharing your screen with others in the channel</string>
+    <string>Share a camera, screen, or window with your channel</string>
    </property>
    <property name="whatsThis">
-    <string>Captures and streams your primary screen as H.264 video to all users in the current channel.</string>
+    <string>Choose a camera, screen, or window to share with everyone in the current channel. Use Stop sharing in your preview to end the stream.</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>true</bool>

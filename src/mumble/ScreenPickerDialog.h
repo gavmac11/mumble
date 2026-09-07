@@ -14,6 +14,9 @@
 #	include <QtWidgets/QDialog>
 
 class QListWidget;
+class QTabBar;
+class QLabel;
+class QPushButton;
 class QListWidgetItem;
 
 /// Modal dialog that lists available screens and windows for screen sharing.
@@ -33,7 +36,13 @@ private slots:
 	void onItemDoubleClicked(QListWidgetItem *item);
 
 private:
+	void updateSources();
+	void updateSelection();
 	QListWidget *m_list;
+	QTabBar *m_tabs;
+	QLabel *m_hint;
+	QLabel *m_selection;
+	QPushButton *m_shareButton;
 	QList< CaptureSource > m_sources;
 };
 

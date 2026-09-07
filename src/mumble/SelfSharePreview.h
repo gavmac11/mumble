@@ -30,6 +30,9 @@ public:
 	/// Reopens the window from a menu action: shows, raises and repaints the last frame.
 	void showAndRefresh();
 
+signals:
+	void stopSharingRequested();
+
 public slots:
 	void updateFrame(QImage frame);
 
@@ -39,7 +42,8 @@ protected:
 private:
 	void updateImageDisplay();
 
-	QLabel *m_imageLabel  = nullptr;
+	QLabel *m_imageLabel = nullptr;
+	QLabel *m_status     = nullptr;
 	QImage m_currentFrame;
 };
 

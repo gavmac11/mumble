@@ -4283,6 +4283,8 @@ void MainWindow::screenShare() {
 					}
 					// Auto-open the self-preview once frames are really flowing (a failed or
 					// cancelled capture should never flash an empty window).
+					qaScreenShare->setText(tr("Stop sharing vi&deo"));
+					qaScreenShare->setToolTip(tr("Stop sharing video with your channel"));
 					m_selfShareIsWebcam = isWebcam;
 					showSelfSharePreview(isWebcam);
 				},
@@ -4412,12 +4414,19 @@ void MainWindow::on_qaUserViewScreenShare_triggered() {
 }
 
 void MainWindow::showSelfSharePreview(bool isWebcam) {
-	if (!m_selfSharePreview)
+	if (!m_selfSharePreview) {
 		m_selfSharePreview = new SelfSharePreview(this);
+		connect(m_selfSharePreview, &SelfSharePreview::stopSharingRequested, this, []() {
+			if (Global::get().sc && Global::get().sc->isCapturing())
+				Global::get().sc->stopCapture();
+		});
+	}
 	m_selfSharePreview->startSharing(isWebcam);
 }
 
 void MainWindow::onSelfShareStopped() {
+	qaScreenShare->setText(tr("Share vi&deo…"));
+	qaScreenShare->setToolTip(tr("Share a camera, screen, or window with your channel"));
 	// Single funnel for every way the local share can end: the user toggling Share Screen off,
 	// a mid-share capture/encoder failure (whose error paths bypass the toggle logic), and
 	// disconnect-triggered stops. Everything that tracked the share is reset here.
