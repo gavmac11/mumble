@@ -3,6 +3,8 @@
 # that can be found in the LICENSE file at the root of the
 # Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
+find_pkg(Qt6 COMPONENTS Widgets REQUIRED)
+
 add_executable(TestVideoViewUi TestVideoViewUi.cpp)
 set_target_properties(TestVideoViewUi PROPERTIES AUTOMOC ON)
 target_include_directories(TestVideoViewUi PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../mumble")
