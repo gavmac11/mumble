@@ -235,6 +235,7 @@ set(MUMBLE_SOURCES
 	"VideoFramePacketizer.h"
 	"VideoQualityProfile.cpp"
 	"VideoQualityProfile.h"
+	"VideoViewUi.h"
 	"SearchDialog.cpp"
 	"SearchDialog.h"
 	"SearchDialog.ui"

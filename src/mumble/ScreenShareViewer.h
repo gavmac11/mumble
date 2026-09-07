@@ -6,13 +6,17 @@
 #ifndef MUMBLE_MUMBLE_SCREENSHAREVIEWER_H_
 #define MUMBLE_MUMBLE_SCREENSHAREVIEWER_H_
 
-#include <QtCore/QMap>
 #include <QtCore/QList>
+#include <QtCore/QMap>
 #include <QtCore/QString>
 #include <QtGui/QImage>
 #include <QtWidgets/QDialog>
 
 class QGridLayout;
+class QComboBox;
+class QLabel;
+class QPushButton;
+class QScrollArea;
 class ScreenShareTile;
 
 /// Floating gallery that displays shared video from remote users.
@@ -54,14 +58,21 @@ public slots:
 
 protected:
 	void resizeEvent(QResizeEvent *event) override;
+	bool eventFilter(QObject *watched, QEvent *event) override;
 	void closeEvent(QCloseEvent *event) override;
 
 private:
 	ScreenShareTile *ensureTile(quint32 senderSession, const QString &senderName);
 	void reflowTiles();
 	void updateWindowTitle();
+	void setFocused(bool focused);
 
 	QGridLayout *m_gridLayout;
+	QScrollArea *m_scrollArea;
+	QComboBox *m_participants;
+	QLabel *m_status;
+	QPushButton *m_focusButton;
+	bool m_focused = false;
 	QMap< quint32, ScreenShareTile * > m_tiles;
 	bool m_dismissed  = false;
 	int m_columnCount = 0;
