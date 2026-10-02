@@ -1,0 +1,65 @@
+{
+  "scope": "H.264 fixture; decode captured streams separately",
+  "transport": "udp",
+  "media_deliveries_by_transport": {
+    "tcp": 0,
+    "udp": 13986
+  },
+  "crypto_library_sha256": "edefe91c2ad6d40090d8646660a3df46e1d154a72a8cdcd6a67a670775d1de39",
+  "run_id": "1acfeed0",
+  "probe_sha256": "99451e81be229c9832ab1bea1900651c6f6533d947004386f51665fe8db2b8aa",
+  "fixture_sha256": "38bd450ec565dbd6558302fa2750bede1ec0b6c64d40034e24028d53ff0564e8",
+  "start_time_utc": "2026-10-02T05:41:55.158234+00:00",
+  "end_time_utc": "2026-10-02T05:42:02.163010+00:00",
+  "clients": 10,
+  "senders": 1,
+  "frames_per_second": 15,
+  "width": 1920,
+  "height": 1080,
+  "requested_sender_payload_mbps": null,
+  "requested_seconds": 5.0,
+  "actual_offer_seconds": 5.0012,
+  "generator_cpu_seconds_during_offer": 0.5384,
+  "generator_cpu_percent_of_one_core": 10.77,
+  "settle_seconds": 2.0,
+  "offered_payload_mbps": 2.182,
+  "sent_fragments": 1554,
+  "expected_deliveries": 13986,
+  "observed_unique_deliveries": 13986,
+  "undelivered_by_deadline": 0,
+  "integrity_errors": [],
+  "complete_fanout": true,
+  "relay_delay_ms": {
+    "p50": 3.29,
+    "p95": 9.664,
+    "p99": 11.43,
+    "max": 12.625
+  },
+  "control_ping_rtt_ms": {
+    "p50": 0.676,
+    "p95": 1.138,
+    "p99": 1.49,
+    "max": 1.495
+  },
+  "encrypted_udp_ping_rtt_ms": {
+    "p50": 0.506,
+    "p95": 4.04,
+    "p99": 4.105,
+    "max": 4.113
+  },
+  "generator_event_loop_lag_ms": {
+    "p50": 0.835,
+    "p95": 1.808,
+    "p99": 2.241,
+    "max": 3.001
+  },
+  "captures": [
+    {
+      "file": "sender-13.h264",
+      "complete_frames": 75,
+      "expected_frames": 75,
+      "incomplete_frames": [],
+      "sha256": "38bd450ec565dbd6558302fa2750bede1ec0b6c64d40034e24028d53ff0564e8"
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "scope": "H.264 fixture; decode captured streams separately",
+  "transport": "udp",
+  "media_deliveries_by_transport": {
+    "tcp": 0,
+    "udp": 789480
+  },
+  "crypto_library_sha256": "edefe91c2ad6d40090d8646660a3df46e1d154a72a8cdcd6a67a670775d1de39",
+  "run_id": "181d791c",
+  "probe_sha256": "5f8f447f19a5f35772ab9bda842bd0bdf96973c3ef022aa3c66b60027e41a4f0",
+  "fixture_sha256": "19f20c106aca917f3d7c81ae0b77c1c59d17d3146e871b96fc6a5a0afad435e3",
+  "voice_fixture_sha256": "bae760c9b408811d75db7b6a9540f0a82cdc67747a5609ab5fbbae5be0848e40",
+  "start_time_utc": "2026-10-02T15:17:15.607582+00:00",
+  "end_time_utc": "2026-10-02T15:17:47.698680+00:00",
+  "clients": 10,
+  "senders": 10,
+  "stagger_video_frames": false,
+  "video_send_cap_mbps": 2.0,
+  "native_pacer_library_sha256": "ed6dd5ac589728478322455b2fbb720b67b032535f7d74a5a493f48ed8e443fa",
+  "native_pacer_rejected_frames": 0,
+  "frames_per_second": 30,
+  "width": 1280,
+  "height": 720,
+  "requested_sender_payload_mbps": null,
+  "requested_seconds": 30.0,
+  "actual_offer_seconds": 30.0016,
+  "generator_cpu_seconds_during_offer": 24.7863,
+  "generator_cpu_percent_of_one_core": 82.62,
+  "settle_seconds": 2.0,
+  "offered_payload_mbps": 16.3932,
+  "sent_fragments": 72720,
+  "expected_deliveries": 654480,
+  "observed_unique_deliveries": 654480,
+  "undelivered_by_deadline": 0,
+  "integrity_errors": [],
+  "complete_fanout": true,
+  "voice": {
+    "senders": 10,
+    "packet_duration_ms": 20,
+    "sent_packets": 15000,
+    "expected_deliveries": 135000,
+    "observed_unique_deliveries": 135000,
+    "undelivered_by_deadline": 0,
+    "offered_payload_mbps": 0.32,
+    "relay_delay_ms": {
+      "p50": 1.774,
+      "p95": 3.596,
+      "p99": 7.64,
+      "max": 26.536
+    }
+  },
+  "relay_delay_ms": {
+    "p50": 1.559,
+    "p95": 3.041,
+    "p99": 6.053,
+    "max": 55.164
+  },
+  "scheduled_frame_to_fragment_delivery_ms": {
+    "p50": 30.071,
+    "p95": 75.845,
+    "p99": 97.8,
+    "max": 142.134
+  },
+  "control_ping_rtt_ms": {
+    "p50": 1.248,
+    "p95": 1.799,
+    "p99": 2.026,
+    "max": 2.058
+  },
+  "encrypted_udp_ping_rtt_ms": {
+    "p50": 1.562,
+    "p95": 5.147,
+    "p99": 9.922,
+    "max": 10.288
+  },
+  "generator_event_loop_lag_ms": {
+    "p50": 0.458,
+    "p95": 1.061,
+    "p99": 2.047,
+    "max": 40.75
+  },
+  "captures": [
+    {
+      "file": "sender-2.h264",
+      "complete_frames": 900,
+      "expected_frames": 900,
+      "incomplete_frames": [],
+      "sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50"
+    },
+    {
+      "file": "sender-3.h264",
+      "complete_frames": 900,
+      "expected_frames": 900,
+      "incomplete_frames": [],
+      "sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50"
+    },
+    {
+      "file": "sender-4.h264",
+      "complete_frames": 900,
+      "expected_frames": 900,
+      "incomplete_frames": [],
+      "sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50"
+    },
+    {
+      "file": "sender-5.h264",
+      "complete_frames": 900,
+      "expected_frames": 900,
+      "incomplete_frames": [],
+      "sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50"
+    },
+    {
+      "file": "sender-6.h264",
+      "complete_frames": 900,
+      "expected_frames": 900,
+      "incomplete_frames": [],
+      "sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50"
+    },
+    {
+      "file": "sender-7.h264",
+      "complete_frames": 900,
+      "expected_frames": 900,
+      "incomplete_frames": [],
+      "sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50"
+    },
+    {
+      "file": "sender-8.h264",
+      "complete_frames": 900,
+      "expected_frames": 900,
+      "incomplete_frames": [],
+      "sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50"
+    },
+    {
+      "file": "sender-9.h264",
+      "complete_frames": 900,
+      "expected_frames": 900,
+      "incomplete_frames": [],
+      "sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50"
+    },
+    {
+      "file": "sender-10.h264",
+      "complete_frames": 900,
+      "expected_frames": 900,
+      "incomplete_frames": [],
+      "sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50"
+    }
+  ]
+}

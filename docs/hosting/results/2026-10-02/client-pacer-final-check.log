@@ -1,0 +1,16 @@
+[1/7] Automatic RCC for ../../mumble_flags.qrc
+[2/5] Automatic MOC for target TestVideoPacketPacer
+[3/4] Building CXX object src/tests/TestVideoPacketPacer/CMakeFiles/TestVideoPacketPacer.dir/TestVideoPacketPacer.cpp.o
+[4/4] Linking CXX executable tests/TestVideoPacketPacer
+Internal ctest changing into directory: /client-build
+Test project /client-build
+    Start 2: TestVideoFramePacketizer
+1/3 Test #2: TestVideoFramePacketizer .........   Passed    0.01 sec
+    Start 3: TestVideoPacketPacer
+2/3 Test #3: TestVideoPacketPacer .............   Passed    0.13 sec
+    Start 4: TestVideoQualityProfile
+3/3 Test #4: TestVideoQualityProfile ..........   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =   0.14 sec

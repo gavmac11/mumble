@@ -1,0 +1,220 @@
+{
+  "scope": "H.264 fixture; decode captured streams separately",
+  "transport": "udp",
+  "media_deliveries_by_transport": {
+    "tcp": 0,
+    "udp": 117225
+  },
+  "crypto_library_sha256": "edefe91c2ad6d40090d8646660a3df46e1d154a72a8cdcd6a67a670775d1de39",
+  "run_id": "7e793bb4",
+  "probe_sha256": "5219aa544870c464b38d7c550e3eae06e9b3fd50a371a7e71bd9c0ff540848a9",
+  "fixture_sha256": "19f20c106aca917f3d7c81ae0b77c1c59d17d3146e871b96fc6a5a0afad435e3",
+  "voice_fixture_sha256": "bae760c9b408811d75db7b6a9540f0a82cdc67747a5609ab5fbbae5be0848e40",
+  "start_time_utc": "2026-10-02T05:49:05.923014+00:00",
+  "end_time_utc": "2026-10-02T05:49:12.939915+00:00",
+  "clients": 10,
+  "senders": 10,
+  "frames_per_second": 30,
+  "width": 1280,
+  "height": 720,
+  "requested_sender_payload_mbps": null,
+  "requested_seconds": 5.0,
+  "actual_offer_seconds": 5.0002,
+  "generator_cpu_seconds_during_offer": 3.3358,
+  "generator_cpu_percent_of_one_core": 66.71,
+  "settle_seconds": 2.0,
+  "offered_payload_mbps": 16.3934,
+  "sent_fragments": 12120,
+  "expected_deliveries": 109080,
+  "observed_unique_deliveries": 95292,
+  "undelivered_by_deadline": 13788,
+  "integrity_errors": [],
+  "complete_fanout": false,
+  "voice": {
+    "senders": 10,
+    "packet_duration_ms": 20,
+    "sent_packets": 2500,
+    "expected_deliveries": 22500,
+    "observed_unique_deliveries": 21933,
+    "undelivered_by_deadline": 567,
+    "offered_payload_mbps": 0.32,
+    "relay_delay_ms": {
+      "p50": 4.157,
+      "p95": 17.375,
+      "p99": 23.554,
+      "max": 29.716
+    }
+  },
+  "relay_delay_ms": {
+    "p50": 10.755,
+    "p95": 22.902,
+    "p99": 30.75,
+    "max": 35.209
+  },
+  "control_ping_rtt_ms": {
+    "p50": 0.731,
+    "p95": 1.238,
+    "p99": 1.592,
+    "max": 1.598
+  },
+  "encrypted_udp_ping_rtt_ms": {
+    "p50": 0.518,
+    "p95": 7.575,
+    "p99": 7.626,
+    "max": 7.654
+  },
+  "generator_event_loop_lag_ms": {
+    "p50": 0.528,
+    "p95": 1.869,
+    "p99": 3.126,
+    "max": 4.13
+  },
+  "captures": [
+    {
+      "file": "sender-17.h264",
+      "complete_frames": 139,
+      "expected_frames": 150,
+      "incomplete_frames": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        70,
+        80,
+        90,
+        100,
+        110,
+        120
+      ],
+      "sha256": "174e84176497da427da4025da5703c0490f2a0fc22e8aff5b78f5493bb88de2d"
+    },
+    {
+      "file": "sender-18.h264",
+      "complete_frames": 144,
+      "expected_frames": 150,
+      "incomplete_frames": [
+        10,
+        30,
+        60,
+        70,
+        100,
+        130
+      ],
+      "sha256": "1d4e8710ef9b8d252fe74ec01a7615ee90c785a83b150c1fc98a0e1afabde9ab"
+    },
+    {
+      "file": "sender-19.h264",
+      "complete_frames": 143,
+      "expected_frames": 150,
+      "incomplete_frames": [
+        30,
+        40,
+        50,
+        70,
+        80,
+        120,
+        130
+      ],
+      "sha256": "f33d9b555c810449c7c9b9846b81db29b70171fe97312b0c5791a67c06a0b91e"
+    },
+    {
+      "file": "sender-1.h264",
+      "complete_frames": 140,
+      "expected_frames": 150,
+      "incomplete_frames": [
+        10,
+        20,
+        50,
+        70,
+        80,
+        100,
+        110,
+        120,
+        130,
+        140
+      ],
+      "sha256": "3347a2a1f625eb50aa1db57d4ed854f7316e83bda8162d3522f7a85b46f1ccc4"
+    },
+    {
+      "file": "sender-2.h264",
+      "complete_frames": 144,
+      "expected_frames": 150,
+      "incomplete_frames": [
+        20,
+        40,
+        60,
+        90,
+        120,
+        140
+      ],
+      "sha256": "ae429877366d2e467db09b48da8e7cda11bb871097c0b57570003ebe029886e8"
+    },
+    {
+      "file": "sender-3.h264",
+      "complete_frames": 138,
+      "expected_frames": 150,
+      "incomplete_frames": [
+        0,
+        10,
+        20,
+        30,
+        50,
+        60,
+        70,
+        80,
+        90,
+        120,
+        130,
+        140
+      ],
+      "sha256": "962c0a336137ee35e732e9324b1551c0cd5a8f83b968f792e5e29aecb9776406"
+    },
+    {
+      "file": "sender-4.h264",
+      "complete_frames": 144,
+      "expected_frames": 150,
+      "incomplete_frames": [
+        0,
+        30,
+        40,
+        50,
+        90,
+        100
+      ],
+      "sha256": "efc813b83f9b0779dd552eb2c1e0db438a31e2de6c2d01df9051dba9e882b165"
+    },
+    {
+      "file": "sender-5.h264",
+      "complete_frames": 143,
+      "expected_frames": 150,
+      "incomplete_frames": [
+        0,
+        10,
+        20,
+        60,
+        80,
+        110,
+        140
+      ],
+      "sha256": "4cf2fb702963e7968e7ffa333ad9350305e4f98b081620b2f2745c17c0e63207"
+    },
+    {
+      "file": "sender-6.h264",
+      "complete_frames": 141,
+      "expected_frames": 150,
+      "incomplete_frames": [
+        0,
+        30,
+        40,
+        60,
+        70,
+        90,
+        100,
+        110,
+        130
+      ],
+      "sha256": "358bf52d9aa4e90793d02d7345cfdbc8296fac6a25cbab01bd69a3636a4bb645"
+    }
+  ]
+}

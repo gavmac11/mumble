@@ -1,0 +1,53 @@
+{
+  "scope": "H.264 fixture over TCP/TLS UDPTunnel; decode captured streams separately",
+  "run_id": "76347ae8",
+  "probe_sha256": "1ec4d549f4d8a644bbf8a5eceb4854eed33f2f5f5fb975cb72db7e7dd6e429c0",
+  "fixture_sha256": "38bd450ec565dbd6558302fa2750bede1ec0b6c64d40034e24028d53ff0564e8",
+  "start_time_utc": "2026-10-02T05:27:06.769180+00:00",
+  "end_time_utc": "2026-10-02T05:27:13.778711+00:00",
+  "clients": 10,
+  "senders": 1,
+  "frames_per_second": 15,
+  "width": 1920,
+  "height": 1080,
+  "requested_sender_payload_mbps": null,
+  "requested_seconds": 5.0,
+  "actual_offer_seconds": 4.9861,
+  "generator_cpu_seconds_during_offer": 0.4062,
+  "generator_cpu_percent_of_one_core": 8.15,
+  "settle_seconds": 2,
+  "offered_payload_mbps": 2.1885,
+  "sent_fragments": 1554,
+  "expected_deliveries": 13986,
+  "observed_unique_deliveries": 13986,
+  "undelivered_by_deadline": 0,
+  "integrity_errors": [],
+  "complete_fanout": true,
+  "relay_delay_ms": {
+    "p50": 16.96,
+    "p95": 36.561,
+    "p99": 46.773,
+    "max": 63.942
+  },
+  "control_ping_rtt_ms": {
+    "p50": 10.457,
+    "p95": 19.421,
+    "p99": 19.892,
+    "max": 19.898
+  },
+  "generator_event_loop_lag_ms": {
+    "p50": 10.627,
+    "p95": 16.089,
+    "p99": 24.01,
+    "max": 26.699
+  },
+  "captures": [
+    {
+      "file": "sender-1.h264",
+      "complete_frames": 75,
+      "expected_frames": 75,
+      "incomplete_frames": [],
+      "sha256": "38bd450ec565dbd6558302fa2750bede1ec0b6c64d40034e24028d53ff0564e8"
+    }
+  ]
+}

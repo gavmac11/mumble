@@ -1,0 +1,43 @@
+{
+  "scope": "Final client build and native pacing probe, October 2 2026. Source hashes normalize CRLF to LF; binary hashes use exact bytes.",
+  "base_commit": "1772f827f12018472511e82b20c1cb4ba38108b1",
+  "working_tree_patch": true,
+  "source_lf_sha256": {
+    "src/mumble/VideoPacketPacer.h": "58c2ab8b194ae574edb430f2ef054944051189bcac53c99230696ea8cc801f5b",
+    "src/mumble/VideoPacketPacer.cpp": "3941ea8828f3906d1fa18e775e7a83a2a5618eddbb1e1a7f2bc1464d96b6e64a",
+    "src/mumble/MainWindow.cpp": "706b3782ce46ea4ed4be37cc7de78472ed70169f9dffb3027dc81e647fd4c7d9",
+    "src/mumble/MainWindow.h": "ac593ffbc8171bc061b2e1b963b3fc3e94bfbf727ae2cc5c602042b8f869236f",
+    "src/mumble/CMakeLists.txt": "3d46f413e12d3c8879759fe82e8a8945f322891bf7ca975843de0d5a2fb0e80c",
+    "src/tests/CMakeLists.txt": "b35f5a6ad3771272dec5dcf463c091b47c53632bbec2e7622b8936a14332aa1e",
+    "src/tests/TestVideoPacketPacer/CMakeLists.txt": "700748f24275cdded3d6ca7658fb6bd92af10edf96d24f8e9be26b4f3e8ab672",
+    "src/tests/TestVideoPacketPacer/TestVideoPacketPacer.cpp": "ff19598caab40639e3184ac5bb9aea4cf4061fea45596f11558de0205cc1ed25",
+    "scripts/hosting/relay_probe.py": "5f8f447f19a5f35772ab9bda842bd0bdf96973c3ef022aa3c66b60027e41a4f0",
+    "scripts/hosting/pacer_bridge.cpp": "eb686575fb2a64ba04359dd25a494e339e6fdda84bd57e7a87394b291f395491",
+    "scripts/hosting/native_pacer.py": "d14e06fee40bf5c57e19bdfd4eea804d2161d25a69338fea5e90f2ddd111eff3",
+    "scripts/hosting/build_client_pilot.sh": "a46633e82e2eb48fe6bb0728b504d2c9c85b99eec7fa32820751937ad1c805bf"
+  },
+  "binary_sha256": {
+    "client-build/mumble": "29b66802e58f78b0cbeb36d9bb666947782598e78d5fc231edb72e92fea7c41f",
+    "build/mumble-server": "2c97648941109b142386dc08ccf709abd0808dddc7f9ebb03ee35071252b4154",
+    "build/libmumble_pilot_pacer.so": "ed6dd5ac589728478322455b2fbb720b67b032535f7d74a5a493f48ed8e443fa",
+    "build/libmumble_pilot_ocb.so": "edefe91c2ad6d40090d8646660a3df46e1d154a72a8cdcd6a67a670775d1de39"
+  },
+  "client_build_image": "sha256:9cea5f8ec6743fe6066e43228478f723db31f8ea4796c4eadbb1e99f880fe7f8",
+  "validation": {
+    "full_linux_client_build_exit_code": 0,
+    "related_ctest_suites": 3,
+    "failed_ctest_suites": 0,
+    "python_checks": 19,
+    "failed_python_checks": 0,
+    "client_build_log": "client-build-final-rate3.log",
+    "python_log": "hosting-tests-20261002.log",
+    "final_test_source_check_log": "client-pacer-final-check.log",
+    "final_test_source_check_exit_code": 0
+  },
+  "network_tests": {
+    "queue": "Actual PacketQueue via C ABI; Python event loop drives deadlines",
+    "qt_timer": "PacketPacer adapter unit tested; full GUI network path not exercised",
+    "server_video_sender_limit_bps": 3500000,
+    "server_video_aggregate_limit_bps": 200000000
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "scope": "One server container; clients share the supplied host network namespace. Shared host counters can include unrelated activity. No UDP buffer settings changed.",
+  "kernel_rmem_default_bytes": 212992,
+  "kernel_rmem_max_bytes": 212992,
+  "runs": [
+    {
+      "mode": "sync",
+      "server_udp_counter_delta": {
+        "InDatagrams": 13199,
+        "NoPorts": 0,
+        "InErrors": 1581,
+        "OutDatagrams": 117511,
+        "RcvbufErrors": 1581,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "client_shared_host_udp_counter_delta": {
+        "InDatagrams": 117522,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 14794,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "server_cpu_counter_delta": {
+        "usage_usec": 2753884,
+        "user_usec": 2119647,
+        "system_usec": 634236,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 65,
+        "nr_throttled": 0,
+        "throttled_usec": 0,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "client_cpu_counters": {
+        "usage_usec": 3480937,
+        "user_usec": 3218146,
+        "system_usec": 262791,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 75,
+        "nr_throttled": 0,
+        "throttled_usec": 0,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "missing_media_deliveries": 14229,
+      "server_receive_buffer_drops_times_nine_viewers": 14229,
+      "counts_match": true
+    },
+    {
+      "mode": "stagger",
+      "server_udp_counter_delta": {
+        "InDatagrams": 14568,
+        "NoPorts": 0,
+        "InErrors": 212,
+        "OutDatagrams": 127906,
+        "RcvbufErrors": 212,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "client_shared_host_udp_counter_delta": {
+        "InDatagrams": 127908,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 14791,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "server_cpu_counter_delta": {
+        "usage_usec": 3217265,
+        "user_usec": 2507464,
+        "system_usec": 709801,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 63,
+        "nr_throttled": 0,
+        "throttled_usec": 0,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "client_cpu_counters": {
+        "usage_usec": 3909157,
+        "user_usec": 3616401,
+        "system_usec": 292756,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 76,
+        "nr_throttled": 0,
+        "throttled_usec": 0,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "missing_media_deliveries": 3834,
+      "server_receive_buffer_drops_times_nine_viewers": 1908,
+      "counts_match": false
+    }
+  ]
+}
