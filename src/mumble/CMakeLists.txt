@@ -233,6 +233,8 @@ set(MUMBLE_SOURCES
 	"SelfSharePreview.h"
 	"VideoFramePacketizer.cpp"
 	"VideoFramePacketizer.h"
+	"VideoPacketPacer.cpp"
+	"VideoPacketPacer.h"
 	"VideoQualityProfile.cpp"
 	"VideoQualityProfile.h"
 	"VideoViewUi.h"
