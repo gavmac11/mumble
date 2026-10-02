@@ -1,0 +1,11 @@
+{
+  "Decoder": "FFmpeg 7.1",
+  "DecodeExitCode": 0,
+  "DecodedFrames": 75,
+  "ExpectedFrames": 75,
+  "Width": 1920,
+  "Height": 1080,
+  "CaptureMatchesFixture": true,
+  "FixtureSha256": "38bd450ec565dbd6558302fa2750bede1ec0b6c64d40034e24028d53ff0564e8",
+  "ProbeResult": "tcp-direct-h264-screen-35mbps-sender.json"
+}

@@ -1,0 +1,8 @@
+{
+  "requested_receive_buffer_bytes": 1048576,
+  "effective_receive_buffer_bytes": 2097152,
+  "server_uid": 1000,
+  "server_gid": 1000,
+  "effective_capabilities": 0,
+  "host_sysctls_changed": false
+}

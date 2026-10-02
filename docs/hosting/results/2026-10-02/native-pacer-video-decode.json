@@ -1,0 +1,31 @@
+{
+  "scope": "One observer capture per workload; all other captured sender streams matched this hash in the relay results. FFmpeg 7.1 strict decode, not GUI playout.",
+  "runs": [
+    {
+      "workload": "webcam",
+      "expected_frames": 900,
+      "decoded": {
+        "width": 1280,
+        "height": 720,
+        "nb_read_frames": "900"
+      },
+      "strict_decode_exit_code": 0,
+      "captured_sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50",
+      "six_repetitions_of_fixture_sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50",
+      "bit_exact": true
+    },
+    {
+      "workload": "screen",
+      "expected_frames": 450,
+      "decoded": {
+        "width": 1920,
+        "height": 1080,
+        "nb_read_frames": "450"
+      },
+      "strict_decode_exit_code": 0,
+      "captured_sha256": "e5dd7909eee94babcbc111a0bffc2923a7f5b0ce4be9f9ca43c948248aa6335f",
+      "six_repetitions_of_fixture_sha256": "e5dd7909eee94babcbc111a0bffc2923a7f5b0ce4be9f9ca43c948248aa6335f",
+      "bit_exact": true
+    }
+  ]
+}
