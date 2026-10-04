@@ -1129,6 +1129,7 @@ if(file-sharing)
 								"${3RDPARTY_DIR}/argon2/src/core.c"
 								"${3RDPARTY_DIR}/argon2/src/encoding.c"
 								"${3RDPARTY_DIR}/argon2/src/thread.c"
+								"${3RDPARTY_DIR}/argon2/src/ref.c"
 								"${3RDPARTY_DIR}/argon2/src/blake2/blake2b.c"
 		)
 		target_include_directories(argon2 PUBLIC "${3RDPARTY_DIR}/argon2/include")
@@ -1147,6 +1148,22 @@ if(file-sharing)
 	target_include_directories(qrcodegen PUBLIC "${3RDPARTY_DIR}/qrcodegen")
 	target_disable_warnings(qrcodegen)
 	target_link_libraries(mumble_client_object_lib PUBLIC qrcodegen)
+
+	target_sources(mumble_client_object_lib PRIVATE
+		"PQFileTransfer/PQFTConstants.h"
+		"PQFileTransfer/crypto/Argon2Wrap.h"
+		"PQFileTransfer/crypto/Argon2Wrap.cpp"
+		"PQFileTransfer/crypto/CanonicalCBOR.h"
+		"PQFileTransfer/crypto/CanonicalCBOR.cpp"
+		"PQFileTransfer/crypto/CryptoUtils.h"
+		"PQFileTransfer/crypto/CryptoUtils.cpp"
+		"PQFileTransfer/crypto/KemMLKEM768.h"
+		"PQFileTransfer/crypto/KemMLKEM768.cpp"
+		"PQFileTransfer/crypto/Merkle.h"
+		"PQFileTransfer/crypto/Merkle.cpp"
+		"PQFileTransfer/crypto/SigMLDSA65.h"
+		"PQFileTransfer/crypto/SigMLDSA65.cpp"
+	)
 
 	target_compile_definitions(mumble_client_object_lib PUBLIC "USE_FILE_SHARING")
 endif()
