@@ -1169,6 +1169,8 @@ if(file-sharing)
 		"PQFileTransfer/identity/PeerTrustStore.cpp"
 		"PQFileTransfer/engine/FTMessages.h"
 		"PQFileTransfer/engine/FTMessages.cpp"
+		"PQFileTransfer/engine/FileTransferEngine.h"
+		"PQFileTransfer/engine/FileTransferEngine.cpp"
 		"PQFileTransfer/engine/FileTransferManager.h"
 		"PQFileTransfer/engine/FileTransferManager.cpp"
 		"PQFileTransfer/engine/FileTransferSession.h"

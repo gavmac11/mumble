@@ -127,7 +127,7 @@ QByteArray safetyQrPayload(const QByteArray &fingerprintA, const QByteArray &fin
 
 // --- FileTransferIdentity ---------------------------------------------------------
 
-bool FileTransferIdentity::ensureSchema(QSqlDatabase &db) {
+bool FileTransferIdentity::ensureSchema(QSqlDatabase db) {
 	QSqlQuery query(db);
 	if (!exec(query, QLatin1String("CREATE TABLE IF NOT EXISTS `ft_identity` ("
 								   "`id` INTEGER PRIMARY KEY, `pubkey` BLOB, `seckey_enc` BLOB, "
@@ -142,7 +142,7 @@ bool FileTransferIdentity::ensureSchema(QSqlDatabase &db) {
 									  "UNIQUE(`server_digest`, `username`))"));
 }
 
-FileTransferIdentity::FileTransferIdentity(QSqlDatabase &db) : m_db(db) { }
+FileTransferIdentity::FileTransferIdentity(QSqlDatabase db) : m_db(db) { }
 
 bool FileTransferIdentity::hasIdentity() const {
 	QSqlQuery query(m_db);

@@ -26,6 +26,11 @@ struct SessionIdentity {
 		sign;
 };
 
+/// Peek at the sender identity key inside an M1 frame (for TOFU checks
+/// before any session exists). Also validates version/suite and canonical
+/// form. Empty QByteArray if the frame is not a well-formed M1.
+QByteArray extractM1IdentityKey(const QByteArray &m1Frame);
+
 class FileTransferSession {
 public:
 	enum class Role { Initiator, Responder };
@@ -47,6 +52,10 @@ public:
 	/// Fingerprint of the verified peer identity (valid after the peer's
 	/// identity key was seen and matched the pin).
 	const QByteArray &peerFingerprint() const { return m_expectedPeerFingerprint; }
+
+	/// The peer's raw ML-DSA identity public key once seen and pinned
+	/// (empty before that).
+	const QByteArray &peerIdentityKey() const { return m_peerIdentityKey; }
 
 	// --- Initiator (file sender, role A) ---------------------------------
 

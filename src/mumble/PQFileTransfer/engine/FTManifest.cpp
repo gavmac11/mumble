@@ -140,11 +140,12 @@ QByteArray FTManifest::transferDigest() const {
 	e.append(qMakePair(QCborValue(KChunkCount), QCborValue(static_cast< qint64 >(chunkCount))));
 	e.append(qMakePair(QCborValue(KMerkleRoot), QCborValue(merkleRoot)));
 	e.append(qMakePair(QCborValue(KPasswordMode), QCborValue(passwordMode)));
-	if (passwordMode) {
-		addEntry(e, KArgon2Params, QCborValue(argon2ParamsMap(*argon2)));
-		addEntry(e, KArgon2Salt, QCborValue(argon2Salt));
-	}
-	e.append(qMakePair(QCborValue(KCreatedAt), QCborValue(static_cast< qint64 >(createdAtUnix))));
+	// Deliberately NOT part of the digest:
+	//  - createdAtUnix: informational only (PQShield v2 §11 note); both sides
+	//    must compute the digest identically without depending on clocks.
+	//  - Argon2 params + salt: they are signed manifest fields and are bound
+	//    into the password-wrap AAD2; the password_mode flag above already
+	//    anchors the mode into every chunk.
 	return sha384({ encodeCanonicalMap(e) });
 }
 

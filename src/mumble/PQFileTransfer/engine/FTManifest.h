@@ -42,8 +42,10 @@ struct FTManifest {
 	QByteArray signature;	// ML-DSA-65 over the sig-less manifest
 
 	/// SHA-384 over the canonical CBOR of every field except the
-	/// recipient-specific ones (fp_B, wrapped_file_key, signature). Identical
-	/// for all recipients of a transfer; anchors the chunk AAD.
+	/// recipient-specific ones (fp_B, wrapped_file_key, signature), the
+	/// informational createdAtUnix and the Argon2 material (signed + bound
+	/// into AAD2). Identical for all recipients of a transfer; anchors the
+	/// chunk AAD.
 	QByteArray transferDigest() const;
 };
 

@@ -501,6 +501,28 @@ QByteArray FileTransferSession::computeMacA() const {
 	return hmacSha384(m_finishedKeyA2B.toByteArray(), { thFin });
 }
 
+QByteArray extractM1IdentityKey(const QByteArray &m1Frame) {
+	quint8 type = 0;
+	QCborValue value;
+	if (!FTFrame::decodeHeader(m1Frame, type) || type != FTFrame::TypeM1
+		|| !decodeCanonical(m1Frame.mid(1), value)) {
+		return QByteArray();
+	}
+	const QCborMap m1 = value.toMap();
+	if (m1.size() != 5 || m1.value(QCborValue(KVersion)).toInteger() != Version
+		|| m1.value(QCborValue(KSuite)).toString() != QString::fromLatin1(SuiteId)) {
+		return QByteArray();
+	}
+	const QByteArray ephA   = mapBytes(m1, KEphX25519);
+	const QByteArray peerPk = mapBytes(m1, KIdentityPk);
+	const QByteArray nonceA = mapBytes(m1, KNonce);
+	if (ephA.size() != X25519KeySize || peerPk.size() != SigMLDSA65::PublicKeySize
+		|| nonceA.size() != HandshakeNonceSize) {
+		return QByteArray();
+	}
+	return peerPk;
+}
+
 QByteArray FileTransferSession::computeMacB() const {
 	// TH_full = H(M1 ‖ M2 ‖ ct ‖ sig_A ‖ MAC_A); MAC_B = HMAC(fk_b2a, TH_full)
 	const QByteArray thFull =

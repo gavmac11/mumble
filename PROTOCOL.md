@@ -111,9 +111,12 @@ Sender, per transfer (PQShield §9 with adaptation A4):
    PQShield §9.3 (`leaf = H(0x00‖chunk_hash)`, `node = H(0x01‖l‖r)`, duplicate-last-when-odd).
 3. **Common manifest fields** (identical for every recipient): version, suite,
    transfer_id, fp_A, fp_B… — see §6. Define
-   `transfer_digest = SHA-384(canonical CBOR of the common fields)`. This digest replaces
-   PQShield's `manifest_hash` in the **chunk AAD** (A4); it is identical for all
-   recipients so one ciphertext serves everyone.
+   `transfer_digest = SHA-384(canonical CBOR of the manifest fields excluding the
+   recipient-specific ones (fp_B, wrapped_file_key, signature), the informational
+   created_at, and the Argon2 material (params/salt are signed manifest fields and are
+   bound into the password-wrap AAD2; the password_mode flag itself IS digested)). This
+   digest replaces PQShield's `manifest_hash` in the **chunk AAD** (A4); it is identical
+   for all recipients so one ciphertext serves everyone.
 4. Chunk records: `ct_i = AES-256-GCM(file_key, nonce = chunk_nonce_prefix ‖ uint64be(i),
    plaintext = chunk_i, AAD = canonical(transfer_id, transfer_digest, i, total_chunks,
    len_i, suite))`. Duplicate delivery of an index is fatal at the receiver (A3 removes

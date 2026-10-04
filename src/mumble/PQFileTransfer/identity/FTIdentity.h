@@ -47,9 +47,9 @@ QByteArray safetyQrPayload(const QByteArray &fingerprintA, const QByteArray &fin
 class FileTransferIdentity {
 public:
 	/// Ensure the tables exist (idempotent).
-	static bool ensureSchema(QSqlDatabase &db);
+	static bool ensureSchema(QSqlDatabase db);
 
-	explicit FileTransferIdentity(QSqlDatabase &db);
+	explicit FileTransferIdentity(QSqlDatabase db);
 
 	/// True when an identity row exists.
 	bool hasIdentity() const;
