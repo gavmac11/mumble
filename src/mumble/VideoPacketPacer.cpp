@@ -3,6 +3,8 @@
 
 #include "VideoPacketPacer.h"
 
+#include <QtCore/QDebug>
+
 #include <algorithm>
 #include <chrono>
 #include <stdexcept>
@@ -13,44 +15,66 @@ namespace Mumble::Video {
 PacketQueue::PacketQueue(std::uint64_t bitsPerSecond) : m_bitsPerSecond(bitsPerSecond) {
 	if (bitsPerSecond == 0 || bitsPerSecond > 100'000'000)
 		throw std::invalid_argument("Invalid video pacing rate");
-	// At most 250 ms of wire bytes can wait in memory, including packet overhead.
-	m_maximumBytes = static_cast< std::size_t >(bitsPerSecond / 32);
+	// Match the encoder's one-second VBV reservoir for frames waiting behind the
+	// front frame. Large front frames have their own bounded serialization allowance.
+	m_maximumBytes = static_cast< std::size_t >(bitsPerSecond / 8);
 }
 
 bool PacketQueue::stale(std::uint64_t nowNs) const {
-	return !m_frames.empty() && nowNs - m_frames.front().createdNs >= MaximumAgeNs;
+	return !m_frames.empty() && nowNs >= m_frames.front().expiresNs;
 }
 
 void PacketQueue::discardBacklog() {
+	m_droppedFrames += m_frames.size();
 	m_frames.clear();
 	m_queuedBytes   = 0;
 	m_needsKeyframe = true;
 	// Preserve the next send deadline so a replacement keyframe cannot bypass pacing.
 }
 
-void PacketQueue::clear() {
-	discardBacklog();
-	m_dueNs = 0;
+void PacketQueue::retainFrontFrame() {
+	while (m_frames.size() > 1) {
+		m_queuedBytes -= m_frames.back().remainingBytes;
+		m_frames.pop_back();
+		++m_droppedFrames;
+	}
+	m_needsKeyframe = true;
+}
+
+bool PacketQueue::rejectFrame() {
+	++m_droppedFrames;
+	m_needsKeyframe = true;
+	return false;
+}
+
+std::uint64_t PacketQueue::transmissionNs(std::size_t bytes) const {
+	return (bytes * 8'000'000'000ULL + m_bitsPerSecond - 1) / m_bitsPerSecond;
 }
 
 bool PacketQueue::enqueue(VideoPackets packets, bool keyframe, std::uint64_t nowNs) {
-	if (packets.empty())
-		return false;
+	if (packets.empty() || packets.size() > MaximumFramePackets)
+		return rejectFrame();
 	std::size_t bytes = 0;
 	for (const auto &packet : packets) {
-		if (packet.empty() || packet.size() > 1024 || bytes + packet.size() + WireOverhead > m_maximumBytes) {
-			discardBacklog();
-			return false;
-		}
+		// Invalid/oversized input must not destroy already accepted, decodable work.
+		if (packet.empty() || packet.size() > MaximumPacketBytes)
+			return rejectFrame();
 		bytes += packet.size() + WireOverhead;
 	}
-	if (stale(nowNs) || m_queuedBytes + bytes > m_maximumBytes)
+	if (stale(nowNs))
 		discardBacklog();
-	if (m_needsKeyframe && !keyframe)
-		return false;
+	if (m_needsKeyframe && (!keyframe || !m_frames.empty()))
+		return rejectFrame();
+	if (!m_frames.empty() && m_queuedBytes - m_frames.front().remainingBytes + bytes > m_maximumBytes) {
+		// Finish the frame already in flight before asking the encoder to restart.
+		retainFrontFrame();
+		return rejectFrame();
+	}
 	if (m_frames.empty())
 		m_dueNs = std::max(m_dueNs, nowNs);
-	m_frames.push_back({ std::move(packets), 0, nowNs });
+	// A legal large IDR needs its serialization time in addition to scheduling slack.
+	const auto expiresNs = nowNs + SchedulingSlackNs + transmissionNs(m_queuedBytes + bytes);
+	m_frames.push_back({ std::move(packets), 0, bytes, expiresNs });
 	m_queuedBytes += bytes;
 	m_needsKeyframe = false;
 	return true;
@@ -65,7 +89,8 @@ std::optional< VideoPacket > PacketQueue::takeReady(std::uint64_t nowNs) {
 	VideoPacket packet = std::move(frame.packets[frame.next++]);
 	const auto bytes   = packet.size() + WireOverhead;
 	m_queuedBytes -= bytes;
-	const std::uint64_t interval = (bytes * 8'000'000'000ULL + m_bitsPerSecond - 1) / m_bitsPerSecond;
+	frame.remainingBytes -= bytes;
+	const std::uint64_t interval = transmissionNs(bytes);
 	// Carry fractional-millisecond deadlines across Qt timer wakeups, but permit
 	// no more than one packet of catch-up after the event loop has been delayed.
 	m_dueNs = std::max(m_dueNs + interval, nowNs);
@@ -84,6 +109,14 @@ std::size_t PacketQueue::queuedBytes() const {
 	return m_queuedBytes;
 }
 
+std::uint64_t PacketQueue::droppedFrames() const {
+	return m_droppedFrames;
+}
+
+bool PacketQueue::needsKeyframe() const {
+	return m_needsKeyframe && m_frames.empty();
+}
+
 PacketPacer::PacketPacer(std::uint64_t bitsPerSecond, Sink sink, QObject *parent)
 	: QObject(parent), m_queue(bitsPerSecond), m_sink(std::move(sink)), m_timer(this) {
 	m_timer.setSingleShot(true);
@@ -99,6 +132,9 @@ std::uint64_t PacketPacer::nowNs() {
 
 bool PacketPacer::enqueue(VideoPackets packets, bool keyframe) {
 	const bool accepted = m_queue.enqueue(std::move(packets), keyframe, nowNs());
+	if (accepted && keyframe)
+		m_recoveryRequested = false;
+	reportState();
 	if (!m_timer.isActive())
 		schedule();
 	return accepted;
@@ -110,9 +146,34 @@ void PacketPacer::schedule() {
 }
 
 void PacketPacer::sendNext() {
-	if (auto packet = m_queue.takeReady(nowNs()))
+	// Use one timestamp so callback/sink work cannot turn catch-up into an unbounded loop.
+	const auto now = nowNs();
+	while (auto packet = m_queue.takeReady(now))
 		m_sink(*packet);
+	reportState();
 	schedule();
+}
+
+std::uint64_t PacketPacer::droppedFrames() const {
+	return m_queue.droppedFrames();
+}
+
+void PacketPacer::reportState() {
+	const auto dropped = m_queue.droppedFrames();
+	if (dropped != m_reportedDrops) {
+		m_reportedDrops = dropped;
+		emit framesDropped(static_cast< quint64 >(dropped));
+		const auto now = nowNs();
+		if (now >= m_nextWarningNs) {
+			qWarning("Video pacer dropped %llu frames in this share; queued wire bytes: %zu",
+					 static_cast< unsigned long long >(dropped), m_queue.queuedBytes());
+			m_nextWarningNs = now + 5'000'000'000ULL;
+		}
+	}
+	if (m_queue.needsKeyframe() && !m_recoveryRequested) {
+		m_recoveryRequested = true;
+		emit keyframeRequested();
+	}
 }
 
 } // namespace Mumble::Video

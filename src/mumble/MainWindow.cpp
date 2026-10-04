@@ -50,8 +50,8 @@
 #include "ScreenShareReceiver.h"
 #include "ScreenShareViewer.h"
 #include "ScreenShareWindow.h"
-#include "SelfSharePreview.h"
 #include "SearchDialog.h"
+#include "SelfSharePreview.h"
 #include "ServerHandler.h"
 #include "ServerInformation.h"
 #include "Settings.h"
@@ -70,6 +70,7 @@
 #include "VersionCheck.h"
 #include "VideoFramePacketizer.h"
 #include "VideoPacketPacer.h"
+#include "VideoQualityProfile.h"
 #include "ViewCert.h"
 #include "VoiceRecorderDialog.h"
 #include "Global.h"
@@ -3682,7 +3683,6 @@ void MainWindow::serverConnected() {
 }
 
 void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString reason) {
-	m_videoPacketPacer.reset();
 	// clear ChannelListener
 	Global::get().channelListenerManager->clear();
 
@@ -4354,9 +4354,7 @@ void MainWindow::screenShare() {
 	} else {
 		// stopCapture() emits captureStopped; the common onSelfShareStopped handler
 		// clears the toggle, hides the preview and retracts screen_sharing.
-		// Stop sending queued video immediately; the common stop handler also
-		// clears the pacer for asynchronous capture failures.
-		m_videoPacketPacer.reset();
+		// The send callback checks capture state until the queued stop handler runs.
 		Global::get().sc->stopCapture();
 	}
 }
@@ -4373,15 +4371,20 @@ void MainWindow::sendScreenShareFrame(QByteArray encodedData, quint64 frameNumbe
 		// Bind queued packets to this connection; they must never follow a reconnect.
 		m_videoPacerConnectionId = sh->getConnectionID();
 		const std::weak_ptr< ServerHandler > destination = sh;
-		const std::uint64_t wireBitsPerSecond = m_selfShareIsWebcam ? 2'000'000 : 3'000'000;
+		const auto &profile =
+			m_selfShareIsWebcam ? Mumble::VideoQuality::webcamProfile() : Mumble::VideoQuality::screenShareProfile();
 		m_videoPacketPacer = std::make_unique< Mumble::Video::PacketPacer >(
-			wireBitsPerSecond, [this, destination](const Mumble::Video::VideoPacket &packet) {
+			Mumble::VideoQuality::wireBitRate(profile), [this, destination](const Mumble::Video::VideoPacket &packet) {
 				if (!m_selfShareAnnounced || !Global::get().sc || !Global::get().sc->isCapturing())
 					return;
-				if (auto handler = destination.lock())
+				if (auto handler = destination.lock();
+					handler && handler == Global::get().sh && Global::get().uiSession)
 					handler->sendMessage(packet.data(), static_cast< int >(packet.size()));
 			});
+		connect(m_videoPacketPacer.get(), &Mumble::Video::PacketPacer::keyframeRequested, Global::get().sc,
+				&ScreenCapture::requestKeyframe);
 	}
+	// Rejections and abandoned backlog are counted and rate-limited warnings come from the pacer.
 	m_videoPacketPacer->enqueue(
 		Mumble::Video::packetizeFrame(p->uiSession, encodedData, frameNumber, width, height, isKeyFrame), isKeyFrame);
 }
@@ -4442,6 +4445,7 @@ void MainWindow::showSelfSharePreview(bool isWebcam) {
 
 void MainWindow::onSelfShareStopped() {
 	m_videoPacketPacer.reset();
+	m_videoPacerConnectionId = 0;
 	qaScreenShare->setText(tr("Share vi&deo…"));
 	qaScreenShare->setToolTip(tr("Share a camera, screen, or window with your channel"));
 	// Single funnel for every way the local share can end: the user toggling Share Screen off,

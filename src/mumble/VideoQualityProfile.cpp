@@ -4,8 +4,11 @@
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "VideoQualityProfile.h"
+#include "VideoFramePacketizer.h"
+#include "VideoPacketPacer.h"
 
 #include <QtCore/Qt>
+#include <algorithm>
 
 namespace Mumble::VideoQuality {
 
@@ -19,6 +22,25 @@ const Profile &screenShareProfile() {
 const Profile &webcamProfile() {
 	static const Profile profile{ QSize(1280, 720), 30, 1'500'000, 10 };
 	return profile;
+}
+
+namespace {
+	constexpr std::uint64_t DefaultServerVideoBitRate = 2'500'000;
+	constexpr std::uint64_t MaximumWireBitRate        = DefaultServerVideoBitRate * 24 / 25;
+	constexpr std::uint64_t FullPacketWireBytes =
+		Video::PacketQueue::MaximumPacketBytes + Video::PacketQueue::WireOverhead;
+	constexpr std::uint64_t PayloadBytes = Video::MaximumFragmentBytes;
+} // namespace
+
+int encoderBitRate(const Profile &profile) {
+	return std::clamp(profile.bitRate, 1, static_cast< int >(MaximumWireBitRate * PayloadBytes / FullPacketWireBytes));
+}
+
+std::uint64_t wireBitRate(const Profile &profile) {
+	const auto wireRate =
+		(static_cast< std::uint64_t >(encoderBitRate(profile)) * FullPacketWireBytes + PayloadBytes - 1) / PayloadBytes;
+	// Allow 10% scheduling/encoder burst headroom where the default server ceiling permits it.
+	return std::min(MaximumWireBitRate, (wireRate * 11 + 9) / 10);
 }
 
 QSize constrainedFrameSize(const QSize &sourceSize, const Profile &profile) {
