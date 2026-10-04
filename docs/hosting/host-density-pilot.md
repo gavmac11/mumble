@@ -1,6 +1,6 @@
 # Host density pilot
 
-Status: the [initial application pilot](pilot-results-2026-10-01.md) exposed video bursts that also dropped voice. The [October 2 client pacing follow-up](pilot-pacing-results-2026-10-02.md) passed 30-second encoded-webcam and screen-share tests with concurrent voice and the original server receive buffer. GUI quality, sustained workloads, KVM density and the full workload matrix remain untested. This plan is intended to validate the [bare metal launch proposal](launch-research.md); thresholds below are proposed gates, not customer guarantees.
+Status: the [initial application pilot](pilot-results-2026-10-01.md) exposed video bursts that also dropped voice. The [October 2 pacing tests](pilot-pacing-results-2026-10-02.md) and [October 3 per-sender comparison](pr25-review-followup-2026-10-03.md) passed short media workloads with a raised **200 Mbps aggregate video limit**, not the server's default 20 Mbps aggregate limit. Client pacing does not prevent aggregate-limit drops or report them to the sender. GUI quality, sustained workloads, KVM density and the full workload matrix remain untested. This plan is intended to validate the [bare metal launch proposal](launch-research.md); thresholds below are proposed gates, not customer guarantees.
 
 ## Inputs to record
 
@@ -30,7 +30,16 @@ Run local accounting checks with:
 
 Use an isolated checkout of the pinned commit with all submodules initialized, including license-only dependencies. The [build script](../../scripts/hosting/build_pilot.sh) requires an explicitly designated disposable Debian container and builds a SQLite-only server with two compiler jobs. Cap the container to two CPUs and 3 GiB RAM. This pilot disables LTO and downgrades only the known GCC 12 restrict diagnostic from error to visible warning; it does not change application source. It is not the final production build profile.
 
-Choose the configuration for the comparison explicitly: [pilot-server-defaults.ini](../../scripts/hosting/pilot-server-defaults.ini) uses the original 2.5 Mbps sender / 20 Mbps aggregate limits; [pilot-server.ini](../../scripts/hosting/pilot-server.ini) uses the 3.5 Mbps sender / 200 Mbps aggregate allowances from the October 1–2 passing runs. Copy the selected file to the mounted runtime directory as server.ini before starting the server, and save that effective file with the results. Keep port publication private: loopback for a TCP SSH tunnel, or an authenticated private network address for direct TCP/UDP. Use a test certificate valid for the probe hostname. Record tunnels and overlays as part of the measured path; an SSH TCP forward does not test UDP.
+Choose one of the two named configurations without modifying its bandwidth fields:
+
+| Configuration | Per-sender video cap | Aggregate relayed-video cap | Purpose |
+| --- | ---: | ---: | --- |
+| [pilot-server-defaults.ini](../../scripts/hosting/pilot-server-defaults.ini) | 2.5 Mbps | 20 Mbps | Qualify both default video limits, including multi-sender failures. |
+| [pilot-server.ini](../../scripts/hosting/pilot-server.ini) | 3.5 Mbps | 200 Mbps | Raised-limit hosting workload and historical October 1–2 reproduction. |
+
+Copy the selected file to the mounted runtime directory as server.ini before starting the server, and save that effective file with the results. The October 3 result is an archived **per-sender-only comparison** at 2.5/200 Mbps; use its [recorded effective configuration](results/2026-10-03/pr25-final-default-sender-server.ini) only to reproduce that historical comparison. It is not the defaults recipe, and counts from different aggregates must not be presented as the same configuration.
+
+Keep port publication private: loopback for a TCP SSH tunnel, or an authenticated private network address for direct TCP/UDP. Use a test certificate valid for the probe hostname. Record tunnels and overlays as part of the measured path; an SSH TCP forward does not test UDP.
 
 Example after the private server and tunnel are running:
 
@@ -49,14 +58,26 @@ Use ten webcam senders at 30 fps and 1280×720 for the burst case. Compare synch
 
 For the current client pacing comparison, compile the [pacer bridge](../../scripts/hosting/build_pacer_bridge.sh) and add --native-pacer-library plus --video-send-cap-mbps 1.972668 for webcams or 2.4 for screen sharing, matching VideoQuality::wireBitRate with the current profiles. The probe uses the actual C++ PacketQueue with Python scheduling; recorded fixtures cannot respond to encoder keyframe requests. The historical October 2 rates of 2 and 3 Mbps apply only to the earlier patch and its archived evidence.
 
+Set MUMBLE_PILOT_PACER_LIBRARY to the compiled bridge when running the Python tests to include the 2,049–4,096-packet large-frame boundary checks. The probe rounds Mbps to whole bps; the older October 3 probe truncated the webcam allowance to 1,972,667 bps, one below the client value. Its raw records are retained unchanged.
+
 Keep scheduled-frame-to-delivery delay alongside relay delay so pacing latency remains visible. Probe schema 2 records offered, accepted and actually submitted fragments separately. expected_deliveries and undelivered_by_deadline now describe submitted traffic; pacer_rejected_fragments and accepted_not_submitted_by_deadline expose client-side losses or remaining queued work. total_missing_deliveries includes both client and relay deficits, and complete_fanout still fails if either loses media. Captured-frame completeness remains an independent check. Actual GUI sending and playout need separate tests.
+
+For the fully default video-limit check, use pilot-server-defaults.ini with ten clients and two webcam senders. Nine-way replication puts even two 1.5 Mbps encoded streams above the 20 Mbps aggregate allowance before overhead. The server may silently discard video despite every sender staying below 2.5 Mbps. This is a workload limitation to record, not a failure to hide by raising the cap in the defaults recipe.
+
+The [October 4 comparison](pilot-default-limits-2026-10-04.md) recorded this failure: 85,680 of 130,896 video deliveries arrived at 2.5/20 Mbps, versus all 130,896 at 3.5/200 Mbps. Both runs delivered all voice and had no client pacing drops. The templates and effective limits are recorded beside each result.
+
+## Budget negotiation follow-up
+
+Track a protocol follow-up to advertise the server's actual per-sender video limit and server-wide aggregate egress limit during connection setup, including disabled limits and changes made while connected. The client must clamp encoder and pacer budgets together to the negotiated allowance. Aggregate capacity also needs an explicit allocation or admission policy as senders, recipients and channels change; merely advertising a per-sender cap cannot prevent aggregate drops.
+
+Acceptance checks should cover videobandwidth=1500000, the 2.5/20 Mbps defaults, raised limits, legacy peers without advertisement, configuration changes and multiple senders/channels. Define visible feedback when a requested quality cannot fit and when the server drops media for a budget limit. Until this is implemented, the client uses its default-budget fallback without detecting lower custom caps or aggregate exhaustion. The current patch does not resolve that negotiation gap.
 
 ## Guest and network preparation
 
 1. Build the fork's pinned Debian server package with its existing packaging workflow. Verify the artifact checksum and matching client build.
 2. Create a clean Debian guest template with cloud-init or equivalent first-boot configuration. Generate unique SSH identity, credentials, and initial application identity for each new community.
 3. Start with 1 vCPU, 1 GiB fixed RAM, and a 15 GiB disk. Apply CPU, memory, storage, I/O, and NIC limits on the host. Measure hypervisor overhead before admitting more guests.
-4. Set the managed pilot to ten users. Keep the 200 Mbps aggregate allowance for a full ten-webcam community. To qualify the revised client against the default per-sender budget, copy pilot-server.ini and set videobandwidth=2500000 in that runtime copy; record both effective values. The historical unpaced traffic needed the higher sender allowance. The original 20 Mbps aggregate cap cannot carry ten full webcam streams regardless of pacing.
+4. Set the managed pilot to ten users. For default video-limit qualification, copy pilot-server-defaults.ini unchanged (2.5/20 Mbps). For the raised-limit hosting workload, copy pilot-server.ini unchanged (3.5/200 Mbps). Record both effective limits and the template used beside every result. The default 20 Mbps aggregate cap cannot carry ten full webcam streams regardless of pacing; raised-limit results do not qualify the default configuration.
 5. Give the guest a private IP, one public Mumble port forwarded for TCP and UDP, and a separate SSH port. Verify invite links, normal UDP, TCP fallback, guest root access, and isolation from tenants and management.
 6. Install collection for host/guest CPU, run queues, steal time, memory pressure, swap, disk latency, thin-pool usage, NIC bytes/packets/drops, NAT tracking, and Mumble/client quality. Confirm the timestamp and units of each counter.
 

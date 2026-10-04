@@ -1,0 +1,31 @@
+{
+  "scope": "October 4 follow-up: native bridge and pacer test build; runtime client logic unchanged.",
+  "review_start_commit": "6c6303c03f755e9e1636eb094e78371d10d88961",
+  "source_lf_sha256": {
+    "scripts/hosting/pacer_bridge.cpp": "1ac97119185bf18e0dda4f58b86e5f7d274ef942f1c4a6fb03ed202767e21713",
+    "scripts/hosting/relay_probe.py": "9783b0c5fd5572f1e2d7cf0c5de58a653f2c3779104409815cc6e12b06c8f29c",
+    "scripts/hosting/native_pacer.py": "d14e06fee40bf5c57e19bdfd4eea804d2161d25a69338fea5e90f2ddd111eff3",
+    "scripts/hosting/test_native_pacer.py": "684d6825321242ad9a472c972d77f0ee065dee20d4a956c169ed6f66447b39a8",
+    "scripts/hosting/test_hosting_tools.py": "5e69d97d6996e088f57b09d95fe7c2d72ea98a5d4366927e6dc423a40131cc28",
+    "scripts/hosting/build_pacer_bridge.sh": "ece8ea602f7269f1c03db170717dad66f0fa503b61442a0e18d484cb787abb76",
+    "scripts/hosting/pilot-server.ini": "5b44146aa8ed5b19ade9e577e46f1cb2e254e604b8d53e62f26d36a6301c1170",
+    "scripts/hosting/pilot-server-defaults.ini": "4924db353ed462b559db1c853c8e41152f801afa96a0688b11c3481ac27d9949",
+    "src/mumble/VideoPacketPacer.cpp": "79415234e11ccae868ad0bd36366baef2a954d7661c8a1942745b4a59355dff4",
+    "src/mumble/VideoPacketPacer.h": "58ec54375a741cce706e6b4fee4e2767ad7b709b6e37fd508f54bd56e22fa1da",
+    "src/tests/TestVideoPacketPacer/TestVideoPacketPacer.cpp": "ecd313efc3f630afcfecd7c9b3ca3aba6a09136b090b2fb43c3668291b6b477a"
+  },
+  "binary_sha256": {
+    "build-review-20261003/libmumble_pilot_pacer.so": "38ef4f5ac9a6fcfa68478ab1bcf07efe46b1b7b3a30390a51c0c63bfc07a2264",
+    "build/libmumble_pilot_ocb.so": "edefe91c2ad6d40090d8646660a3df46e1d154a72a8cdcd6a67a670775d1de39",
+    "build/mumble-server": "2c97648941109b142386dc08ccf709abd0808dddc7f9ebb03ee35071252b4154",
+    "client-build/tests/TestVideoPacketPacer": "e6b1e11a9f47ba84587234133e97a9584d9e1f45e30cd2ee8056a77585544282"
+  },
+  "validation": {
+    "hosting_python_checks": 25,
+    "python_failures": 0,
+    "python_skipped": 0,
+    "pacer_ctest_suites": 1,
+    "ctest_failures": 0
+  },
+  "previous_server_config_restored": true
+}

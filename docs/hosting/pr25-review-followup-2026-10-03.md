@@ -2,7 +2,7 @@
 
 Test date: October 3, 2026, America/Los_Angeles (October 4 UTC in the raw records). This follows the [original October 2 measurements](pilot-pacing-results-2026-10-02.md).
 
-The revised client queue passed both 30-second fixture workloads with the server's default **2.5 Mbps per-sender** video budget. The aggregate budget remained **200 Mbps** to accommodate ten webcams. Neither workload dropped offered media inside the pacer or after submission to the relay. This is a short regression check of the C++ queue, not a hosting-density or full GUI qualification.
+The revised client queue passed both 30-second fixture workloads with **2.5 Mbps per sender and a raised 200 Mbps aggregate video cap**. This tested the default per-sender limit only; it did **not** qualify the fully default 2.5/20 Mbps configuration. Multiple senders can still exhaust the default aggregate cap and lose video without sender feedback. Neither measured workload dropped offered media inside the pacer or after submission to the relay. This is a short regression check of the C++ queue, not a hosting-density or full GUI qualification.
 
 ## Review changes
 
@@ -23,6 +23,8 @@ The protocol does not currently advertise its per-sender video budget. The rate 
 ## Measurements
 
 Ten authenticated clients used encrypted UDP, ten simultaneous voice senders, 30 seconds of offered media and two seconds to settle. Five-second encoded fixtures repeated six times. The actual C++ `PacketQueue` was driven through the native bridge by Python scheduling. Server and generator each had a one-CPU, 1 GiB container limit on the supplied eight-vCPU VM. A separate client build used up to two other vCPUs during these runs; these are not isolated latency measurements.
+
+Reproduction correction from the next review: this probe version truncated 1.972668 Mbps to 1,972,667 bps when constructing the native webcam pacer, one below the client's 1,972,668 bps value. The current probe rounds instead. The archived measurements and source hashes below have not been rewritten.
 
 | Workload | Video deliveries | Voice deliveries | Voice relay p95 | Scheduled frame to fragment delivery p95 |
 | --- | ---: | ---: | ---: | ---: |
@@ -47,6 +49,6 @@ The final candidate expands pending capacity to match the encoder's one-second b
 
 The full Linux client built with screen sharing enabled. The packet pacer, video packetizer and video quality profile CTest suites passed, including large-IDR completion, backlog preservation, overload recovery signaling, bounded catch-up, drop counters and teardown. All 22 hosting-tool/native-crypto checks passed. See the [build log](results/2026-10-03/pr25-final-build-20261003.log), [hosting checks](results/2026-10-03/pr25-repair-python-20261003.log) and [tested source/binary hashes](results/2026-10-03/pr25-tested-build-manifest.json). A subsequent whitespace-only formatting pass and rebuild are recorded separately in the [final manifest](results/2026-10-03/final-build-manifest.json).
 
-Follow the [runbook](host-density-pilot.md): use the same encoded fixtures, copy `pilot-server.ini` to the disposable runtime directory, change only `videobandwidth` to `2500000`, restart the test server, and save that effective file. Build both native bridges. Use ten clients, ten voice senders, `--seconds 30 --settle-seconds 2`, and a fresh capture directory. Select ten 720p30 senders with `--video-send-cap-mbps 1.972668`, or one 1080p15 sender with `--video-send-cap-mbps 2.4`. Record UDP and cgroup counters before/after. The test host's previous 3.5/200 Mbps configuration was restored after these comparisons.
+To reproduce this historical per-sender-only comparison, use the pinned source and [archived effective 2.5/200 Mbps configuration](results/2026-10-03/pr25-final-default-sender-server.ini), rather than the fully default template. Build both native bridges. Use the same encoded fixtures, ten clients, ten voice senders, `--seconds 30 --settle-seconds 2`, and a fresh capture directory. Select ten 720p30 senders with `--video-send-cap-mbps 1.972668`, or one 1080p15 sender with `--video-send-cap-mbps 2.4`; the old probe's rounding caveat above applies. Record UDP and cgroup counters before/after. The test host's previous 3.5/200 Mbps configuration was restored after these comparisons. New default-limit qualification follows the [runbook](host-density-pilot.md) and uses pilot-server-defaults.ini unchanged.
 
 The Qt timer adapter and its recovery signal are unit tested; the network fixtures cannot respond to encoder requests. Full GUI capture, actual forced-IDR recovery and playback still require platform testing, including Windows timer behavior. Longer mixed-media, external-path and physical-host density tests remain the launch gates in the runbook. The larger bounded queue is not a guarantee of low latency under sustained overload.
