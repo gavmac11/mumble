@@ -3,6 +3,7 @@
 import unittest
 import asyncio
 from types import SimpleNamespace
+from unittest.mock import AsyncMock, patch
 
 import capacity_model
 import collect_metrics
@@ -11,6 +12,22 @@ import opus_fixture
 
 
 class VideoAccountingTests(unittest.IsolatedAsyncioTestCase):
+    async def test_connection_uses_the_exact_documented_webcam_wire_rate(self):
+        client = relay_probe.Client("test", {})
+        client.session = 1
+        client.ready.set_result(None)
+        args = SimpleNamespace(host="localhost", port=64738, server_name="localhost",
+                               transport="tcp", native_pacer_library="test-library",
+                               video_send_cap_mbps=1.972668)
+        with patch.object(relay_probe.asyncio, "open_connection", new=AsyncMock(return_value=(None, None))), \
+                patch.object(client, "send", new=AsyncMock()), \
+                patch.object(client, "receive", new=AsyncMock()), \
+                patch.object(client, "send_paced_packets", new=AsyncMock()), \
+                patch.object(relay_probe, "NativePacer") as native:
+            await client.connect(args, None)
+            native.assert_called_once_with("test-library", 1_972_668)
+            await asyncio.gather(client.reader_task, client.pacer_task)
+
     def test_rejections_and_abandoned_backlog_are_separate_from_relay_loss(self):
         shared = {"offered": {1: (), 2: (), 3: (), 4: ()},
                   "accepted": {1, 2, 3}, "sent": {1: (), 2: ()}}
