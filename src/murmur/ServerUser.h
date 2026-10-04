@@ -142,6 +142,7 @@ public:
 
 	LeakyBucket leakyBucket;
 	LeakyBucket m_pluginMessageBucket;
+	LeakyBucket m_fileControlBucket;
 
 	int iLastPermissionCheck;
 	QMap< int, unsigned int > qmPermissionSent;
@@ -153,6 +154,10 @@ public:
 	BandwidthRecord bwr;
 	/// Video traffic is metered separately from voice (bwr) so one cannot starve the other.
 	BandwidthRecord bwrVideo;
+	/// Chat file-transfer traffic, metered separately from voice and video.
+	BandwidthRecord bwrFile;
+	/// True when the client announced UserState.file_transfer_capable.
+	bool bFileTransferCapable = false;
 	struct sockaddr_storage saiUdpAddress;
 	struct sockaddr_storage saiTcpLocalAddress;
 	ServerUser(Server *parent, QSslSocket *socket);

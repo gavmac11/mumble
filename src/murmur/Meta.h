@@ -48,6 +48,17 @@ public:
 	/// Server-wide ceiling for relayed video egress (bits/s) — bounds the O(senders × receivers)
 	/// amplification of the blind relay. 0 disables video relaying.
 	int iMaxVideoBandwidthAggregate;
+	/// Per-user ceiling for chat file-transfer traffic (bits/s), metered separately from voice
+	/// and video.
+	int iMaxFileBandwidth;
+	/// Server-wide ceiling for relayed file egress (bits/s). 0 disables file relaying.
+	int iMaxFileBandwidthAggregate;
+	/// Per-transfer byte ceiling a sender may push through the relay (murmur never stores files).
+	quint64 iMaxFileSize;
+	/// Sustained FileTransferControl messages per second per user (handshakes are bursty).
+	unsigned int iFileControlLimit;
+	/// Burst bucket size for FileTransferControl messages.
+	unsigned int iFileControlBurst;
 	unsigned int iMaxUsers;
 	unsigned int iMaxUsersPerChannel;
 	int iMaxListenersPerChannel;

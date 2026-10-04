@@ -24,6 +24,7 @@ class AudioInput;
 class AudioOutput;
 class Database;
 class ScreenCapture;
+class FileTransferManager;
 class ScreenShareReceiver;
 class Log;
 class PluginManager;
@@ -58,6 +59,7 @@ public:
 	std::shared_ptr< AudioOutput > ao;
 	ScreenCapture *sc                        = nullptr;
 	ScreenShareReceiver *screenShareReceiver = nullptr;
+	FileTransferManager *fileTransferManager = nullptr;
 	/**
 	 * @remark Must only be accessed from the main event loop
 	 */

@@ -120,6 +120,9 @@ public:
 	int iMaxBandwidth;
 	int iMaxVideoBandwidth;
 	int iMaxVideoBandwidthAggregate;
+	int iMaxFileBandwidth;
+	int iMaxFileBandwidthAggregate;
+	quint64 iMaxFileSize;
 	unsigned int iMaxUsers;
 	unsigned int iMaxUsersPerChannel;
 	unsigned int iDefaultChan;
@@ -154,6 +157,9 @@ public:
 
 	unsigned int iPluginMessageLimit;
 	unsigned int iPluginMessageBurst;
+
+	unsigned int iFileControlLimit;
+	unsigned int iFileControlBurst;
 
 	bool broadcastListenerVolumeAdjustments;
 
@@ -196,6 +202,22 @@ public:
 	/// iMaxVideoBandwidthAggregate to bound the blind relay's O(senders × receivers) amplification.
 	/// Guarded by qrwlVoiceThread like the rest of the UDP path state.
 	BandwidthRecord m_bwrVideoAggregate;
+
+	/// Server-wide meter for relayed file egress, checked against iMaxFileBandwidthAggregate.
+	/// Guarded by m_qmFileTransferBytes (the handlers run on the TCP message path, not the
+	/// voice thread).
+	BandwidthRecord m_bwrFileAggregate;
+
+	/// In-memory per-(session, transfer_id) accounting of relayed file bytes, checked against
+	/// iMaxFileSize. Advisory relay state only — never persisted anywhere.
+	struct FileTransferBytes {
+		quint64 bytes = 0;
+		qint64 lastSeenMSecs = 0;
+	};
+	QHash< QPair< unsigned int, QByteArray >, FileTransferBytes > m_qhFileTransferBytes;
+	QMutex m_qmFileTransferBytes;
+	/// Drop transfer accumulators idle for more than pruneAfterMSecs (called opportunistically).
+	void pruneFileTransferBytes(qint64 pruneAfterMSecs = 5 * 60 * 1000);
 
 	std::span< const Mumble::Protocol::byte >
 		handlePing(const Mumble::Protocol::UDPDecoder< Mumble::Protocol::Role::Server > &decoder,

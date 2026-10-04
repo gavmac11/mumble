@@ -520,6 +520,8 @@ void Server::msgAuthenticate(ServerUser *uSource, MumbleProto::Authenticate &msg
 			mpus.set_recording(true);
 		if (u->bScreenSharing)
 			mpus.set_screen_sharing(true);
+		if (u->bFileTransferCapable)
+			mpus.set_file_transfer_capable(true);
 		if (u->bSelfDeaf)
 			mpus.set_self_deaf(true);
 		else if (u->bSelfMute)
@@ -947,8 +949,8 @@ void Server::msgUserState(ServerUser *uSource, MumbleProto::UserState &msg) {
 	// Prevent self-targeting state changes from being applied to others
 	if ((pDstServerUser != uSource)
 		&& (msg.has_self_deaf() || msg.has_self_mute() || msg.has_plugin_context() || msg.has_plugin_identity()
-			|| msg.has_recording() || msg.has_screen_sharing() || msg.listening_channel_add_size() > 0
-			|| msg.listening_channel_remove_size() > 0)) {
+			|| msg.has_recording() || msg.has_screen_sharing() || msg.has_file_transfer_capable()
+			|| msg.listening_channel_add_size() > 0 || msg.listening_channel_remove_size() > 0)) {
 		return;
 	}
 
@@ -1076,6 +1078,14 @@ void Server::msgUserState(ServerUser *uSource, MumbleProto::UserState &msg) {
 
 		sendAll(mptm, Version::fromComponents(1, 2, 3), Version::CompareMode::LessThan);
 
+		bBroadcast = true;
+	}
+
+	if (msg.has_file_transfer_capable()
+		&& (pDstServerUser->bFileTransferCapable != msg.file_transfer_capable())) {
+		assert(uSource == pDstServerUser);
+
+		pDstServerUser->bFileTransferCapable = msg.file_transfer_capable();
 		bBroadcast = true;
 	}
 
@@ -2576,6 +2586,118 @@ void Server::msgPluginDataTransmission(ServerUser *sender, MumbleProto::PluginDa
 			// We can simply redirect the message we have received to the clients
 			sendMessage(receiver, msg);
 		}
+	}
+}
+
+
+void Server::msgFileTransferControl(ServerUser *uSource, MumbleProto::FileTransferControl &msg) {
+	ZoneScoped;
+	MSG_SETUP(ServerUser::Authenticated);
+
+	// Opaque pairwise record of the file-transfer protocol (handshake frames
+	// and AEAD control messages). We are an untrusted relay: route to the
+	// targeted sessions, never inspect, never store (PROTOCOL.md §3).
+
+	if (uSource->m_fileControlBucket.ratelimit(1)) {
+		qWarning("Dropping file-transfer control record from \"%s\" (%d) - rate limited",
+				 qUtf8Printable(uSource->qsName), uSource->uiSession);
+		return;
+	}
+
+	if (msg.payload().size() > 64 * 1024) {
+		qWarning("Dropping file-transfer control record from \"%s\" (%d) - too large",
+				 qUtf8Printable(uSource->qsName), uSource->uiSession);
+		return;
+	}
+
+	// Anti-spoofing: the actor is always the authenticated sender.
+	msg.set_actor(uSource->uiSession);
+
+	for (int i = 0; i < msg.target_session_size(); ++i) {
+		ServerUser *receiver = qhUsers.value(msg.target_session(i));
+
+		// Only route within the sender's own channel to authenticated users.
+		if (!receiver || receiver == uSource || receiver->sState != ServerUser::Authenticated
+			|| receiver->cChannel != uSource->cChannel) {
+			continue;
+		}
+
+		sendMessage(receiver, msg);
+	}
+}
+
+void Server::msgFileData(ServerUser *uSource, MumbleProto::FileData &msg) {
+	ZoneScoped;
+	MSG_SETUP(ServerUser::Authenticated);
+
+	// One encrypted chunk of a file transfer. Blind relay to the sender's
+	// channel (minus the sender), skipping clients that never announced
+	// file-transfer capability. Nothing is stored.
+
+	if (msg.transfer_id().size() != 16) {
+		qWarning("Dropping file chunk from \"%s\" (%d) - bad transfer id",
+				 qUtf8Printable(uSource->qsName), uSource->uiSession);
+		return;
+	}
+	if (msg.data().size() > 1024 * 1024) {
+		qWarning("Dropping file chunk from \"%s\" (%d) - too large",
+				 qUtf8Printable(uSource->qsName), uSource->uiSession);
+		return;
+	}
+
+	// Per-user byte meter (TCP/IP + framing overhead included, like video).
+	const int packetsize = 20 + 8 + 6 + static_cast< int >(msg.data().size());
+	if (iMaxFileBandwidth > 0 && !uSource->bwrFile.addFrame(packetsize, iMaxFileBandwidth / 8)) {
+		return;
+	}
+
+	// Per-transfer accounting against maxfilesize (in-memory only).
+	bool tooLarge = false;
+	{
+		QMutexLocker lock(&m_qmFileTransferBytes);
+		auto &entry = m_qhFileTransferBytes[{
+			uSource->uiSession, QByteArray(msg.transfer_id().data(), static_cast< int >(msg.transfer_id().size())) }];
+		entry.bytes += static_cast< quint64 >(msg.data().size());
+		entry.lastSeenMSecs = QDateTime::currentMSecsSinceEpoch();
+		tooLarge = iMaxFileSize > 0 && entry.bytes > iMaxFileSize;
+		if (m_qhFileTransferBytes.size() > 1024) {
+			pruneFileTransferBytes();
+		}
+	}
+	if (tooLarge) {
+		log(uSource, QString("File transfer from user %1 exceeded maxfilesize").arg(uSource->uiSession));
+		return;
+	}
+
+	msg.set_actor(uSource->uiSession);
+
+	// Aggregate egress guard: charge the amplified cost up front.
+	int receivers = 0;
+	for (User *p : uSource->cChannel->qlUsers) {
+		auto *dst = static_cast< ServerUser * >(p);
+		if (dst != uSource && dst->sState == ServerUser::Authenticated && dst->bFileTransferCapable) {
+			++receivers;
+		}
+	}
+	if (receivers == 0) {
+		return;
+	}
+	{
+		QMutexLocker lock(&m_qmFileTransferBytes);
+		if (iMaxFileBandwidthAggregate > 0
+			&& !m_bwrFileAggregate.addFrame(
+				static_cast< quint64 >(packetsize) * static_cast< quint64 >(receivers),
+				static_cast< quint64 >(iMaxFileBandwidthAggregate / 8))) {
+			return;
+		}
+	}
+
+	for (User *p : uSource->cChannel->qlUsers) {
+		auto *dst = static_cast< ServerUser * >(p);
+		if (dst == uSource || dst->sState != ServerUser::Authenticated || !dst->bFileTransferCapable) {
+			continue;
+		}
+		sendMessage(dst, msg);
 	}
 }
 

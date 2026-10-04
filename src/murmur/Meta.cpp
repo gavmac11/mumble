@@ -68,6 +68,11 @@ MetaParams::MetaParams() {
 	// aggregate assumes a small group on a typical home uplink.
 	iMaxVideoBandwidth         = 2500000;
 	iMaxVideoBandwidthAggregate = 20000000;
+	iMaxFileBandwidth          = 16000000;
+	iMaxFileBandwidthAggregate = 64000000;
+	iMaxFileSize               = 10ull * 1024 * 1024 * 1024;
+	iFileControlLimit          = 20;
+	iFileControlBurst          = 100;
 	iMaxUsers                  = 1000;
 	iMaxUsersPerChannel        = 0;
 	iMaxListenersPerChannel    = -1;
@@ -291,6 +296,11 @@ void MetaParams::read(QString fname) {
 	iMaxBandwidth              = typeCheckedFromSettings("bandwidth", iMaxBandwidth);
 	iMaxVideoBandwidth         = typeCheckedFromSettings("videobandwidth", iMaxVideoBandwidth);
 	iMaxVideoBandwidthAggregate = typeCheckedFromSettings("videobandwidthaggregate", iMaxVideoBandwidthAggregate);
+	iMaxFileBandwidth           = typeCheckedFromSettings("filebandwidth", iMaxFileBandwidth);
+	iMaxFileBandwidthAggregate  = typeCheckedFromSettings("filebandwidthaggregate", iMaxFileBandwidthAggregate);
+	iMaxFileSize                = typeCheckedFromSettings("maxfilesize", iMaxFileSize);
+	iFileControlLimit           = typeCheckedFromSettings("filecontrollimit", iFileControlLimit);
+	iFileControlBurst           = typeCheckedFromSettings("filecontrolburst", iFileControlBurst);
 	iDefaultChan               = typeCheckedFromSettings("defaultchannel", iDefaultChan);
 	bRememberChan              = typeCheckedFromSettings("rememberchannel", bRememberChan);
 	iRememberChanDuration      = typeCheckedFromSettings("rememberchannelduration", iRememberChanDuration);
@@ -419,6 +429,11 @@ void MetaParams::read(QString fname) {
 	qmConfig.insert(QLatin1String("bandwidth"), QString::number(iMaxBandwidth));
 	qmConfig.insert(QLatin1String("videobandwidth"), QString::number(iMaxVideoBandwidth));
 	qmConfig.insert(QLatin1String("videobandwidthaggregate"), QString::number(iMaxVideoBandwidthAggregate));
+	qmConfig.insert(QLatin1String("filebandwidth"), QString::number(iMaxFileBandwidth));
+	qmConfig.insert(QLatin1String("filebandwidthaggregate"), QString::number(iMaxFileBandwidthAggregate));
+	qmConfig.insert(QLatin1String("maxfilesize"), QString::number(iMaxFileSize));
+	qmConfig.insert(QLatin1String("filecontrollimit"), QString::number(iFileControlLimit));
+	qmConfig.insert(QLatin1String("filecontrolburst"), QString::number(iFileControlBurst));
 	qmConfig.insert(QLatin1String("users"), QString::number(iMaxUsers));
 	qmConfig.insert(QLatin1String("defaultchannel"), QString::number(iDefaultChan));
 	qmConfig.insert(QLatin1String("rememberchannel"), bRememberChan ? QLatin1String("true") : QLatin1String("false"));

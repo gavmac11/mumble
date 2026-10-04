@@ -50,6 +50,9 @@
 #include "ScreenShareReceiver.h"
 #include "ScreenShareViewer.h"
 #include "ScreenShareWindow.h"
+#ifdef USE_FILE_SHARING
+#	include "PQFileTransfer/engine/FileTransferManager.h"
+#endif
 #include "SelfSharePreview.h"
 #include "SearchDialog.h"
 #include "ServerHandler.h"
@@ -236,6 +239,9 @@ MainWindow::MainWindow(QWidget *p)
 	m_screenShareViewer = new ScreenShareViewer(this);
 	m_activeVideoDisplayMode = Global::get().s.videoDisplayMode;
 	Global::get().screenShareReceiver = new ScreenShareReceiver(this);
+#ifdef USE_FILE_SHARING
+	Global::get().fileTransferManager = new FileTransferManager(this);
+#endif
 	connect(Global::get().screenShareReceiver, &ScreenShareReceiver::frameDecoded, this,
 			&MainWindow::onRemoteFrameDecoded, Qt::QueuedConnection);
 	connect(this, &MainWindow::disconnectedFromServer, this, [this]() {

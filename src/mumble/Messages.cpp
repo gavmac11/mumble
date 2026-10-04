@@ -596,6 +596,10 @@ void MainWindow::msgUserState(const MumbleProto::UserState &msg) {
 		}
 	}
 
+	if (msg.has_file_transfer_capable()) {
+		pDst->setFileTransferCapable(msg.file_transfer_capable());
+	}
+
 	if (msg.has_screen_sharing()) {
 		pDst->setScreenSharing(msg.screen_sharing());
 
@@ -1314,6 +1318,20 @@ void MainWindow::msgSuggestConfig(const MumbleProto::SuggestConfig &msg) {
 		else
 			Global::get().l->log(Log::Warning, tr("The server requests Push-to-Talk be disabled."));
 	}
+}
+
+void MainWindow::msgFileTransferControl(const MumbleProto::FileTransferControl &msg) {
+	// Defensive stub: ServerHandler::message intercepts FileTransferControl before
+	// anything is posted to the GUI thread, so reaching this handler means the
+	// interception path is broken.
+	qWarning("FileTransferControl reached the GUI dispatcher unexpectedly");
+	Q_UNUSED(msg);
+}
+
+void MainWindow::msgFileData(const MumbleProto::FileData &msg) {
+	// Defensive stub: see msgFileTransferControl.
+	qWarning("FileData reached the GUI dispatcher unexpectedly");
+	Q_UNUSED(msg);
 }
 
 void MainWindow::msgPluginDataTransmission(const MumbleProto::PluginDataTransmission &msg) {
