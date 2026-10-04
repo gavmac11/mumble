@@ -16,12 +16,13 @@ void mumble_pilot_pacer_free(void *handle) noexcept {
 int mumble_pilot_pacer_enqueue(void *handle, const unsigned char *data, unsigned int length,
                               const unsigned int *sizes, unsigned int count, int keyframe,
                               std::uint64_t now) noexcept {
-    if (!handle || !data || !sizes || !count || count > 2048 || length > 2 * 1024 * 1024) return -1;
+    if (!handle || !data || !sizes || !count || count > PacketQueue::MaximumFramePackets
+        || length > PacketQueue::MaximumFramePackets * PacketQueue::MaximumPacketBytes) return -1;
     try {
         VideoPackets packets;
         unsigned int offset = 0;
         for (unsigned int i = 0; i < count; ++i) {
-            if (!sizes[i] || sizes[i] > 1024 || sizes[i] > length - offset) return -1;
+            if (!sizes[i] || sizes[i] > PacketQueue::MaximumPacketBytes || sizes[i] > length - offset) return -1;
             packets.emplace_back(data + offset, data + offset + sizes[i]);
             offset += sizes[i];
         }
@@ -31,7 +32,7 @@ int mumble_pilot_pacer_enqueue(void *handle, const unsigned char *data, unsigned
 }
 int mumble_pilot_pacer_take(void *handle, std::uint64_t now, unsigned char *output,
                            unsigned int capacity) noexcept {
-    if (!handle || !output || capacity < 1024) return -1;
+    if (!handle || !output || capacity < PacketQueue::MaximumPacketBytes) return -1;
     try {
         auto packet = static_cast<PacketQueue *>(handle)->takeReady(now);
         if (!packet) return 0;
