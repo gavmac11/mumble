@@ -43,6 +43,8 @@ void PacketQueue::retainFrontFrame() {
 
 bool PacketQueue::rejectFrame() {
 	++m_droppedFrames;
+	// Even a frame rejected before transmission may be an encoder reference for
+	// later P-frames. Without non-reference metadata, recovery needs a new IDR.
 	m_needsKeyframe = true;
 	return false;
 }
