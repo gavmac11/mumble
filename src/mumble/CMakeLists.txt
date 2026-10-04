@@ -1163,6 +1163,10 @@ if(file-sharing)
 		"PQFileTransfer/crypto/Merkle.cpp"
 		"PQFileTransfer/crypto/SigMLDSA65.h"
 		"PQFileTransfer/crypto/SigMLDSA65.cpp"
+		"PQFileTransfer/identity/FTIdentity.h"
+		"PQFileTransfer/identity/FTIdentity.cpp"
+		"PQFileTransfer/identity/PeerTrustStore.h"
+		"PQFileTransfer/identity/PeerTrustStore.cpp"
 	)
 
 	target_compile_definitions(mumble_client_object_lib PUBLIC "USE_FILE_SHARING")
