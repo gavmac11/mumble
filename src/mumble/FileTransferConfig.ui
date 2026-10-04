@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FileTransferConfig</class>
+ <widget class="QWidget" name="FileTransferConfig">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>420</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>File Sharing</string>
+  </property>
+  <layout class="QVBoxLayout">
+   <item>
+    <widget class="QGroupBox" name="qgbFTGeneral">
+     <property name="title">
+      <string>Chat file transfers</string>
+     </property>
+     <layout class="QVBoxLayout">
+      <item>
+       <widget class="QCheckBox" name="qcbFTEnabled">
+        <property name="toolTip">
+         <string>When disabled, no files can be sent or accepted</string>
+        </property>
+        <property name="text">
+         <string>Enable file transfers</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="qcbFTAutoAccept">
+        <property name="toolTip">
+         <string>Save incoming files from verified contacts directly to the download directory without asking</string>
+        </property>
+        <property name="text">
+         <string>Automatically save files from verified contacts</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout">
+        <item>
+         <widget class="QLabel" name="qlFTDownloadDir">
+          <property name="text">
+           <string>Download directory</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="qleFTDownloadDir">
+          <property name="toolTip">
+           <string>Files received from verified contacts are saved here</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="qpbFTBrowse">
+          <property name="text">
+           <string>&amp;Browse…</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="qgbFTAdvanced">
+     <property name="title">
+      <string>Transfer limits</string>
+     </property>
+     <layout class="QGridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="qlFTChunkSize">
+        <property name="text">
+         <string>Chunk size (KiB)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="qsbFTChunkSize">
+        <property name="toolTip">
+         <string>Size of the encrypted chunks a file is split into (16–1024 KiB)</string>
+        </property>
+        <property name="minimum">
+         <number>16</number>
+        </property>
+        <property name="maximum">
+         <number>1024</number>
+        </property>
+        <property name="singleStep">
+         <number>16</number>
+        </property>
+        <property name="value">
+         <number>256</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="qlFTSendPace">
+        <property name="text">
+         <string>Send pace (KiB/s)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="qsbFTSendPace">
+        <property name="toolTip">
+         <string>Maximum sending rate; 0 means unlimited</string>
+        </property>
+        <property name="specialValueText">
+         <string>Unlimited</string>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>1048576</number>
+        </property>
+        <property name="value">
+         <number>4096</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="qlFTMaxReceive">
+        <property name="text">
+         <string>Maximum incoming file size (MiB)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="qsbFTMaxReceive">
+        <property name="toolTip">
+         <string>Files larger than this are refused (the server enforces its own limit as well)</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1048576</number>
+        </property>
+        <property name="value">
+         <number>10240</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QLabel" name="qlFTNote">
+        <property name="text">
+         <string>Note: transfers are always post-quantum end-to-end encrypted between the participants; the server only ever sees encrypted chunks. A file password adds a second, independent layer.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

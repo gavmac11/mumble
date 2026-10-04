@@ -463,6 +463,19 @@ struct Settings {
 
 	QString qsImagePath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
 
+	/// Whether chat file transfers are enabled
+	bool bFTEnabled = true;
+	/// Chunk size for outgoing file transfers in KiB (clamped to 16..1024)
+	int iFTChunkKB = 256;
+	/// Outgoing file-transfer pace in KiB/s (0 = unlimited)
+	int iFTSendPaceKiB = 4096;
+	/// Maximum accepted incoming file size in MiB
+	int iFTMaxReceiveMiB = 10 * 1024;
+	/// Default directory for saving incoming files (empty = choose on save)
+	QString qsFTDownloadDir;
+	/// Automatically save incoming files from verified peers into qsFTDownloadDir
+	bool bFTAutoAcceptPinned = false;
+
 	bool bUpdateCheck      = true;
 	bool bPluginCheck      = true;
 	bool bPluginAutoUpdate = false;

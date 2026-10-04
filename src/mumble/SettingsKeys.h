@@ -224,6 +224,12 @@ const SettingsKey AUTO_UPDATE_PLUGINS_KEY      = { "auto_update_plugins" };
 // Misc
 const SettingsKey DATABASE_LOCATION_KEY                  = { "database_location" };
 const SettingsKey IMAGE_DIRECTORY_KEY                    = { "image_directory" };
+const SettingsKey FT_ENABLED_KEY                        = { "file_transfer_enabled" };
+const SettingsKey FT_CHUNK_SIZE_KEY                     = { "file_transfer_chunk_size_kib" };
+const SettingsKey FT_SEND_PACE_KEY                      = { "file_transfer_send_pace_kib" };
+const SettingsKey FT_MAX_RECEIVE_SIZE_KEY               = { "file_transfer_max_receive_size_mib" };
+const SettingsKey FT_DOWNLOAD_DIR_KEY                   = { "file_transfer_download_dir" };
+const SettingsKey FT_AUTO_ACCEPT_PINNED_KEY             = { "file_transfer_auto_accept_pinned" };
 const SettingsKey SERVER_PING_CONSENT_MESSAGE_VIEWED_KEY = { "viewed_server_ping_consent_message" };
 const SettingsKey AUDIO_WIZARD_SHOWN_KEY                 = { "audio_wizard_has_been_shown" };
 const SettingsKey CRASH_EMAIL_ADDRESS_KEY                = { "crash_report_email_address" };

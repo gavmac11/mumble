@@ -172,7 +172,7 @@ void FileTransferManager::pushIdentityToEngine() {
 bool FileTransferManager::startSend(const QString &filePath, const QString &mimeType, bool passwordMode,
 									const QByteArray &password,
 									const QList< unsigned int > &recipients) {
-	if (!hasUsableIdentity() || m_engine == nullptr) {
+	if (!hasUsableIdentity() || m_engine == nullptr || !Global::get().s.bFTEnabled) {
 		return false;
 	}
 	QSet< unsigned int > sessions;
@@ -309,6 +309,8 @@ void FileTransferManager::refreshPinCache() {
 	if (!m_trustStore || !m_identity) {
 		return;
 	}
+	// Re-apply limits whenever the world changes; cheap and idempotent
+	applyEngineConfig();
 	const QByteArray digest = serverDigest();
 	if (digest.isEmpty()) {
 		return;
@@ -338,12 +340,21 @@ void FileTransferManager::applyEngineConfig() {
 	if (!m_engine) {
 		return;
 	}
+	const Settings &s = Global::get().s;
 	PQFT::FileTransferEngine::Config config;
-	config.chunkSize			   = 256 * 1024;
-	config.sendRateBytesPerSecond  = 4 * 1024 * 1024;
-	config.maxReceiveSize		   = 10ull * 1024 * 1024 * 1024;
+	config.chunkSize = static_cast< quint32 >(
+		qBound(16, s.iFTChunkKB, 1024) * 1024);
+	config.sendRateBytesPerSecond =
+		static_cast< quint32 >(qBound(0, s.iFTSendPaceKiB, 1 << 20)) * 1024ull;
+	config.maxReceiveSize =
+		static_cast< quint64 >(qMax(1, s.iFTMaxReceiveMiB)) * 1024ull * 1024ull;
 	config.handshakeTimeoutMSecs   = 10000;
 	config.receiveIdleTimeoutMSecs = 60000;
 	QMetaObject::invokeMethod(m_engine, [this, config]() { m_engine->setConfig(config); },
 							  Qt::QueuedConnection);
+
+	// A disabled feature stops everything in flight
+	if (!s.bFTEnabled) {
+		disconnectCleanup();
+	}
 }

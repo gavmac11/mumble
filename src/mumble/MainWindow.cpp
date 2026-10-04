@@ -88,6 +88,7 @@
 #endif
 
 #include <QAccessible>
+#include <QtCore/QDir>
 #include <QtCore/QMimeDatabase>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QUrlQuery>
@@ -4770,6 +4771,10 @@ void MainWindow::onFileTransferUpdated(const PQFT::FTTransferInfo &info) {
 	if (info.transferId.isEmpty()) {
 		return;
 	}
+	auto *manager = Global::get().fileTransferManager;
+	if (!manager) {
+		return;
+	}
 
 	const bool isNew = !m_fileTransferCards.contains(info.transferId);
 	m_fileTransferCards.insert(info.transferId, info);
@@ -4783,6 +4788,17 @@ void MainWindow::onFileTransferUpdated(const PQFT::FTTransferInfo &info) {
 			doc->addResource(QTextDocument::ImageResource, url, card);
 			doc->markContentsDirty(0, static_cast< int >(doc->characterCount()));
 			qteLog->viewport()->update();
+		}
+	}
+
+	// Auto-save files from verified contacts when enabled
+	if (info.incoming && info.state == PQFT::FTTransferInfo::State::Ready
+		&& Global::get().s.bFTAutoAcceptPinned && !Global::get().s.qsFTDownloadDir.isEmpty()) {
+		QByteArray pinnedFp;
+		if (manager->trustStateFor(info.peerSession, pinnedFp)
+			== PQFT::TrustState::Verified) {
+			const QString target = QDir(Global::get().s.qsFTDownloadDir).filePath(info.fileName);
+			manager->saveTransferAs(info.transferId, target);
 		}
 	}
 
@@ -4815,12 +4831,16 @@ void MainWindow::onFileCardClicked(const QByteArray &transferId) {
 
 	switch (info.state) {
 		case PQFT::FTTransferInfo::State::Ready: {
-			const QString suggested =
-				QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/" + info.fileName;
-			const QString target = QFileDialog::getSaveFileName(
-				this, tr("Save file"), suggested, QString(), nullptr,
-				QFileDialog::DontConfirmOverwrite);
+			QString baseDir = Global::get().s.qsFTDownloadDir;
+			if (baseDir.isEmpty()) {
+				baseDir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+			}
+			const QString suggested = baseDir + "/" + info.fileName;
+			QString target			 = QFileDialog::getSaveFileName(this, tr("Save file"), suggested,
+																	  QString(), nullptr,
+																	  QFileDialog::DontConfirmOverwrite);
 			if (!target.isEmpty()) {
+				Global::get().s.qsFTDownloadDir = QFileInfo(target).absolutePath();
 				manager->saveTransferAs(transferId, target);
 			}
 			break;
