@@ -77,11 +77,20 @@ private slots:
 		QVERIFY(queue.enqueue(frame(2, 19), true, 0));
 		QVERIFY(!queue.enqueue(frame(PacketQueue::MaximumFramePackets + 1), true, 0));
 		QVERIFY(!queue.enqueue({ VideoPacket(1025) }, true, 0));
+		QVERIFY(!queue.enqueue({}, false, 0));
+		QVERIFY(!queue.enqueue({ VideoPacket{} }, false, 0));
 		QCOMPARE(queue.queuedBytes(), std::size_t(2 * 952));
-		QCOMPARE(queue.droppedFrames(), std::uint64_t(2));
+		QCOMPARE(queue.droppedFrames(), std::uint64_t(4));
 		QCOMPARE(*queue.takeReady(0), VideoPacket(900, 19));
 		QCOMPARE(*queue.takeReady(3'808'000), VideoPacket(900, 19));
 		QVERIFY(queue.needsKeyframe());
+		// No malformed packet reached the wire, but the encoder may have referenced
+		// that missing frame. Do not pass dependent P-frames until an IDR restarts it.
+		QVERIFY(!queue.enqueue(frame(1), false, 7'616'000));
+		QVERIFY(queue.enqueue(frame(1, 23), true, 7'616'000));
+		QCOMPARE(*queue.takeReady(7'616'000), VideoPacket(900, 23));
+		QVERIFY(queue.enqueue(frame(1, 24), false, 11'424'000));
+		QCOMPARE(*queue.takeReady(11'424'000), VideoPacket(900, 24));
 	}
 
 	void largeKeyframeFinishesBeyondTheSoftAgeAndByteBudgets() const {
