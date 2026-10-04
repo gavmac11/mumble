@@ -36,6 +36,10 @@ option(plugin-callback-debug "Build Mumble with debug output for plugin callback
 
 option(screen-sharing "Build support for screen sharing (requires libavcodec + libswscale with libx264)." ON)
 
+option(file-sharing "Build support for file sharing in chat (post-quantum encrypted; requires liboqs + libargon2)." ON)
+option(bundled-oqs "Build the bundled version of liboqs (ML-KEM-768, ML-DSA-65) instead of looking for one on the system." ${file-sharing})
+option(bundled-argon2 "Build the bundled version of libargon2 instead of looking for one on the system." ${file-sharing})
+
 if(WIN32)
 	option(asio "Build support for ASIO audio input." OFF)
 	option(wasapi "Build support for WASAPI." ON)
@@ -1092,6 +1096,59 @@ if(screen-sharing)
 			endif()
 		endif()
 	endif()
+endif()
+
+if(file-sharing)
+
+	# --- liboqs (ML-KEM-768 + ML-DSA-65, post-quantum file-transfer crypto) ---
+	if(bundled-oqs)
+		# Minimal build: only the two schemes the file-transfer protocol uses
+		# (see PROTOCOL.md "2. Cryptographic suite"). A full liboqs build pulls
+		# in every algorithm and is roughly an order of magnitude slower.
+		set(OQS_BUILD_ONLY_LIB ON CACHE BOOL "" FORCE)
+		set(OQS_MINIMAL_BUILD "KEM_ml_kem_768;SIG_ml_dsa_65" CACHE STRING "" FORCE)
+		# Generic codegen keeps the bundled library portable across machines.
+		set(OQS_OPT_TARGET "generic" CACHE STRING "" FORCE)
+		# Build a static library so there is no extra runtime .so to distribute.
+		set(PREV_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+		set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+		add_subdirectory("${3RDPARTY_DIR}/liboqs" "${CMAKE_CURRENT_BINARY_DIR}/liboqs" EXCLUDE_FROM_ALL)
+		set(BUILD_SHARED_LIBS ${PREV_BUILD_SHARED_LIBS} CACHE BOOL "" FORCE)
+		disable_warnings_for_all_targets_in("${3RDPARTY_DIR}/liboqs")
+		target_link_libraries(mumble_client_object_lib PUBLIC oqs)
+	else()
+		find_pkg("oqs" REQUIRED)
+		target_include_directories(mumble_client_object_lib SYSTEM PUBLIC ${oqs_INCLUDE_DIRS})
+		target_link_libraries(mumble_client_object_lib PUBLIC ${oqs_LIBRARIES})
+	endif()
+
+	# --- libargon2 (Argon2id password KDF) -------------------------------------
+	if(bundled-argon2)
+		add_library(argon2 STATIC
+								"${3RDPARTY_DIR}/argon2/src/argon2.c"
+								"${3RDPARTY_DIR}/argon2/src/core.c"
+								"${3RDPARTY_DIR}/argon2/src/encoding.c"
+								"${3RDPARTY_DIR}/argon2/src/thread.c"
+								"${3RDPARTY_DIR}/argon2/src/blake2/blake2b.c"
+		)
+		target_include_directories(argon2 PUBLIC "${3RDPARTY_DIR}/argon2/include")
+		target_disable_warnings(argon2)
+		find_package(Threads REQUIRED)
+		target_link_libraries(argon2 PUBLIC Threads::Threads)
+		target_link_libraries(mumble_client_object_lib PUBLIC argon2)
+	else()
+		find_pkg("libargon2" REQUIRED)
+		target_include_directories(mumble_client_object_lib SYSTEM PUBLIC ${libargon2_INCLUDE_DIRS})
+		target_link_libraries(mumble_client_object_lib PUBLIC ${libargon2_LIBRARIES})
+	endif()
+
+	# --- qrcodegen (safety-number QR codes) ------------------------------------
+	add_library(qrcodegen STATIC "${3RDPARTY_DIR}/qrcodegen/qrcodegen.cpp")
+	target_include_directories(qrcodegen PUBLIC "${3RDPARTY_DIR}/qrcodegen")
+	target_disable_warnings(qrcodegen)
+	target_link_libraries(mumble_client_object_lib PUBLIC qrcodegen)
+
+	target_compile_definitions(mumble_client_object_lib PUBLIC "USE_FILE_SHARING")
 endif()
 
 if(xboxinput)
