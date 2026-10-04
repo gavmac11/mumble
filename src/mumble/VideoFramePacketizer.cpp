@@ -21,16 +21,15 @@ std::vector< std::vector< unsigned char > > packetizeFrame(quint32 senderSession
 		return {};
 
 	// Stay comfortably below common network MTUs after protobuf, encryption, UDP and IP overhead.
-	static constexpr int MAX_FRAGMENT_BYTES = 900;
 	const int dataSize                      = static_cast< int >(encodedData.size());
-	const int fragmentCount                 = (dataSize + MAX_FRAGMENT_BYTES - 1) / MAX_FRAGMENT_BYTES;
+	const int fragmentCount                 = (dataSize + MaximumFragmentBytes - 1) / MaximumFragmentBytes;
 
 	std::vector< std::vector< unsigned char > > packets;
 	packets.reserve(static_cast< std::size_t >(fragmentCount));
 
 	for (int i = 0; i < fragmentCount; ++i) {
-		const int offset    = i * MAX_FRAGMENT_BYTES;
-		const int chunkSize = std::min(MAX_FRAGMENT_BYTES, dataSize - offset);
+		const int offset    = i * MaximumFragmentBytes;
+		const int chunkSize = std::min(MaximumFragmentBytes, dataSize - offset);
 
 		MumbleUDP::Video videoMsg;
 		videoMsg.set_sender_session(senderSession);

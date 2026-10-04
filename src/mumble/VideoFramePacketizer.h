@@ -13,6 +13,8 @@
 
 namespace Mumble::Video {
 
+inline constexpr int MaximumFragmentBytes = 900;
+
 /// Splits an encoded H.264 frame into UDP-safe MumbleUDP::Video packets.
 std::vector< std::vector< unsigned char > > packetizeFrame(quint32 senderSession, const QByteArray &encodedData,
 														   quint64 frameNumber, quint32 width, quint32 height,

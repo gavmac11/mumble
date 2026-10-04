@@ -166,6 +166,12 @@ bool ScreenCapture::isCapturing() const {
 	return m_capturing;
 }
 
+void ScreenCapture::requestKeyframe() {
+#ifdef USE_SCREEN_SHARING
+	m_keyframeRequested.store(true);
+#endif
+}
+
 #ifdef USE_SCREEN_SHARING
 
 void ScreenCapture::setSource(const CaptureSource &source) {
@@ -274,6 +280,7 @@ void ScreenCapture::encodeImage(const QImage &srcImage) {
 	sws_scale(m_swsCtx, srcData, srcLinesize, 0, height, m_frame->data, m_frame->linesize);
 
 	m_frame->pts = static_cast< int64_t >(m_frameNumber);
+	m_frame->pict_type = m_keyframeRequested.exchange(false) ? AV_PICTURE_TYPE_I : AV_PICTURE_TYPE_NONE;
 
 	if (avcodec_send_frame(m_codecCtx, m_frame) < 0) {
 		scheduleCaptureAbort();
@@ -342,6 +349,7 @@ void ScreenCapture::encodeYuvFrame(int width, int height, const uint8_t *const d
 	sws_scale(m_swsCtx, data, linesize, 0, height, m_frame->data, m_frame->linesize);
 
 	m_frame->pts = static_cast< int64_t >(m_frameNumber);
+	m_frame->pict_type = m_keyframeRequested.exchange(false) ? AV_PICTURE_TYPE_I : AV_PICTURE_TYPE_NONE;
 
 	if (avcodec_send_frame(m_codecCtx, m_frame) < 0) {
 		scheduleCaptureAbort();
@@ -467,14 +475,22 @@ bool ScreenCapture::initEncoder(int width, int height, const Mumble::VideoQualit
 	m_codecCtx->height         = height;
 	m_codecCtx->time_base      = { 1, profile.framesPerSecond };
 	m_codecCtx->pix_fmt        = AV_PIX_FMT_YUV420P;
-	m_codecCtx->bit_rate       = profile.bitRate;
-	m_codecCtx->rc_max_rate    = profile.bitRate;
-	m_codecCtx->rc_buffer_size = profile.bitRate;
+	const int bitRate          = Mumble::VideoQuality::encoderBitRate(profile);
+	if (bitRate != profile.bitRate)
+		qWarning("Video profile bitrate limited to %d bps by the default server budget", bitRate);
+	m_codecCtx->bit_rate       = bitRate;
+	m_codecCtx->rc_max_rate    = bitRate;
+	m_codecCtx->rc_buffer_size = bitRate;
 	m_codecCtx->gop_size       = profile.keyFrameInterval;
 
 	// Minimise encoding latency. These could maybe be settings?
 	av_opt_set(m_codecCtx->priv_data, "preset", "superfast", 0);
 	av_opt_set(m_codecCtx->priv_data, "tune", "zerolatency", 0);
+	// A requested I picture must reset decoder dependencies, not merely be intra-coded.
+	if (av_opt_set_int(m_codecCtx->priv_data, "forced-idr", 1, 0) < 0) {
+		avcodec_free_context(&m_codecCtx);
+		return false;
+	}
 
 	if (avcodec_open2(m_codecCtx, codec, nullptr) < 0) {
 		avcodec_free_context(&m_codecCtx);

@@ -7,6 +7,7 @@
 #define MUMBLE_MUMBLE_VIDEOQUALITYPROFILE_H_
 
 #include <QtCore/QSize>
+#include <cstdint>
 
 namespace Mumble::VideoQuality {
 
@@ -23,6 +24,12 @@ const Profile &screenShareProfile();
 
 /// Webcam content favours motion and matches the broadly supported UVC 720p30 mode.
 const Profile &webcamProfile();
+
+/// The protocol currently does not advertise the per-sender video limit. Use the default
+/// 2.5 Mbit/s ceiling with scheduling headroom. Clamp the encoder and pacer together if a
+/// profile requests more than fits, including packetization and wire overhead.
+int encoderBitRate(const Profile &profile);
+std::uint64_t wireBitRate(const Profile &profile);
 
 /// Returns an even-sized frame that fits the profile without enlarging the source.
 /// An invalid size is returned when the source cannot produce a YUV420-compatible frame.
