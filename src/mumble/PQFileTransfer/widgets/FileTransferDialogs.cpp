@@ -13,6 +13,8 @@
 
 #include <QCheckBox>
 #include <QDialogButtonBox>
+#include <QBrush>
+#include <QColor>
 #include <QFontDatabase>
 #include <QFontMetrics>
 #include <QHBoxLayout>
@@ -210,13 +212,16 @@ FileSendDialog::FileSendDialog(const QString &fileName, quint64 fileSize,
 		item->setText(tr("%1 — %2").arg(recipient.name.toHtmlEscaped()).arg(trust));
 		item->setData(Qt::UserRole, recipient.session);
 		item->setData(Qt::UserRole + 1, recipient.trustState);
-		item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
-		item->setCheckState(recipient.trustState
-									== static_cast< int >(PQFT::TrustState::Changed)
-								? Qt::Unchecked
-								: Qt::Checked);
 		if (recipient.trustState == static_cast< int >(PQFT::TrustState::Changed)) {
-			item->setFlags(item->flags() & ~Qt::ItemIsUserCheckable);
+			// Hard exclusion: a peer whose pinned identity changed is never a
+			// valid recipient. Gray the entry out and make it inert (the
+			// engine refuses the handshake anyway — this is UX only).
+			item->setFlags((item->flags() & ~Qt::ItemIsUserCheckable) & ~Qt::ItemIsEnabled);
+			item->setCheckState(Qt::Unchecked);
+			item->setForeground(QBrush(QColor(0xe8, 0x74, 0x6f)));
+		} else {
+			item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+			item->setCheckState(Qt::Checked);
 		}
 	}
 	layout->addWidget(m_recipients);
@@ -247,6 +252,11 @@ QList< unsigned int > FileSendDialog::selectedSessions() const {
 	QList< unsigned int > sessions;
 	for (int i = 0; i < m_recipients->count(); ++i) {
 		const QListWidgetItem *item = m_recipients->item(i);
+		// Identity-changed peers are hard-excluded even if their check state
+		// were somehow toggled
+		if (item->data(Qt::UserRole + 1).toInt() == static_cast< int >(PQFT::TrustState::Changed)) {
+			continue;
+		}
 		if (item->checkState() == Qt::Checked) {
 			sessions.append(item->data(Qt::UserRole).toUInt());
 		}
