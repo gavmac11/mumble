@@ -7,17 +7,31 @@
 #define MUMBLE_MUMBLE_CUSTOMELEMENTS_H_
 
 #include <QtCore/QObject>
+#include <QtGui/QTextImageFormat>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QTextEdit>
+
+class QEvent;
+class QMouseEvent;
 
 class LogTextBrowser : public QTextBrowser {
 private:
 	Q_OBJECT
 	Q_DISABLE_COPY(LogTextBrowser)
 
+	/// Whether the mouse is currently hovering over a chat video
+	bool m_overChatVideo = false;
+
+	/// Returns the image format of the inline image at the given position (in
+	/// viewport coordinates), or an invalid format if there is none.
+	QTextImageFormat imageFormatAt(const QPoint &pos) const;
+
 protected:
 	void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+	void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+	void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+	void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 public:
 	LogTextBrowser(QWidget *p = nullptr);

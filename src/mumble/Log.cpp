@@ -22,6 +22,12 @@
 #include "VolumeAdjustment.h"
 #include "Global.h"
 
+#ifdef USE_CHAT_WEBM
+#	include "ChatVideoDecoder.h"
+#	include "ChatVideoPlayer.h"
+#endif
+
+#include <cstring>
 #include <limits>
 #include <memory>
 #include <type_traits>
@@ -30,6 +36,7 @@
 #include <QtCore/QBuffer>
 #include <QtCore/QMutexLocker>
 #include <QtCore/QRegularExpression>
+#include <QtCore/QTimer>
 #include <QtGui/QImageReader>
 #include <QtGui/QImageWriter>
 #include <QtGui/QMovie>
@@ -590,13 +597,9 @@ void Log::clearIgnore() {
 	qmIgnore.clear();
 }
 
-QString Log::imageToImg(const QByteArray &format, const QByteArray &image) {
-	QString fmt = QLatin1String(format);
-
-	if (fmt.isEmpty())
-		fmt = QLatin1String("qt");
-
-	QByteArray rawbase = image.toBase64();
+/// Embeds the given payload as a base64-encoded data-URL in an HTML image tag
+static QString embedDataUrl(const QString &mimeType, const QByteArray &payload) {
+	QByteArray rawbase = payload.toBase64();
 	QByteArray encoded;
 	int i     = 0;
 	int begin = 0, end = 0;
@@ -611,7 +614,16 @@ QString Log::imageToImg(const QByteArray &format, const QByteArray &image) {
 		++i;
 	} while (end < rawbase.length());
 
-	return QString::fromLatin1("<img src=\"data:image/%1;base64,%2\" />").arg(fmt).arg(QLatin1String(encoded));
+	return QString::fromLatin1("<img src=\"data:%1;base64,%2\" />").arg(mimeType).arg(QLatin1String(encoded));
+}
+
+QString Log::imageToImg(const QByteArray &format, const QByteArray &image) {
+	QString fmt = QLatin1String(format);
+
+	if (fmt.isEmpty())
+		fmt = QLatin1String("qt");
+
+	return embedDataUrl(QLatin1String("image/") + fmt, image);
 }
 
 QString Log::imageToImg(QImage img, int maxSize) {
@@ -683,13 +695,36 @@ QString Log::imageToImg(const QByteArray &rawImageData, const QImage &image, int
 	return imageToImg(image, maxSize);
 }
 
+bool Log::isWebM(const QByteArray &rawVideoData) {
+	// Every (Web)M-EBML file starts with the EBML magic
+	static const unsigned char webmMagic[] = { 0x1A, 0x45, 0xDF, 0xA3 };
+	return rawVideoData.size() >= 4 && std::memcmp(rawVideoData.constData(), webmMagic, 4) == 0;
+}
+
+QString Log::videoToImg(const QByteArray &rawVideoData, int maxSize) {
+	// Videos cannot be re-encoded without heavy loss of quality (and never
+	// losslessly), so the raw data is embedded as-is - but only if the generated
+	// HTML fits into the message size limit. The size check deliberately measures
+	// the final HTML string (including base64 and percent-encoding), exactly like
+	// the GIF path in imageToImg(QByteArray, QImage, int) and the server do.
+	if (!isWebM(rawVideoData)) {
+		return QString();
+	}
+
+	const QString html = embedDataUrl(QLatin1String("video/webm"), rawVideoData);
+	if (maxSize == 0 || html.length() < maxSize) {
+		return html;
+	}
+
+	return QString();
+}
+
 QByteArray Log::imageDataFromDataUrl(const QUrl &url, QByteArray &imageFormat) {
 	imageFormat.clear();
 
 	if (url.scheme() != QLatin1String("data") || !url.host().isEmpty()) {
 		return QByteArray();
 	}
-
 	// Note: this mirrors how Qt itself decodes data-URLs (including the percent-encoded and
 	// line-wrapped base64 payload that imageToImg generates).
 	QByteArray data =
@@ -1055,6 +1090,11 @@ LogMessage::LogMessage(Log::MsgType mt, const QString &console, const QString &t
 LogDocument::LogDocument(QObject *p, bool animateImages) : QTextDocument(p), m_animateImages(animateImages) {
 	if (m_animateImages) {
 		QObject::connect(this, &QTextDocument::contentsChanged, this, &LogDocument::removeUnreferencedAnimations);
+#ifdef USE_CHAT_WEBM
+		m_qtVideoPresentTimer = new QTimer(this);
+		m_qtVideoPresentTimer->setInterval(1000 / 30);
+		QObject::connect(m_qtVideoPresentTimer, &QTimer::timeout, this, &LogDocument::presentChatVideoFrames);
+#endif
 	}
 }
 
@@ -1073,9 +1113,15 @@ void LogDocument::stopOldestAnimation() {
 }
 
 void LogDocument::removeUnreferencedAnimations() {
+#ifdef USE_CHAT_WEBM
+	if (m_qmAnimatedImages.isEmpty() && m_qmChatVideos.isEmpty()) {
+		return;
+	}
+#else
 	if (m_qmAnimatedImages.isEmpty()) {
 		return;
 	}
+#endif
 
 	QSet< QUrl > referencedUrls;
 	for (QTextBlock block = begin(); block.isValid(); block = block.next()) {
@@ -1095,6 +1141,16 @@ void LogDocument::removeUnreferencedAnimations() {
 			movie->stop();
 		}
 	}
+
+#ifdef USE_CHAT_WEBM
+	const QList< QUrl > videoUrls = m_qmChatVideos.keys();
+	for (const QUrl &url : videoUrls) {
+		if (!referencedUrls.contains(url)) {
+			removeChatVideo(url);
+		}
+	}
+	updateVideoPresentTimer();
+#endif
 }
 
 QMovie *LogDocument::createAnimation(const QUrl &url, const QByteArray &imageData) {
@@ -1135,6 +1191,152 @@ QMovie *LogDocument::createAnimation(const QUrl &url, const QByteArray &imageDat
 	return nullptr;
 }
 
+#ifdef USE_CHAT_WEBM
+void LogDocument::stopOldestChatVideo() {
+	if (m_qlPlayingChatVideoOrder.isEmpty()) {
+		return;
+	}
+
+	const QUrl url = m_qlPlayingChatVideoOrder.takeFirst();
+	if (ChatVideoPlayer *player = m_qmChatVideos.value(url)) {
+		// Pause (do not destroy): the video keeps existing and can be played again
+		// by clicking it. This also freezes it at its current frame.
+		player->pause();
+	}
+}
+
+void LogDocument::destroyOldestChatVideo() {
+	if (m_qlChatVideoOrder.isEmpty()) {
+		return;
+	}
+
+	removeChatVideo(m_qlChatVideoOrder.takeFirst());
+}
+
+void LogDocument::removeChatVideo(const QUrl &url) {
+	m_qlChatVideoOrder.removeOne(url);
+	m_qlPlayingChatVideoOrder.removeOne(url);
+	if (ChatVideoPlayer *player = m_qmChatVideos.take(url)) {
+		// The last shown frame stays cached as a static resource, so that the video
+		// keeps being displayed (exactly like stopped GIF animations).
+		player->pause();
+		player->deleteLater();
+	}
+	updateVideoPresentTimer();
+}
+
+ChatVideoPlayer *LogDocument::createChatVideo(const QUrl &url, const QByteArray &videoData, QImage poster) {
+	while (m_qmChatVideos.size() >= MAX_CHAT_VIDEOS) {
+		destroyOldestChatVideo();
+	}
+
+	ChatVideoPlayer *player = ChatVideoPlayer::create(url, videoData, std::move(poster), this);
+	if (!player) {
+		return nullptr;
+	}
+
+	m_qmChatVideos.insert(url, player);
+	m_qlChatVideoOrder.append(url);
+
+	QObject::connect(player, &ChatVideoPlayer::frameReady, this, &LogDocument::onChatVideoFrame);
+	QObject::connect(player, &ChatVideoPlayer::stateChanged, this, &LogDocument::onChatVideoStateChanged);
+	QObject::connect(player, &ChatVideoPlayer::playbackUnsupported, this, [this](const QUrl &url) {
+		// loadResource() may run deep inside the document's layout, so the log
+		// entry (which modifies this very document) has to be deferred.
+		QTimer::singleShot(0, this, [url]() {
+			Log::logOrDefer(Log::Information, tr("A video in the chat log could not be played."));
+			Q_UNUSED(url);
+		});
+	});
+
+	return player;
+}
+
+void LogDocument::onChatVideoFrame(const QUrl &url, const QImage &image) {
+	// QTextImageHandler fetches the image for a given resource name from the document on
+	// every paint, so replacing the cached frame and triggering a repaint is enough to
+	// advance the video. Frames of a WebM video all have the same size, therefore no
+	// re-layout is needed (same reasoning as for GIF animations above).
+	addResource(QTextDocument::ImageResource, url, image);
+	emit animationFrameChanged();
+}
+
+void LogDocument::onChatVideoStateChanged(const QUrl &url, bool playing) {
+	m_qlPlayingChatVideoOrder.removeOne(url);
+	if (playing) {
+		m_qlPlayingChatVideoOrder.append(url);
+
+		// Bound the number of concurrently playing (i.e. decoding + sounding) videos.
+		while (m_qlPlayingChatVideoOrder.size() > MAX_PLAYING_CHAT_VIDEOS) {
+			stopOldestChatVideo();
+		}
+	}
+	updateVideoPresentTimer();
+}
+
+void LogDocument::presentChatVideoFrames() {
+	for (ChatVideoPlayer *player : m_qmChatVideos) {
+		player->presentTick();
+	}
+}
+
+void LogDocument::updateVideoPresentTimer() {
+	if (!m_qtVideoPresentTimer) {
+		return;
+	}
+
+	if (m_qlPlayingChatVideoOrder.isEmpty()) {
+		m_qtVideoPresentTimer->stop();
+	} else if (!m_qtVideoPresentTimer->isActive()) {
+		m_qtVideoPresentTimer->start();
+	}
+}
+
+void LogDocument::logWebmUnsupported() {
+	if (m_webmUnsupportedLogged) {
+		return;
+	}
+	m_webmUnsupportedLogged = true;
+
+	// loadResource() may run deep inside the document's layout, so the log entry
+	// (which modifies this very document) has to be deferred.
+	QTimer::singleShot(0, this, []() {
+		Log::logOrDefer(Log::Information,
+						tr("WebM videos cannot be played: this build of FFmpeg lacks the required decoders."));
+	});
+}
+
+bool LogDocument::isChatVideo(const QUrl &url) const {
+	return m_qmChatVideos.contains(url);
+}
+
+void LogDocument::toggleChatVideo(const QUrl &url) {
+	ChatVideoPlayer *player = m_qmChatVideos.value(url);
+	if (!player) {
+		if (!ChatVideoDecoder::isSupported()) {
+			logWebmUnsupported();
+			return;
+		}
+
+		// The player was destroyed earlier (capacity eviction) while its URL stayed
+		// referenced - re-create it from the URL's data.
+		QByteArray imageFormat;
+		const QByteArray videoData = Log::imageDataFromDataUrl(url, imageFormat);
+		QImage poster = (imageFormat == QByteArray("webm")) ? ChatVideoDecoder::decodePoster(videoData) : QImage();
+		if (poster.isNull()) {
+			return;
+		}
+
+		player = createChatVideo(url, videoData, std::move(poster));
+		if (!player) {
+			return;
+		}
+	}
+
+	player->toggle();
+}
+#endif // USE_CHAT_WEBM
+
 QVariant LogDocument::loadResource(int type, const QUrl &url) {
 	// Ignore requests for all external resources
 	// that aren't images. We don't support any of them.
@@ -1155,6 +1357,16 @@ QVariant LogDocument::loadResource(int type, const QUrl &url) {
 				return frame;
 			}
 
+#ifdef USE_CHAT_WEBM
+			if (ChatVideoPlayer *player = m_qmChatVideos.value(url)) {
+				// The video is already registered. The document's resource cache may have been
+				// cleared in the meantime, so make sure the current frame is cached again.
+				const QImage image = player->currentImage();
+				addResource(type, url, image);
+				return image;
+			}
+#endif
+
 			QByteArray imageFormat;
 			const QByteArray imageData = Log::imageDataFromDataUrl(url, imageFormat);
 			if (!imageData.isEmpty() && imageFormat == QByteArray("gif")) {
@@ -1165,6 +1377,50 @@ QVariant LogDocument::loadResource(int type, const QUrl &url) {
 					return frame;
 				}
 			}
+
+#ifdef USE_CHAT_WEBM
+			if (!imageData.isEmpty() && imageFormat == QByteArray("webm")) {
+				QImage poster;
+				if (!ChatVideoDecoder::isSupported()) {
+					logWebmUnsupported();
+				} else {
+					// The poster stays the resource while the video is not playing:
+					// videos never start playing on their own, only on click.
+					poster = ChatVideoDecoder::decodePoster(imageData);
+					if (!poster.isNull() && createChatVideo(url, imageData, std::move(poster))) {
+						const QImage image = m_qmChatVideos.value(url)->currentImage();
+						addResource(type, url, image);
+						return image;
+					}
+				}
+
+				// Undecodable data (or a build without decoders): show the same
+				// placeholder that non-data URLs get.
+				QImage placeholder(1, 1, QImage::Format_Mono);
+				addResource(type, url, placeholder);
+				return placeholder;
+			}
+#endif
+		} else {
+#ifdef USE_CHAT_WEBM
+			// Documents that do not animate (i.e. the ones validHtml parses into for
+			// validation) get a static poster at most - they never spawn players.
+			QByteArray imageFormat;
+			const QByteArray imageData = Log::imageDataFromDataUrl(url, imageFormat);
+			if (!imageData.isEmpty() && imageFormat == QByteArray("webm")) {
+				if (ChatVideoDecoder::isSupported()) {
+					const QImage poster = ChatVideoDecoder::decodePoster(imageData);
+					if (!poster.isNull()) {
+						addResource(type, url, poster);
+						return poster;
+					}
+				}
+
+				QImage placeholder(1, 1, QImage::Format_Mono);
+				addResource(type, url, placeholder);
+				return placeholder;
+			}
+#endif
 		}
 
 		return QTextDocument::loadResource(type, url);

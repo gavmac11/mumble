@@ -36,6 +36,8 @@ option(plugin-callback-debug "Build Mumble with debug output for plugin callback
 
 option(screen-sharing "Build support for screen sharing (requires libavcodec + libswscale with libx264)." ON)
 
+option(chat-webm "Build support for playing WebM videos (VP8/VP9/AV1, with audio) embedded in chat messages (non-Windows only, requires libavformat + libswresample)." ON)
+
 if(WIN32)
 	option(asio "Build support for ASIO audio input." OFF)
 	option(wasapi "Build support for WASAPI." ON)
@@ -1019,6 +1021,41 @@ if(screen-sharing)
 												${LIBAVDEVICE_LIBRARIES}
 												${LIBAVFORMAT_LIBRARIES}
 								)
+
+		if(chat-webm)
+			# WebM videos in chat messages: demux + decode via libavformat/libavcodec,
+			# video scaling via libswscale and audio resampling via libswresample.
+			pkg_check_modules(LIBSWRESAMPLE REQUIRED libswresample)
+
+			target_sources(mumble_client_object_lib PRIVATE
+													"ChatVideoDecoder.h"
+													"ChatVideoDecoder.cpp"
+													"ChatVideoPlayer.h"
+													"ChatVideoPlayer.cpp"
+									)
+
+			target_include_directories(mumble_client_object_lib SYSTEM PUBLIC
+													${LIBSWRESAMPLE_INCLUDE_DIRS}
+											)
+			target_link_directories(mumble_client_object_lib PUBLIC
+													${LIBSWRESAMPLE_LIBRARY_DIRS}
+											)
+			target_link_libraries(mumble_client_object_lib PUBLIC
+													${LIBSWRESAMPLE_LIBRARIES}
+											)
+
+			target_compile_definitions(mumble_client_object_lib PUBLIC "USE_CHAT_WEBM")
+
+			# Audio playback of chat videos goes through Qt Multimedia's QAudioSink.
+			# It is optional: without it, videos play silently (paced by a wall clock).
+			find_pkg(Qt6 COMPONENTS Multimedia QUIET)
+			if(Qt6Multimedia_FOUND)
+				target_link_libraries(mumble_client_object_lib PUBLIC Qt6::Multimedia)
+				target_compile_definitions(mumble_client_object_lib PUBLIC "USE_CHAT_WEBM_AUDIO")
+			else()
+				message(STATUS "Qt6 Multimedia not found - chat WebM videos will play without sound")
+			endif()
+		endif()
 
 		if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 			target_sources(mumble_client_object_lib PRIVATE
