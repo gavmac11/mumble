@@ -1,11 +1,49 @@
 """Regression checks for unit accounting and invalid hosting scenarios."""
 
 import unittest
+import asyncio
+from types import SimpleNamespace
 
 import capacity_model
 import collect_metrics
 import relay_probe
 import opus_fixture
+
+
+class VideoAccountingTests(unittest.IsolatedAsyncioTestCase):
+    def test_rejections_and_abandoned_backlog_are_separate_from_relay_loss(self):
+        shared = {"offered": {1: (), 2: (), 3: (), 4: ()},
+                  "accepted": {1, 2, 3}, "sent": {1: (), 2: ()}}
+        result = relay_probe.video_delivery_accounting(shared, received=17, clients=10)
+        self.assertEqual(result["pacer_rejected_fragments"], 1)
+        self.assertEqual(result["accepted_not_submitted_by_deadline"], 1)
+        self.assertEqual(result["expected_deliveries"], 18)
+        self.assertEqual(result["undelivered_by_deadline"], 1)
+        self.assertEqual(result["total_missing_deliveries"], 19)
+
+    async def test_native_rejection_never_enters_the_sent_ledger(self):
+        class RejectingPacer:
+            def enqueue(self, *unused):
+                return False
+
+        shared = {"offered": {}, "accepted": set(), "sent": {}, "frame_ready": {},
+                  "payload_sent": 0, "encoded_payload_offered": 0}
+        client = relay_probe.Client("test", shared)
+        client.session = 1
+        client.native_pacer = RejectingPacer()
+        args = SimpleNamespace(sender_mbps=1, fps=100, seconds=.01,
+                               video_frames=[b"\x00\x00\x01\x65payload"], width=2, height=2,
+                               video_send_cap_mbps=2)
+        await client.stream(args, asyncio.get_running_loop().time())
+        self.assertEqual(len(shared["offered"]), 1)
+        self.assertEqual(shared["sent"], {})
+        self.assertEqual(shared["accepted"], set())
+        self.assertEqual(client.pacer_rejected_frames, 1)
+
+    def test_impossible_submission_accounting_is_rejected(self):
+        with self.assertRaises(ValueError):
+            relay_probe.video_delivery_accounting(
+                {"offered": {}, "accepted": set(), "sent": {1: ()}}, received=0, clients=2)
 
 
 class CapacityTests(unittest.TestCase):
