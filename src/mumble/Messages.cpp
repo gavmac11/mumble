@@ -128,6 +128,11 @@ void MainWindow::msgServerSync(const MumbleProto::ServerSync &msg) {
 	}
 	Global::get().uiSession = msg.session();
 
+#ifdef USE_FILE_SHARING
+	// First-run identity creation / unlock, then advertise capability.
+	Global::get().mw->bootstrapFileTransferIdentity();
+#endif
+
 	Global::get().sh->sendPing(); // Send initial ping to establish UDP connection
 
 	Global::get().pPermissions = ChanACL::Permissions(static_cast< unsigned int >(msg.permissions()));

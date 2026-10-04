@@ -1177,6 +1177,10 @@ if(file-sharing)
 		"PQFileTransfer/engine/FileTransferSession.cpp"
 		"PQFileTransfer/engine/FTManifest.h"
 		"PQFileTransfer/engine/FTManifest.cpp"
+		"PQFileTransfer/engine/FTCardRender.h"
+		"PQFileTransfer/engine/FTCardRender.cpp"
+		"PQFileTransfer/widgets/FileTransferDialogs.h"
+		"PQFileTransfer/widgets/FileTransferDialogs.cpp"
 	)
 
 	target_compile_definitions(mumble_client_object_lib PUBLIC "USE_FILE_SHARING")

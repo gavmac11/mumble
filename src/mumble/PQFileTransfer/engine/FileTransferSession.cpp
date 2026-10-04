@@ -129,9 +129,17 @@ bool FileTransferSession::processM2(const QByteArray &frame) {
 	}
 
 	// Identity pin: the presented key must hash to exactly the pinned
-	// fingerprint — no silent updates, ever (§5).
-	if (identityFingerprint(peerPk) != m_expectedPeerFingerprint) {
-		return fail(), false;
+	// fingerprint — no silent updates, ever (§5). An empty pin is the
+	// documented sender-side first-use exception: the presented key is
+	// adopted (after its signature verifies) and the caller pins it.
+	{
+		const QByteArray presented = identityFingerprint(peerPk);
+		if (!m_expectedPeerFingerprint.isEmpty() && presented != m_expectedPeerFingerprint) {
+			return fail(), false;
+		}
+		if (m_expectedPeerFingerprint.isEmpty()) {
+			m_expectedPeerFingerprint = presented;
+		}
 	}
 	m_peerIdentityKey   = peerPk;
 	m_nonceB			= nonceB;
@@ -252,8 +260,11 @@ bool FileTransferSession::processM1(const QByteArray &frame) {
 		return fail(), false;
 	}
 
-	if (identityFingerprint(peerPk) != m_expectedPeerFingerprint) {
-		return fail(), false;
+	{
+		const QByteArray presented = identityFingerprint(peerPk);
+		if (!m_expectedPeerFingerprint.isEmpty() && presented != m_expectedPeerFingerprint) {
+			return fail(), false;
+		}
 	}
 	m_peerIdentityKey	  = peerPk;
 	m_nonceA			  = nonceA;

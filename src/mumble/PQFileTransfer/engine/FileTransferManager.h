@@ -67,6 +67,10 @@ public:
 	/// and continue (verified) or drop (declined) the pending handshake.
 	void resolveFirstContact(unsigned int peerSession, bool verified);
 
+	/// Pin a peer's fingerprint (first use), optionally marking it verified.
+	/// Returns false when the peer cannot be resolved. GUI thread only.
+	bool pinPeer(unsigned int peerSession, bool verified);
+
 	/// TOFU state of a channel member for the pre-send dialog (live DB read).
 	PQFT::TrustState trustStateFor(unsigned int peerSession, QByteArray &pinnedFingerprint);
 	/// Safety number of a peer against our identity (for verification UI).

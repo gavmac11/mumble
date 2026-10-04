@@ -149,6 +149,14 @@ void FileTransferEngine::processControlForSend(SendJob &job, SendPeer &peer,
 		case FileTransferSession::State::AwaitingM4:
 			if (type == FTFrame::TypeM4 && peer.session_->processM4(payload)) {
 				peer.established = true;
+				if (peer.pinnedFingerprint.isEmpty()) {
+					// First use: the presented (signature-verified) identity
+					// becomes the pin; surface it for the safety-number flow.
+					const QByteArray peerFp = peer.session_->peerFingerprint();
+					emit firstContact(peer.session, peerFp,
+									  safetyNumber(identityFingerprint(m_identityPk), peerFp),
+									  job.transferId);
+				}
 			} else {
 				peer.failed = true;
 			}
@@ -509,11 +517,9 @@ quint64 FileTransferEngine::startSend(const QString &filePath, const QString &mi
 	bool anyPeer = false;
 	for (unsigned int session : recipients) {
 		const QByteArray pinned = m_pinLookup ? m_pinLookup(session) : QByteArray();
-		if (pinned.isEmpty()) {
-			continue;
-		}
 		SendPeer peer;
 		peer.session  = session;
+		peer.pinnedFingerprint = pinned;
 		SessionIdentity identity;
 		identity.publicKey = m_identityPk;
 		identity.sign		= m_sign;

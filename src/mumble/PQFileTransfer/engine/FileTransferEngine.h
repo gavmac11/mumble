@@ -116,6 +116,9 @@ private:
 	// --- sending ---
 	struct SendPeer {
 		unsigned int session = 0;
+		/// The pinned fingerprint at send time; empty = first use (pin on
+		/// first observation after the signature verifies).
+		QByteArray pinnedFingerprint;
 		/// Raw pointer: the session is owned by the SendJob (freed when the
 		/// job ends) — a plain member keeps SendPeer copyable for QList.
 		FileTransferSession *session_ = nullptr;

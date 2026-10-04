@@ -18,6 +18,8 @@ private:
 
 protected:
 	void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+	/// Clicking a file-transfer card acts on the transfer (save / password).
+	void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 public:
 	LogTextBrowser(QWidget *p = nullptr);
@@ -68,6 +70,11 @@ signals:
 	void entered(QString);
 	void ctrlEnterPressed(QString);
 	void pastedImage(QString);
+#ifdef USE_FILE_SHARING
+	/// Emitted when one or more non-media files are dropped onto the chat bar
+	/// (media files keep the inline image behavior).
+	void fileDropRequested(const QStringList &paths);
+#endif
 public slots:
 	void pasteAndSend_triggered();
 	void doResize();

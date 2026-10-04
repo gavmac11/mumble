@@ -87,6 +87,18 @@ void FileTransferManager::setupEngineTransports() {
 	connect(engine, &PQFT::FileTransferEngine::firstContact, this,
 			[this](unsigned int peerSession, const QByteArray &peerFingerprint,
 				   const QString &safetyNumberStr, const QByteArray &) {
+				// Pin on first observation (TOFU); verification state is set
+				// by the user through the safety-number dialog.
+				if (const ClientUser *user = ClientUser::get(peerSession)) {
+					if (m_trustStore && !serverDigest().isEmpty()) {
+						PQFT::PinnedPeer existing;
+						if (!m_trustStore->lookup(existing, serverDigest(), user->qsName)) {
+							m_trustStore->checkAndPin(serverDigest(), user->qsName, peerFingerprint,
+													  safetyNumberStr);
+							refreshPinCache();
+						}
+					}
+				}
 				emit firstContact(peerSession, peerFingerprint, safetyNumberStr);
 			},
 			Qt::QueuedConnection);
@@ -224,6 +236,37 @@ void FileTransferManager::resolveFirstContact(unsigned int peerSession, bool ver
 	QMetaObject::invokeMethod(m_engine, [this, peerSession, v]() {
 		m_engine->resolveFirstContact(peerSession, v);
 	}, Qt::QueuedConnection);
+}
+
+bool FileTransferManager::pinPeer(unsigned int peerSession, bool verified) {
+	const ClientUser *user = ClientUser::get(peerSession);
+	if (!user || !m_trustStore) {
+		return false;
+	}
+	// Which fingerprint? The pin cache may already carry it (receiver side
+	// ran checkAndPin); for the sender-side first-use flow the engine just
+	// emitted it. Look it up from the live cache first.
+	QByteArray fp;
+	{
+		QMutexLocker lock(&m_pinCacheMutex);
+		fp = m_pinCache.value(peerSession);
+	}
+	if (fp.isEmpty()) {
+		PQFT::PinnedPeer peer;
+		if (m_trustStore->lookup(peer, serverDigest(), user->qsName)) {
+			fp = peer.fingerprint;
+		}
+	}
+	if (fp.isEmpty()) {
+		return false;
+	}
+	const QString safety = safetyNumberFor(peerSession);
+	m_trustStore->checkAndPin(serverDigest(), user->qsName, fp, safety);
+	if (verified) {
+		m_trustStore->markVerified(serverDigest(), user->qsName);
+	}
+	refreshPinCache();
+	return true;
 }
 
 PQFT::TrustState FileTransferManager::trustStateFor(unsigned int peerSession,
