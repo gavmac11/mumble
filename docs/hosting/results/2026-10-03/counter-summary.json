@@ -1,0 +1,99 @@
+{
+  "scope": "Counter intervals include setup and settling. Both workloads ran while a bounded client build used up to two other host vCPUs. No density or isolated latency claim.",
+  "runs": [
+    {
+      "workload": "webcams",
+      "server_cpu_delta": {
+        "usage_usec": 19630451,
+        "user_usec": 15570737,
+        "system_usec": 4059715,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 313,
+        "nr_throttled": 0,
+        "throttled_usec": 0,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "client_container_cpu": {
+        "usage_usec": 26393152,
+        "user_usec": 24653373,
+        "system_usec": 1739778,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 333,
+        "nr_throttled": 2,
+        "throttled_usec": 1250,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "client_udp_delta": {
+        "InDatagrams": 790198,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 88458,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "server_udp_delta": {
+        "InDatagrams": 88380,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 790140,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      }
+    },
+    {
+      "workload": "screen",
+      "server_cpu_delta": {
+        "usage_usec": 5057242,
+        "user_usec": 3519689,
+        "system_usec": 1537552,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 315,
+        "nr_throttled": 0,
+        "throttled_usec": 0,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "client_container_cpu": {
+        "usage_usec": 7322860,
+        "user_usec": 6606475,
+        "system_usec": 716385,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 328,
+        "nr_throttled": 0,
+        "throttled_usec": 0,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "client_udp_delta": {
+        "InDatagrams": 220073,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 25526,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "server_udp_delta": {
+        "InDatagrams": 24984,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 219576,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      }
+    }
+  ]
+}

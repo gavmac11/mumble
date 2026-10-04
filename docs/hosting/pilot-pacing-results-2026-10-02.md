@@ -2,6 +2,8 @@
 
 Test date: October 2, 2026. This continues the [initial application pilot](pilot-results-2026-10-01.md).
 
+Historical result: these measurements describe the original pacing patch, including its 2/3 Mbps constants and 250 ms hard queue limit. PR review subsequently changed rate selection, large-frame handling, encoder feedback and probe accounting. See the [October 3 review follow-up](pr25-review-followup-2026-10-03.md) and current [pilot runbook](host-density-pilot.md) for the revised behavior; the raw records below are preserved unchanged.
+
 Client packet pacing passed two short application workloads that matter for hosting: ten encoded webcams with ten voice senders, and one encoded screen share with ten voice senders. Every expected delivery arrived during each 30-second test. The original server receive buffer was sufficient in these runs. This resolves the reproduced burst case for these fixtures; it does not establish production quality or customers per physical host.
 
 ## Measured results
@@ -39,7 +41,7 @@ Earlier buffer experiments did not preserve IP_PKTINFO and are retained as super
 
 A 2.5 Mbps screen pacing allowance also failed: the bounded queue abandoned backlog, leaving three of 75 captured frames incomplete and 459 expected deliveries missing. Its enqueue-rejection count was zero because an accepted replacement keyframe can discard queued work. Delivery and frame counts remain the acceptance criteria. [Screen at 2.5 Mbps](results/2026-10-02/udp-default-native-screen-sync.json).
 
-Raising only the screen pacing allowance to 3 Mbps passed the [five-second comparison](results/2026-10-02/udp-default-native-screen3-sync.json) and the 30-second run above. This is the current client setting. The server's ordinary 2.5 Mbps sender and 20 Mbps aggregate defaults have not changed; the hosted configuration needs the tested allowances and further qualification.
+Raising only the screen pacing allowance to 3 Mbps passed the [five-second comparison](results/2026-10-02/udp-default-native-screen3-sync.json) and the 30-second run above. That was the client setting tested on October 2. The server's ordinary 2.5 Mbps sender and 20 Mbps aggregate defaults have not changed; these historical runs required the raised pilot allowances.
 
 ## Build and reproduction
 
@@ -47,7 +49,7 @@ The full Linux client built successfully with screen sharing enabled. The packet
 
 The [build manifest](results/2026-10-02/pacing-build-manifest.json) records the base commit, hashes of the modified source, exact binaries, build image and validation scope. The client build uses the [disposable-container script](../../scripts/hosting/build_client_pilot.sh), with two compiler jobs and a 3 GiB memory cap. Host packages and unrelated services were left unchanged. Windows and macOS builds have not been checked for this patch.
 
-Use the fixture commands and private-server setup in the [pilot runbook](host-density-pilot.md). Build the [crypto bridge](../../scripts/hosting/build_crypto_bridge.sh) and [pacer bridge](../../scripts/hosting/build_pacer_bridge.sh) in a designated disposable build container. Set PILOT_PRIVATE_ADDRESS to the reachable private address of your test server. With fixtures, the public test certificate and bridge libraries mounted, the webcam invocation is:
+To reproduce this historical comparison, use the source hashes in the build manifest and copy [pilot-server.ini](../../scripts/hosting/pilot-server.ini) into the mounted runtime directory as server.ini: it sets videobandwidth=3500000 and videobandwidthaggregate=200000000. Use the fixture commands and private-server setup in the [pilot runbook](host-density-pilot.md). Build the crypto and pacer bridges from that same historical source. Set PILOT_PRIVATE_ADDRESS to the reachable private address of your test server. With fixtures, the public test certificate and bridge libraries mounted, the webcam invocation was:
 
 ```sh
 python3 /source/scripts/hosting/relay_probe.py \
