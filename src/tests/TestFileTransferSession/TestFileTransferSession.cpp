@@ -10,6 +10,8 @@
 #include "PQFileTransfer/crypto/CryptoUtils.h"
 #include "PQFileTransfer/crypto/SigMLDSA65.h"
 #include "PQFileTransfer/engine/FTMessages.h"
+#include "PQFileTransfer/crypto/Merkle.h"
+#include "PQFileTransfer/engine/FTManifest.h"
 #include "PQFileTransfer/engine/FileTransferSession.h"
 #include "PQFileTransfer/identity/FTIdentity.h"
 
@@ -49,6 +51,10 @@ private slots:
 	void controlChannelSequencing();
 	void sessionKekBoundToTransfer();
 	void controlTamperFails();
+	void manifestRoundTrip();
+	void manifestTamperFails();
+	void chunkRoundTrip();
+	void fileKeyDoubleWrap();
 
 private:
 	// Wire a fresh initiator/responder pair through the full handshake.
@@ -267,3 +273,170 @@ void TestFileTransferSession::controlTamperFails() {
 
 QTEST_MAIN(TestFileTransferSession)
 #include "TestFileTransferSession.moc"
+
+// ---- Manifest + chunk encryption -------------------------------------------------
+
+void TestFileTransferSession::manifestRoundTrip() {
+	TestIdentity idA = generateIdentity();
+	TestIdentity idB = generateIdentity();
+	auto signA = [&idA](QByteArray &sig, const QByteArray &msg, const QByteArray &ctx) {
+		PQFT::SigMLDSA65 s;
+		return s.sign(sig, idA.secretKey, msg, ctx);
+	};
+	auto verifyA = [&idA](const QByteArray &msg, const QByteArray &sig, const QByteArray &ctx) {
+		PQFT::SigMLDSA65 s;
+		return s.verify(idA.publicKey, msg, sig, ctx);
+	};
+
+	PQFT::FTManifest m;
+	m.transferId   = PQFT::randomBytes(PQFT::TransferIdSize);
+	m.fpA		   = PQFT::identityFingerprint(idA.publicKey);
+	m.fpB		   = PQFT::identityFingerprint(idB.publicKey);
+	m.fileName	 = QStringLiteral("holiday photos.zip");
+	m.mimeType	 = QStringLiteral("application/zip");
+	m.fileSize	 = 3 * 256 * 1024 - 17;
+	m.chunkSize	= 256 * 1024;
+	m.chunkCount   = 3;
+	m.merkleRoot   = PQFT::randomBytes(PQFT::HashSize);
+	m.createdAtUnix = 1234567;
+	m.wrappedFileKey = PQFT::randomBytes(PQFT::KeySize + PQFT::TagSize);
+	QVERIFY(PQFT::signManifest(m, signA));
+
+	const QByteArray encoded = PQFT::encodeManifest(m);
+	QVERIFY(!encoded.isEmpty());
+
+	PQFT::FTManifest parsed;
+	QVERIFY(PQFT::parseAndVerifyManifest(parsed, encoded, m.fpA, 10ull * 1024 * 1024 * 1024, verifyA));
+	QCOMPARE(parsed.fileName, m.fileName);
+	QCOMPARE(parsed.chunkCount, quint64(3));
+	QCOMPARE(parsed.transferDigest(), m.transferDigest()); // identical for recipients
+
+	// fp mismatch against the pinned sender fails
+	QVERIFY(!PQFT::parseAndVerifyManifest(parsed, encoded, PQFT::randomBytes(48),
+										  10ull << 30, verifyA));
+	// size ceiling enforced
+	QVERIFY(!PQFT::parseAndVerifyManifest(parsed, encoded, m.fpA, 1024, verifyA));
+}
+
+void TestFileTransferSession::manifestTamperFails() {
+	TestIdentity idA = generateIdentity();
+	auto signA = [&idA](QByteArray &sig, const QByteArray &msg, const QByteArray &ctx) {
+		PQFT::SigMLDSA65 s;
+		return s.sign(sig, idA.secretKey, msg, ctx);
+	};
+	auto verifyA = [&idA](const QByteArray &msg, const QByteArray &sig, const QByteArray &ctx) {
+		PQFT::SigMLDSA65 s;
+		return s.verify(idA.publicKey, msg, sig, ctx);
+	};
+
+	PQFT::FTManifest m;
+	m.transferId   = PQFT::randomBytes(PQFT::TransferIdSize);
+	m.fpA		   = PQFT::identityFingerprint(idA.publicKey);
+	m.fpB		   = PQFT::randomBytes(PQFT::HashSize);
+	m.fileName	 = QStringLiteral("a.txt");
+	m.mimeType	 = QStringLiteral("text/plain");
+	m.fileSize	 = 16 * 1024;
+	m.chunkSize	= 16 * 1024;
+	m.chunkCount   = 1;
+	m.merkleRoot   = PQFT::randomBytes(PQFT::HashSize);
+	m.wrappedFileKey = PQFT::randomBytes(PQFT::KeySize + PQFT::TagSize);
+	QVERIFY(PQFT::signManifest(m, signA));
+
+	QByteArray encoded = PQFT::encodeManifest(m);
+	// Flip a byte in the middle of the encoded manifest -> signature fails
+	encoded[encoded.size() / 2] = encoded[encoded.size() / 2] ^ 0x01;
+
+	PQFT::FTManifest parsed;
+	QVERIFY(!PQFT::parseAndVerifyManifest(parsed, encoded, m.fpA, 10ull << 30, verifyA));
+
+	// Path-traversal names rejected even with a valid signature
+	PQFT::FTManifest evil = m;
+	evil.fileName = QStringLiteral("../../etc/passwd");
+	QVERIFY(PQFT::signManifest(evil, signA));
+	QVERIFY(!PQFT::parseAndVerifyManifest(parsed, PQFT::encodeManifest(evil), m.fpA, 10ull << 30,
+										  verifyA));
+}
+
+void TestFileTransferSession::chunkRoundTrip() {
+	const QByteArray transferId = PQFT::randomBytes(PQFT::TransferIdSize);
+	const QByteArray digest	 = PQFT::randomBytes(PQFT::HashSize);
+	const QByteArray fileKey	 = PQFT::randomBytes(PQFT::KeySize);
+
+	const QByteArray chunk = PQFT::randomBytes(256 * 1024);
+	QByteArray ct;
+	QVERIFY(PQFT::encryptChunk(ct, fileKey, transferId, digest, 0, 3, chunk));
+	QCOMPARE(ct.size(), chunk.size() + PQFT::TagSize);
+
+	QByteArray pt;
+	QVERIFY(PQFT::decryptChunk(pt, fileKey, transferId, digest, 0, 3, ct));
+	QCOMPARE(pt, chunk);
+
+	// Wrong index (nonce/AAD binding) fails
+	QVERIFY(!PQFT::decryptChunk(pt, fileKey, transferId, digest, 1, 3, ct));
+	// Tampered ciphertext fails
+	QByteArray bad = ct;
+	bad[7] = bad[7] ^ 0x01;
+	QVERIFY(!PQFT::decryptChunk(pt, fileKey, transferId, digest, 0, 3, bad));
+	// Wrong transfer digest (cross-transfer splicing) fails
+	QVERIFY(!PQFT::decryptChunk(pt, fileKey, transferId, PQFT::randomBytes(PQFT::HashSize), 0, 3, ct));
+	// Wrong file key fails
+	QVERIFY(!PQFT::decryptChunk(pt, PQFT::randomBytes(PQFT::KeySize), transferId, digest, 0, 3, ct));
+}
+
+void TestFileTransferSession::fileKeyDoubleWrap() {
+	// Full §10 ladder in the no-password shape: file_key -> layer1 under the
+	// session KEK; and in the password shape: -> layer2 under pw_wrap_key.
+	const QByteArray transferId = PQFT::randomBytes(PQFT::TransferIdSize);
+	const QByteArray fpA		  = PQFT::randomBytes(PQFT::HashSize);
+	const QByteArray fpB		  = PQFT::randomBytes(PQFT::HashSize);
+	const QByteArray fileKey	  = PQFT::randomBytes(PQFT::KeySize);
+	const QByteArray sessionKek   = PQFT::randomBytes(PQFT::KeySize);
+	const QByteArray wrapNonce1   = PQFT::randomBytes(PQFT::NonceSize);
+
+	QByteArray layer1;
+	QVERIFY(PQFT::wrapFileKeySessionLayer(layer1, fileKey, sessionKek, wrapNonce1, transferId,
+										  false, fpA, fpB));
+	QCOMPARE(layer1.size(), PQFT::KeySize + PQFT::TagSize);
+
+	QByteArray recovered;
+	QVERIFY(PQFT::unwrapFileKeySessionLayer(recovered, layer1, sessionKek, wrapNonce1, transferId,
+											false, fpA, fpB));
+	QCOMPARE(recovered, fileKey);
+
+	// Session key alone can't touch the password-wrapped shape
+	QByteArray pwKeyBytes = PQFT::randomBytes(PQFT::Argon2OutputSize);
+	const QByteArray pwWrapKey = PQFT::passwordWrapKey(pwKeyBytes, transferId, fpA, fpB);
+	const QByteArray nonce2	= PQFT::wrapNonce2(pwWrapKey);
+	QCOMPARE(nonce2.size(), PQFT::NonceSize);
+
+	// The double-wrap scenario: layer1 is wrapped with password_mode=true in
+	// its AAD (the mode is bound into both wrap layers).
+	QByteArray layer1Pw;
+	QVERIFY(PQFT::wrapFileKeySessionLayer(layer1Pw, fileKey, sessionKek, wrapNonce1, transferId,
+										  true, fpA, fpB));
+	const QByteArray salt = PQFT::randomBytes(PQFT::Argon2SaltSize);
+	QByteArray layer2;
+	QVERIFY(PQFT::wrapLayer1WithPassword(layer2, layer1Pw, pwWrapKey, transferId, true, fpA, fpB,
+										 PQFT::Argon2Params(), salt));
+	QCOMPARE(layer2.size(), layer1.size() + PQFT::TagSize);
+
+	// Unwrap with a WRONG password key fails, and looks identical to corruption
+	QByteArray wrongKeyBytes = PQFT::randomBytes(PQFT::Argon2OutputSize);
+	const QByteArray wrongWrapKey = PQFT::passwordWrapKey(wrongKeyBytes, transferId, fpA, fpB);
+	QByteArray out1;
+	QVERIFY(!PQFT::unwrapPasswordLayer(out1, layer2, wrongWrapKey, transferId, true, fpA, fpB,
+									   PQFT::Argon2Params(), salt));
+	QByteArray tampered = layer2;
+	tampered[3] ^= 0x01;
+	QByteArray out2;
+	QVERIFY(!PQFT::unwrapPasswordLayer(out2, tampered, pwWrapKey, transferId, true, fpA, fpB,
+									   PQFT::Argon2Params(), salt));
+
+	// Right password key unwraps layer2 -> layer1 -> file_key
+	QByteArray inner, finalKey;
+	QVERIFY(PQFT::unwrapPasswordLayer(inner, layer2, pwWrapKey, transferId, true, fpA, fpB,
+									  PQFT::Argon2Params(), salt));
+	QVERIFY(PQFT::unwrapFileKeySessionLayer(finalKey, inner, sessionKek, wrapNonce1, transferId,
+											true, fpA, fpB));
+	QCOMPARE(finalKey, fileKey);
+}

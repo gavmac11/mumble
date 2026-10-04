@@ -15,6 +15,7 @@ add_executable(TestFileTransferSession
 	"${CMAKE_SOURCE_DIR}/src/mumble/PQFileTransfer/identity/PeerTrustStore.cpp"
 	"${CMAKE_SOURCE_DIR}/src/mumble/PQFileTransfer/engine/FTMessages.cpp"
 	"${CMAKE_SOURCE_DIR}/src/mumble/PQFileTransfer/engine/FileTransferSession.cpp"
+	"${CMAKE_SOURCE_DIR}/src/mumble/PQFileTransfer/engine/FTManifest.cpp"
 )
 
 set_target_properties(TestFileTransferSession PROPERTIES AUTOMOC ON)
