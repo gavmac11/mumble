@@ -203,7 +203,7 @@ class Client:
             if not self.udp_ready.is_set():
                 raise RuntimeError("encrypted UDP connectivity check failed")
         if args.native_pacer_library:
-            self.native_pacer = NativePacer(args.native_pacer_library, int(args.video_send_cap_mbps * 1_000_000))
+            self.native_pacer = NativePacer(args.native_pacer_library, round(args.video_send_cap_mbps * 1_000_000))
             self.pacer_task = asyncio.create_task(self.send_paced_packets())
 
     async def send_paced_packets(self):
