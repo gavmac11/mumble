@@ -121,6 +121,27 @@ class DatagramReceiver(asyncio.DatagramProtocol):
         self.client.errors.append(f"udp_socket_{type(error).__name__}")
 
 
+def video_delivery_accounting(shared, received, clients):
+    """Keep source loss visible while counting relay expectations only after submission."""
+    offered = set(shared["offered"])
+    accepted = shared["accepted"]
+    submitted = set(shared["sent"])
+    if not submitted <= accepted <= offered:
+        raise ValueError("inconsistent video submission accounting")
+    fanout = clients - 1
+    return {
+        "offered_fragments": len(offered),
+        "accepted_fragments": len(accepted),
+        "pacer_rejected_fragments": len(offered - accepted),
+        "accepted_not_submitted_by_deadline": len(accepted - submitted),
+        "sent_fragments": len(submitted),
+        "offered_expected_deliveries": len(offered) * fanout,
+        "expected_deliveries": len(submitted) * fanout,
+        "undelivered_by_deadline": len(submitted) * fanout - received,
+        "total_missing_deliveries": len(offered) * fanout - received,
+    }
+
+
 class Client:
     def __init__(self, name, shared):
         self.name = name
@@ -191,7 +212,7 @@ class Client:
             if packet:
                 video = fields(packet[1:])
                 key = (self.session, video.get(5, 0), video.get(6, 0))
-                expected = self.shared["sent"][key]
+                expected = self.shared["offered"][key]
                 self.shared["sent"][key] = (time.perf_counter(), *expected[1:])
                 self.shared["payload_sent"] += len(video[8])
                 await self.send_media(packet)
@@ -336,17 +357,23 @@ class Client:
                     await asyncio.sleep(max(0, next_packet - time.perf_counter()))
                     # Permit at most one packet interval of scheduler catch-up.
                     next_packet = max(next_packet + interval, time.perf_counter())
-                self.shared["sent"][(self.session, frame, index)] = (
+                key = (self.session, frame, index)
+                self.shared["offered"][key] = (
                     time.perf_counter(), hashlib.sha256(chunk).digest(),
                     len(fragments), args.width, args.height)
+                self.shared["encoded_payload_offered"] += len(chunk)
                 if self.native_pacer:
                     frame_packets.append(packet)
                     continue
+                self.shared["accepted"].add(key)
+                self.shared["sent"][key] = self.shared["offered"][key]
                 self.shared["payload_sent"] += len(chunk)
                 await self.send_media(packet)
             if self.native_pacer:
                 if not self.native_pacer.enqueue(frame_packets, keyframe, time.perf_counter_ns()):
                     self.pacer_rejected_frames += 1
+                else:
+                    self.shared["accepted"].update((self.session, frame, index) for index in range(len(fragments)))
                 self.pacer_wakeup.set()
         await asyncio.sleep(max(0, start + args.seconds - time.perf_counter()))
 
@@ -405,7 +432,8 @@ async def measure_loop_lag(observations):
 
 async def run(args):
     context = ssl.create_default_context(cafile=str(args.ca_file) if args.ca_file else None)
-    shared = {"sent": {}, "payload_sent": 0, "voice_sent": {}, "voice_payload_sent": 0,
+    shared = {"offered": {}, "accepted": set(), "encoded_payload_offered": 0,
+              "sent": {}, "payload_sent": 0, "voice_sent": {}, "voice_payload_sent": 0,
               "frame_ready": {}}
     run_id = uuid.uuid4().hex[:8]
     clients = [Client(f"pilot-{run_id}-{index}", shared) for index in range(args.clients)]
@@ -437,8 +465,9 @@ async def run(args):
         for client in clients:
             if client.pacer_task and client.pacer_task.done():
                 client.pacer_task.result()
-        expected = len(shared["sent"]) * (args.clients - 1)
         received = sum(len(client.seen) for client in clients)
+        video_accounting = video_delivery_accounting(shared, received, args.clients)
+        expected = video_accounting["expected_deliveries"]
         voice_expected = len(shared["voice_sent"]) * (args.clients - 1)
         voice_received = sum(len(client.voice_seen) for client in clients)
         errors = [error for client in clients for error in client.errors]
@@ -464,6 +493,7 @@ async def run(args):
                                  "incomplete_frames": incomplete_frames,
                                  "sha256": hashlib.sha256(output.read_bytes()).hexdigest()})
         return {
+            "schema_version": 2,
             "scope": ("H.264 fixture; decode captured streams separately" if args.video_frames else
                       "synthetic video payload; no decoded media validation"),
             "transport": args.transport,
@@ -493,14 +523,13 @@ async def run(args):
             "generator_cpu_seconds_during_offer": round(offer_cpu, 4),
             "generator_cpu_percent_of_one_core": round(100 * offer_cpu / offered_duration, 2),
             "settle_seconds": args.settle_seconds,
-            "offered_payload_mbps": round(shared["payload_sent"] * 8 /
+            "offered_payload_mbps": round(shared["encoded_payload_offered"] * 8 /
                                            offered_duration / 1_000_000, 4),
-            "sent_fragments": len(shared["sent"]),
-            "expected_deliveries": expected,
+            "submitted_payload_mbps": round(shared["payload_sent"] * 8 / offered_duration / 1_000_000, 4),
+            **video_accounting,
             "observed_unique_deliveries": received,
-            "undelivered_by_deadline": expected - received,
             "integrity_errors": errors,
-            "complete_fanout": (expected > 0 and received == expected and not errors and
+            "complete_fanout": (expected > 0 and video_accounting["total_missing_deliveries"] == 0 and not errors and
                                 voice_received == voice_expected and
                                 all(client.media_received_by_transport[args.transport] == len(client.seen) + len(client.voice_seen)
                                     for client in clients)),
