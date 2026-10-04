@@ -15,10 +15,41 @@
 
 #ifdef USE_CHAT_WEBM
 
+#ifdef USE_CHAT_WEBM_AUDIO
+#	include <QtCore/QIODevice>
+#	include <QtCore/QMutex>
+#endif
+
 class ChatVideoDecoder;
 class QAudioSink;
-class QIODevice;
 class QThread;
+
+#ifdef USE_CHAT_WEBM_AUDIO
+/// Audio source for the QAudioSink, operated in pull mode: the sink reads at its
+/// own pace (from the audio thread), which avoids the push-mode write sizing
+/// problems of some Qt 6.4 backends (observed as garbled playback).
+class ChatVideoAudioSource : public QIODevice {
+public:
+	explicit ChatVideoAudioSource(QObject *parent);
+
+	/// Appends decoded audio (called from the GUI thread)
+	void append(const QByteArray &pcm);
+	/// Drops all buffered audio (called from the GUI thread)
+	void clear();
+	qint64 bufferedBytes() const;
+	/// Bytes handed to the sink so far (diagnostics)
+	qint64 deliveredBytes() const { return m_delivered; }
+
+protected:
+	qint64 readData(char *data, qint64 maxlen) Q_DECL_OVERRIDE;
+	qint64 writeData(const char *data, qint64 maxSize) Q_DECL_OVERRIDE;
+
+private:
+	mutable QMutex m_mutex;
+	QByteArray m_buffer;
+	qint64 m_delivered = 0;
+};
+#endif
 
 /// Plays a WebM video embedded in a chat message.
 ///
@@ -61,6 +92,18 @@ public:
 	/// The image currently representing the video in the document: the poster
 	/// (with play overlay) while not playing, the current frame while playing.
 	QImage currentImage() const { return m_displayImage; }
+
+	// Diagnostics (used by the tests)
+	/// The current playback clock in milliseconds
+	qint64 currentClockMs() const;
+	/// Whether decoded video frames are currently buffered for presentation
+	qsizetype queuedVideoFrames() const { return m_videoQueue.size(); }
+	/// Whether the decoder has decoded the whole stream already
+	bool decoderAtEof() const { return m_decoderAtEof; }
+	/// Whether audio is being played through a QAudioSink
+	bool hasAudioOutput() const;
+	/// Amount of audio data waiting to be fed into the sink (bytes)
+	qsizetype bufferedAudioBytes() const;
 
 	// Pure pacing helpers - kept static so they can be unit-tested without any
 	// threads or decoders.
@@ -105,12 +148,11 @@ private:
 	/// Sets up the QAudioSink (lazily, on first start); returns whether audio is available
 	bool ensureAudioSink();
 #endif
-	/// The current playback clock in milliseconds (audio-master, wall-clock fallback)
-	qint64 currentClockMs() const;
 	/// The raw time source the clock is based on
 	qint64 timeSourceMs() const;
-	/// Feeds buffered audio into the sink
-	void drainAudio();
+	/// Re-bases the clock time sources so that the current clock value stays put
+	/// while the sources keep counting from here
+	void rebaseClock();
 	/// Requests the next bounded decode burst, if the queues run low
 	void keepDecoderFed();
 	/// Restarts the video from the beginning once everything has been played
@@ -134,17 +176,22 @@ private:
 	QList< TimedFrame > m_videoQueue;
 
 #ifdef USE_CHAT_WEBM_AUDIO
-	QAudioSink *m_sink   = nullptr;
-	QIODevice *m_audioIo = nullptr;
-	QByteArray m_audioBuffer;
+	QAudioSink *m_sink               = nullptr;
+	ChatVideoAudioSource *m_audioSource = nullptr;
 #endif
 	/// Stream time the current loop iteration started at (0 for the first one)
 	qint64 m_loopAccumMs = 0;
-	/// Duration of the video, cached when the decoder was opened
-	qint64 m_durationMs = 0;
-	/// Time source value when the current iteration started
-	qint64 m_tsAtIterationStart = 0;
+	/// pts of the last decoded video frame (the last thing that has to be presented)
+	qint64 m_lastVideoPtsMs = 0;
+	/// Whether the clock is paced by the wall clock because the audio clock ran
+	/// dry (all content played out, or no audio output at all)
+	bool m_wallPaced = false;
+	/// Time source values when the current iteration started
+	qint64 m_tsAudioBase = 0;
+	qint64 m_tsWallBase  = 0;
 	QElapsedTimer m_wallClock;
+	/// Diagnostics: tick counter for the periodic debug line (MUMBLE_WEBM_DEBUG)
+	int m_debugTick = 0;
 
 	/// Video frames buffered ahead per video (bounded queue on the GUI side)
 	static constexpr int MAX_QUEUED_FRAMES = 3;

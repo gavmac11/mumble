@@ -13,6 +13,7 @@
 extern "C" {
 #	include <libavcodec/avcodec.h>
 #	include <libavformat/avformat.h>
+#	include <libavutil/opt.h>
 #	include <libswresample/swresample.h>
 #	include <libswscale/swscale.h>
 }
@@ -149,9 +150,9 @@ bool ChatVideoDecoder::open(const QByteArray &videoData, bool decodeAudio) {
 	return openInternal();
 }
 
-bool ChatVideoDecoder::reopen() {
+void ChatVideoDecoder::reopen() {
 	closeInternal();
-	return openInternal();
+	openInternal();
 }
 
 void ChatVideoDecoder::close() {
@@ -161,6 +162,10 @@ void ChatVideoDecoder::close() {
 }
 
 bool ChatVideoDecoder::openInternal() {
+	// Rewind the in-memory source - reopen() reuses this path after the previous
+	// iteration read it to the end.
+	m_avioPos = 0;
+
 	m_avioBuf = static_cast< unsigned char * >(av_malloc(AVIO_BUFFER_SIZE));
 	if (!m_avioBuf)
 		return false;
@@ -373,29 +378,46 @@ bool ChatVideoDecoder::decodeAudioStep(AudioChunk &audioChunk, bool flush) {
 		if (m_audio.frame->best_effort_timestamp == AV_NOPTS_VALUE)
 			continue;
 
+		// Some decoders (Opus notably) report an unspecified channel layout even
+		// for plain stereo - normalize it, the resampler refuses unspecified ones.
+		AVChannelLayout frameLayout;
+		if (m_audio.frame->ch_layout.order == AV_CHANNEL_ORDER_UNSPEC) {
+			av_channel_layout_default(&frameLayout, m_audio.frame->ch_layout.nb_channels);
+		} else {
+			frameLayout = m_audio.frame->ch_layout;
+		}
+
 		// (Re-)create the resampler whenever the input parameters change. SwrContext
 		// is opaque, so the last-used parameters are tracked here.
-		const bool layoutMatches = m_swrInLayout.order == AV_CHANNEL_ORDER_UNSPEC
-									   ? m_audio.frame->ch_layout.order == AV_CHANNEL_ORDER_UNSPEC
-									   : av_channel_layout_compare(&m_swrInLayout, &m_audio.frame->ch_layout) == 0;
+		const bool layoutMatches = av_channel_layout_compare(&m_swrInLayout, &frameLayout) == 0;
 		if (!m_swrCtx || m_swrInRate != m_audio.frame->sample_rate
 			|| m_swrInFormat != static_cast< AVSampleFormat >(m_audio.frame->format) || !layoutMatches) {
 			swr_free(&m_swrCtx);
 			av_channel_layout_uninit(&m_swrInLayout);
+
+			// Note: the options API is used instead of swr_alloc_set_opts2(), whose
+			// parameter order differs between FFmpeg versions.
 			AVChannelLayout outLayout = AV_CHANNEL_LAYOUT_STEREO;
-			if (swr_alloc_set_opts2(&m_swrCtx, &m_audio.frame->ch_layout,
-									static_cast< AVSampleFormat >(m_audio.frame->format),
-									m_audio.frame->sample_rate, &outLayout, AV_SAMPLE_FMT_S16,
-									AUDIO_OUT_SAMPLE_RATE, 0, nullptr)
-				< 0) {
+			m_swrCtx                  = swr_alloc();
+			if (av_opt_set_chlayout(m_swrCtx, "in_chlayout", &frameLayout, 0) >= 0
+				&& av_opt_set_chlayout(m_swrCtx, "out_chlayout", &outLayout, 0) >= 0
+				&& av_opt_set_int(m_swrCtx, "in_sample_rate", m_audio.frame->sample_rate, 0) >= 0
+				&& av_opt_set_int(m_swrCtx, "out_sample_rate", AUDIO_OUT_SAMPLE_RATE, 0) >= 0
+				&& av_opt_set_sample_fmt(m_swrCtx, "in_sample_fmt",
+										  static_cast< AVSampleFormat >(m_audio.frame->format), 0)
+					   >= 0
+				&& av_opt_set_sample_fmt(m_swrCtx, "out_sample_fmt", AV_SAMPLE_FMT_S16, 0) >= 0
+				&& swr_init(m_swrCtx) >= 0) {
+				m_swrInRate   = m_audio.frame->sample_rate;
+				m_swrInFormat = static_cast< AVSampleFormat >(m_audio.frame->format);
+				// Custom channel orders own heap data and must not be copied.
+				if (frameLayout.order != AV_CHANNEL_ORDER_CUSTOM)
+					m_swrInLayout = frameLayout;
+			} else {
+				swr_free(&m_swrCtx);
 				m_swrCtx = nullptr;
 				continue;
 			}
-			m_swrInRate    = m_audio.frame->sample_rate;
-			m_swrInFormat  = static_cast< AVSampleFormat >(m_audio.frame->format);
-			// Custom channel orders own heap data and must not be copied.
-			if (m_audio.frame->ch_layout.order != AV_CHANNEL_ORDER_CUSTOM)
-				m_swrInLayout = m_audio.frame->ch_layout;
 		}
 
 		const int maxOutSamples = swr_get_out_samples(m_swrCtx, m_audio.frame->nb_samples);

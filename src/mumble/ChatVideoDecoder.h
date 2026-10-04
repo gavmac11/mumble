@@ -39,10 +39,11 @@ class ChatVideoDecoder : public QObject {
 public:
 	struct VideoFrame {
 		QImage image;
-		/// Presentation timestamp of the frame, relative to the start of the stream
-		qint64 ptsMs = -1;
+		/// Presentation timestamp of the frame, relative to the start of the stream.
+		/// May be slightly negative (codec pre-roll, e.g. Opus pre-skip).
+		qint64 ptsMs = 0;
 
-		bool isValid() const { return !image.isNull() && ptsMs >= 0; }
+		bool isValid() const { return !image.isNull(); }
 	};
 
 	struct AudioChunk {
@@ -76,10 +77,6 @@ public:
 	bool open(const QByteArray &videoData, bool decodeAudio);
 	/// Closes and frees all FFmpeg state. Safe to call from any state.
 	void close();
-	/// Re-opens the retained video data from the beginning (loop restart). This
-	/// tears the demuxer and the decoders down completely instead of seeking, so
-	/// it does not depend on the container providing a seek index.
-	bool reopen();
 
 	/// Demuxes and decodes until either a video frame or an audio chunk has been
 	/// produced, or EOF is reached. Must only be called on the decoder's thread.
@@ -98,6 +95,8 @@ public slots:
 	/// or maxBurstAudioMs of audio, whichever limit is hit first) and then
 	/// returns, waiting for the next request. A no-op once shutdown() was called.
 	void requestWork();
+	/// Re-opens the retained video data from the beginning (loop restart).
+	void reopen();
 	/// Stops the worker for good (used before tearing the decoder down).
 	void shutdown();
 
