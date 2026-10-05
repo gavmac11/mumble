@@ -1115,7 +1115,15 @@ if(file-sharing)
 		# Build a static library so there is no extra runtime .so to distribute.
 		set(PREV_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 		set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+		# liboqs's AES/SHA implementations define file-local symbols that
+		# collide when their sources are combined into one unity-build
+		# translation unit (breaks configurations using
+		# CMAKE_UNITY_BUILD=ON, e.g. the CodeQL CI job) — always build it as
+		# separate TUs.
+		set(PREV_UNITY_BUILD ${CMAKE_UNITY_BUILD})
+		set(CMAKE_UNITY_BUILD OFF)
 		add_subdirectory("${3RDPARTY_DIR}/liboqs" "${CMAKE_CURRENT_BINARY_DIR}/liboqs" EXCLUDE_FROM_ALL)
+		set(CMAKE_UNITY_BUILD ${PREV_UNITY_BUILD})
 		set(BUILD_SHARED_LIBS ${PREV_BUILD_SHARED_LIBS} CACHE BOOL "" FORCE)
 		disable_warnings_for_all_targets_in("${3RDPARTY_DIR}/liboqs")
 		target_link_libraries(mumble_client_object_lib PUBLIC oqs)
@@ -1414,6 +1422,7 @@ if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
 		# an awful lot of macros that can conflict with other code
 		set_source_files_properties(
 			"GlobalShortcut_unix.cpp"
+			"CaptureSourceLister_unix.cpp"
 			PROPERTIES
 				SKIP_UNITY_BUILD_INCLUSION TRUE
 		)

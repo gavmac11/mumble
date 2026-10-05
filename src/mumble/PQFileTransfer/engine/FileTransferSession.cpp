@@ -22,13 +22,13 @@ namespace {
 using MapEntries = QVector< QPair< QCborValue, QCborValue > >;
 
 // CBOR field keys in the fixed order of the spec (§6)
-constexpr int KVersion   = 1;
-constexpr int KSuite	   = 2;
+constexpr int KHsVersion   = 1;
+constexpr int KHsSuite	   = 2;
 constexpr int KNonce	   = 3;
 constexpr int KEphX25519  = 4;
 constexpr int KMlKemEk	= 5;
 constexpr int KIdentityPk = 6;
-constexpr int KSignature  = 7;
+constexpr int KHsSignature  = 7;
 // M3 carries its own fields
 constexpr int K3Ciphertext = 1;
 constexpr int K3SigA		 = 2;
@@ -37,8 +37,8 @@ constexpr int K4MacB		 = 1;
 
 MapEntries versionAndSuite() {
 	MapEntries entries;
-	entries.append({ QCborValue(KVersion), QCborValue(Version) });
-	entries.append({ QCborValue(KSuite), QCborValue(QString::fromLatin1(SuiteId)) });
+	entries.append({ QCborValue(KHsVersion), QCborValue(Version) });
+	entries.append({ QCborValue(KHsSuite), QCborValue(QString::fromLatin1(SuiteId)) });
 	return entries;
 }
 
@@ -111,8 +111,8 @@ bool FileTransferSession::processM2(const QByteArray &frame) {
 	if (m2.size() != 7)
 		return fail(), false;
 
-	if (m2.value(QCborValue(KVersion)).toInteger() != Version
-		|| m2.value(QCborValue(KSuite)).toString() != QString::fromLatin1(SuiteId)) {
+	if (m2.value(QCborValue(KHsVersion)).toInteger() != Version
+		|| m2.value(QCborValue(KHsSuite)).toString() != QString::fromLatin1(SuiteId)) {
 		return fail(), false;
 	}
 
@@ -120,7 +120,7 @@ bool FileTransferSession::processM2(const QByteArray &frame) {
 	const QByteArray ephB   = mapBytes(m2, KEphX25519);
 	const QByteArray ekB	= mapBytes(m2, KMlKemEk);
 	const QByteArray peerPk = mapBytes(m2, KIdentityPk);
-	const QByteArray sigB   = mapBytes(m2, KSignature);
+	const QByteArray sigB   = mapBytes(m2, KHsSignature);
 
 	if (nonceB.size() != HandshakeNonceSize || ephB.size() != X25519KeySize
 		|| ekB.size() != KemMLKEM768::PublicKeySize || peerPk.size() != SigMLDSA65::PublicKeySize
@@ -246,8 +246,8 @@ bool FileTransferSession::processM1(const QByteArray &frame) {
 	if (m1.size() != 5)
 		return fail(), false;
 
-	if (m1.value(QCborValue(KVersion)).toInteger() != Version
-		|| m1.value(QCborValue(KSuite)).toString() != QString::fromLatin1(SuiteId)) {
+	if (m1.value(QCborValue(KHsVersion)).toInteger() != Version
+		|| m1.value(QCborValue(KHsSuite)).toString() != QString::fromLatin1(SuiteId)) {
 		return fail(), false;
 	}
 
@@ -301,7 +301,7 @@ QByteArray FileTransferSession::buildM2() {
 	}
 
 	MapEntries m2 = withoutSig;
-	m2.append({ QCborValue(KSignature), QCborValue(sigB) });
+	m2.append({ QCborValue(KHsSignature), QCborValue(sigB) });
 	m_m2Encoding = encodeCanonicalMap(m2);
 	if (m_m2Encoding.isEmpty())
 		return fail(), QByteArray();
@@ -408,6 +408,16 @@ QByteArray FileTransferSession::sealControl(quint8 frameType, const QByteArray &
 
 bool FileTransferSession::openControl(quint8 &frameType, QByteArray &canonicalBody,
 									  const QByteArray &frame) {
+	return openControlImpl(frameType, canonicalBody, frame, true);
+}
+
+bool FileTransferSession::tryOpenControl(quint8 &frameType, QByteArray &canonicalBody,
+										 const QByteArray &frame) {
+	return openControlImpl(frameType, canonicalBody, frame, false);
+}
+
+bool FileTransferSession::openControlImpl(quint8 &frameType, QByteArray &canonicalBody,
+										  const QByteArray &frame, bool strict) {
 	if (m_state != State::Established)
 		return false;
 
@@ -419,28 +429,30 @@ bool FileTransferSession::openControl(quint8 &frameType, QByteArray &canonicalBo
 		return false;
 	}
 
-	// Strict sequencing: first record must be 0, then exactly previous+1 (§8)
+	// Strict sequencing: first record must be 0, then exactly previous+1 (§8).
+	// The state is only committed once the record fully authenticates, so the
+	// non-strict probe leaves a mismatching record without any trace.
 	if (!m_seqInStarted) {
 		if (seq != 0)
-			return fail(), false;
-		m_seqInStarted = true;
+			return strict ? (fail(), false) : false;
 	} else if (seq != m_seqIn + 1) {
-		return fail(), false;
+		return strict ? (fail(), false) : false;
 	}
 
 	QByteArray plaintext;
 	if (!aesGcmDecrypt(plaintext, m_controlKeyIn, FTFrame::controlNonce(m_noncePrefixIn, seq),
 					   ciphertext, FTFrame::controlAAD(frame))) {
-		return fail(), false;
+		return strict ? (fail(), false) : false;
 	}
 	QCborValue parsed;
 	if (!decodeCanonical(plaintext, parsed)) {
-		return fail(), false;
+		return strict ? (fail(), false) : false;
 	}
 
-	m_seqIn		= seq;
-	frameType	= type;
-	canonicalBody = plaintext;
+	m_seqInStarted = true;
+	m_seqIn		  = seq;
+	frameType	  = type;
+	canonicalBody  = plaintext;
 	return true;
 }
 
@@ -520,8 +532,8 @@ QByteArray extractM1IdentityKey(const QByteArray &m1Frame) {
 		return QByteArray();
 	}
 	const QCborMap m1 = value.toMap();
-	if (m1.size() != 5 || m1.value(QCborValue(KVersion)).toInteger() != Version
-		|| m1.value(QCborValue(KSuite)).toString() != QString::fromLatin1(SuiteId)) {
+	if (m1.size() != 5 || m1.value(QCborValue(KHsVersion)).toInteger() != Version
+		|| m1.value(QCborValue(KHsSuite)).toString() != QString::fromLatin1(SuiteId)) {
 		return QByteArray();
 	}
 	const QByteArray ephA   = mapBytes(m1, KEphX25519);

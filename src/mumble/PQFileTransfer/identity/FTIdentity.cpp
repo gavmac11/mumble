@@ -18,7 +18,7 @@
 namespace PQFT {
 namespace {
 
-bool exec(QSqlQuery &query, const QString &statement = QString()) {
+bool execIdentityQuery(QSqlQuery &query, const QString &statement = QString()) {
 	const bool ok = statement.isEmpty() ? query.exec() : query.exec(statement);
 	if (!ok) {
 		qWarning("FileTransferIdentity: query failed: %s",
@@ -129,12 +129,12 @@ QByteArray safetyQrPayload(const QByteArray &fingerprintA, const QByteArray &fin
 
 bool FileTransferIdentity::ensureSchema(QSqlDatabase db) {
 	QSqlQuery query(db);
-	if (!exec(query, QLatin1String("CREATE TABLE IF NOT EXISTS `ft_identity` ("
+	if (!execIdentityQuery(query, QLatin1String("CREATE TABLE IF NOT EXISTS `ft_identity` ("
 								   "`id` INTEGER PRIMARY KEY, `pubkey` BLOB, `seckey_enc` BLOB, "
 								   "`kek_salt` BLOB, `kek_nonce` BLOB, `kdf_params` TEXT, "
 								   "`created` DATE)")))
 		return false;
-	return exec(query, QLatin1String("CREATE TABLE IF NOT EXISTS `ft_pins` ("
+	return execIdentityQuery(query, QLatin1String("CREATE TABLE IF NOT EXISTS `ft_pins` ("
 									  "`id` INTEGER PRIMARY KEY AUTOINCREMENT, "
 									  "`server_digest` BLOB, `username` TEXT, "
 									  "`peer_fingerprint` BLOB, `safety_number` TEXT, "
@@ -146,7 +146,7 @@ FileTransferIdentity::FileTransferIdentity(QSqlDatabase db) : m_db(db) { }
 
 bool FileTransferIdentity::hasIdentity() const {
 	QSqlQuery query(m_db);
-	if (!exec(query, QLatin1String("SELECT COUNT(*) FROM `ft_identity`")))
+	if (!execIdentityQuery(query, QLatin1String("SELECT COUNT(*) FROM `ft_identity`")))
 		return false;
 	return query.next() && query.value(0).toInt() > 0;
 }
@@ -190,7 +190,7 @@ bool FileTransferIdentity::createIdentity(const QString &passphrase) {
 	query.addBindValue(nonce);
 	query.addBindValue(argon2ParamsString(params));
 	query.addBindValue(QDate::currentDate());
-	if (!exec(query))
+	if (!execIdentityQuery(query))
 		return false;
 
 	m_publicKey = publicKey;
@@ -202,7 +202,7 @@ bool FileTransferIdentity::createIdentity(const QString &passphrase) {
 bool FileTransferIdentity::loadRow(QByteArray &pubkey, QByteArray &seckeyEnc, QByteArray &salt,
 								   QByteArray &nonce, Argon2Params &params) const {
 	QSqlQuery query(m_db);
-	if (!exec(query, QLatin1String("SELECT `pubkey`, `seckey_enc`, `kek_salt`, `kek_nonce`, "
+	if (!execIdentityQuery(query, QLatin1String("SELECT `pubkey`, `seckey_enc`, `kek_salt`, `kek_nonce`, "
 								   "`kdf_params` FROM `ft_identity` WHERE `id` = 1")))
 		return false;
 	if (!query.next())
@@ -305,7 +305,7 @@ bool FileTransferIdentity::changePassphrase(const QString &newPassphrase) {
 	query.addBindValue(salt);
 	query.addBindValue(nonce);
 	query.addBindValue(argon2ParamsString(params));
-	return exec(query);
+	return execIdentityQuery(query);
 }
 
 } // namespace PQFT

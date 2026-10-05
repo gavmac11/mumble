@@ -95,6 +95,13 @@ public:
 	/// Decrypt an inbound control frame; enforces seq == expected.
 	bool openControl(quint8 &frameType, QByteArray &canonicalBody, const QByteArray &frame);
 
+	/// Non-destructive probe: identical to openControl, but a record that
+	/// does not authenticate against THIS session leaves it completely
+	/// untouched (no state change, no failure). The engine uses it to route
+	/// a frame to whichever of a peer's sessions it belongs to — with
+	/// several concurrent transfers one record must not kill the others.
+	bool tryOpenControl(quint8 &frameType, QByteArray &canonicalBody, const QByteArray &frame);
+
 	// --- Established: per-transfer derivations (§7 / §10) --------------------
 
 	/// session_kek = Expand(PRK, "ft/filekey-session-wrap/" ‖ transfer_id ‖
@@ -119,6 +126,11 @@ private:
 	};
 
 	void fail();
+	/// Shared openControl implementation; `strict` makes authentication or
+	/// sequencing failures terminal (state ::Failed) as the protocol demands
+	/// for directly-connected use.
+	bool openControlImpl(quint8 &frameType, QByteArray &canonicalBody, const QByteArray &frame,
+						 bool strict);
 	void deriveEarlySecrets();     // PRK_early, finished keys (needs ss_x ‖ ss_k, TH_hs)
 	void deriveTrafficSecrets();   // PRK, control keys/nonces (needs TH_full)
 	QByteArray computeMacA() const;

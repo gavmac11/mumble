@@ -48,9 +48,16 @@ private slots:
 	void passwordRoundTrip();
 	void wrongPasswordFailsClosed();
 	void duplicateChunkIsFatal();
+	void latePasswordSpoolsAllChunks();
+	void secondTransferWhileFirstReady();
+	void readyTransferDoesNotExpire();
+	void firstContactPinFlags();
 
 private:
 	QString writeTestFile(qsizetype size);
+	/// True once `updates` contains `state` for `transferId` ("" matches any).
+	static bool sawState(const QSignalSpy &updates, const QByteArray &transferId,
+						 PQFT::FTTransferInfo::State state);
 
 	QTemporaryDir m_tempDir;
 	TestIdentity m_alice, m_bob;
@@ -76,6 +83,17 @@ QString TestFileTransferEngine::writeTestFile(qsizetype size) {
 	file.write(data);
 	file.close();
 	return path;
+}
+
+bool TestFileTransferEngine::sawState(const QSignalSpy &updates, const QByteArray &transferId,
+									 PQFT::FTTransferInfo::State state) {
+	for (const auto &argument : updates) {
+		const PQFT::FTTransferInfo info = argument.at(0).value< PQFT::FTTransferInfo >();
+		if (info.state == state && (transferId.isEmpty() || info.transferId == transferId)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 namespace {
@@ -353,6 +371,250 @@ void TestFileTransferEngine::duplicateChunkIsFatal() {
 	const QString dir =
 		QDir::temp().absoluteFilePath("mumble-ft/" + QString::fromLatin1(failedTransfer.toHex()));
 	QVERIFY(!QFile::exists(dir + "/content.bin"));
+}
+
+// Review regression: the sender streams without a readiness acknowledgement,
+// so a receiver waiting for the password must keep EVERY chunk. The old
+// 8-entry memory buffer silently discarded the rest and the transfer could
+// never complete.
+void TestFileTransferEngine::latePasswordSpoolsAllChunks() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = 0;
+	config.chunkSize              = 16 * 1024;
+	pair.alice.setConfig(config);
+	pair.bob.setConfig(config);
+
+	QSignalSpy bobUpdates(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	QSignalSpy bobPassword(&pair.bob, &PQFT::FileTransferEngine::passwordRequired);
+	QSignalSpy aliceUpdates(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
+
+	// 13 chunks — deliberately past the old 8-entry buffer
+	const QString source = writeTestFile(200 * 1024);
+	QVERIFY(!source.isEmpty());
+	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", true,
+								  QByteArray("a late password"), { BobSession }),
+			 200ull * 1024);
+
+	// Let the sender run to completion BEFORE any password is provided.
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(aliceUpdates, QByteArray(),
+									 PQFT::FTTransferInfo::State::Saved),
+							 30000);
+	QVERIFY(sawState(bobUpdates, QByteArray(), PQFT::FTTransferInfo::State::WaitingPassword));
+
+	QByteArray passwordTransfer;
+	for (const auto &argument : bobPassword) {
+		passwordTransfer = argument.at(0).toByteArray();
+	}
+	QVERIFY(!passwordTransfer.isEmpty());
+
+	pair.bob.providePassword(passwordTransfer, QByteArray("a late password"));
+
+	// Every spooled chunk replays and the transfer completes.
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(bobUpdates, passwordTransfer,
+									 PQFT::FTTransferInfo::State::Ready),
+							 30000);
+
+	const QString target = m_tempDir.filePath("received-late-password.bin");
+	pair.bob.saveTransferAs(passwordTransfer, target);
+	QTRY_VERIFY_WITH_TIMEOUT(QFile::exists(target), 10000);
+
+	QFile original(source);
+	QFile received(target);
+	QVERIFY(original.open(QIODevice::ReadOnly));
+	QVERIFY(received.open(QIODevice::ReadOnly));
+	QCOMPARE(original.size(), received.size());
+	QCOMPARE(original.readAll(), received.readAll());
+}
+
+// Review regression: a new M1 from the same sender used to be routed into
+// the established session of an earlier transfer, killing it while the new
+// handshake timed out.
+void TestFileTransferEngine::secondTransferWhileFirstReady() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config fast;
+	fast.sendRateBytesPerSecond = 0;
+	pair.alice.setConfig(fast);
+	pair.bob.setConfig(fast);
+
+	QSignalSpy bobUpdates(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+
+	const QString first = writeTestFile(64 * 1024);
+	QVERIFY(!first.isEmpty());
+	QCOMPARE(pair.alice.startSend(first, "application/octet-stream", false, QByteArray(),
+								  { BobSession }),
+			 64ull * 1024);
+
+	QByteArray firstTransfer;
+	QTRY_VERIFY_WITH_TIMEOUT(
+		[&]() {
+			for (const auto &argument : bobUpdates) {
+				const PQFT::FTTransferInfo info = argument.at(0).value< PQFT::FTTransferInfo >();
+				if (info.state == PQFT::FTTransferInfo::State::Ready) {
+					firstTransfer = info.transferId;
+					return true;
+				}
+			}
+			return false;
+		}(),
+		30000);
+	QVERIFY(!firstTransfer.isEmpty());
+	// Deliberately left unsaved: the first transfer stays Ready.
+
+	const QString second = writeTestFile(100 * 1024);
+	QVERIFY(!second.isEmpty());
+	QCOMPARE(pair.alice.startSend(second, "application/octet-stream", false, QByteArray(),
+								  { BobSession }),
+			 100ull * 1024);
+
+	QByteArray secondTransfer;
+	QTRY_VERIFY_WITH_TIMEOUT(
+		[&]() {
+			for (const auto &argument : bobUpdates) {
+				const PQFT::FTTransferInfo info = argument.at(0).value< PQFT::FTTransferInfo >();
+				if (info.state == PQFT::FTTransferInfo::State::Ready
+					&& info.transferId != firstTransfer) {
+					secondTransfer = info.transferId;
+					return true;
+				}
+			}
+			return false;
+		}(),
+		30000);
+	QVERIFY(!secondTransfer.isEmpty());
+
+	// The first transfer was untouched by the second one's handshake.
+	QVERIFY(!sawState(bobUpdates, firstTransfer, PQFT::FTTransferInfo::State::Failed));
+	const QString firstDir =
+		QDir::temp().absoluteFilePath("mumble-ft/" + QString::fromLatin1(firstTransfer.toHex()));
+	QVERIFY(QFile::exists(firstDir + "/content.bin"));
+
+	// ...and both saved copies match their sources.
+	const QString firstTarget  = m_tempDir.filePath("received-first.bin");
+	const QString secondTarget = m_tempDir.filePath("received-second.bin");
+	pair.bob.saveTransferAs(firstTransfer, firstTarget);
+	pair.bob.saveTransferAs(secondTransfer, secondTarget);
+	QTRY_VERIFY_WITH_TIMEOUT(QFile::exists(firstTarget) && QFile::exists(secondTarget), 10000);
+
+	QFile originalFirst(first), originalSecond(second);
+	QFile receivedFirst(firstTarget), receivedSecond(secondTarget);
+	QVERIFY(originalFirst.open(QIODevice::ReadOnly) && receivedFirst.open(QIODevice::ReadOnly));
+	QVERIFY(originalSecond.open(QIODevice::ReadOnly) && receivedSecond.open(QIODevice::ReadOnly));
+	QCOMPARE(originalFirst.readAll(), receivedFirst.readAll());
+	QCOMPARE(originalSecond.readAll(), receivedSecond.readAll());
+}
+
+// Review regression: the idle timer used to keep running after Ready and,
+// 60 s later, marked the verified transfer Failed and deleted its temp file.
+void TestFileTransferEngine::readyTransferDoesNotExpire() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config fast;
+	fast.sendRateBytesPerSecond   = 0;
+	fast.receiveIdleTimeoutMSecs  = 500;   // would have killed it quickly
+	pair.alice.setConfig(fast);
+	pair.bob.setConfig(fast);
+
+	QSignalSpy bobUpdates(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+
+	const QString source = writeTestFile(64 * 1024);
+	QVERIFY(!source.isEmpty());
+	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(),
+								  { BobSession }),
+			 64ull * 1024);
+
+	QByteArray readyTransfer;
+	QTRY_VERIFY_WITH_TIMEOUT(
+		[&]() {
+			for (const auto &argument : bobUpdates) {
+				const PQFT::FTTransferInfo info = argument.at(0).value< PQFT::FTTransferInfo >();
+				if (info.state == PQFT::FTTransferInfo::State::Ready) {
+					readyTransfer = info.transferId;
+					return true;
+				}
+			}
+			return false;
+		}(),
+		30000);
+	QVERIFY(!readyTransfer.isEmpty());
+
+	// Sit well past the idle timeout with the transfer Ready.
+	QTest::qWait(2000);
+	QVERIFY(!sawState(bobUpdates, readyTransfer, PQFT::FTTransferInfo::State::Failed));
+	const QString dir =
+		QDir::temp().absoluteFilePath("mumble-ft/" + QString::fromLatin1(readyTransfer.toHex()));
+	QVERIFY(QFile::exists(dir + "/content.bin"));
+
+	const QString target = m_tempDir.filePath("received-no-expiry.bin");
+	pair.bob.saveTransferAs(readyTransfer, target);
+	QTRY_VERIFY_WITH_TIMEOUT(QFile::exists(target), 10000);
+
+	QFile original(source);
+	QFile received(target);
+	QVERIFY(original.open(QIODevice::ReadOnly));
+	QVERIFY(received.open(QIODevice::ReadOnly));
+	QCOMPARE(original.readAll(), received.readAll());
+}
+
+// Review regression: only the SENDER side (post-M4, key authenticated by the
+// handshake) may pin on first observation; a receiver-side plain M1 is an
+// unauthenticated claim and declining it must leave nothing behind.
+void TestFileTransferEngine::firstContactPinFlags() {
+	{
+		// Receiver side: unknown peer parks the handshake and reports
+		// pinOnObservation = false; declining drops it without an answer.
+		EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+		PQFT::FileTransferEngine::Config config;
+		config.sendRateBytesPerSecond = 0;
+		config.handshakeTimeoutMSecs = 500;
+		pair.alice.setConfig(config);
+		pair.bob.setConfig(config);
+		pair.bob.setPinLookup([](unsigned int) { return QByteArray(); });   // first contact
+
+		QSignalSpy bobFirstContact(&pair.bob, &PQFT::FileTransferEngine::firstContact);
+		QSignalSpy aliceUpdates(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
+
+		const QString source = writeTestFile(64 * 1024);
+		QVERIFY(!source.isEmpty());
+		QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(),
+									  { BobSession }),
+				 64ull * 1024);
+
+		QTRY_VERIFY_WITH_TIMEOUT(bobFirstContact.count() >= 1, 10000);
+		QCOMPARE(bobFirstContact.first().at(4).toBool(), false);
+
+		pair.bob.resolveFirstContact(AliceSession, false);   // declined
+
+		// No M2 was ever sent: the initiator fails once its handshake
+		// timeout expires instead of hanging.
+		QTRY_VERIFY_WITH_TIMEOUT(sawState(aliceUpdates, QByteArray(),
+										 PQFT::FTTransferInfo::State::Failed),
+								 10000);
+	}
+	{
+		// Sender side: first use after a completed (authenticated) handshake
+		// reports pinOnObservation = true and the transfer proceeds.
+		EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+		PQFT::FileTransferEngine::Config fast;
+		fast.sendRateBytesPerSecond = 0;
+		pair.alice.setConfig(fast);
+		pair.bob.setConfig(fast);
+		pair.alice.setPinLookup([](unsigned int) { return QByteArray(); });   // first use
+
+		QSignalSpy aliceFirstContact(&pair.alice, &PQFT::FileTransferEngine::firstContact);
+		QSignalSpy bobUpdates(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+
+		const QString source = writeTestFile(64 * 1024);
+		QVERIFY(!source.isEmpty());
+		QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(),
+									  { BobSession }),
+				 64ull * 1024);
+
+		QTRY_VERIFY_WITH_TIMEOUT(aliceFirstContact.count() >= 1, 30000);
+		QCOMPARE(aliceFirstContact.first().at(4).toBool(), true);
+		QTRY_VERIFY_WITH_TIMEOUT(sawState(bobUpdates, QByteArray(),
+										 PQFT::FTTransferInfo::State::Ready),
+								 30000);
+	}
 }
 
 QTEST_MAIN(TestFileTransferEngine)

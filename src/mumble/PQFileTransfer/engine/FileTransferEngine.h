@@ -107,8 +107,14 @@ public:
 
 signals:
 	void transferUpdated(const PQFT::FTTransferInfo &info);
+	/// pinOnObservation: the handshake already authenticated the peer's
+	/// identity key (sender side, after M4) — TOFU pinning on first
+	/// observation is the documented deviation. When false (receiver side,
+	/// plain M1) the fingerprint is an unauthenticated claim and MUST only be
+	/// pinned once the user completes the safety-number verification.
 	void firstContact(unsigned int peerSession, const QByteArray &peerFingerprint,
-					  const QString &safetyNumber, const QByteArray &pendingTransferId);
+					  const QString &safetyNumber, const QByteArray &pendingTransferId,
+					  bool pinOnObservation);
 	void peerBlocked(unsigned int peerSession);
 	void passwordRequired(const QByteArray &transferId);
 
@@ -166,6 +172,11 @@ private:
 		bool waitingPassword   = false;
 		QString tempDir;
 		QString tempFile;
+		/// Ciphertext spool while the password is pending: the sender keeps
+		/// streaming (no readiness acknowledgement exists), so every chunk
+		/// must survive on disk until the key can be unwrapped.
+		QString spoolFile;
+		::QFile *spool = nullptr;   // open for appending while waitingPassword
 		QByteArray receivedBits;   // bit i set = chunk i verified
 		quint64 receivedCount  = 0;
 		QVector< QByteArray > leafHashes;   // chunk digests (merkleRoot builds the leaves)
@@ -184,7 +195,10 @@ private:
 	};
 
 	void processControlForSend(SendJob &job, SendPeer &peer, const QByteArray &payload);
-	void processControlForReceive(const std::shared_ptr< ReceiveJob > &jobPtr, const QByteArray &payload);
+	/// Handles an already-authenticated control record (routed by
+	/// onControlMessage, which probed the sessions non-destructively).
+	void processControlForReceive(const std::shared_ptr< ReceiveJob > &jobPtr, quint8 type,
+								  const QByteArray &body);
 	void startResponder(unsigned int actorSession, const QByteArray &m1Frame,
 						const QByteArray &peerFingerprint);
 	void handleIncomingM1(unsigned int actorSession, const QByteArray &payload);
@@ -194,13 +208,22 @@ private:
 	void finishSend(SendJob &job, bool success, const QString &error);
 	void updateSendState(SendJob &job, FTTransferInfo::State state, const QString &error = QString());
 	void updateReceiveState(ReceiveJob &job, FTTransferInfo::State state, const QString &error = QString());
-	void feedReceiveChunk(ReceiveJob &job, quint64 index, const QByteArray &ciphertext);
-	void drainEarlyChunks(ReceiveJob &job);
-	bool tryCompleteReceive(ReceiveJob &job);
+	/// Takes the owning pointer: failure paths remove the job from the map,
+	/// which may drop the last reference — the parameter keeps it alive.
+	void feedReceiveChunk(const std::shared_ptr< ReceiveJob > &jobPtr, quint64 index,
+						  const QByteArray &ciphertext);
+	void drainEarlyChunks(const std::shared_ptr< ReceiveJob > &jobPtr);
+	void drainSpooledChunks(const std::shared_ptr< ReceiveJob > &jobPtr);
+	bool openSpool(ReceiveJob &job);
+	bool tryCompleteReceive(const std::shared_ptr< ReceiveJob > &jobPtr);
 	void cleanupSend(SendJob &job, bool keepCard);
-	void cleanupReceive(ReceiveJob &job);
+	/// Removes the job from the map first (dropping the map's owning
+	/// reference) and keeps it alive through the pointer for the rest of the
+	/// teardown — reading job fields after the erase used to be a
+	/// use-after-free.
+	void cleanupReceive(const std::shared_ptr< ReceiveJob > &jobPtr);
 	void emitInfo(const FTTransferInfo &info);
-	void emitSaveDone(ReceiveJob &job);
+	void emitSaveDone(const std::shared_ptr< ReceiveJob > &jobPtr);
 	void emitSaveFailed(ReceiveJob &job);
 	std::shared_ptr< ReceiveJob > findReceiveByPeer(unsigned int peerSession,
 													const QByteArray &transferId);

@@ -2639,7 +2639,10 @@ void Server::msgFileData(ServerUser *uSource, MumbleProto::FileData &msg) {
 				 qUtf8Printable(uSource->qsName), uSource->uiSession);
 		return;
 	}
-	if (msg.data().size() > 1024 * 1024) {
+	// 1 MiB plaintext chunks carry a 16-byte AES-GCM tag on the wire; the
+	// client rejects any other length against the signed manifest, so only
+	// the hard cap lives here.
+	if (msg.data().size() > 1024 * 1024 + 16) {
 		qWarning("Dropping file chunk from \"%s\" (%d) - too large",
 				 qUtf8Printable(uSource->qsName), uSource->uiSession);
 		return;

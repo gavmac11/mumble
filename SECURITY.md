@@ -61,7 +61,10 @@ updates. First-use pinning on the sending side pins the peer's
 signature-verified key when no pin exists yet and immediately offers the
 safety-number check — a documented TOFU softening of the strict
 verify-before-first-transfer rule on the initiator side only. The receiving
-side always requires explicit verification before a transfer proceeds.
+side always requires explicit verification before a transfer proceeds: an
+incoming M1 presents an unsigned key claim, so nothing is written to the
+trust store until the safety-number dialog is accepted; declining leaves no
+pin behind and the handshake is never answered.
 
 ## Operational notes
 

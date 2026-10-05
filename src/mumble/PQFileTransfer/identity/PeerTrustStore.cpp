@@ -12,7 +12,7 @@
 namespace PQFT {
 namespace {
 
-bool exec(QSqlQuery &query, const QString &statement = QString()) {
+bool execTrustQuery(QSqlQuery &query, const QString &statement = QString()) {
 	const bool ok = statement.isEmpty() ? query.exec() : query.exec(statement);
 	if (!ok) {
 		qWarning("PeerTrustStore: query failed: %s", qPrintable(query.lastError().text()));
@@ -71,7 +71,7 @@ TrustState PeerTrustStore::checkAndPin(const QByteArray &serverDigest, const QSt
 	query.addBindValue(peerFingerprint);
 	query.addBindValue(safetyNumber);
 	query.addBindValue(QDate::currentDate());
-	if (!exec(query)) {
+	if (!execTrustQuery(query)) {
 		return TrustState::Changed;
 	}
 	return TrustState::Pinned;
@@ -84,7 +84,7 @@ bool PeerTrustStore::markVerified(const QByteArray &serverDigest, const QString 
 		return false;
 	query.addBindValue(serverDigest);
 	query.addBindValue(username);
-	return exec(query);
+	return execTrustQuery(query);
 }
 
 bool PeerTrustStore::removePin(const QByteArray &serverDigest, const QString &username) {
@@ -94,7 +94,7 @@ bool PeerTrustStore::removePin(const QByteArray &serverDigest, const QString &us
 		return false;
 	query.addBindValue(serverDigest);
 	query.addBindValue(username);
-	return exec(query);
+	return execTrustQuery(query);
 }
 
 bool PeerTrustStore::lookup(PinnedPeer &out, const QByteArray &serverDigest,
@@ -106,7 +106,7 @@ bool PeerTrustStore::lookup(PinnedPeer &out, const QByteArray &serverDigest,
 		return false;
 	query.addBindValue(serverDigest);
 	query.addBindValue(username);
-	if (!exec(query) || !query.next())
+	if (!execTrustQuery(query) || !query.next())
 		return false;
 
 	out = rowToPeer(query);
@@ -116,7 +116,7 @@ bool PeerTrustStore::lookup(PinnedPeer &out, const QByteArray &serverDigest,
 QList< PinnedPeer > PeerTrustStore::list() const {
 	QList< PinnedPeer > peers;
 	QSqlQuery query(m_db);
-	if (!exec(query, QLatin1String("SELECT `server_digest`, `username`, `peer_fingerprint`, "
+	if (!execTrustQuery(query, QLatin1String("SELECT `server_digest`, `username`, `peer_fingerprint`, "
 								   "`safety_number`, `first_seen`, `verified` FROM `ft_pins` "
 								   "ORDER BY `username`")))
 		return peers;

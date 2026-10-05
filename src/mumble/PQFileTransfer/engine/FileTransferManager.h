@@ -111,6 +111,12 @@ private:
 	/// Session -> pinned fingerprint cache, guarded for the worker's lookups.
 	QMutex m_pinCacheMutex;
 	QHash< unsigned int, QByteArray > m_pinCache;
+
+	/// Receiver-side first contacts awaiting the user's decision:
+	/// session -> (presented fingerprint, safety number). In memory only — a
+	/// declined peer must leave NO pin behind, so nothing goes to the trust
+	/// store until the safety-number dialog is accepted. GUI thread only.
+	QHash< unsigned int, QPair< QByteArray, QString > > m_pendingFirstContact;
 };
 
 #endif // MUMBLE_MUMBLE_PQFILETRANSFER_ENGINE_FILETRANSFERMANAGER_H_

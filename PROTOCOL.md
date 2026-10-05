@@ -66,17 +66,21 @@ message FileData {
 	required bytes transfer_id = 2;       // 16 random bytes
 	required uint64 chunk_index = 3;
 	optional uint64 chunk_count = 4;      // hint only; the signed manifest is authoritative
-	required bytes data = 5;              // AEAD ciphertext ‖ 16-byte tag, ≤ 1 MiB
+	required bytes data = 5;              // AEAD ciphertext ‖ 16-byte tag, ≤ 1 MiB + 16 B
 }
 ```
 Murmur handling: authenticated senders only; `transfer_id` MUST be 16 bytes and `data`
-≤ 1 MiB or the message is dropped; per-user byte meter `filebandwidth` (default
+≤ 1 MiB + 16 B (a maximum-size chunk plus its GCM tag) or the message is dropped;
+per-user byte meter `filebandwidth` (default
 16 Mbit/s) charging `20 + 8 + 6 + len(data)`; per-(session, transfer_id) in-memory
 accumulator against `maxfilesize` (default 10 GiB) — exceeded ⇒ drop + log, accumulator
 **never persisted**; aggregate meter `filebandwidthaggregate` (default 64 Mbit/s) charging
 `packetsize × receiver_count`; broadcast to every authenticated user in the sender's
 channel except the sender, **skipping users without `UserState.file_transfer_capable`**.
-Chunk size: 16 KiB–1 MiB, default 256 KiB.
+Chunk size: 16 KiB–1 MiB, default 256 KiB. Receivers enforce the exact per-chunk
+plaintext length implied by the manifest (full `chunk_size` for every chunk but the
+last, which carries the file's remainder) — the wire cap above only bounds the
+frame.
 
 ### Capability and limits
 - `UserState.file_transfer_capable` (field 25, next free after `screen_sharing`): set by
