@@ -28,6 +28,7 @@ if (static)
 endif()
 
 if(client)
+	add_subdirectory("TestReleaseUpdate")
 	add_subdirectory("TestAnimatedImages")
 	add_subdirectory("TestChatWebM")
 	add_subdirectory("TestVideoFramePacketizer")

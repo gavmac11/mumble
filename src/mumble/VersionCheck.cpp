@@ -6,205 +6,135 @@
 #include "VersionCheck.h"
 
 #include "MainWindow.h"
-#include "Utils.h"
-#include "WebFetch.h"
+#include "NetworkConfig.h"
+#include "ReleaseUpdate.h"
+#include "ReleaseUpdateCache.h"
+#include "Version.h"
 #include "Global.h"
 
-#ifdef Q_OS_WIN
-#	include "win.h"
-#endif
-
-#include <QtCore/QUrlQuery>
+#include <QDateTime>
+#include <QDesktopServices>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QPushButton>
+#include <QStandardPaths>
+#include <QSysInfo>
+#include <QTimer>
 #include <QtWidgets/QMessageBox>
-#include <QtXml/QDomDocument>
+#include <memory>
 
-#include <QtConcurrent/QtConcurrent>
-
-#ifdef Q_OS_WIN
-#	include <shellapi.h>
-#	include <softpub.h>
-#endif
-
-VersionCheck::VersionCheck(bool autocheck, QObject *p, bool focus) : QObject(p), m_preparationWatcher() {
-	connect(&m_preparationWatcher, &QFutureWatcher< void >::finished, this, &VersionCheck::performRequest);
-
-	QFuture< void > future = QtConcurrent::run([this, autocheck, focus]() {
-		m_requestURL.setPath(focus ? QLatin1String("/v1/banner") : QLatin1String("/v1/version-check"));
-
-		QList< QPair< QString, QString > > queryItems;
-		queryItems << qMakePair(QString::fromLatin1("ver"),
-								QString::fromLatin1(QUrl::toPercentEncoding(Version::getRelease())));
-#if defined(Q_OS_WIN)
-#	if defined(Q_OS_WIN64)
-		queryItems << qMakePair(QString::fromLatin1("os"), QString::fromLatin1("WinX64"));
-#	else
-		queryItems << qMakePair(QString::fromLatin1("os"), QString::fromLatin1("Win32"));
-#	endif
-#elif defined(Q_OS_MAC)
-		queryItems << qMakePair(QString::fromLatin1("os"), QString::fromLatin1("MacOSX"));
-#else
-		queryItems << qMakePair(QString::fromLatin1("os"), QString::fromLatin1("Unix"));
-#endif
-		if (!Global::get().s.bUsage)
-			queryItems << qMakePair(QString::fromLatin1("nousage"), QString::fromLatin1("1"));
-		if (autocheck)
-			queryItems << qMakePair(QString::fromLatin1("auto"), QString::fromLatin1("1"));
-
-		queryItems << qMakePair(QString::fromLatin1("locale"), Global::get().s.qsLanguage.isEmpty()
-																   ? QLocale::system().name()
-																   : Global::get().s.qsLanguage);
-
-		QFile f(qApp->applicationFilePath());
-		if (!f.open(QIODevice::ReadOnly)) {
-			qWarning("VersionCheck: Failed to open binary");
-		} else {
-			QByteArray a = f.readAll();
-			if (a.size() < 1) {
-				qWarning("VersionCheck: suspiciously small binary");
-			} else {
-				QCryptographicHash qch(QCryptographicHash::Sha1);
-				qch.addData(a);
-				queryItems << qMakePair(QString::fromLatin1("sha1"), QString::fromLatin1(qch.result().toHex()));
-			}
-		}
-
-		QUrlQuery query;
-		query.setQueryItems(queryItems);
-		m_requestURL.setQuery(query);
-	});
-
-	m_preparationWatcher.setFuture(future);
+VersionCheck::VersionCheck(bool autocheck, QObject *parent) : QObject(parent), m_autoCheck(autocheck) {
+	// Queue the request so construction has finished before any completion path runs.
+	QTimer::singleShot(0, this, &VersionCheck::performRequest);
 }
 
 void VersionCheck::performRequest() {
-	WebFetch::fetch(QLatin1String("update"), m_requestURL, this, SLOT(fetched(QByteArray, QUrl)));
+	const QString endpoint =
+		MUMBLE_UPDATE_PRERELEASES ? QStringLiteral("releases?per_page=100") : QStringLiteral("releases/latest");
+	QNetworkRequest request(
+		QUrl(QStringLiteral("https://api.github.com/repos/%1/%2").arg(ReleaseUpdate::repository(), endpoint)));
+	const QString cacheName =
+		MUMBLE_UPDATE_PRERELEASES ? QStringLiteral("preview.json") : QStringLiteral("stable.json");
+	const QString cachePath =
+		QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QStringLiteral("/updates/") + cacheName;
+	const auto cache =
+		std::make_shared< ReleaseUpdate::Cache >(cachePath, request.url().toString(), MUMBLE_UPDATE_PRERELEASES);
+	const qint64 now = QDateTime::currentSecsSinceEpoch();
+	if (!cache->canRequest(m_autoCheck, now)) {
+		if (!m_autoCheck) {
+			QMessageBox::information(Global::get().mw, tr("Check for updates"),
+									 tr("GitHub has temporarily limited update checks. Please try again later."));
+		}
+		deleteLater();
+		return;
+	}
+	cache->recordAttempt(now);
+	Network::prepareRequest(request);
+	if (!cache->etag().isEmpty()) {
+		request.setRawHeader("If-None-Match", cache->etag());
+	}
+	request.setRawHeader("Accept", "application/vnd.github+json");
+	request.setRawHeader("X-GitHub-Api-Version", "2022-11-28");
+	request.setTransferTimeout(15000);
+	QNetworkReply *reply = Global::get().nam->get(request);
+	// Bound both the total duration and response size, including a slowly trickling response.
+	QTimer::singleShot(20000, reply, &QNetworkReply::abort);
+	// The reply must clean itself up even if the window (and this checker) closes first.
+	connect(reply, &QNetworkReply::finished, reply, &QObject::deleteLater);
+	connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
+		constexpr qsizetype maximumSize = ReleaseUpdate::MaximumResponseSize;
+		m_response += reply->read(maximumSize + 1 - m_response.size());
+		if (m_response.size() > maximumSize) {
+			reply->abort();
+		}
+	});
+	connect(reply, &QNetworkReply::finished, this, [this, reply, cache]() {
+		const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+		if (status == 403 || status == 429) {
+			cache->rateLimited(QDateTime::currentSecsSinceEpoch(), reply->rawHeader("Retry-After"),
+							   reply->rawHeader("X-RateLimit-Reset"));
+		}
+		const bool success = reply->error() == QNetworkReply::NoError
+							 && cache->acceptResponse(status, m_response, reply->rawHeader("ETag"));
+		if (!success) {
+			if (!m_autoCheck) {
+				QMessageBox::warning(Global::get().mw, tr("Check for updates"),
+									 tr("Could not check GitHub for updates. Please try again later."));
+			}
+			deleteLater();
+			return;
+		}
+		m_response = cache->body();
+		showResult();
+	});
 }
 
-void VersionCheck::fetched(QByteArray a, QUrl url) {
-	if (!a.isNull()) {
-		if (!a.isEmpty()) {
-#ifdef SNAPSHOT_BUILD
-			if (url.path() == QLatin1String("/v1/banner")) {
-				Global::get().mw->msgBox(QString::fromUtf8(a));
-			} else if (url.path() == QLatin1String("/v1/version-check")) {
-#	ifndef Q_OS_WIN
-				Global::get().mw->msgBox(QString::fromUtf8(a));
-#	else
-				QDomDocument qdd;
-				qdd.setContent(a);
-
-				QDomElement elem = qdd.firstChildElement(QLatin1String("p"));
-				elem             = elem.firstChildElement(QLatin1String("a"));
-
-				QUrl fetch = QUrl(elem.attribute(QLatin1String("href")));
-				fetch.setHost(QString());
-				fetch.setScheme(QString());
-				if (!fetch.isValid()) {
-					Global::get().mw->msgBox(QString::fromUtf8(a));
-				} else {
-					QString filename = Global::get().qdBasePath.absoluteFilePath(QLatin1String("Snapshots/")
-																				 + QFileInfo(fetch.path()).fileName());
-
-					QFile qf(filename);
-					if (qf.exists()) {
-						std::wstring native = QDir::toNativeSeparators(filename).toStdWString();
-
-						WINTRUST_FILE_INFO file;
-						ZeroMemory(&file, sizeof(file));
-						file.cbStruct      = sizeof(file);
-						file.pcwszFilePath = native.c_str();
-
-						WINTRUST_DATA data;
-						ZeroMemory(&data, sizeof(data));
-						data.cbStruct            = sizeof(data);
-						data.dwUIChoice          = WTD_UI_NONE;
-						data.fdwRevocationChecks = WTD_REVOKE_NONE;
-						data.dwUnionChoice       = WTD_CHOICE_FILE;
-						data.pFile               = &file;
-						data.dwProvFlags         = WTD_SAFER_FLAG | WTD_USE_DEFAULT_OSVER_CHECK;
-						data.dwUIContext         = WTD_UICONTEXT_INSTALL;
-
-						static GUID guid = WINTRUST_ACTION_GENERIC_VERIFY_V2;
-
-						LONG ts = WinVerifyTrust(0, &guid, &data);
-
-						if (ts == 0) {
-							if (QMessageBox::question(
-									Global::get().mw, tr("Upgrade Mumble"),
-									tr("A new version of Mumble has been detected and automatically downloaded. It is "
-									   "recommended that you either upgrade to this version, or downgrade to the "
-									   "latest stable release. Do you want to launch the installer now?"),
-									QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes)
-								== QMessageBox::Yes) {
-								SHELLEXECUTEINFOW execinfo;
-								std::wstring filenative = filename.toStdWString();
-								std::wstring dirnative  = QDir::toNativeSeparators(QDir::tempPath()).toStdWString();
-								ZeroMemory(&execinfo, sizeof(execinfo));
-								execinfo.cbSize      = sizeof(execinfo);
-								execinfo.lpFile      = filenative.c_str();
-								execinfo.lpDirectory = dirnative.c_str();
-								execinfo.nShow       = SW_NORMAL;
-
-								if (ShellExecuteExW(&execinfo)) {
-									Global::get().mw->forceQuit = true;
-									qApp->closeAllWindows();
-								} else {
-									Global::get().mw->msgBox(tr("Failed to launch snapshot installer."));
-								}
-							}
-
-						} else {
-							Global::get().mw->msgBox(
-								tr("Corrupt download of new version detected. Automatically removed."));
-							qf.remove();
-						}
-
-						// Delete all but the N most recent snapshots
-						size_t numberOfSnapshotsToKeep = 1;
-
-						QDir snapdir(Global::get().qdBasePath.absolutePath() + QLatin1String("/Snapshots/"), QString(),
-									 QDir::Name, QDir::Files);
-
-						for (const QFileInfo &fileInfo :
-							 snapdir.entryInfoList(QStringList(), QDir::NoFilter, QDir::Time)) {
-							if (numberOfSnapshotsToKeep) {
-								--numberOfSnapshotsToKeep;
-								continue;
-							}
-
-							qWarning() << "Purging old snapshot" << fileInfo.fileName();
-							QFile file(fileInfo.absoluteFilePath());
-							file.remove();
-						}
-					} else {
-						Global::get().mw->msgBox(tr("Downloading new snapshot from %1 to %2")
-													 .arg(fetch.toString().toHtmlEscaped(), filename.toHtmlEscaped()));
-						WebFetch::fetch(QLatin1String("dl"), fetch, this, SLOT(fetched(QByteArray, QUrl)));
-						return;
-					}
-				}
-			} else {
-				QString filename = Global::get().qdBasePath.absoluteFilePath(QLatin1String("Snapshots/")
-																			 + QFileInfo(url.path()).fileName());
-
-				QFile qf(filename);
-				if (qf.open(QIODevice::WriteOnly)) {
-					qf.write(a);
-					qf.close();
-					new VersionCheck(true, Global::get().mw);
-				} else {
-					Global::get().mw->msgBox(tr("Failed to write new version to disk."));
-				}
-#	endif
-			}
-#else
-			Q_UNUSED(url);
-			Global::get().mw->msgBox(QString::fromUtf8(a));
-#endif
+void VersionCheck::showResult() {
+	QString os = QString::fromLatin1(MUMBLE_TARGET_OS);
+	if (os == QLatin1String("linux")) {
+		os = QSysInfo::productType();
+	}
+	const QString asset =
+		ReleaseUpdate::assetForPlatform(os, QString::fromLatin1(MUMBLE_TARGET_ARCH), QSysInfo::productVersion());
+	const auto result = ReleaseUpdate::parse(m_response, asset, MUMBLE_UPDATE_PRERELEASES);
+	const QVersionNumber current(MUMBLE_VERSION_MAJOR, MUMBLE_VERSION_MINOR, MUMBLE_VERSION_PATCH);
+	if (!result.valid || result.release.version.isNull()) {
+		if (!m_autoCheck) {
+			QMessageBox::information(
+				Global::get().mw, tr("Check for updates"),
+				result.valid ? tr("No compatible versioned releases have been published for this update channel yet.")
+							 : tr("GitHub returned an invalid update response. Please try again later."));
+		}
+	} else if (result.release.version <= current) {
+		if (!m_autoCheck) {
+			QMessageBox::information(Global::get().mw, tr("Check for updates"),
+									 tr("Mumble %1 is up to date for this update channel.").arg(current.toString()));
 		}
 	} else {
-		Global::get().mw->msgBox(tr("Mumble failed to retrieve version information from the central server."));
+		QMessageBox box(Global::get().mw);
+		box.setWindowTitle(tr("Mumble update available"));
+		box.setIcon(QMessageBox::Information);
+		box.setTextFormat(Qt::PlainText);
+		box.setText(tr("Mumble %1%2 is available. You are using %3.")
+						.arg(result.release.version.toString(), result.release.preview ? tr(" (preview)") : QString(),
+							 current.toString()));
+		box.setInformativeText(result.release.download.isEmpty()
+								   ? tr("View the release notes for installation options on your platform.")
+								   : tr("Download the new version, then close Mumble and install it. Your settings "
+										"will be preserved."));
+		auto *notes           = box.addButton(tr("Release notes"), QMessageBox::ActionRole);
+		QPushButton *download = nullptr;
+		if (!result.release.download.isEmpty()) {
+			download = box.addButton(tr("Download update"), QMessageBox::AcceptRole);
+		}
+		box.addButton(tr("Later"), QMessageBox::RejectRole);
+		box.exec();
+		if (box.clickedButton() == notes) {
+			QDesktopServices::openUrl(result.release.notes);
+		} else if (download && box.clickedButton() == download) {
+			QDesktopServices::openUrl(result.release.download);
+		}
 	}
-
 	deleteLater();
 }

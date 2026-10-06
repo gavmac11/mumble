@@ -6,25 +6,21 @@
 #ifndef MUMBLE_MUMBLE_VERSIONCHECK_H_
 #define MUMBLE_MUMBLE_VERSIONCHECK_H_
 
-#include <QFutureWatcher>
-#include <QtCore/QByteArray>
-#include <QtCore/QObject>
-#include <QtCore/QUrl>
+#include <QByteArray>
+#include <QObject>
 
 class VersionCheck : public QObject {
-private:
 	Q_OBJECT
 	Q_DISABLE_COPY(VersionCheck)
 
-	QFutureWatcher< void > m_preparationWatcher;
-	QUrl m_requestURL;
-protected slots:
+private:
+	bool m_autoCheck;
+	QByteArray m_response;
 	void performRequest();
-public slots:
-	void fetched(QByteArray data, QUrl url);
+	void showResult();
 
 public:
-	VersionCheck(bool autocheck, QObject *parent = nullptr, bool focus = false);
+	VersionCheck(bool autocheck, QObject *parent = nullptr);
 };
 
 #endif
