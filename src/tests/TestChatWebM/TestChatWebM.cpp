@@ -10,6 +10,9 @@
 #	include "ChatVideoDecoder.h"
 #	include "ChatVideoPlayer.h"
 #endif
+#ifdef USE_CHAT_WEBM_AUDIO
+#	include <QtMultimedia/QAudioSink>
+#endif
 
 #include <limits>
 #include <memory>
@@ -642,6 +645,9 @@ private slots:
 	void posterDoesNotAutoplay();
 	void clickTogglesPlayback();
 	void audioPlaybackAdvancesClockAndResumes();
+#ifdef USE_CHAT_WEBM_AUDIO
+	void idleAudioRecoveryPreservesQueuedPcm();
+#endif
 	void loopsAfterEnd();
 	void resumeAtClipEndRestartsImmediately();
 	void pauseResumeKeepsFrameSchedule();
@@ -858,6 +864,52 @@ void TestChatWebM::audioPlaybackAdvancesClockAndResumes() {
 
 	document.toggleChatVideo(url);
 }
+
+#ifdef USE_CHAT_WEBM_AUDIO
+void TestChatWebM::idleAudioRecoveryPreservesQueuedPcm() {
+	if (!ChatVideoDecoder::isSupported()) {
+		QSKIP("WebM decoder not available");
+	}
+
+	QImage poster(128, 96, QImage::Format_RGBA8888);
+	poster.fill(Qt::black);
+	std::unique_ptr< ChatVideoPlayer > player(
+		ChatVideoPlayer::create(QUrl(QStringLiteral("data:video/webm")), QByteArray(), poster, nullptr));
+	QVERIFY(player);
+	if (!player->ensureAudioSink()) {
+		QSKIP("No audio output device available");
+	}
+
+	// Exercise sink recovery without a decode worker refilling the source or
+	// advancing the frame schedule while the device drains its queued PCM.
+	player->m_state       = ChatVideoPlayer::Playing;
+	player->m_loopAccumMs = 123;
+	player->m_clockBaseMs = 456;
+	player->rebaseClock();
+	ChatVideoAudioSource *source = player->m_audioSource;
+	const QByteArray pcm(38400, '\0'); // 200 ms of silent S16 stereo at 48 kHz
+	for (int recovery = 0; recovery < 3; ++recovery) {
+		QTRY_COMPARE_WITH_TIMEOUT(player->m_sink->state(), QAudio::IdleState, 3000);
+		const qint64 deliveredBefore = source->deliveredBytes();
+		source->append(pcm);
+		const qint64 clockBefore = player->currentClockMs();
+		player->presentTick();
+
+		QCOMPARE(player->m_audioSource, source);
+		QCOMPARE(player->findChildren< QIODevice * >(QString(), Qt::FindDirectChildrenOnly).size(), 1);
+		QCOMPARE(player->m_loopAccumMs, 123);
+		QVERIFY(qAbs(player->currentClockMs() - clockBefore) < 50);
+
+		// Suspension stops device reads so the accounting check also permits a
+		// backend that consumed some PCM immediately when the new sink started.
+		player->m_sink->suspend();
+		QCOMPARE(source->bufferedBytes() + source->deliveredBytes() - deliveredBefore,
+				 static_cast< qint64 >(pcm.size()));
+		player->m_sink->resume();
+		QTRY_COMPARE_WITH_TIMEOUT(source->bufferedBytes(), 0, 3000);
+	}
+}
+#endif
 
 void TestChatWebM::loopsAfterEnd() {
 	if (TINY_WEBM.isEmpty() || !ChatVideoDecoder::isSupported()) {

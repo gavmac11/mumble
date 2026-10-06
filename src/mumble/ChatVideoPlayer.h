@@ -37,6 +37,8 @@ public:
 	/// Drops all buffered audio (called from the GUI thread)
 	void clear();
 	qint64 bufferedBytes() const;
+	bool isSequential() const Q_DECL_OVERRIDE { return true; }
+	qint64 bytesAvailable() const Q_DECL_OVERRIDE;
 	/// Bytes handed to the sink so far (diagnostics)
 	qint64 deliveredBytes() const { return m_delivered; }
 
@@ -137,6 +139,10 @@ private slots:
 	void onDecoderError(const QString &message);
 
 private:
+#ifdef USE_CHAT_WEBM_AUDIO
+	friend class TestChatWebM;
+#endif
+
 	enum State { Poster, Playing, Paused };
 
 	ChatVideoPlayer(const QUrl &url, const QByteArray &videoData, QImage poster, QObject *parent);

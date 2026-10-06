@@ -63,6 +63,11 @@ qint64 ChatVideoAudioSource::bufferedBytes() const {
 	return m_buffer.size();
 }
 
+qint64 ChatVideoAudioSource::bytesAvailable() const {
+	QMutexLocker lock(&m_mutex);
+	return m_buffer.size() + QIODevice::bytesAvailable();
+}
+
 qint64 ChatVideoAudioSource::readData(char *data, qint64 maxlen) {
 	QMutexLocker lock(&m_mutex);
 	const qint64 toCopy = qMin< qint64 >(maxlen, m_buffer.size());
@@ -158,6 +163,7 @@ bool ChatVideoPlayer::ensureWorker() {
 		if (m_sink) {
 			m_sink->stop();
 			delete m_sink;
+			delete m_audioSource;
 			m_sink         = nullptr;
 			m_audioSource  = nullptr;
 		}
@@ -173,8 +179,9 @@ bool ChatVideoPlayer::ensureWorker() {
 		// against the wall clock from the start instead.
 		m_sink->stop();
 		delete m_sink;
+		delete m_audioSource;
 		m_sink        = nullptr;
-		m_audioSource = nullptr;  // child of this, deleted with the player
+		m_audioSource = nullptr;
 		m_wallPaced   = true;
 	}
 #endif
@@ -208,18 +215,22 @@ bool ChatVideoPlayer::ensureAudioSink() {
 	const QAudioDevice device = QMediaDevices::defaultAudioOutput();
 	if (device.isNull()) {
 		qWarning("ChatVideoPlayer: no audio output device - playing without sound");
+		delete m_audioSource;
+		m_audioSource = nullptr;
 		return false;
 	}
 
-	// Pull mode: the sink reads from the source at its own pace.
-	m_audioSource = new ChatVideoAudioSource(this);
+	// Pull mode: the sink reads from the source at its own pace. A replacement
+	// sink must keep the existing source, including PCM queued after an underrun.
+	if (!m_audioSource)
+		m_audioSource = new ChatVideoAudioSource(this);
 	QAudioSink *sink = new QAudioSink(device, format, this);
 	sink->start(m_audioSource);
 	if (sink->error() == QAudio::FatalError) {
 		qWarning("ChatVideoPlayer: unable to open an audio output - playing without sound");
 		sink->stop();
 		delete sink;
-		m_audioSource->deleteLater();
+		delete m_audioSource;
 		m_audioSource = nullptr;
 		return false;
 	}
@@ -240,12 +251,15 @@ bool ChatVideoPlayer::ensureAudioSink() {
 			// Fall back to the wall clock, continuing from the current position.
 			// (Only the clock base moves - the frame schedule stays put.)
 			m_clockBaseMs = currentClockMs();
-			m_audioSource->clear();
+			// Stop reads before releasing the source; disconnect first because
+			// stop() can emit another stateChanged signal.
+			sink->disconnect(this);
+			sink->stop();
+			delete m_audioSource;
 			m_audioSource = nullptr;
 			m_wallPaced   = true;
 			rebaseClock();
-			// Detach the broken sink (stopped and deleted at destruction).
-			sink->disconnect(this);
+			// The stopped sink is deleted with the player.
 		}
 	});
 
