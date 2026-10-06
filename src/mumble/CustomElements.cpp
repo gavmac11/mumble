@@ -371,9 +371,10 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 #ifdef USE_FILE_SHARING
 				if (!plainFiles.isEmpty()) {
 					emit fileDropRequested(plainFiles);
+					return true;
 				}
 #endif
-				return (count > 0) || !plainFiles.isEmpty();
+				return count > 0;
 			}
 		} else {
 			Global::get().l->log(Log::Information, tr("This server does not allow sending images."));
