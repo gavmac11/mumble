@@ -25,7 +25,9 @@
 class TextToSpeech;
 #endif
 
+class ChatVideoPlayer;
 class QMovie;
+class QTimer;
 
 class LogConfig : public ConfigWidget, public Ui::LogConfig {
 private:
@@ -161,6 +163,17 @@ public:
 	/// @param maxSize The maximum length of the generated HTML string
 	/// @return The image HTML or an empty string, if the image could not be processed
 	static QString imageToImg(const QByteArray &rawImageData, const QImage &image, int maxSize);
+	/// Creates an HTML image tag embedding the given raw WebM video data, so that it can be
+	/// played inline in the chat log (by clients that support it).
+	/// Unlike images, videos cannot be re-encoded, so the raw data is embedded as-is and
+	/// sending is refused entirely if the generated HTML does not fit into maxSize.
+	/// @param rawVideoData The raw WebM container data
+	/// @param maxSize The maximum length of the generated HTML string
+	/// @return The video HTML or an empty string, if the data is not WebM or too large
+	static QString videoToImg(const QByteArray &rawVideoData, int maxSize);
+	/// Returns whether the given data looks like a WebM container (EBML magic)
+	static bool isWebM(const QByteArray &rawVideoData);
+
 #ifdef USE_FILE_SHARING
 	/// HTML that embeds a file-transfer card into the log. The card is
 	/// resolved by LogDocument through the lookup installed by MainWindow.
@@ -238,9 +251,61 @@ private:
 	std::function< bool(const QByteArray &, QImage &) > m_fileCardLookup;
 #endif
 
+#ifdef USE_CHAT_WEBM
+	/// The players of the chat videos, keyed by their data-URL
+	QHash< QUrl, ChatVideoPlayer * > m_qmChatVideos;
+	/// The URLs of m_qmChatVideos in the order in which they were created (oldest first)
+	QList< QUrl > m_qlChatVideoOrder;
+	/// The URLs of the currently playing chat videos in the order in which playback was
+	/// started (oldest first)
+	QList< QUrl > m_qlPlayingChatVideoOrder;
+	/// Shared presentation timer, ticking while any chat video is playing
+	QTimer *m_qtVideoPresentTimer = nullptr;
+	/// Whether the "WebM videos cannot be played" hint was logged for this document already
+	bool m_webmUnsupportedLogged = false;
+
+	/// Pauses the chat video whose playback was started first
+	void stopOldestChatVideo();
+	/// Destroys the chat video that was created first (its last frame stays displayed)
+	void destroyOldestChatVideo();
+	/// Pauses and destroys the chat video registered under the given URL, if any
+	void removeChatVideo(const QUrl &url);
+	/// Creates a player for the given WebM data under the given URL. The player starts out
+	/// showing the poster - it does not play anything until toggled.
+	ChatVideoPlayer *createChatVideo(const QUrl &url, const QByteArray &videoData, QImage poster);
+	/// Starts and stops the presentation timer according to whether any video is playing
+	void updateVideoPresentTimer();
+	/// Logs (once per document) that WebM videos cannot be played by this build
+	void logWebmUnsupported();
+
+private slots:
+	void onChatVideoFrame(const QUrl &url, const QImage &image);
+	void onChatVideoStateChanged(const QUrl &url, bool playing);
+	/// Presents due video frames of all playing chat videos (timer tick)
+	void presentChatVideoFrames();
+#endif
+
 public:
 	LogDocument(QObject *p = nullptr, bool animateImages = false);
 	QVariant loadResource(int, const QUrl &) Q_DECL_OVERRIDE;
+#ifdef USE_CHAT_WEBM
+	/// Maximum number of chat videos held by a document. Once reached, the oldest one is
+	/// destroyed, leaving its last shown frame cached as a static image.
+	static constexpr int MAX_CHAT_VIDEOS = 16;
+	/// Maximum number of chat videos playing at the same time. Once reached, the oldest
+	/// playing one is paused (frozen at its current frame).
+	static constexpr int MAX_PLAYING_CHAT_VIDEOS = 4;
+
+	/// Returns whether the given data-URL refers to a chat video in this document.
+	/// This includes players destroyed earlier at the capacity limit: their last
+	/// image stays in the document under the original data-URL, and clicking it
+	/// re-creates the player (see toggleChatVideo).
+	bool isChatVideo(const QUrl &url) const;
+	/// Toggles playback of the chat video referred to by the given data-URL. If the
+	/// player was destroyed earlier (capacity eviction), it is re-created from the
+	/// URL's data.
+	void toggleChatVideo(const QUrl &url);
+#endif
 
 #ifdef USE_FILE_SHARING
 	/// Installs the live card lookup for mumble-file data URLs (called by
@@ -252,8 +317,8 @@ public:
 #endif
 
 signals:
-	/// Emitted whenever an animated image advanced a frame, so that the widget displaying this
-	/// document has to be repainted
+	/// Emitted whenever an animated image or chat video advanced a frame, so that the widget
+	/// displaying this document has to be repainted
 	void animationFrameChanged();
 };
 

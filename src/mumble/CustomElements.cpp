@@ -6,7 +6,6 @@
 #include "CustomElements.h"
 
 #ifdef USE_FILE_SHARING
-#	include "MainWindow.h"
 #	include "PQFileTransfer/engine/FTCardRender.h"
 #endif
 
@@ -24,44 +23,106 @@
 #include <QtGui/QClipboard>
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QKeyEvent>
+#include <QtGui/QMouseEvent>
 #include <QtGui/QTextBlock>
 #include <QtGui/QTextFragment>
 #include <QtGui/QTextImageFormat>
 #include <QtWidgets/QScrollBar>
+#include <QtWidgets/QToolTip>
 
 namespace {
 constexpr int ORIGINAL_IMAGE_SIZE_PROPERTY = QTextFormat::UserProperty + 1;
 }
 
+LogTextBrowser::LogTextBrowser(QWidget *p) : QTextBrowser(p) {
+}
+
+QTextImageFormat LogTextBrowser::imageFormatAt(const QPoint &pos) const {
+	QTextCursor cursor = cursorForPosition(pos);
+
+	// Work around imprecise cursor image identification (the same workaround the
+	// context menu uses): apparently, the cursor is shifted half the characters
+	// width to the right on the image element. For the image, we get the right
+	// half (plus the left half of the next character) for the image, and have to
+	// move the cursor forward to also detect on the left half of the image.
+	if (!cursor.isNull() && cursor.charFormat().objectType() == QTextFormat::NoObject) {
+		cursor.movePosition(QTextCursor::NextCharacter);
+	}
+
+	if (cursor.isNull() || !cursor.charFormat().isImageFormat()) {
+		return QTextImageFormat();
+	}
+
+	return cursor.charFormat().toImageFormat();
+}
+
 void LogTextBrowser::mousePressEvent(QMouseEvent *event) {
-#ifdef USE_FILE_SHARING
+#if defined(USE_FILE_SHARING) || defined(USE_CHAT_WEBM)
 	if (event->button() == Qt::LeftButton) {
-		// File cards live in the document as <img> resources with the
-		// mumble-file subtype; find the format under the cursor.
-		QTextCursor cursor = cursorForPosition(event->pos());
-		QString imageFormat;
-		QTextImageFormat format = cursor.charFormat().toImageFormat();
-		if (format.isValid() && !format.name().isEmpty()) {
+		const QTextImageFormat format = imageFormatAt(event->pos());
+		if (format.isValid()) {
 			const QUrl url(format.name());
+#ifdef USE_FILE_SHARING
 			if (url.isValid() && url.scheme() == QLatin1String("data")) {
 				QByteArray subtype;
 				Log::imageDataFromDataUrl(url, subtype);
 				if (subtype == QByteArray("mumble-file")) {
-					bool ok	  = false;
+					bool ok = false;
 					const QByteArray transferId = PQFT::fileCardTransferId(url, ok);
 					if (ok && Global::get().mw) {
 						Global::get().mw->onFileCardClicked(transferId);
 					}
+					event->accept();
 					return;
 				}
 			}
+#endif
+#ifdef USE_CHAT_WEBM
+			if (LogDocument *document = qobject_cast< LogDocument * >(this->document())) {
+				// Evicted videos are recreated from their data URL on demand.
+				if (document->isChatVideo(url)) {
+					document->toggleChatVideo(url);
+					event->accept();
+					return;
+				}
+			}
+#endif
 		}
 	}
-#endif // USE_FILE_SHARING
+#endif
+	// Preserve selection and link handling for other document content.
 	QTextBrowser::mousePressEvent(event);
 }
 
-LogTextBrowser::LogTextBrowser(QWidget *p) : QTextBrowser(p) {
+void LogTextBrowser::mouseMoveEvent(QMouseEvent *event) {
+	const QTextImageFormat format = imageFormatAt(event->pos());
+	bool overChatVideo             = false;
+#ifdef USE_CHAT_WEBM
+	if (format.isValid()) {
+		if (const LogDocument *document = qobject_cast< LogDocument * >(this->document())) {
+			overChatVideo = document->isChatVideo(QUrl(format.name()));
+		}
+	}
+#endif // USE_CHAT_WEBM
+
+	if (overChatVideo != m_overChatVideo) {
+		m_overChatVideo = overChatVideo;
+		viewport()->setCursor(overChatVideo ? Qt::PointingHandCursor : Qt::IBeamCursor);
+		if (overChatVideo) {
+			QToolTip::showText(event->globalPosition().toPoint(), tr("Click to play/pause"));
+		}
+	}
+
+	QTextBrowser::mouseMoveEvent(event);
+}
+
+void LogTextBrowser::leaveEvent(QEvent *event) {
+	if (m_overChatVideo) {
+		m_overChatVideo = false;
+		viewport()->unsetCursor();
+	}
+
+	QTextBrowser::leaveEvent(event);
 }
 
 void LogTextBrowser::resizeEvent(QResizeEvent *event) {
@@ -343,6 +404,24 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 #endif
 				for (int i = 0; i < urlList.size(); ++i) {
 					QString path = urlList[i].toLocalFile();
+					if (path.endsWith(QLatin1String(".webm"), Qt::CaseInsensitive)) {
+						// WebM videos are embedded as-is (they cannot be re-encoded
+						// losslessly). There is no static fallback if they are too
+						// large, so sending is refused entirely in that case.
+						QFile file(path);
+						if (file.open(QIODevice::ReadOnly)) {
+							const QString html =
+								Log::videoToImg(file.readAll(), static_cast< int >(Global::get().uiImageLength));
+							if (!html.isEmpty()) {
+								emit pastedImage(QLatin1String("<br />") + html);
+								++count;
+								continue;
+							}
+						}
+						Log::logOrDefer(Log::Information, tr("Unable to send video %1: too large.").arg(path));
+						continue;
+					}
+
 					QByteArray rawImage;
 					if (path.endsWith(QLatin1String(".gif"), Qt::CaseInsensitive)) {
 						QFile file(path);

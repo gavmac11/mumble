@@ -1157,20 +1157,23 @@ void MainWindow::saveImageAs() {
 	QDateTime now   = QDateTime::currentDateTime();
 	QString resName = qtcSaveImageCursor.charFormat().toImageFormat().name();
 	bool isGif      = resName.startsWith(QLatin1String("data:image/gif;"), Qt::CaseInsensitive);
+	bool isWebM     = resName.startsWith(QLatin1String("data:video/webm;"), Qt::CaseInsensitive);
 	QString defaultFname =
 		QString::fromLatin1("Mumble-%1.%2").arg(now.toString(QString::fromLatin1("yyyy-MM-dd-HHmmss"))).arg(
-			isGif ? QLatin1String("gif") : QLatin1String("jpg"));
+			isGif ? QLatin1String("gif")
+				  : (isWebM ? QLatin1String("webm") : QLatin1String("jpg")));
 
-	QString fname = QFileDialog::getSaveFileName(this, tr("Save Image File"), getImagePath(defaultFname),
-												 tr("Images (*.png *.jpg *.jpeg *.gif)"));
+	QString fname =
+		QFileDialog::getSaveFileName(this, tr("Save Image File"), getImagePath(defaultFname),
+									 tr("Images (*.png *.jpg *.jpeg *.gif);;Videos (*.webm)"));
 	if (fname.isNull()) {
 		return;
 	}
 
-	// Animated GIFs are displayed frame by frame, so the cached resource only ever contains a single
-	// frame. Save the raw data instead in order to preserve the animation.
+	// Animated GIFs and WebM videos are displayed frame by frame, so the cached resource only ever
+	// contains a single frame. Save the raw data instead in order to preserve the animation/video.
 	bool ok = false;
-	if (isGif) {
+	if (isGif || isWebM) {
 		QByteArray imageFormat;
 		const QByteArray rawData = Log::imageDataFromDataUrl(QUrl(resName), imageFormat);
 

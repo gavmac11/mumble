@@ -29,6 +29,7 @@ endif()
 
 if(client)
 	add_subdirectory("TestAnimatedImages")
+	add_subdirectory("TestChatWebM")
 	add_subdirectory("TestVideoFramePacketizer")
 	add_subdirectory("TestVideoPacketPacer")
 	add_subdirectory("TestVideoQualityProfile")
