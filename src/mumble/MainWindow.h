@@ -51,6 +51,10 @@ class VoiceRecorderDialog;
 class PositionalAudioViewer;
 class PTTButtonWidget;
 
+namespace Mumble::Video {
+class PacketPacer;
+}
+
 namespace Search {
 class SearchDialog;
 }
@@ -150,6 +154,8 @@ public:
 	/// Whether this client announced the current share to the server. Kept separately from
 	/// ClientUser::bScreenSharing because that flag is only updated after the server echoes it.
 	bool m_selfShareAnnounced = false;
+	std::unique_ptr< Mumble::Video::PacketPacer > m_videoPacketPacer;
+	int m_videoPacerConnectionId = 0;
 
 	MumbleProto::Reject_RejectType rtLast;
 	bool bRetryServer;

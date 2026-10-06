@@ -1,0 +1,74 @@
+{
+  "scope": "H.264 fixture; decode captured streams separately",
+  "transport": "udp",
+  "media_deliveries_by_transport": {
+    "tcp": 0,
+    "udp": 127746
+  },
+  "crypto_library_sha256": "edefe91c2ad6d40090d8646660a3df46e1d154a72a8cdcd6a67a670775d1de39",
+  "run_id": "eacc8d1c",
+  "probe_sha256": "8c111e0c0b317c2a4b82ab8b55736185b63e478a4485bc5c2ef9b45281245e60",
+  "fixture_sha256": "19f20c106aca917f3d7c81ae0b77c1c59d17d3146e871b96fc6a5a0afad435e3",
+  "voice_fixture_sha256": "bae760c9b408811d75db7b6a9540f0a82cdc67747a5609ab5fbbae5be0848e40",
+  "start_time_utc": "2026-10-02T05:51:47.391388+00:00",
+  "end_time_utc": "2026-10-02T05:51:54.425313+00:00",
+  "clients": 10,
+  "senders": 10,
+  "stagger_video_frames": true,
+  "frames_per_second": 30,
+  "width": 1280,
+  "height": 720,
+  "requested_sender_payload_mbps": null,
+  "requested_seconds": 5.0,
+  "actual_offer_seconds": 5.0315,
+  "generator_cpu_seconds_during_offer": 3.7537,
+  "generator_cpu_percent_of_one_core": 74.6,
+  "settle_seconds": 2.0,
+  "offered_payload_mbps": 16.2913,
+  "sent_fragments": 12120,
+  "expected_deliveries": 109080,
+  "observed_unique_deliveries": 105399,
+  "undelivered_by_deadline": 3681,
+  "integrity_errors": [],
+  "complete_fanout": false,
+  "voice": {
+    "senders": 10,
+    "packet_duration_ms": 20,
+    "sent_packets": 2500,
+    "expected_deliveries": 22500,
+    "observed_unique_deliveries": 22347,
+    "undelivered_by_deadline": 153,
+    "offered_payload_mbps": 0.318,
+    "relay_delay_ms": {
+      "p50": 0.9,
+      "p95": 22.314,
+      "p99": 28.674,
+      "max": 35.161
+    }
+  },
+  "relay_delay_ms": {
+    "p50": 1.746,
+    "p95": 26.778,
+    "p99": 31.541,
+    "max": 38.542
+  },
+  "control_ping_rtt_ms": {
+    "p50": 0.879,
+    "p95": 1.391,
+    "p99": 1.408,
+    "max": 1.411
+  },
+  "encrypted_udp_ping_rtt_ms": {
+    "p50": 0.559,
+    "p95": 3.357,
+    "p99": 3.4,
+    "max": 3.474
+  },
+  "generator_event_loop_lag_ms": {
+    "p50": 0.382,
+    "p95": 1.074,
+    "p99": 1.281,
+    "max": 2.297
+  },
+  "captures": []
+}

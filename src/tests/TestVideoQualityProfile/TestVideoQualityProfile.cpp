@@ -13,6 +13,22 @@ class TestVideoQualityProfile : public QObject {
 	Q_OBJECT
 
 private slots:
+	void derivesEncoderAndWireRatesFromTheSameBudget() const {
+		using namespace Mumble::VideoQuality;
+		QCOMPARE(encoderBitRate(screenShareProfile()), 2'000'000);
+		QCOMPARE(encoderBitRate(webcamProfile()), 1'500'000);
+		QVERIFY(wireBitRate(screenShareProfile()) < 2'500'000);
+		QVERIFY(wireBitRate(screenShareProfile()) > wireBitRate(webcamProfile()));
+		auto raised    = screenShareProfile();
+		raised.bitRate = 10'000'000;
+		QVERIFY(encoderBitRate(raised) < raised.bitRate);
+		QVERIFY(wireBitRate(raised) <= 2'400'000);
+		QVERIFY(wireBitRate(raised) > static_cast< std::uint64_t >(encoderBitRate(raised)));
+		auto lowered = webcamProfile();
+		lowered.bitRate /= 2;
+		QVERIFY(wireBitRate(lowered) < wireBitRate(webcamProfile()));
+	}
+
 	void definesSourceAppropriateDefaults() const {
 		const Mumble::VideoQuality::Profile &screen = Mumble::VideoQuality::screenShareProfile();
 		QCOMPARE(screen.maximumFrameSize, QSize(1920, 1080));

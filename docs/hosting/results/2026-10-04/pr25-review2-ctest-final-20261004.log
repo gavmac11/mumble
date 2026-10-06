@@ -1,0 +1,12 @@
+[1/5] Automatic MOC for target TestVideoPacketPacer
+[2/4] Building CXX object src/tests/TestVideoPacketPacer/CMakeFiles/TestVideoPacketPacer.dir/__/__/mumble/VideoPacketPacer.cpp.o
+[3/4] Building CXX object src/tests/TestVideoPacketPacer/CMakeFiles/TestVideoPacketPacer.dir/TestVideoPacketPacer.cpp.o
+[4/4] Linking CXX executable tests/TestVideoPacketPacer
+Internal ctest changing into directory: /client-build
+Test project /client-build
+    Start 3: TestVideoPacketPacer
+1/1 Test #3: TestVideoPacketPacer .............   Passed    0.13 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.13 sec

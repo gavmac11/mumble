@@ -1,0 +1,191 @@
+{
+  "scope": "Before/after kernel UDP and cgroup counters. Server network namespace is isolated; client counters cover the shared host. CPU intervals include connection/setup and settle time, not just offered media.",
+  "runs": [
+    {
+      "file": "udp-buffer1m-v2-sync.json",
+      "server_udp_counter_deltas": {
+        "InDatagrams": 14780,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 125710,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "client_udp_counter_deltas": {
+        "InDatagrams": 125736,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 14792,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "server_cpu_seconds_during_counter_interval": 3.002457,
+      "server_throttled_periods_delta": 0,
+      "client_throttled_periods": 0,
+      "missing_video_deliveries": 6030,
+      "missing_voice_deliveries": 0,
+      "missing_deliveries_explained_by_server_rcvbuf_errors": 0
+    },
+    {
+      "file": "udp-default-native-paced2-sync.json",
+      "server_udp_counter_deltas": {
+        "InDatagrams": 14780,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 131740,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "client_udp_counter_deltas": {
+        "InDatagrams": 131761,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 14798,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "server_cpu_seconds_during_counter_interval": 3.205698,
+      "server_throttled_periods_delta": 0,
+      "client_throttled_periods": 0,
+      "missing_video_deliveries": 0,
+      "missing_voice_deliveries": 0,
+      "missing_deliveries_explained_by_server_rcvbuf_errors": 0
+    },
+    {
+      "file": "udp-default-native-paced2-30s-sync.json",
+      "server_udp_counter_deltas": {
+        "InDatagrams": 88380,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 790140,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "client_udp_counter_deltas": {
+        "InDatagrams": 790238,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 88462,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 17,
+        "MemErrors": 0
+      },
+      "server_cpu_seconds_during_counter_interval": 18.882266,
+      "server_throttled_periods_delta": 0,
+      "client_throttled_periods": 0,
+      "missing_video_deliveries": 0,
+      "missing_voice_deliveries": 0,
+      "missing_deliveries_explained_by_server_rcvbuf_errors": 0
+    },
+    {
+      "file": "udp-default-native-screen-sync.json",
+      "server_udp_counter_deltas": {
+        "InDatagrams": 4163,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 36187,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "client_udp_counter_deltas": {
+        "InDatagrams": 36214,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 4192,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "server_cpu_seconds_during_counter_interval": 0.837153,
+      "server_throttled_periods_delta": 0,
+      "client_throttled_periods": 0,
+      "missing_video_deliveries": 459,
+      "missing_voice_deliveries": 0,
+      "missing_deliveries_explained_by_server_rcvbuf_errors": 0
+    },
+    {
+      "file": "udp-default-native-screen3-sync.json",
+      "server_udp_counter_deltas": {
+        "InDatagrams": 4214,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 36646,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "client_udp_counter_deltas": {
+        "InDatagrams": 36659,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 4227,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "server_cpu_seconds_during_counter_interval": 0.83281,
+      "server_throttled_periods_delta": 0,
+      "client_throttled_periods": 0,
+      "missing_video_deliveries": 0,
+      "missing_voice_deliveries": 0,
+      "missing_deliveries_explained_by_server_rcvbuf_errors": 0
+    },
+    {
+      "file": "udp-default-native-screen3-30s-sync.json",
+      "server_udp_counter_deltas": {
+        "InDatagrams": 24984,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 219576,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "client_udp_counter_deltas": {
+        "InDatagrams": 219690,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 25101,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 9,
+        "MemErrors": 0
+      },
+      "server_cpu_seconds_during_counter_interval": 4.708507,
+      "server_throttled_periods_delta": 0,
+      "client_throttled_periods": 0,
+      "missing_video_deliveries": 0,
+      "missing_voice_deliveries": 0,
+      "missing_deliveries_explained_by_server_rcvbuf_errors": 0
+    }
+  ]
+}

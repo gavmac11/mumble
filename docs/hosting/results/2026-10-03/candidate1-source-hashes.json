@@ -1,0 +1,20 @@
+{
+  "scope": "First review candidate, before one-second pending budget and scheduling headroom; media workload failed on client-side drops.",
+  "source_lf_sha256": {
+    "scripts/hosting/build_pacer_bridge.sh": "ece8ea602f7269f1c03db170717dad66f0fa503b61442a0e18d484cb787abb76",
+    "scripts/hosting/pilot-server.ini": "5b44146aa8ed5b19ade9e577e46f1cb2e254e604b8d53e62f26d36a6301c1170",
+    "scripts/hosting/relay_probe.py": "0406c72d58334e541de87e93b3c792da7553a8fa171c2881a9d6b7059d0b870a",
+    "scripts/hosting/test_hosting_tools.py": "5d99ec83ab07a9686a66ab4637d9ff9de048931fb2b741f36f89f9c875654d91",
+    "src/mumble/MainWindow.cpp": "a62f9d4150834ddbb47be7cde708f1682b61c5f9854d26b61016b7f9aea9f290",
+    "src/mumble/ScreenCapture.cpp": "ee5d88ac00e946d638fee576d694814ee8611c023d430fc2a5c6114e890252ee",
+    "src/mumble/ScreenCapture.h": "80cc193596e8a51b38f1184e3e089e79ff10c8b0670ce745941bb619ddd34d5f",
+    "src/mumble/VideoFramePacketizer.cpp": "c81817bebf08280fdda0fcc3ecee70c75978f98766def8ff44ffb5e0ebf89526",
+    "src/mumble/VideoFramePacketizer.h": "560ece6373b4bb8f6637dcd352ddfad84078c055f79e3db4e06c478f6a06457b",
+    "src/mumble/VideoPacketPacer.cpp": "90330337f1eb8bb7678f9533589babba8a0d789448f35cf0d22e6c5766e4e874",
+    "src/mumble/VideoPacketPacer.h": "78f71132a0b9cf1b4cd75195f8c013e3207d2076d645bb4996b7e3f5880ea873",
+    "src/mumble/VideoQualityProfile.cpp": "a0281357a3894a7ba2eb00e668874befc1c61b813d35a760cc3bb6c54fb3e749",
+    "src/mumble/VideoQualityProfile.h": "e016e438398bcb096ae893317de3c65e34430d138e02b8690eb5aa204e16138d",
+    "src/tests/TestVideoPacketPacer/TestVideoPacketPacer.cpp": "2deb51db34d5d96e39d2d8e1980198568c6bd03424f4598e85c45b2159fd25b2",
+    "src/tests/TestVideoQualityProfile/TestVideoQualityProfile.cpp": "e0c0dd23bdd949ac19577290b93283e5cbc91e3942a3a067fb9dfb5e02d9d040"
+  }
+}
