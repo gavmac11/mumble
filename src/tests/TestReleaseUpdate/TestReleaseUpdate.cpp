@@ -4,10 +4,13 @@
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "ReleaseUpdate.h"
+#include "ReleaseUpdateCache.h"
 
+#include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QTemporaryDir>
 #include <QTest>
 
 namespace {
@@ -21,12 +24,12 @@ QJsonObject release(const QString &version, bool preview = true) {
 			{ "name", name },
 			{ "state", "uploaded" },
 			{ "size", 42 },
-			{ "browser_download_url", base + QStringLiteral("download/") + tag + QLatin1Char('/') + name } });
+			{ "browser_download_url", QString(base + QStringLiteral("download/") + tag + QLatin1Char('/') + name) } });
 	}
 	return { { "tag_name", tag },
 			 { "draft", false },
 			 { "prerelease", preview },
-			 { "html_url", base + QStringLiteral("tag/") + tag },
+			 { "html_url", QString(base + QStringLiteral("tag/") + tag) },
 			 { "assets", assets } };
 }
 ReleaseUpdate::Result parse(const QJsonArray &releases, bool previews = true) {
@@ -100,6 +103,11 @@ private slots:
 	void choosesOnlySupportedPlatformPackages() {
 		using ReleaseUpdate::assetForPlatform;
 		QCOMPARE(assetForPlatform("windows", "x86_64", "11"), package);
+		QCOMPARE(assetForPlatform("windows", "x64", "11"), package);
+		QCOMPARE(assetForPlatform("ubuntu", "x64", "24.04"), QStringLiteral("Mumble-Ubuntu-24.04-amd64.deb"));
+		QVERIFY(assetForPlatform("macos", "arm64", "14.7").isEmpty());
+		QVERIFY(assetForPlatform("macos", "arm64", "").isEmpty());
+		QCOMPARE(assetForPlatform("macos", "arm64", "26.0"), QStringLiteral("Mumble-macOS-arm64.zip"));
 		QCOMPARE(assetForPlatform("macos", "arm64", "15.0"), QStringLiteral("Mumble-macOS-arm64.zip"));
 		QCOMPARE(assetForPlatform("ubuntu", "x86_64", "24.04"), QStringLiteral("Mumble-Ubuntu-24.04-amd64.deb"));
 		QVERIFY(assetForPlatform("ubuntu", "arm64", "24.04").isEmpty());
@@ -110,6 +118,85 @@ private slots:
 			ReleaseUpdate::parse(QJsonDocument(QJsonArray{ release("1.7.100") }).toJson(), {}, true);
 		QVERIFY(unsupported.release.download.isEmpty());
 		QVERIFY(!unsupported.release.notes.isEmpty());
+	}
+	void persistsConditionalResponsesAndSeparatesFeeds() {
+		QTemporaryDir dir;
+		QVERIFY(dir.isValid());
+		const QString path    = dir.filePath("feed.json");
+		const QByteArray body = QJsonDocument(QJsonArray{ release("1.7.100") }).toJson();
+		ReleaseUpdate::Cache cache(path, "preview", true);
+		QVERIFY(!cache.acceptResponse(304, {}, {}));
+		QVERIFY(cache.acceptResponse(200, body, "\"etag-1\""));
+		ReleaseUpdate::Cache reloaded(path, "preview", true);
+		QCOMPARE(reloaded.etag(), QByteArray("\"etag-1\""));
+		QVERIFY(reloaded.acceptResponse(304, {}, {}));
+		QCOMPARE(reloaded.body(), body);
+		ReleaseUpdate::Cache otherFeed(path, "stable", false);
+		QVERIFY(otherFeed.etag().isEmpty());
+		QVERIFY(otherFeed.body().isEmpty());
+		QVERIFY(!otherFeed.acceptResponse(304, {}, {}));
+	}
+	void throttlesFailedAttemptsAcrossLaunchesButAllowsManualChecks() {
+		QTemporaryDir dir;
+		QVERIFY(dir.isValid());
+		const QString path   = dir.filePath("feed.json");
+		constexpr qint64 now = 1000000;
+		ReleaseUpdate::Cache cache(path, "preview", true);
+		QVERIFY(cache.canRequest(true, now));
+		cache.recordAttempt(now);
+		ReleaseUpdate::Cache reloaded(path, "preview", true);
+		QVERIFY(!reloaded.canRequest(true, now + 1));
+		QVERIFY(reloaded.canRequest(false, now + 1));
+		QVERIFY(reloaded.canRequest(true, now + 6 * 60 * 60));
+		// A backwards clock jump must not disable checks indefinitely.
+		QVERIFY(reloaded.canRequest(true, now - 2 * 24 * 60 * 60));
+	}
+	void preservesGoodCacheOnInvalidResponses() {
+		QTemporaryDir dir;
+		QVERIFY(dir.isValid());
+		const QString path = dir.filePath("feed.json");
+		ReleaseUpdate::Cache cache(path, "preview", true);
+		QVERIFY(cache.acceptResponse(200, "[]", "good"));
+		QVERIFY(!cache.acceptResponse(200, "not json", "bad"));
+		QVERIFY(!cache.acceptResponse(403, "{}", "bad"));
+		QVERIFY(!cache.acceptResponse(200, QByteArray(ReleaseUpdate::MaximumResponseSize + 1, ' '), "bad"));
+		ReleaseUpdate::Cache reloaded(path, "preview", true);
+		QCOMPARE(reloaded.etag(), QByteArray("good"));
+		QCOMPARE(reloaded.body(), QByteArray("[]"));
+		QVERIFY(reloaded.acceptResponse(200, "[]", "bad\r\nheader"));
+		QVERIFY(reloaded.etag().isEmpty());
+	}
+	void recoversFromCorruptCache() {
+		QTemporaryDir dir;
+		QVERIFY(dir.isValid());
+		const QString path = dir.filePath("feed.json");
+		QFile file(path);
+		QVERIFY(file.open(QIODevice::WriteOnly));
+		file.write("incomplete cache file");
+		file.close();
+		ReleaseUpdate::Cache cache(path, "preview", true);
+		QVERIFY(cache.canRequest(true, 1000000));
+		QVERIFY(cache.etag().isEmpty());
+		QVERIFY(cache.acceptResponse(200, "[]", "recovered"));
+	}
+	void honorsPersistedServerBackoffForManualChecks() {
+		QTemporaryDir dir;
+		QVERIFY(dir.isValid());
+		const QString path   = dir.filePath("feed.json");
+		constexpr qint64 now = 1000000;
+		ReleaseUpdate::Cache cache(path, "preview", true);
+		cache.rateLimited(now, "120", "");
+		ReleaseUpdate::Cache reloaded(path, "preview", true);
+		QVERIFY(!reloaded.canRequest(false, now + 119));
+		QVERIFY(reloaded.canRequest(false, now + 120));
+		reloaded.rateLimited(now, "", QByteArray::number(now + 180));
+		QVERIFY(!reloaded.canRequest(false, now + 179));
+		QVERIFY(reloaded.canRequest(false, now + 180));
+		reloaded.rateLimited(now, "bad", "bad");
+		QVERIFY(!reloaded.canRequest(false, now + 3599));
+		QVERIFY(reloaded.canRequest(false, now + 3600));
+		reloaded.rateLimited(now, "99999999999", "");
+		QVERIFY(reloaded.canRequest(false, now + 24 * 60 * 60));
 	}
 };
 

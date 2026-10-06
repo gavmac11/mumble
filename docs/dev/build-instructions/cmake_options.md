@@ -34,6 +34,11 @@ Build an x86 overlay
 Bundle Qt's translations as well
 (Default: ${static})
 
+### bundled-argon2
+
+Build the bundled version of libargon2 instead of looking for one on the system.
+(Default: ${file-sharing})
+
 ### bundled-cli11
 
 Use the bundled CLI11 version instead of looking for one on the system
@@ -43,6 +48,11 @@ Use the bundled CLI11 version instead of looking for one on the system
 
 Build the included version of nlohmann_json instead of looking for one on the system
 (Default: ON)
+
+### bundled-oqs
+
+Build the bundled version of liboqs (ML-KEM-768, ML-DSA-65) instead of looking for one on the system.
+(Default: ${file-sharing})
 
 ### bundled-rnnoise
 
@@ -67,6 +77,11 @@ Build the included version of Speex instead of looking for one on the system.
 ### bundled-utfcpp
 
 Use the bundled utf8cpp version instead of looking for one on the system
+(Default: ON)
+
+### chat-webm
+
+Build support for playing WebM videos (VP8/VP9/AV1, with audio) embedded in chat messages (non-Windows only, requires libavformat + libswresample).
 (Default: ON)
 
 ### client
@@ -132,6 +147,11 @@ Whether or not to enable the PostgreSQL database backend
 ### enable-sqlite
 
 Whether or not to enable the SQLite database backend
+(Default: ON)
+
+### file-sharing
+
+Build support for file sharing in chat (post-quantum encrypted; requires liboqs + libargon2).
 (Default: ON)
 
 ### g15
@@ -249,6 +269,11 @@ Build redacted (outdated) plugins as well
 Use RNNoise for machine learning noise reduction.
 (Default: ON)
 
+### screen-sharing
+
+Build support for screen sharing (requires libavcodec + libswscale with libx264).
+(Default: ON)
+
 ### server
 
 Build the server (Murmur)
@@ -297,6 +322,11 @@ Include languages other than English.
 ### update
 
 Check for updates by default.
+(Default: ON)
+
+### update-prereleases
+
+Offer preview releases from this fork in the client update checker.
 (Default: ON)
 
 ### use-pkgconf-install-paths

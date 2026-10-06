@@ -8,17 +8,21 @@
 #include "MainWindow.h"
 #include "NetworkConfig.h"
 #include "ReleaseUpdate.h"
+#include "ReleaseUpdateCache.h"
 #include "Version.h"
 #include "Global.h"
 
+#include <QDateTime>
 #include <QDesktopServices>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QPushButton>
+#include <QStandardPaths>
 #include <QSysInfo>
 #include <QTimer>
 #include <QtWidgets/QMessageBox>
+#include <memory>
 
 VersionCheck::VersionCheck(bool autocheck, QObject *parent) : QObject(parent), m_autoCheck(autocheck) {
 	// Queue the request so construction has finished before any completion path runs.
@@ -30,7 +34,26 @@ void VersionCheck::performRequest() {
 		MUMBLE_UPDATE_PRERELEASES ? QStringLiteral("releases?per_page=100") : QStringLiteral("releases/latest");
 	QNetworkRequest request(
 		QUrl(QStringLiteral("https://api.github.com/repos/%1/%2").arg(ReleaseUpdate::repository(), endpoint)));
+	const QString cacheName =
+		MUMBLE_UPDATE_PRERELEASES ? QStringLiteral("preview.json") : QStringLiteral("stable.json");
+	const QString cachePath =
+		QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QStringLiteral("/updates/") + cacheName;
+	const auto cache =
+		std::make_shared< ReleaseUpdate::Cache >(cachePath, request.url().toString(), MUMBLE_UPDATE_PRERELEASES);
+	const qint64 now = QDateTime::currentSecsSinceEpoch();
+	if (!cache->canRequest(m_autoCheck, now)) {
+		if (!m_autoCheck) {
+			QMessageBox::information(Global::get().mw, tr("Check for updates"),
+									 tr("GitHub has temporarily limited update checks. Please try again later."));
+		}
+		deleteLater();
+		return;
+	}
+	cache->recordAttempt(now);
 	Network::prepareRequest(request);
+	if (!cache->etag().isEmpty()) {
+		request.setRawHeader("If-None-Match", cache->etag());
+	}
 	request.setRawHeader("Accept", "application/vnd.github+json");
 	request.setRawHeader("X-GitHub-Api-Version", "2022-11-28");
 	request.setTransferTimeout(15000);
@@ -39,15 +62,20 @@ void VersionCheck::performRequest() {
 	QTimer::singleShot(20000, reply, &QNetworkReply::abort);
 	connect(this, &QObject::destroyed, reply, &QNetworkReply::abort);
 	connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
-		constexpr qsizetype maximumSize = 4 * 1024 * 1024;
+		constexpr qsizetype maximumSize = ReleaseUpdate::MaximumResponseSize;
 		m_response += reply->read(maximumSize + 1 - m_response.size());
 		if (m_response.size() > maximumSize) {
 			reply->abort();
 		}
 	});
-	connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+	connect(reply, &QNetworkReply::finished, this, [this, reply, cache]() {
+		const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+		if (status == 403 || status == 429) {
+			cache->rateLimited(QDateTime::currentSecsSinceEpoch(), reply->rawHeader("Retry-After"),
+							   reply->rawHeader("X-RateLimit-Reset"));
+		}
 		const bool success = reply->error() == QNetworkReply::NoError
-							 && reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200;
+							 && cache->acceptResponse(status, m_response, reply->rawHeader("ETag"));
 		reply->deleteLater();
 		if (!success) {
 			if (!m_autoCheck) {
@@ -57,6 +85,7 @@ void VersionCheck::performRequest() {
 			deleteLater();
 			return;
 		}
+		m_response = cache->body();
 		showResult();
 	});
 }
@@ -83,33 +112,28 @@ void VersionCheck::showResult() {
 									 tr("Mumble %1 is up to date for this update channel.").arg(current.toString()));
 		}
 	} else {
-		// Avoid duplicate startup notifications if a check is requested more than once in a session.
-		static QVersionNumber lastNotified;
-		if (!m_autoCheck || result.release.version > lastNotified) {
-			lastNotified = result.release.version;
-			QMessageBox box(Global::get().mw);
-			box.setWindowTitle(tr("Mumble update available"));
-			box.setIcon(QMessageBox::Information);
-			box.setTextFormat(Qt::PlainText);
-			box.setText(tr("Mumble %1%2 is available. You are using %3.")
-							.arg(result.release.version.toString(),
-								 result.release.preview ? tr(" (preview)") : QString(), current.toString()));
-			box.setInformativeText(result.release.download.isEmpty()
-									   ? tr("View the release notes for installation options on your platform.")
-									   : tr("Download the new version, then close Mumble and install it. Your settings "
-											"will be preserved."));
-			auto *notes           = box.addButton(tr("Release notes"), QMessageBox::ActionRole);
-			QPushButton *download = nullptr;
-			if (!result.release.download.isEmpty()) {
-				download = box.addButton(tr("Download update"), QMessageBox::AcceptRole);
-			}
-			box.addButton(tr("Later"), QMessageBox::RejectRole);
-			box.exec();
-			if (box.clickedButton() == notes) {
-				QDesktopServices::openUrl(result.release.notes);
-			} else if (download && box.clickedButton() == download) {
-				QDesktopServices::openUrl(result.release.download);
-			}
+		QMessageBox box(Global::get().mw);
+		box.setWindowTitle(tr("Mumble update available"));
+		box.setIcon(QMessageBox::Information);
+		box.setTextFormat(Qt::PlainText);
+		box.setText(tr("Mumble %1%2 is available. You are using %3.")
+						.arg(result.release.version.toString(), result.release.preview ? tr(" (preview)") : QString(),
+							 current.toString()));
+		box.setInformativeText(result.release.download.isEmpty()
+								   ? tr("View the release notes for installation options on your platform.")
+								   : tr("Download the new version, then close Mumble and install it. Your settings "
+										"will be preserved."));
+		auto *notes           = box.addButton(tr("Release notes"), QMessageBox::ActionRole);
+		QPushButton *download = nullptr;
+		if (!result.release.download.isEmpty()) {
+			download = box.addButton(tr("Download update"), QMessageBox::AcceptRole);
+		}
+		box.addButton(tr("Later"), QMessageBox::RejectRole);
+		box.exec();
+		if (box.clickedButton() == notes) {
+			QDesktopServices::openUrl(result.release.notes);
+		} else if (download && box.clickedButton() == download) {
+			QDesktopServices::openUrl(result.release.download);
 		}
 	}
 	deleteLater();

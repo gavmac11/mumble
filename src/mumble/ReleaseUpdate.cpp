@@ -17,13 +17,16 @@ QString repository() {
 }
 
 QString assetForPlatform(const QString &os, const QString &architecture, const QString &osVersion) {
-	if (os == QLatin1String("windows") && architecture == QLatin1String("x86_64")) {
+	if (os == QLatin1String("windows")
+		&& (architecture == QLatin1String("x86_64") || architecture == QLatin1String("x64"))) {
 		return QStringLiteral("Mumble-Windows-x64.exe");
 	}
-	if (os == QLatin1String("macos") && architecture == QLatin1String("arm64")) {
+	if (os == QLatin1String("macos") && architecture == QLatin1String("arm64")
+		&& QVersionNumber::fromString(osVersion) >= QVersionNumber(15)) {
 		return QStringLiteral("Mumble-macOS-arm64.zip");
 	}
-	if (os == QLatin1String("ubuntu") && architecture == QLatin1String("x86_64")
+	if (os == QLatin1String("ubuntu")
+		&& (architecture == QLatin1String("x86_64") || architecture == QLatin1String("x64"))
 		&& osVersion == QLatin1String("24.04")) {
 		return QStringLiteral("Mumble-Ubuntu-24.04-amd64.deb");
 	}

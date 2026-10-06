@@ -308,6 +308,8 @@ set(MUMBLE_SOURCES
 	"UserView.h"
 	"ReleaseUpdate.cpp"
 	"ReleaseUpdate.h"
+	"ReleaseUpdateCache.cpp"
+	"ReleaseUpdateCache.h"
 	"VersionCheck.cpp"
 	"VersionCheck.h"
 	"ViewCert.cpp"
