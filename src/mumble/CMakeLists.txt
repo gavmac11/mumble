@@ -1122,10 +1122,20 @@ if(file-sharing)
 		# separate TUs.
 		set(PREV_UNITY_BUILD ${CMAKE_UNITY_BUILD})
 		set(CMAKE_UNITY_BUILD OFF)
+		# liboqs compiles its sources inside OBJECT libraries, which
+		# disable_warnings_for_all_targets_in() does not cover (it only walks
+		# library/executable targets) — MSVC's /W4 /WX then fails on
+		# liboqs-internal warnings (C4057 in x86_64_helpers.h, C4996 for
+		# strdup). Suppress warnings at the directory level instead so every
+		# target created inside inherits them.
+		get_compiler_flags(DISABLE_ALL_WARNINGS DISABLE_DEFAULT_FLAGS
+			OUTPUT_VARIABLE OQS_NO_WARNING_FLAGS)
+		get_directory_property(OQS_PREV_COMPILE_OPTIONS COMPILE_OPTIONS)
+		add_compile_options(${OQS_NO_WARNING_FLAGS})
 		add_subdirectory("${3RDPARTY_DIR}/liboqs" "${CMAKE_CURRENT_BINARY_DIR}/liboqs" EXCLUDE_FROM_ALL)
+		set_property(DIRECTORY PROPERTY COMPILE_OPTIONS ${OQS_PREV_COMPILE_OPTIONS})
 		set(CMAKE_UNITY_BUILD ${PREV_UNITY_BUILD})
 		set(BUILD_SHARED_LIBS ${PREV_BUILD_SHARED_LIBS} CACHE BOOL "" FORCE)
-		disable_warnings_for_all_targets_in("${3RDPARTY_DIR}/liboqs")
 		target_link_libraries(mumble_client_object_lib PUBLIC oqs)
 	else()
 		find_pkg("oqs" REQUIRED)
@@ -1145,6 +1155,21 @@ if(file-sharing)
 		)
 		target_include_directories(argon2 PUBLIC "${3RDPARTY_DIR}/argon2/include")
 		target_disable_warnings(argon2)
+		# Static Qt builds pull in libb2 (a Qt6Core dependency) whose blake2b
+		# implementation exports the same symbol names as argon2's bundled
+		# one, which the linker rejects ("multiple definition of `blake2b'")
+		# under LTO. Rename argon2's internal blake2b API at compile time;
+		# every TU of the target sees the same renames, so argon2's internal
+		# calls follow and the two implementations coexist.
+		target_compile_definitions(argon2 PRIVATE
+			blake2b_init_param=argon2_blake2b_init_param
+			blake2b_init=argon2_blake2b_init
+			blake2b_init_key=argon2_blake2b_init_key
+			blake2b_update=argon2_blake2b_update
+			blake2b_final=argon2_blake2b_final
+			blake2b=argon2_blake2b
+			blake2b_long=argon2_blake2b_long
+		)
 		find_package(Threads REQUIRED)
 		target_link_libraries(argon2 PUBLIC Threads::Threads)
 		target_link_libraries(mumble_client_object_lib PUBLIC argon2)

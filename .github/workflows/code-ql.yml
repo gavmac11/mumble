@@ -34,6 +34,15 @@ jobs:
       uses: github/codeql-action/init@v4
       with:
           languages: python, cpp
+          # 3rdparty contains pinned upstream code (liboqs, argon2,
+          # qrcodegen, ...) that we deliberately do not lint or patch —
+          # the same policy as the compile-time warning suppression for
+          # those directories. Scanning it only yields alerts nobody will
+          # act on (e.g. benign int-multiplication findings in qrcodegen's
+          # mask scoring).
+          config: |
+            paths_exclude:
+              - 3rdparty/**
 
     - uses: ./.github/actions/install-dependencies
       with:

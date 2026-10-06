@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <climits>
 #include <set>
 #include <unordered_map>
 
@@ -2687,10 +2688,16 @@ void Server::msgFileData(ServerUser *uSource, MumbleProto::FileData &msg) {
 	}
 	{
 		QMutexLocker lock(&m_qmFileTransferBytes);
+		// addFrame() takes ints; the product of packetsize and the channel's
+		// receiver count stays well below the int range for any realistic
+		// channel, but clamp anyway rather than narrowing blindly.
+		const qint64 aggregateCharge =
+			static_cast< qint64 >(packetsize) * static_cast< qint64 >(receivers);
 		if (iMaxFileBandwidthAggregate > 0
 			&& !m_bwrFileAggregate.addFrame(
-				static_cast< quint64 >(packetsize) * static_cast< quint64 >(receivers),
-				static_cast< quint64 >(iMaxFileBandwidthAggregate / 8))) {
+				static_cast< int >(
+					qBound(static_cast< qint64 >(0), aggregateCharge, static_cast< qint64 >(INT_MAX))),
+				iMaxFileBandwidthAggregate / 8)) {
 			return;
 		}
 	}

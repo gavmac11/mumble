@@ -21,7 +21,10 @@
 #include <QSignalSpy>
 #include <QTemporaryDir>
 
-namespace {
+// A named namespace (not an anonymous one): the test class below has external
+// linkage and GCC's -Wsubobject-linkage rejects members whose type uses an
+// anonymous namespace.
+namespace PQFTTest {
 constexpr unsigned int AliceSession = 1;
 constexpr unsigned int BobSession   = 2;
 
@@ -36,7 +39,9 @@ TestIdentity makeIdentity() {
 	sig.keypair(id.publicKey, id.secretKey);
 	return id;
 }
-} // namespace
+} // namespace PQFTTest
+
+using namespace PQFTTest;
 
 class TestFileTransferEngine : public QObject {
 	Q_OBJECT
