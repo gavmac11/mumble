@@ -823,6 +823,15 @@ void TestChatWebM::audioPlaybackAdvancesClockAndResumes() {
 
 	document.toggleChatVideo(url);
 	QTRY_VERIFY(player->isPlaying());
+
+	// This test exercises the audio-clock pacing path and needs an audio output
+	// device. Headless runners have none - playback then (correctly) falls back
+	// to the wall clock, whose pacing and pause/resume behavior are covered by
+	// silentVideoPacesOnWallClock and pauseResumeKeepsFrameSchedule instead.
+	if (!player->hasAudioOutput()) {
+		QSKIP("No audio output device available");
+	}
+
 	QTest::qWait(800);
 	const qint64 clockWhilePlaying = player->currentClockMs();
 	qInfo() << "audio output:" << player->hasAudioOutput() << "clock:" << clockWhilePlaying
