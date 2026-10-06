@@ -20,13 +20,16 @@ while the server should work on anything Qt can be installed on.
 
 ## Preview builds
 
-Installable previews of the latest successfully built `master` commit are available for
-[Windows x64](https://github.com/gavmac11/mumble/releases/download/master-preview/Mumble-Master-Preview-Windows-x64.exe),
-[macOS ARM64](https://github.com/gavmac11/mumble/releases/download/master-preview/Mumble-Master-Preview-macOS-arm64.zip),
-[Ubuntu 24.04 amd64](https://github.com/gavmac11/mumble/releases/download/master-preview/Mumble-Master-Preview-Ubuntu-24.04-amd64.deb),
-and the [Debian 12 amd64 server](https://github.com/gavmac11/mumble/releases/download/master-preview/Mumble-Master-Preview-Debian-12-amd64.deb).
-Checksums and the exact source commit are published in the
-[rolling master preview release](https://github.com/gavmac11/mumble/releases/tag/master-preview).
+Versioned previews of successfully built `master` commits are available on the
+[releases page](https://github.com/gavmac11/mumble/releases) for Windows x64, macOS ARM64,
+Ubuntu 24.04 amd64 (client), and Debian 12 amd64 (server). Each release includes checksums,
+release notes, and the exact source commit. Tags use `v1.7.<build number>`; previous releases
+remain available for rollback.
+
+The client checks this fork for updates at startup when update checks are enabled, and through
+**Help → Check for update**. It offers release notes and the appropriate download; installation
+is manual and preserves your settings. Older clients need one manual upgrade to gain this checker.
+See [release and update maintenance](docs/dev/ClientUpdates.md) for channel and publishing details.
 
 These builds are intended for testing and may be unstable. The Windows installer is unsigned, and the macOS application is ad-hoc signed and not
 notarized, so the operating system may display a security warning.

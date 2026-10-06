@@ -16,6 +16,7 @@ include(qt-utils)
 include(install-library)
 
 option(update "Check for updates by default." ON)
+option(update-prereleases "Offer preview releases from this fork in the client update checker." ON)
 
 option(translations "Include languages other than English." ON)
 option(bundle-qt-translations "Bundle Qt's translations as well" ${static})
@@ -305,6 +306,8 @@ set(MUMBLE_SOURCES
 	"UserModel.h"
 	"UserView.cpp"
 	"UserView.h"
+	"ReleaseUpdate.cpp"
+	"ReleaseUpdate.h"
 	"VersionCheck.cpp"
 	"VersionCheck.h"
 	"ViewCert.cpp"
@@ -434,6 +437,7 @@ target_link_libraries(mumble PRIVATE CLI11::CLI11)
 
 target_compile_definitions(mumble_client_object_lib
 	PUBLIC
+	"MUMBLE_UPDATE_PRERELEASES=$<BOOL:${update-prereleases}>"
 	"MUMBLE_LIBRARY_PATH=${MUMBLE_INSTALL_ABS_LIBDIR}"
 	"MUMBLE_PLUGIN_PATH=${MUMBLE_INSTALL_ABS_PLUGINDIR}"
 )
