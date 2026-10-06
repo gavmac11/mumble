@@ -29,6 +29,7 @@ private:
 
 protected:
 	void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+	/// Dispatches file-card actions and chat-video playback.
 	void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 	void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 	void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
@@ -82,6 +83,11 @@ signals:
 	void entered(QString);
 	void ctrlEnterPressed(QString);
 	void pastedImage(QString);
+#ifdef USE_FILE_SHARING
+	/// Emitted when one or more non-media files are dropped onto the chat bar
+	/// (media files keep the inline image behavior).
+	void fileDropRequested(const QStringList &paths);
+#endif
 public slots:
 	void pasteAndSend_triggered();
 	void doResize();

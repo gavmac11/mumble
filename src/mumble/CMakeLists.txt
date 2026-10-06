@@ -38,6 +38,10 @@ option(screen-sharing "Build support for screen sharing (requires libavcodec + l
 
 option(chat-webm "Build support for playing WebM videos (VP8/VP9/AV1, with audio) embedded in chat messages (non-Windows only, requires libavformat + libswresample)." ON)
 
+option(file-sharing "Build support for file sharing in chat (post-quantum encrypted; requires liboqs + libargon2)." ON)
+option(bundled-oqs "Build the bundled version of liboqs (ML-KEM-768, ML-DSA-65) instead of looking for one on the system." ${file-sharing})
+option(bundled-argon2 "Build the bundled version of libargon2 instead of looking for one on the system." ${file-sharing})
+
 if(WIN32)
 	option(asio "Build support for ASIO audio input." OFF)
 	option(wasapi "Build support for WASAPI." ON)
@@ -172,6 +176,9 @@ set(MUMBLE_SOURCES
 	"LegacyPlugin.h"
 	"ListenerVolumeSlider.cpp"
 	"ListenerVolumeSlider.h"
+	"FileTransferConfig.cpp"
+	"FileTransferConfig.h"
+	"FileTransferConfig.ui"
 	"Log.cpp"
 	"Log.h"
 	"Log.ui"
@@ -235,8 +242,11 @@ set(MUMBLE_SOURCES
 	"SelfSharePreview.h"
 	"VideoFramePacketizer.cpp"
 	"VideoFramePacketizer.h"
+	"VideoPacketPacer.cpp"
+	"VideoPacketPacer.h"
 	"VideoQualityProfile.cpp"
 	"VideoQualityProfile.h"
+	"VideoViewUi.h"
 	"SearchDialog.cpp"
 	"SearchDialog.h"
 	"SearchDialog.ui"
@@ -1130,6 +1140,127 @@ if(screen-sharing)
 	endif()
 endif()
 
+if(file-sharing)
+
+	# --- liboqs (ML-KEM-768 + ML-DSA-65, post-quantum file-transfer crypto) ---
+	if(bundled-oqs)
+		# Minimal build: only the two schemes the file-transfer protocol uses
+		# (see PROTOCOL.md "2. Cryptographic suite"). A full liboqs build pulls
+		# in every algorithm and is roughly an order of magnitude slower.
+		set(OQS_BUILD_ONLY_LIB ON CACHE BOOL "" FORCE)
+		set(OQS_MINIMAL_BUILD "KEM_ml_kem_768;SIG_ml_dsa_65" CACHE STRING "" FORCE)
+		# Generic codegen keeps the bundled library portable across machines.
+		set(OQS_OPT_TARGET "generic" CACHE STRING "" FORCE)
+		# Build a static library so there is no extra runtime .so to distribute.
+		set(PREV_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+		set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+		# liboqs's AES/SHA implementations define file-local symbols that
+		# collide when their sources are combined into one unity-build
+		# translation unit (breaks configurations using
+		# CMAKE_UNITY_BUILD=ON, e.g. the CodeQL CI job) — always build it as
+		# separate TUs.
+		set(PREV_UNITY_BUILD ${CMAKE_UNITY_BUILD})
+		set(CMAKE_UNITY_BUILD OFF)
+		# liboqs compiles its sources inside OBJECT libraries, which
+		# disable_warnings_for_all_targets_in() does not cover (it only walks
+		# library/executable targets) — MSVC's /W4 /WX then fails on
+		# liboqs-internal warnings (C4057 in x86_64_helpers.h, C4996 for
+		# strdup). Suppress warnings at the directory level instead so every
+		# target created inside inherits them.
+		get_compiler_flags(DISABLE_ALL_WARNINGS DISABLE_DEFAULT_FLAGS
+			OUTPUT_VARIABLE OQS_NO_WARNING_FLAGS)
+		get_directory_property(OQS_PREV_COMPILE_OPTIONS COMPILE_OPTIONS)
+		add_compile_options(${OQS_NO_WARNING_FLAGS})
+		add_subdirectory("${3RDPARTY_DIR}/liboqs" "${CMAKE_CURRENT_BINARY_DIR}/liboqs" EXCLUDE_FROM_ALL)
+		set_property(DIRECTORY PROPERTY COMPILE_OPTIONS ${OQS_PREV_COMPILE_OPTIONS})
+		set(CMAKE_UNITY_BUILD ${PREV_UNITY_BUILD})
+		set(BUILD_SHARED_LIBS ${PREV_BUILD_SHARED_LIBS} CACHE BOOL "" FORCE)
+		target_link_libraries(mumble_client_object_lib PUBLIC oqs)
+	else()
+		find_pkg("oqs" REQUIRED)
+		target_include_directories(mumble_client_object_lib SYSTEM PUBLIC ${oqs_INCLUDE_DIRS})
+		target_link_libraries(mumble_client_object_lib PUBLIC ${oqs_LIBRARIES})
+	endif()
+
+	# --- libargon2 (Argon2id password KDF) -------------------------------------
+	if(bundled-argon2)
+		add_library(argon2 STATIC
+								"${3RDPARTY_DIR}/argon2/src/argon2.c"
+								"${3RDPARTY_DIR}/argon2/src/core.c"
+								"${3RDPARTY_DIR}/argon2/src/encoding.c"
+								"${3RDPARTY_DIR}/argon2/src/thread.c"
+								"${3RDPARTY_DIR}/argon2/src/ref.c"
+								"${3RDPARTY_DIR}/argon2/src/blake2/blake2b.c"
+		)
+		target_include_directories(argon2 PUBLIC "${3RDPARTY_DIR}/argon2/include")
+		target_disable_warnings(argon2)
+		# Static Qt builds pull in libb2 (a Qt6Core dependency) whose blake2b
+		# implementation exports the same symbol names as argon2's bundled
+		# one, which the linker rejects ("multiple definition of `blake2b'")
+		# under LTO. Rename argon2's internal blake2b API at compile time;
+		# every TU of the target sees the same renames, so argon2's internal
+		# calls follow and the two implementations coexist.
+		target_compile_definitions(argon2 PRIVATE
+			blake2b_init_param=argon2_blake2b_init_param
+			blake2b_init=argon2_blake2b_init
+			blake2b_init_key=argon2_blake2b_init_key
+			blake2b_update=argon2_blake2b_update
+			blake2b_final=argon2_blake2b_final
+			blake2b=argon2_blake2b
+			blake2b_long=argon2_blake2b_long
+		)
+		find_package(Threads REQUIRED)
+		target_link_libraries(argon2 PUBLIC Threads::Threads)
+		target_link_libraries(mumble_client_object_lib PUBLIC argon2)
+	else()
+		find_pkg("libargon2" REQUIRED)
+		target_include_directories(mumble_client_object_lib SYSTEM PUBLIC ${libargon2_INCLUDE_DIRS})
+		target_link_libraries(mumble_client_object_lib PUBLIC ${libargon2_LIBRARIES})
+	endif()
+
+	# --- qrcodegen (safety-number QR codes) ------------------------------------
+	add_library(qrcodegen STATIC "${3RDPARTY_DIR}/qrcodegen/qrcodegen.cpp")
+	target_include_directories(qrcodegen PUBLIC "${3RDPARTY_DIR}/qrcodegen")
+	target_disable_warnings(qrcodegen)
+	target_link_libraries(mumble_client_object_lib PUBLIC qrcodegen)
+
+	target_sources(mumble_client_object_lib PRIVATE
+		"PQFileTransfer/PQFTConstants.h"
+		"PQFileTransfer/crypto/Argon2Wrap.h"
+		"PQFileTransfer/crypto/Argon2Wrap.cpp"
+		"PQFileTransfer/crypto/CanonicalCBOR.h"
+		"PQFileTransfer/crypto/CanonicalCBOR.cpp"
+		"PQFileTransfer/crypto/CryptoUtils.h"
+		"PQFileTransfer/crypto/CryptoUtils.cpp"
+		"PQFileTransfer/crypto/KemMLKEM768.h"
+		"PQFileTransfer/crypto/KemMLKEM768.cpp"
+		"PQFileTransfer/crypto/Merkle.h"
+		"PQFileTransfer/crypto/Merkle.cpp"
+		"PQFileTransfer/crypto/SigMLDSA65.h"
+		"PQFileTransfer/crypto/SigMLDSA65.cpp"
+		"PQFileTransfer/identity/FTIdentity.h"
+		"PQFileTransfer/identity/FTIdentity.cpp"
+		"PQFileTransfer/identity/PeerTrustStore.h"
+		"PQFileTransfer/identity/PeerTrustStore.cpp"
+		"PQFileTransfer/engine/FTMessages.h"
+		"PQFileTransfer/engine/FTMessages.cpp"
+		"PQFileTransfer/engine/FileTransferEngine.h"
+		"PQFileTransfer/engine/FileTransferEngine.cpp"
+		"PQFileTransfer/engine/FileTransferManager.h"
+		"PQFileTransfer/engine/FileTransferManager.cpp"
+		"PQFileTransfer/engine/FileTransferSession.h"
+		"PQFileTransfer/engine/FileTransferSession.cpp"
+		"PQFileTransfer/engine/FTManifest.h"
+		"PQFileTransfer/engine/FTManifest.cpp"
+		"PQFileTransfer/engine/FTCardRender.h"
+		"PQFileTransfer/engine/FTCardRender.cpp"
+		"PQFileTransfer/widgets/FileTransferDialogs.h"
+		"PQFileTransfer/widgets/FileTransferDialogs.cpp"
+	)
+
+	target_compile_definitions(mumble_client_object_lib PUBLIC "USE_FILE_SHARING")
+endif()
+
 if(xboxinput)
 	target_sources(mumble_client_object_lib
 		PRIVATE
@@ -1355,6 +1486,7 @@ if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
 		# an awful lot of macros that can conflict with other code
 		set_source_files_properties(
 			"GlobalShortcut_unix.cpp"
+			"CaptureSourceLister_unix.cpp"
 			PROPERTIES
 				SKIP_UNITY_BUILD_INCLUSION TRUE
 		)

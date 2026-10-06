@@ -8,6 +8,8 @@
 
 #include <set>
 
+#include <functional>
+
 #include <QSystemTrayIcon>
 #include <QtCore/QDate>
 #include <QtCore/QHash>
@@ -171,6 +173,13 @@ public:
 	static QString videoToImg(const QByteArray &rawVideoData, int maxSize);
 	/// Returns whether the given data looks like a WebM container (EBML magic)
 	static bool isWebM(const QByteArray &rawVideoData);
+
+#ifdef USE_FILE_SHARING
+	/// HTML that embeds a file-transfer card into the log. The card is
+	/// resolved by LogDocument through the lookup installed by MainWindow.
+	static QString fileCardToHtml(const QByteArray &transferId);
+#endif
+
 	/// Extracts the raw image data from a data-URL as it is created by the imageToImg functions above.
 	/// @param url The data-URL to extract the image data from
 	/// @param imageFormat Receives the image format declared in the URL (e.g. "gif")
@@ -237,6 +246,11 @@ private:
 	/// @return The started movie or nullptr, if the data turned out not to be animated
 	QMovie *createAnimation(const QUrl &url, const QByteArray &imageData);
 
+#ifdef USE_FILE_SHARING
+	/// Live file-card state lookup (transferId -> rendered card image)
+	std::function< bool(const QByteArray &, QImage &) > m_fileCardLookup;
+#endif
+
 #ifdef USE_CHAT_WEBM
 	/// The players of the chat videos, keyed by their data-URL
 	QHash< QUrl, ChatVideoPlayer * > m_qmChatVideos;
@@ -291,6 +305,15 @@ public:
 	/// player was destroyed earlier (capacity eviction), it is re-created from the
 	/// URL's data.
 	void toggleChatVideo(const QUrl &url);
+#endif
+
+#ifdef USE_FILE_SHARING
+	/// Installs the live card lookup for mumble-file data URLs (called by
+	/// MainWindow). Returns false when no such transfer exists.
+	void setFileCardLookup(
+		const std::function< bool(const QByteArray &, class QImage &) > &lookup) {
+		m_fileCardLookup = lookup;
+	}
 #endif
 
 signals:

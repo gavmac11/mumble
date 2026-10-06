@@ -10,6 +10,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
 #include <QtGui/QImage>
+#include <atomic>
 #include <chrono>
 #include <cstdint>
 
@@ -56,6 +57,8 @@ public:
 	void startCapture();
 	void stopCapture();
 	bool isCapturing() const;
+	/// Thread-safe request consumed by the next encoder submission, including V4L2's worker.
+	void requestKeyframe();
 
 #ifdef USE_SCREEN_SHARING
 	/// Sets the capture source for the non-native picker path. Call before startCapture().
@@ -118,6 +121,7 @@ private:
 	int m_encoderWidth         = 0;
 	int m_encoderHeight        = 0;
 	bool m_reportedCaptureStarted = false;
+	std::atomic< bool > m_keyframeRequested{ false };
 
 	/// Preview scaler, deliberately independent of m_swsCtx: destroyEncoder() may free that one
 	/// from the worker thread mid-stream, while the preview context is only ever freed from

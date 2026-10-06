@@ -1,0 +1,11 @@
+{
+  "scope": "Offline diagnostic of the single observed Opus padding change; not a listening test",
+  "fixture_sha256": "7dcb01ae23e53b0a2b1d4bb3506ea902e262382813629f2746dee4bed498228a",
+  "voice_packet_index": 10,
+  "mumble_frame_number": 20,
+  "changed_opus_byte_index": 57,
+  "change": "XOR 1, inside the packet padding",
+  "original_decoded_pcm": "SHA256=e835d588b8001cf430e3dd6fa08539f6b5b1b1c501aa09d7845de3d392cdfa36",
+  "adjusted_decoded_pcm": "SHA256=e835d588b8001cf430e3dd6fa08539f6b5b1b1c501aa09d7845de3d392cdfa36",
+  "identical_decoded_pcm": true
+}

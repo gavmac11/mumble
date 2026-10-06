@@ -1,0 +1,106 @@
+{
+  "schema_version": 2,
+  "scope": "H.264 fixture; decode captured streams separately",
+  "transport": "udp",
+  "media_deliveries_by_transport": {
+    "tcp": 0,
+    "udp": 265896
+  },
+  "crypto_library_sha256": "edefe91c2ad6d40090d8646660a3df46e1d154a72a8cdcd6a67a670775d1de39",
+  "run_id": "5ca88d5a",
+  "probe_sha256": "9783b0c5fd5572f1e2d7cf0c5de58a653f2c3779104409815cc6e12b06c8f29c",
+  "fixture_sha256": "19f20c106aca917f3d7c81ae0b77c1c59d17d3146e871b96fc6a5a0afad435e3",
+  "voice_fixture_sha256": "bae760c9b408811d75db7b6a9540f0a82cdc67747a5609ab5fbbae5be0848e40",
+  "start_time_utc": "2026-10-04T15:25:11.166399+00:00",
+  "end_time_utc": "2026-10-04T15:25:43.196442+00:00",
+  "clients": 10,
+  "senders": 2,
+  "stagger_video_frames": false,
+  "video_send_cap_mbps": 1.972668,
+  "native_pacer_library_sha256": "38ef4f5ac9a6fcfa68478ab1bcf07efe46b1b7b3a30390a51c0c63bfc07a2264",
+  "native_pacer_rejected_frames": 0,
+  "frames_per_second": 30,
+  "width": 1280,
+  "height": 720,
+  "requested_sender_payload_mbps": null,
+  "requested_seconds": 30.0,
+  "actual_offer_seconds": 30.0015,
+  "generator_cpu_seconds_during_offer": 8.9456,
+  "generator_cpu_percent_of_one_core": 29.82,
+  "settle_seconds": 2.0,
+  "offered_payload_mbps": 3.2787,
+  "submitted_payload_mbps": 3.2787,
+  "offered_fragments": 14544,
+  "accepted_fragments": 14544,
+  "pacer_rejected_fragments": 0,
+  "accepted_not_submitted_by_deadline": 0,
+  "sent_fragments": 14544,
+  "offered_expected_deliveries": 130896,
+  "expected_deliveries": 130896,
+  "undelivered_by_deadline": 0,
+  "total_missing_deliveries": 0,
+  "observed_unique_deliveries": 130896,
+  "integrity_errors": [],
+  "complete_fanout": true,
+  "voice": {
+    "senders": 10,
+    "packet_duration_ms": 20,
+    "sent_packets": 15000,
+    "expected_deliveries": 135000,
+    "observed_unique_deliveries": 135000,
+    "undelivered_by_deadline": 0,
+    "offered_payload_mbps": 0.32,
+    "relay_delay_ms": {
+      "p50": 0.888,
+      "p95": 1.475,
+      "p99": 1.679,
+      "max": 5.569
+    }
+  },
+  "relay_delay_ms": {
+    "p50": 0.637,
+    "p95": 1.226,
+    "p99": 1.525,
+    "max": 15.284
+  },
+  "scheduled_frame_to_fragment_delivery_ms": {
+    "p50": 30.442,
+    "p95": 72.886,
+    "p99": 85.123,
+    "max": 96.381
+  },
+  "control_ping_rtt_ms": {
+    "p50": 0.87,
+    "p95": 1.29,
+    "p99": 1.455,
+    "max": 1.581
+  },
+  "encrypted_udp_ping_rtt_ms": {
+    "p50": 0.559,
+    "p95": 1.556,
+    "p99": 1.987,
+    "max": 2.007
+  },
+  "generator_event_loop_lag_ms": {
+    "p50": 0.532,
+    "p95": 1.664,
+    "p99": 1.977,
+    "max": 2.802
+  },
+  "captures": [
+    {
+      "file": "sender-1.h264",
+      "complete_frames": 900,
+      "expected_frames": 900,
+      "incomplete_frames": [],
+      "sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50"
+    },
+    {
+      "file": "sender-2.h264",
+      "complete_frames": 900,
+      "expected_frames": 900,
+      "incomplete_frames": [],
+      "sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50"
+    }
+  ]
+}

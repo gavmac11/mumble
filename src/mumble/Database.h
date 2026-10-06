@@ -35,6 +35,10 @@ public:
 	Database(const QString &dbname);
 	~Database() Q_DECL_OVERRIDE;
 
+	/// The client's SQLite connection (for feature-local tables; do not keep
+	/// around longer than needed).
+	QSqlDatabase connection() const { return db; }
+
 	QList< FavoriteServer > getFavorites();
 	void setFavorites(const QList< FavoriteServer > &servers);
 	void addFavorite(const FavoriteServer &server);

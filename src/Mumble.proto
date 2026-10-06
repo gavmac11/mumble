@@ -247,6 +247,10 @@ message UserState {
 	repeated VolumeAdjustment listening_volume_adjustment = 23;
 	// True if the user is currently sharing their screen.
 	optional bool screen_sharing = 24;
+	// True if the user's client implements chat file transfers
+	// (FileTransferControl / FileData messages). The server uses this to
+	// skip clients that cannot receive them.
+	optional bool file_transfer_capable = 25;
 }
 
 // Relays information on the bans. The client may send the BanList message to
@@ -607,6 +611,8 @@ message ServerConfig {
 	optional uint32 image_message_length = 5;
 	// The maximum number of users allowed on the server.
 	optional uint32 max_users = 6;
+	// The maximum file size (in bytes) accepted for chat file transfers.
+	optional uint64 max_file_transfer_size = 8;
 	// Whether using Mumble's recording feature is allowed on the server
 	optional bool recording_allowed = 7;
 }
@@ -638,4 +644,35 @@ message PluginDataTransmission {
 	// The ID of the sent data. This will be used by plugins to check whether they will
 	// process it or not
 	optional string dataID = 4;
+}
+
+// Chat file transfer: opaque, pairwise control records (handshake frames
+// and post-handshake AEAD control messages). The server routes each record
+// to the targeted sessions only and never inspects or stores it. See
+// PROTOCOL.md in the repository root.
+message FileTransferControl {
+	// The session ID of the client this record was sent from. Set by the
+	// server; client-supplied values are ignored.
+	optional uint32 actor = 1;
+	// The session IDs of the users this record is routed to.
+	repeated uint32 target_session = 2;
+	// Opaque control payload (handshake frame or AEAD control record).
+	required bytes payload = 3;
+}
+
+// Chat file transfer: one encrypted chunk of a file. The server broadcasts
+// it to all other file-transfer-capable users in the sender's channel and
+// never stores it.
+message FileData {
+	// The session ID of the client this chunk was sent from. Set by the
+	// server.
+	optional uint32 actor = 1;
+	// 16 random bytes chosen by the sender identifying the transfer.
+	required bytes transfer_id = 2;
+	// Zero-based index of this chunk.
+	required uint64 chunk_index = 3;
+	// Total number of chunks (hint only; the signed manifest is authoritative).
+	optional uint64 chunk_count = 4;
+	// AEAD ciphertext including the 16-byte authentication tag.
+	required bytes data = 5;
 }

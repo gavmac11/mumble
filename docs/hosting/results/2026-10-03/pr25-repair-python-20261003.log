@@ -1,0 +1,27 @@
+test_correlated_load_can_exceed_network_with_same_customer_count (test_hosting_tools.CapacityTests.test_correlated_load_can_exceed_network_with_same_customer_count) ... ok
+test_default_economics_is_explicitly_unvalidated (test_hosting_tools.CapacityTests.test_default_economics_is_explicitly_unvalidated) ... ok
+test_impossible_active_count_rejected (test_hosting_tools.CapacityTests.test_impossible_active_count_rejected) ... ok
+test_spare_and_setup_costs_count (test_hosting_tools.CapacityTests.test_spare_and_setup_costs_count) ... ok
+test_unprofitable_unit_has_no_break_even (test_hosting_tools.CapacityTests.test_unprofitable_unit_has_no_break_even) ... ok
+test_cpu_guest_time_is_not_double_counted (test_hosting_tools.CounterTests.test_cpu_guest_time_is_not_double_counted) ... ok
+test_decreasing_iowait_interval_is_missing_not_fabricated (test_hosting_tools.CounterTests.test_decreasing_iowait_interval_is_missing_not_fabricated) ... ok
+test_missing_memory_is_null_and_kibibytes_become_bytes (test_hosting_tools.CounterTests.test_missing_memory_is_null_and_kibibytes_become_bytes) ... ok
+test_network_rate_units_and_counter_reset (test_hosting_tools.CounterTests.test_network_rate_units_and_counter_reset) ... ok
+test_steal_is_separate_from_executed_work (test_hosting_tools.CounterTests.test_steal_is_separate_from_executed_work) ... ok
+test_annexb_split_keeps_all_bytes_and_distinguishes_nal_types (test_hosting_tools.RelayEncodingTests.test_annexb_split_keeps_all_bytes_and_distinguishes_nal_types) ... ok
+test_empty_latency_set_does_not_report_zero (test_hosting_tools.RelayEncodingTests.test_empty_latency_set_does_not_report_zero) ... ok
+test_opus_toc_duration_handles_modes_and_multiple_frames (test_hosting_tools.RelayEncodingTests.test_opus_toc_duration_handles_modes_and_multiple_frames) ... ok
+test_truncated_and_oversized_fields_are_rejected (test_hosting_tools.RelayEncodingTests.test_truncated_and_oversized_fields_are_rejected) ... ok
+test_truncated_ogg_is_rejected (test_hosting_tools.RelayEncodingTests.test_truncated_ogg_is_rejected) ... ok
+test_version_and_binary_payload_round_trip (test_hosting_tools.RelayEncodingTests.test_version_and_binary_payload_round_trip) ... ok
+test_impossible_submission_accounting_is_rejected (test_hosting_tools.VideoAccountingTests.test_impossible_submission_accounting_is_rejected) ... ok
+test_native_rejection_never_enters_the_sent_ledger (test_hosting_tools.VideoAccountingTests.test_native_rejection_never_enters_the_sent_ledger) ... ok
+test_rejections_and_abandoned_backlog_are_separate_from_relay_loss (test_hosting_tools.VideoAccountingTests.test_rejections_and_abandoned_backlog_are_separate_from_relay_loss) ... ok
+test_existing_xex_star_safeguard_changes_zero_block (test_native_crypto.CryptoBridgeTests.test_existing_xex_star_safeguard_changes_zero_block) ... ok
+test_maximum_packet_and_nonce_wrap (test_native_crypto.CryptoBridgeTests.test_maximum_packet_and_nonce_wrap) ... ok
+test_tamper_and_replay_are_rejected (test_native_crypto.CryptoBridgeTests.test_tamper_and_replay_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.037s
+
+OK

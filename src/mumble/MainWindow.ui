@@ -150,25 +150,65 @@
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
-   <widget class="ChatbarTextEdit" name="qteChat">
+   <widget class="QWidget" name="qwChatBar" native="true">
     <property name="sizePolicy">
-     <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
       <horstretch>0</horstretch>
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
-    <property name="maximumSize">
-     <size>
-      <width>16777215</width>
-      <height>16777215</height>
-     </size>
-    </property>
-    <property name="accessibleName">
-     <string>Enter chat message</string>
-    </property>
-    <property name="acceptRichText">
-     <bool>false</bool>
-    </property>
+    <layout class="QHBoxLayout" name="hlChatBar">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item>
+      <widget class="ChatbarTextEdit" name="qteChat">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="accessibleName">
+        <string>Enter chat message</string>
+       </property>
+       <property name="acceptRichText">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="qtbSendFile">
+       <property name="toolTip">
+        <string>Send a file to the channel</string>
+       </property>
+       <property name="accessibleName">
+        <string>Send a file to the channel</string>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QToolBar" name="qtIconToolbar">
@@ -1049,13 +1089,13 @@ the channel's context menu.</string>
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Share &amp;Screen</string>
+    <string>Share vi&amp;deo…</string>
    </property>
    <property name="toolTip">
-    <string>Start or stop sharing your screen with others in the channel</string>
+    <string>Share a camera, screen, or window with your channel</string>
    </property>
    <property name="whatsThis">
-    <string>Captures and streams your primary screen as H.264 video to all users in the current channel.</string>
+    <string>Choose a camera, screen, or window to share with everyone in the current channel. Use Stop sharing in your preview to end the stream.</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>true</bool>

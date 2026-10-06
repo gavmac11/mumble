@@ -1,0 +1,19 @@
+{
+  "scope": "Compare current captured stream hashes and frame counts to the byte-identical October 2 streams already decoded strictly with FFmpeg 7.1; no new decode performed.",
+  "runs": [
+    {
+      "workload": "webcams",
+      "captured_streams": 9,
+      "frames_per_stream": 900,
+      "sha256": "0019e752faabff4fcabb989bf8f72a3fd83a7bdf601d3f1e1cde730f98a87b50",
+      "matches_previously_decoded_streams": true
+    },
+    {
+      "workload": "screen",
+      "captured_streams": 1,
+      "frames_per_stream": 450,
+      "sha256": "e5dd7909eee94babcbc111a0bffc2923a7f5b0ce4be9f9ca43c948248aa6335f",
+      "matches_previously_decoded_streams": true
+    }
+  ]
+}

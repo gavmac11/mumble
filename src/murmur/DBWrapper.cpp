@@ -840,6 +840,26 @@ void DBWrapper::getConfigurationTo(unsigned int serverID, const std::string &con
 	WRAPPER_END
 }
 
+void DBWrapper::getConfigurationTo(unsigned int serverID, const std::string &configKey,
+								   unsigned long long &outVar) {
+	WRAPPER_BEGIN
+
+	assertValidID(serverID);
+
+	std::string property = m_serverDB.getConfigTable().getConfig(serverID, configKey);
+
+	if (!property.empty()) {
+		try {
+			outVar = std::stoull(property);
+		} catch (const std::invalid_argument &) {
+			std::throw_with_nested(::mdb::FormatException(
+				"Fetched property for key \"" + configKey + "\" can't be parsed as a number"));
+		}
+	}
+
+	WRAPPER_END
+}
+
 void DBWrapper::getConfigurationTo(unsigned int serverID, const std::string &configKey, unsigned int &outVar) {
 	WRAPPER_BEGIN
 

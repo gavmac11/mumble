@@ -1,0 +1,81 @@
+{
+  "scope": "synthetic video payload; no decoded media validation",
+  "transport": "udp",
+  "media_deliveries_by_transport": {
+    "tcp": 0,
+    "udp": 79
+  },
+  "crypto_library_sha256": "edefe91c2ad6d40090d8646660a3df46e1d154a72a8cdcd6a67a670775d1de39",
+  "run_id": "6d42e303",
+  "probe_sha256": "5219aa544870c464b38d7c550e3eae06e9b3fd50a371a7e71bd9c0ff540848a9",
+  "fixture_sha256": null,
+  "voice_fixture_sha256": "7dcb01ae23e53b0a2b1d4bb3506ea902e262382813629f2746dee4bed498228a",
+  "start_time_utc": "2026-10-02T05:45:55.500526+00:00",
+  "end_time_utc": "2026-10-02T05:45:57.503090+00:00",
+  "clients": 2,
+  "senders": 1,
+  "frames_per_second": 30,
+  "width": 1280,
+  "height": 720,
+  "requested_sender_payload_mbps": 0.2,
+  "requested_seconds": 1.0,
+  "actual_offer_seconds": 1.0012,
+  "generator_cpu_seconds_during_offer": 0.0356,
+  "generator_cpu_percent_of_one_core": 3.56,
+  "settle_seconds": 1.0,
+  "offered_payload_mbps": 0.1997,
+  "sent_fragments": 30,
+  "expected_deliveries": 30,
+  "observed_unique_deliveries": 30,
+  "undelivered_by_deadline": 0,
+  "integrity_errors": [
+    {
+      "type": "voice_payload_mismatch",
+      "frame": 20,
+      "actual_bytes": 80,
+      "actual_sha256": "7e4fb8a95fcc7d7ba221ac520b32d170da0f4cbce272794aa52993bcbcb05524",
+      "expected_sha256": "5702e0216602f8d28a8b3ffd68c30b67766d9f9d43a9b2bcd507506330b61232"
+    }
+  ],
+  "complete_fanout": false,
+  "voice": {
+    "senders": 1,
+    "packet_duration_ms": 20,
+    "sent_packets": 50,
+    "expected_deliveries": 50,
+    "observed_unique_deliveries": 49,
+    "undelivered_by_deadline": 1,
+    "offered_payload_mbps": 0.032,
+    "relay_delay_ms": {
+      "p50": 0.379,
+      "p95": 0.561,
+      "p99": 0.578,
+      "max": 0.578
+    }
+  },
+  "relay_delay_ms": {
+    "p50": 0.513,
+    "p95": 0.637,
+    "p99": 0.751,
+    "max": 0.751
+  },
+  "control_ping_rtt_ms": {
+    "p50": 0.379,
+    "p95": 0.621,
+    "p99": 0.621,
+    "max": 0.621
+  },
+  "encrypted_udp_ping_rtt_ms": {
+    "p50": 0.259,
+    "p95": 0.526,
+    "p99": 0.526,
+    "max": 0.526
+  },
+  "generator_event_loop_lag_ms": {
+    "p50": 0.893,
+    "p95": 1.953,
+    "p99": 2.243,
+    "max": 2.337
+  },
+  "captures": []
+}

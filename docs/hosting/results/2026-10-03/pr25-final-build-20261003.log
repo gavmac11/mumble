@@ -1,0 +1,100 @@
+[1/90] Automatic RCC for ../../mumble_flags.qrc
+[2/89] Automatic MOC for target TestVideoPacketPacer
+[3/89] Automatic MOC and UIC for target mumble_client_object_lib
+[4/89] Building CXX object src/tests/TestVideoPacketPacer/CMakeFiles/TestVideoPacketPacer.dir/TestVideoPacketPacer_autogen/mocs_compilation.cpp.o
+[5/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/About.cpp.o
+[6/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Accessibility.cpp.o
+[7/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/mumble_client_object_lib_autogen/mocs_compilation.cpp.o
+[8/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ACLEditor.cpp.o
+[9/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioConfigDialog.cpp.o
+[10/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/API_v_1_x_x.cpp.o
+[11/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Audio.cpp.o
+[12/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioInput.cpp.o
+[13/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioOutputSample.cpp.o
+[14/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioOutput.cpp.o
+[15/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioOutputSpeech.cpp.o
+[16/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioStats.cpp.o
+[17/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioWizard.cpp.o
+[18/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/BanEditor.cpp.o
+[19/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Cert.cpp.o
+[20/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ClientUser.cpp.o
+[21/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ConfigDialog.cpp.o
+[22/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/CustomElements.cpp.o
+[23/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ConnectDialog.cpp.o
+[24/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Database.cpp.o
+[25/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/EnumStringConversions.cpp.o
+[26/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Global.cpp.o
+[27/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/GlobalShortcutButtons.cpp.o
+[28/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/GlobalShortcut.cpp.o
+[29/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/LCD.cpp.o
+[30/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/JSONSerialization.cpp.o
+[31/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ListenerVolumeSlider.cpp.o
+[32/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Log.cpp.o
+[33/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/LookConfig.cpp.o
+[34/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Messages.cpp.o
+[35/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/MumbleApplication.cpp.o
+[36/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/MainWindow.cpp.o
+[37/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/NetworkConfig.cpp.o
+[38/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PluginConfig.cpp.o
+[39/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PluginInstaller.cpp.o
+[40/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PluginUpdater.cpp.o
+[41/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PluginManager.cpp.o
+[42/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PositionalAudioViewer.cpp.o
+[43/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PTTButtonWidget.cpp.o
+[44/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ScreenCapture.cpp.o
+[45/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/RichTextEditor.cpp.o
+[46/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/VideoPacketPacer.cpp.o
+[47/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/VideoQualityProfile.cpp.o
+[48/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/SearchDialog.cpp.o
+[49/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ServerHandler.cpp.o
+[50/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ServerInformation.cpp.o
+[51/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/SocketRPC.cpp.o
+[52/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/TalkingUI.cpp.o
+[53/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/TalkingUIContainer.cpp.o
+[54/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Settings.cpp.o
+[55/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/TalkingUIEntry.cpp.o
+[56/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/TalkingUISelection.cpp.o
+[57/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/TextMessage.cpp.o
+[58/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Themes.cpp.o
+[59/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Tokens.cpp.o
+[60/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Usage.cpp.o
+[61/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/UserEdit.cpp.o
+[62/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/UserInformation.cpp.o
+[63/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/UserLocalNicknameDialog.cpp.o
+[64/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/UserLocalVolumeSlider.cpp.o
+[65/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/UserView.cpp.o
+[66/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/UserModel.cpp.o
+[67/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/VersionCheck.cpp.o
+[68/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/VoiceRecorder.cpp.o
+[69/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/WebFetch.cpp.o
+[70/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/VoiceRecorderDialog.cpp.o
+[71/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/AccessibleQGroupBox.cpp.o
+[72/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/BanDialog.cpp.o
+[73/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/FailedConnectionDialog.cpp.o
+[74/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/TrayIcon.cpp.o
+[75/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/GlobalShortcut_unix.cpp.o
+[76/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/__/Channel.cpp.o
+[77/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/TextToSpeech_unix.cpp.o
+[78/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/DBus.cpp.o
+[79/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ALSAAudio.cpp.o
+[80/89] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PipeWire.cpp.o
+[81/89] Building CXX object src/tests/TestVideoPacketPacer/CMakeFiles/TestVideoPacketPacer.dir/TestVideoPacketPacer.cpp.o
+[82/89] Building CXX object src/tests/TestVideoPacketPacer/CMakeFiles/TestVideoPacketPacer.dir/__/__/mumble/VideoPacketPacer.cpp.o
+[83/89] Linking CXX executable tests/TestVideoPacketPacer
+[84/89] Automatic MOC for target TestVideoQualityProfile
+[85/88] Building CXX object src/tests/TestVideoQualityProfile/CMakeFiles/TestVideoQualityProfile.dir/__/__/mumble/VideoQualityProfile.cpp.o
+[86/88] Linking CXX executable tests/TestVideoQualityProfile
+[87/88] Building CXX object src/mumble/CMakeFiles/mumble.dir/main.cpp.o
+[88/88] Linking CXX executable mumble
+Internal ctest changing into directory: /client-build
+Test project /client-build
+    Start 2: TestVideoFramePacketizer
+1/3 Test #2: TestVideoFramePacketizer .........   Passed    0.01 sec
+    Start 3: TestVideoPacketPacer
+2/3 Test #3: TestVideoPacketPacer .............   Passed    0.13 sec
+    Start 4: TestVideoQualityProfile
+3/3 Test #4: TestVideoQualityProfile ..........   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =   0.14 sec

@@ -34,3 +34,11 @@
 [submodule "3rdparty/CLI11"]
 	path = 3rdparty/CLI11
 	url = https://github.com/CLIUtils/CLI11.git
+[submodule "3rdparty/liboqs"]
+	path = 3rdparty/liboqs
+	url = https://github.com/open-quantum-safe/liboqs.git
+	shallow = true
+[submodule "3rdparty/argon2"]
+	path = 3rdparty/argon2
+	url = https://github.com/P-H-C/phc-winner-argon2.git
+	shallow = true

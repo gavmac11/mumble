@@ -5,6 +5,10 @@
 
 #include "CustomElements.h"
 
+#ifdef USE_FILE_SHARING
+#	include "PQFileTransfer/engine/FTCardRender.h"
+#endif
+
 #include "ClientUser.h"
 #include "Log.h"
 #include "MainWindow.h"
@@ -53,26 +57,40 @@ QTextImageFormat LogTextBrowser::imageFormatAt(const QPoint &pos) const {
 }
 
 void LogTextBrowser::mousePressEvent(QMouseEvent *event) {
-	// Single-clicking a chat video toggles between playing and paused. Everything
-	// else (anchors in particular) keeps the default QTextBrowser behavior.
-#ifdef USE_CHAT_WEBM
+#if defined(USE_FILE_SHARING) || defined(USE_CHAT_WEBM)
 	if (event->button() == Qt::LeftButton) {
 		const QTextImageFormat format = imageFormatAt(event->pos());
 		if (format.isValid()) {
+			const QUrl url(format.name());
+#ifdef USE_FILE_SHARING
+			if (url.isValid() && url.scheme() == QLatin1String("data")) {
+				QByteArray subtype;
+				Log::imageDataFromDataUrl(url, subtype);
+				if (subtype == QByteArray("mumble-file")) {
+					bool ok = false;
+					const QByteArray transferId = PQFT::fileCardTransferId(url, ok);
+					if (ok && Global::get().mw) {
+						Global::get().mw->onFileCardClicked(transferId);
+					}
+					event->accept();
+					return;
+				}
+			}
+#endif
+#ifdef USE_CHAT_WEBM
 			if (LogDocument *document = qobject_cast< LogDocument * >(this->document())) {
-				const QUrl url(format.name());
-				// isChatVideo() also covers players evicted at the capacity limit:
-				// toggleChatVideo() re-creates those from the URL's data.
+				// Evicted videos are recreated from their data URL on demand.
 				if (document->isChatVideo(url)) {
 					document->toggleChatVideo(url);
 					event->accept();
 					return;
 				}
 			}
+#endif
 		}
 	}
-#endif // USE_CHAT_WEBM
-
+#endif
+	// Preserve selection and link handling for other document content.
 	QTextBrowser::mousePressEvent(event);
 }
 
@@ -381,6 +399,9 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 				QList< QUrl > urlList = source->urls();
 
 				int count = 0;
+#ifdef USE_FILE_SHARING
+				QStringList plainFiles;
+#endif
 				for (int i = 0; i < urlList.size(); ++i) {
 					QString path = urlList[i].toLocalFile();
 					if (path.endsWith(QLatin1String(".webm"), Qt::CaseInsensitive)) {
@@ -410,8 +431,15 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 					}
 					QImage image(path);
 
-					if (image.isNull() && rawImage.isEmpty())
+					if (image.isNull() && rawImage.isEmpty()) {
+#ifdef USE_FILE_SHARING
+						// Not an image: offer it as a file transfer instead
+						if (QFileInfo(path).isFile()) {
+							plainFiles << path;
+						}
+#endif
 						continue;
+					}
 					if (emitPastedImage(image, rawImage)) {
 						++count;
 					} else {
@@ -419,7 +447,13 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 					}
 				}
 
-				return (count > 0);
+#ifdef USE_FILE_SHARING
+				if (!plainFiles.isEmpty()) {
+					emit fileDropRequested(plainFiles);
+					return true;
+				}
+#endif
+				return count > 0;
 			}
 		} else {
 			Global::get().l->log(Log::Information, tr("This server does not allow sending images."));

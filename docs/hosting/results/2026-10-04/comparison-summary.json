@@ -1,0 +1,115 @@
+{
+  "scope": "Two webcam senders, ten clients, ten voice senders; each workload runs for 30 seconds plus two seconds settling. Counter intervals include setup. No concurrent test build. Same-host private-network containers, not external-path or density validation.",
+  "runs": [
+    {
+      "configuration": "fully-default",
+      "template": "pilot-server-defaults.ini",
+      "video_expected": 130896,
+      "video_received": 85680,
+      "complete_fanout": false,
+      "captured_complete_frames": [
+        292,
+        303
+      ],
+      "client_cpu": {
+        "usage_usec": 7711092,
+        "user_usec": 6812054,
+        "system_usec": 899038,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 327,
+        "nr_throttled": 0,
+        "throttled_usec": 0,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "server_cpu_delta": {
+        "usage_usec": 4962287,
+        "user_usec": 3446424,
+        "system_usec": 1515864,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 316,
+        "nr_throttled": 0,
+        "throttled_usec": 0,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "client_udp_delta": {
+        "InDatagrams": 221447,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 30295,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "server_udp_delta": {
+        "InDatagrams": 30204,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 221340,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      }
+    },
+    {
+      "configuration": "raised",
+      "template": "pilot-server.ini",
+      "video_expected": 130896,
+      "video_received": 130896,
+      "complete_fanout": true,
+      "captured_complete_frames": [
+        900,
+        900
+      ],
+      "client_cpu": {
+        "usage_usec": 9229513,
+        "user_usec": 8248877,
+        "system_usec": 980635,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 327,
+        "nr_throttled": 0,
+        "throttled_usec": 0,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "server_cpu_delta": {
+        "usage_usec": 6214352,
+        "user_usec": 4459848,
+        "system_usec": 1754505,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 314,
+        "nr_throttled": 0,
+        "throttled_usec": 0,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "client_udp_delta": {
+        "InDatagrams": 266664,
+        "NoPorts": 12,
+        "InErrors": 0,
+        "OutDatagrams": 30274,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      },
+      "server_udp_delta": {
+        "InDatagrams": 30204,
+        "NoPorts": 0,
+        "InErrors": 0,
+        "OutDatagrams": 266556,
+        "RcvbufErrors": 0,
+        "SndbufErrors": 0,
+        "InCsumErrors": 0,
+        "IgnoredMulti": 0,
+        "MemErrors": 0
+      }
+    }
+  ]
+}

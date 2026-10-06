@@ -1,0 +1,55 @@
+{
+  "scope": "Final source after whitespace-only formatting, successful full Linux client/CTest rebuild and native bridge rebuild.",
+  "base_commit": "1772f827f12018472511e82b20c1cb4ba38108b1",
+  "review_start_commit": "0dba0a5d3df12a64c772574ec0844245722ab2bb",
+  "working_tree_patch": true,
+  "source_lf_sha256": {
+    "scripts/hosting/build_client_pilot.sh": "a46633e82e2eb48fe6bb0728b504d2c9c85b99eec7fa32820751937ad1c805bf",
+    "scripts/hosting/build_pacer_bridge.sh": "ece8ea602f7269f1c03db170717dad66f0fa503b61442a0e18d484cb787abb76",
+    "scripts/hosting/native_pacer.py": "d14e06fee40bf5c57e19bdfd4eea804d2161d25a69338fea5e90f2ddd111eff3",
+    "scripts/hosting/pacer_bridge.cpp": "eb686575fb2a64ba04359dd25a494e339e6fdda84bd57e7a87394b291f395491",
+    "scripts/hosting/relay_probe.py": "0406c72d58334e541de87e93b3c792da7553a8fa171c2881a9d6b7059d0b870a",
+    "scripts/hosting/test_hosting_tools.py": "5d99ec83ab07a9686a66ab4637d9ff9de048931fb2b741f36f89f9c875654d91",
+    "src/mumble/CMakeLists.txt": "3d46f413e12d3c8879759fe82e8a8945f322891bf7ca975843de0d5a2fb0e80c",
+    "src/mumble/MainWindow.cpp": "a62f9d4150834ddbb47be7cde708f1682b61c5f9854d26b61016b7f9aea9f290",
+    "src/mumble/MainWindow.h": "ac593ffbc8171bc061b2e1b963b3fc3e94bfbf727ae2cc5c602042b8f869236f",
+    "src/mumble/ScreenCapture.cpp": "ee5d88ac00e946d638fee576d694814ee8611c023d430fc2a5c6114e890252ee",
+    "src/mumble/ScreenCapture.h": "80cc193596e8a51b38f1184e3e089e79ff10c8b0670ce745941bb619ddd34d5f",
+    "src/mumble/VideoFramePacketizer.cpp": "c81817bebf08280fdda0fcc3ecee70c75978f98766def8ff44ffb5e0ebf89526",
+    "src/mumble/VideoFramePacketizer.h": "560ece6373b4bb8f6637dcd352ddfad84078c055f79e3db4e06c478f6a06457b",
+    "src/mumble/VideoPacketPacer.cpp": "3d40175f98478889434495ca4626ddf382c4dc618ea344368805e8c8f85e5ba1",
+    "src/mumble/VideoPacketPacer.h": "58ec54375a741cce706e6b4fee4e2767ad7b709b6e37fd508f54bd56e22fa1da",
+    "src/mumble/VideoQualityProfile.cpp": "0b1bae3c052fd821817632c2a06d6148707707ac83de3b497893f8b43b246083",
+    "src/mumble/VideoQualityProfile.h": "e016e438398bcb096ae893317de3c65e34430d138e02b8690eb5aa204e16138d",
+    "src/tests/CMakeLists.txt": "b35f5a6ad3771272dec5dcf463c091b47c53632bbec2e7622b8936a14332aa1e",
+    "src/tests/TestVideoPacketPacer/CMakeLists.txt": "700748f24275cdded3d6ca7658fb6bd92af10edf96d24f8e9be26b4f3e8ab672",
+    "src/tests/TestVideoPacketPacer/TestVideoPacketPacer.cpp": "fd631efdd8697f6ab3b6b076666a8eb41e558655f2731ffa5979170f2f3aa871",
+    "src/tests/TestVideoQualityProfile/TestVideoQualityProfile.cpp": "e0c0dd23bdd949ac19577290b93283e5cbc91e3942a3a067fb9dfb5e02d9d040"
+  },
+  "binary_sha256": {
+    "client-build/mumble": "b6fda1f4736fa2b4f7b53cef8febdefc12584f6ff6401f5bfee295d5cc1b319f",
+    "build/mumble-server": "2c97648941109b142386dc08ccf709abd0808dddc7f9ebb03ee35071252b4154",
+    "build/libmumble_pilot_ocb.so": "edefe91c2ad6d40090d8646660a3df46e1d154a72a8cdcd6a67a670775d1de39",
+    "build-review-20261003/libmumble_pilot_pacer.so": "f144929128b0448c83b30e9aa4dca504f5aeb9889e4529acad5cac61f47c571e"
+  },
+  "client_build_image": "sha256:9cea5f8ec6743fe6066e43228478f723db31f8ea4796c4eadbb1e99f880fe7f8",
+  "validation": {
+    "full_linux_client_build_exit_code": 0,
+    "related_ctest_suites": 3,
+    "failed_ctest_suites": 0,
+    "python_checks": 22,
+    "failed_python_checks": 0,
+    "client_build_log": "pr25-formatted-build-20261003.log",
+    "python_log": "pr25-repair-python-20261003.log"
+  },
+  "network_tests": {
+    "queue": "Actual PacketQueue through native bridge; Python scheduling",
+    "qt_adapter": "Unit tested; full GUI media/recovery not tested",
+    "sender_video_limit_bps": 2500000,
+    "aggregate_video_limit_bps": 200000000,
+    "server_binary_unchanged": true,
+    "client_build_ran_concurrently": true
+  },
+  "native_bridge_identical_to_tested_binary": true,
+  "previous_server_config_restored": true
+}

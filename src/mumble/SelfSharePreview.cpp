@@ -4,33 +4,49 @@
 // tree or at <https://www.mumble.info/LICENSE>.
 
 #include "SelfSharePreview.h"
+#include "VideoViewUi.h"
 
 #include <QtGui/QResizeEvent>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QVBoxLayout>
 
-SelfSharePreview::SelfSharePreview(QWidget *parent)
-	: QDialog(parent, Qt::Window | Qt::WindowStaysOnTopHint) {
+SelfSharePreview::SelfSharePreview(QWidget *parent) : QDialog(parent, Qt::Window | Qt::WindowStaysOnTopHint) {
 	setAttribute(Qt::WA_DeleteOnClose, false);
+	VideoViewUi::style(this);
 
 	m_imageLabel = new QLabel(this);
 	m_imageLabel->setAlignment(Qt::AlignCenter);
 	m_imageLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	m_imageLabel->setMinimumSize(240, 160);
-	m_imageLabel->setText(tr("Waiting for first frame…"));
+	m_imageLabel->setMinimumSize(240, 135);
+	m_imageLabel->setText(tr("Starting your video…"));
 
 	QVBoxLayout *layout = new QVBoxLayout(this);
-	layout->setContentsMargins(0, 0, 0, 0);
-	layout->addWidget(m_imageLabel);
+	layout->setContentsMargins(8, 8, 8, 8);
+	layout->setSpacing(8);
+	layout->addWidget(m_imageLabel, 1);
+	auto *controls = new QHBoxLayout;
+	m_status       = new QLabel(this);
+	m_status->setObjectName(QStringLiteral("sharingStatus"));
+	controls->addWidget(m_status, 1);
+	auto *stop = new QPushButton(tr("Stop sharing"), this);
+	stop->setObjectName(QStringLiteral("stopSharing"));
+	connect(stop, &QPushButton::clicked, this, &SelfSharePreview::stopSharingRequested);
+	controls->addWidget(stop);
+	layout->addLayout(controls);
+	auto *hint = new QLabel(tr("Closing this preview keeps sharing on."), this);
+	hint->setObjectName(QStringLiteral("videoHint"));
+	hint->setWordWrap(true);
+	layout->addWidget(hint);
 
 	resize(480, 320);
 }
 
 void SelfSharePreview::startSharing(bool isWebcam) {
-	setWindowTitle(isWebcam ? tr("Your webcam (live)") : tr("Your screen (live)"));
+	setWindowTitle(isWebcam ? tr("Your camera") : tr("Your screen"));
+	m_status->setText(isWebcam ? tr("● Camera is on") : tr("● You are sharing"));
 	// Drop any frame from a previous share so reopening never flashes stale content.
 	m_currentFrame = QImage();
-	m_imageLabel->setText(tr("Waiting for first frame…"));
+	m_imageLabel->setText(tr("Starting your video…"));
 	show();
 	raise();
 }
@@ -57,12 +73,10 @@ void SelfSharePreview::updateImageDisplay() {
 	if (m_currentFrame.isNull())
 		return;
 
-	QSize areaSize     = size();
-	QPixmap scaled     = QPixmap::fromImage(m_currentFrame)
-					.scaled(areaSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+	QSize areaSize = m_imageLabel->contentsRect().size();
+	QPixmap scaled = QPixmap::fromImage(m_currentFrame).scaled(areaSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 	m_imageLabel->setPixmap(scaled);
-	m_imageLabel->resize(scaled.size());
 }
 
 void SelfSharePreview::resizeEvent(QResizeEvent *event) {

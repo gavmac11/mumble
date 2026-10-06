@@ -12,6 +12,10 @@
 
 #include "ServerHandler.h"
 
+#ifdef USE_FILE_SHARING
+#	include "PQFileTransfer/engine/FileTransferManager.h"
+#endif
+
 #include "AudioInput.h"
 #include "AudioOutput.h"
 #include "Cert.h"
@@ -736,10 +740,52 @@ void ServerHandler::message(Mumble::Protocol::TCPMessageType type, const QByteAr
 				}
 			}
 		}
-	} else {
+	}
+#ifdef USE_FILE_SHARING
+	else if (type == Mumble::Protocol::TCPMessageType::FileTransferControl) {
+		// File-transfer records never reach the GUI thread directly: the
+		// manager's front half parses and enqueues them on this thread.
+		MumbleProto::FileTransferControl msg;
+		if (msg.ParseFromArray(qbaMsg.constData(), static_cast< int >(qbaMsg.size()))) {
+			if (Global::get().fileTransferManager) {
+				Global::get().fileTransferManager->handleControlMessage(msg);
+			}
+		}
+	} else if (type == Mumble::Protocol::TCPMessageType::FileData) {
+		MumbleProto::FileData msg;
+		if (msg.ParseFromArray(qbaMsg.constData(), static_cast< int >(qbaMsg.size()))) {
+			if (Global::get().fileTransferManager) {
+				Global::get().fileTransferManager->handleDataMessage(msg);
+			}
+		}
+	}
+#endif // USE_FILE_SHARING
+	else {
 		ServerHandlerMessageEvent *shme = new ServerHandlerMessageEvent(qbaMsg, type, false);
 		QApplication::postEvent(Global::get().mw, shme);
 	}
+}
+
+void ServerHandler::sendFileTransferControl(const QList< unsigned int > &targetSessions,
+											const QByteArray &payload) {
+	MumbleProto::FileTransferControl msg;
+	for (unsigned int session : targetSessions) {
+		msg.add_target_session(session);
+	}
+	msg.set_payload(payload.constData(), static_cast< size_t >(payload.size()));
+	sendMessage(msg);
+}
+
+void ServerHandler::sendFileData(const QByteArray &transferId, quint64 chunkIndex,
+								 std::optional< quint64 > chunkCount, const QByteArray &data) {
+	MumbleProto::FileData msg;
+	msg.set_transfer_id(transferId.constData(), static_cast< size_t >(transferId.size()));
+	msg.set_chunk_index(chunkIndex);
+	if (chunkCount) {
+		msg.set_chunk_count(*chunkCount);
+	}
+	msg.set_data(data.constData(), static_cast< size_t >(data.size()));
+	sendMessage(msg);
 }
 
 void ServerHandler::disconnect() {

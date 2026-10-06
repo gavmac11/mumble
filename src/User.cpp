@@ -14,6 +14,7 @@ User::User() {
 	bPrioritySpeaker      = false;
 	bRecording            = false;
 	bScreenSharing        = false;
+	bFileTransferCapable  = false;
 	bSuppress             = false;
 	cChannel              = 0;
 }

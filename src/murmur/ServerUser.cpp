@@ -17,7 +17,8 @@
 
 ServerUser::ServerUser(Server *p, QSslSocket *socket)
 	: Connection(p, socket), ServerUserInfo(), s(nullptr), leakyBucket(p->iMessageLimit, p->iMessageBurst),
-	  m_pluginMessageBucket(p->iPluginMessageLimit, p->iPluginMessageBurst) {
+	  m_pluginMessageBucket(p->iPluginMessageLimit, p->iPluginMessageBurst),
+	  m_fileControlBucket(p->iFileControlLimit, p->iFileControlBurst) {
 	sState       = ServerUser::Connected;
 	m_clientType = ClientType::REGULAR;
 	sUdpSocket   = INVALID_SOCKET;

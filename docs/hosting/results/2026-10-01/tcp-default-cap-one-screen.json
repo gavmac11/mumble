@@ -1,0 +1,37 @@
+{
+  "scope": "synthetic video over TCP/TLS UDPTunnel; no decoded media or UDP validation",
+  "run_id": "b5186644",
+  "start_time_utc": "2026-10-02T05:09:03.379960+00:00",
+  "end_time_utc": "2026-10-02T05:09:10.355927+00:00",
+  "clients": 10,
+  "senders": 1,
+  "requested_sender_payload_mbps": 2.0,
+  "requested_seconds": 5.0,
+  "actual_offer_seconds": 4.9844,
+  "settle_seconds": 2,
+  "offered_payload_mbps": 2.0062,
+  "sent_fragments": 1425,
+  "expected_deliveries": 12825,
+  "observed_unique_deliveries": 12798,
+  "undelivered_by_deadline": 27,
+  "integrity_errors": [],
+  "complete_fanout": false,
+  "relay_delay_ms": {
+    "p50": 15.499,
+    "p95": 25.158,
+    "p99": 53.137,
+    "max": 64.912
+  },
+  "control_ping_rtt_ms": {
+    "p50": 18.753,
+    "p95": 69.896,
+    "p99": 70.504,
+    "max": 70.552
+  },
+  "generator_event_loop_lag_ms": {
+    "p50": 10.181,
+    "p95": 15.709,
+    "p99": 18.238,
+    "max": 22.185
+  }
+}
