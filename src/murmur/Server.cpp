@@ -35,6 +35,7 @@
 #include "murmur/database/UserProperty.h"
 
 #include <QtCore/QCoreApplication>
+#include <QtCore/QDateTime>
 #include <QtCore/QRegularExpression>
 #include <QtCore/QSet>
 #include <QtCore/QXmlStreamAttributes>
@@ -342,6 +343,9 @@ void Server::readParams() {
 	iMaxBandwidth                      = Meta::mp->iMaxBandwidth;
 	iMaxVideoBandwidth                 = Meta::mp->iMaxVideoBandwidth;
 	iMaxVideoBandwidthAggregate        = Meta::mp->iMaxVideoBandwidthAggregate;
+	iMaxFileBandwidth                  = Meta::mp->iMaxFileBandwidth;
+	iMaxFileBandwidthAggregate         = Meta::mp->iMaxFileBandwidthAggregate;
+	iMaxFileSize                       = Meta::mp->iMaxFileSize;
 	iMaxUsers                          = Meta::mp->iMaxUsers;
 	iMaxUsersPerChannel                = Meta::mp->iMaxUsersPerChannel;
 	iMaxTextMessageLength              = Meta::mp->iMaxTextMessageLength;
@@ -370,6 +374,8 @@ void Server::readParams() {
 	iMessageBurst                      = Meta::mp->iMessageBurst;
 	iPluginMessageLimit                = Meta::mp->iPluginMessageLimit;
 	iPluginMessageBurst                = Meta::mp->iPluginMessageBurst;
+	iFileControlLimit                  = Meta::mp->iFileControlLimit;
+	iFileControlBurst                  = Meta::mp->iFileControlBurst;
 	broadcastListenerVolumeAdjustments = Meta::mp->broadcastListenerVolumeAdjustments;
 	m_suggestVersion                   = Meta::mp->m_suggestVersion;
 	m_suggestPositional                = Meta::mp->suggestPositional;
@@ -415,6 +421,9 @@ void Server::readParams() {
 	m_dbWrapper.getConfigurationTo(iServerNum, "bandwidth", iMaxBandwidth);
 	m_dbWrapper.getConfigurationTo(iServerNum, "videobandwidth", iMaxVideoBandwidth);
 	m_dbWrapper.getConfigurationTo(iServerNum, "videobandwidthaggregate", iMaxVideoBandwidthAggregate);
+	m_dbWrapper.getConfigurationTo(iServerNum, "filebandwidth", iMaxFileBandwidth);
+	m_dbWrapper.getConfigurationTo(iServerNum, "filebandwidthaggregate", iMaxFileBandwidthAggregate);
+	m_dbWrapper.getConfigurationTo(iServerNum, "maxfilesize", iMaxFileSize);
 	m_dbWrapper.getConfigurationTo(iServerNum, "users", iMaxUsers);
 	m_dbWrapper.getConfigurationTo(iServerNum, "usersperchannel", iMaxUsersPerChannel);
 	m_dbWrapper.getConfigurationTo(iServerNum, "textmessagelength", iMaxTextMessageLength);
@@ -508,6 +517,14 @@ void Server::setLiveConf(const QString &key, const QString &value) {
 		iMaxVideoBandwidth = i ? i : Meta::mp->iMaxVideoBandwidth;
 	else if (key == "videobandwidthaggregate")
 		iMaxVideoBandwidthAggregate = i ? i : Meta::mp->iMaxVideoBandwidthAggregate;
+	else if (key == "filebandwidth")
+		iMaxFileBandwidth = i ? i : Meta::mp->iMaxFileBandwidth;
+	else if (key == "filebandwidthaggregate")
+		iMaxFileBandwidthAggregate = i ? i : Meta::mp->iMaxFileBandwidthAggregate;
+	else if (key == "maxfilesize") {
+		quint64 size = v.toULongLong();
+		iMaxFileSize = size ? size : Meta::mp->iMaxFileSize;
+	}
 	else if (key == "bandwidth") {
 		int length = i ? i : Meta::mp->iMaxBandwidth;
 		if (length != iMaxBandwidth) {
@@ -1179,6 +1196,17 @@ void Server::addListener(QHash< ServerUser *, VolumeAdjustment > &listeners, Ser
 
 	if (it == listeners.end() || it->factor < volumeAdjustment.factor) {
 		listeners[&user] = volumeAdjustment;
+	}
+}
+
+void Server::pruneFileTransferBytes(qint64 pruneAfterMSecs) {
+	const qint64 now = QDateTime::currentMSecsSinceEpoch();
+	for (auto it = m_qhFileTransferBytes.begin(); it != m_qhFileTransferBytes.end();) {
+		if (now - it.value().lastSeenMSecs > pruneAfterMSecs) {
+			it = m_qhFileTransferBytes.erase(it);
+		} else {
+			++it;
+		}
 	}
 }
 
@@ -1859,6 +1887,9 @@ void Server::message(Mumble::Protocol::TCPMessageType type, const QByteArray &qb
 			case Mumble::Protocol::TCPMessageType::CryptSetup:
 			case Mumble::Protocol::TCPMessageType::VoiceTarget:
 			case Mumble::Protocol::TCPMessageType::PluginDataTransmission:
+			// File transfers are pure relay: no DB writes (the byte accounting is in-memory).
+			case Mumble::Protocol::TCPMessageType::FileTransferControl:
+			case Mumble::Protocol::TCPMessageType::FileData:
 
 			// These are also possible, but not strictly required
 			case Mumble::Protocol::TCPMessageType::QueryUsers:

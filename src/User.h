@@ -31,6 +31,7 @@ public:
 	bool bPrioritySpeaker;
 	bool bRecording;
 	bool bScreenSharing;
+	bool bFileTransferCapable;
 	Channel *cChannel;
 	QByteArray qbaTexture;
 	QByteArray qbaTextureHash;

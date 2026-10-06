@@ -78,6 +78,7 @@ public:
 	void getConfigurationTo(unsigned int serverID, const std::string &configKey, unsigned short &outVar);
 	void getConfigurationTo(unsigned int serverID, const std::string &configKey, bool &outVar);
 	void getConfigurationTo(unsigned int serverID, const std::string &configKey, int &outVar);
+	void getConfigurationTo(unsigned int serverID, const std::string &configKey, unsigned long long &outVar);
 	void getConfigurationTo(unsigned int serverID, const std::string &configKey, unsigned int &outVar);
 	void getConfigurationTo(unsigned int serverID, const std::string &configKey, std::optional< bool > &outVar);
 

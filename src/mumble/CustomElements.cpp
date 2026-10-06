@@ -5,6 +5,11 @@
 
 #include "CustomElements.h"
 
+#ifdef USE_FILE_SHARING
+#	include "MainWindow.h"
+#	include "PQFileTransfer/engine/FTCardRender.h"
+#endif
+
 #include "ClientUser.h"
 #include "Log.h"
 #include "MainWindow.h"
@@ -26,6 +31,34 @@
 
 namespace {
 constexpr int ORIGINAL_IMAGE_SIZE_PROPERTY = QTextFormat::UserProperty + 1;
+}
+
+void LogTextBrowser::mousePressEvent(QMouseEvent *event) {
+#ifdef USE_FILE_SHARING
+	if (event->button() == Qt::LeftButton) {
+		// File cards live in the document as <img> resources with the
+		// mumble-file subtype; find the format under the cursor.
+		QTextCursor cursor = cursorForPosition(event->pos());
+		QString imageFormat;
+		QTextImageFormat format = cursor.charFormat().toImageFormat();
+		if (format.isValid() && !format.name().isEmpty()) {
+			const QUrl url(format.name());
+			if (url.isValid() && url.scheme() == QLatin1String("data")) {
+				QByteArray subtype;
+				Log::imageDataFromDataUrl(url, subtype);
+				if (subtype == QByteArray("mumble-file")) {
+					bool ok	  = false;
+					const QByteArray transferId = PQFT::fileCardTransferId(url, ok);
+					if (ok && Global::get().mw) {
+						Global::get().mw->onFileCardClicked(transferId);
+					}
+					return;
+				}
+			}
+		}
+	}
+#endif // USE_FILE_SHARING
+	QTextBrowser::mousePressEvent(event);
 }
 
 LogTextBrowser::LogTextBrowser(QWidget *p) : QTextBrowser(p) {
@@ -305,6 +338,9 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 				QList< QUrl > urlList = source->urls();
 
 				int count = 0;
+#ifdef USE_FILE_SHARING
+				QStringList plainFiles;
+#endif
 				for (int i = 0; i < urlList.size(); ++i) {
 					QString path = urlList[i].toLocalFile();
 					QByteArray rawImage;
@@ -316,8 +352,15 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 					}
 					QImage image(path);
 
-					if (image.isNull() && rawImage.isEmpty())
+					if (image.isNull() && rawImage.isEmpty()) {
+#ifdef USE_FILE_SHARING
+						// Not an image: offer it as a file transfer instead
+						if (QFileInfo(path).isFile()) {
+							plainFiles << path;
+						}
+#endif
 						continue;
+					}
 					if (emitPastedImage(image, rawImage)) {
 						++count;
 					} else {
@@ -325,7 +368,13 @@ bool ChatbarTextEdit::sendImagesFromMimeData(const QMimeData *source) {
 					}
 				}
 
-				return (count > 0);
+#ifdef USE_FILE_SHARING
+				if (!plainFiles.isEmpty()) {
+					emit fileDropRequested(plainFiles);
+					return true;
+				}
+#endif
+				return count > 0;
 			}
 		} else {
 			Global::get().l->log(Log::Information, tr("This server does not allow sending images."));

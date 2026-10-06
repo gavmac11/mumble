@@ -15,6 +15,9 @@
 
 #include "CustomElements.h"
 #include "Log.h"
+#ifdef USE_FILE_SHARING
+#	include "PQFileTransfer/engine/FileTransferEngine.h"
+#endif
 #include "MUComboBox.h"
 #include "Mumble.pb.h"
 #include "MumbleProtocol.h"
@@ -83,6 +86,11 @@ class MainWindow : public QMainWindow, public Ui::MainWindow {
 	friend class UserModel;
 
 private:
+
+#ifdef USE_FILE_SHARING
+	/// Live state of every transfer card shown in the log
+	QHash< QByteArray, PQFT::FTTransferInfo > m_fileTransferCards;
+#endif
 	Q_OBJECT
 	Q_DISABLE_COPY(MainWindow)
 public:
@@ -331,6 +339,16 @@ public slots:
 	void on_qaPositionalAudioViewer_triggered();
 	void on_qaHelpWhatsThis_triggered();
 	void on_qaHelpAbout_triggered();
+
+#ifdef USE_FILE_SHARING
+	void on_qtbSendFile_clicked();
+
+	void startFileSend(const QString &path);
+	void bootstrapFileTransferIdentity();
+	void onFileCardClicked(const QByteArray &transferId);
+	/// Card lookup for the chat log document.
+	bool fileTransferCardInfo(const QByteArray &transferId, QImage &out) const;
+#endif
 	void on_qaHelpAboutQt_triggered();
 	void on_qaHelpVersionCheck_triggered();
 	void on_qaQuit_triggered();
@@ -358,6 +376,13 @@ public slots:
 	void on_gsTransmitModeVAD_triggered(bool, QVariant);
 	void on_gsSendTextMessage_triggered(bool, QVariant);
 	void on_gsSendClipboardTextMessage_triggered(bool, QVariant);
+#ifdef USE_FILE_SHARING
+	void onFileTransferUpdated(const PQFT::FTTransferInfo &info);
+	void onFileFirstContact(unsigned int peerSession, const QByteArray &peerFingerprint,
+							const QString &safetyNumber);
+	void onFilePeerBlocked(unsigned int peerSession, const QString &peerName);
+	void onFilePasswordRequired(const QByteArray &transferId, const QString &fileName);
+#endif
 	void on_gsToggleTalkingUI_triggered(bool, QVariant);
 	void on_gsToggleSearch_triggered(bool, QVariant);
 	void on_gsServerConnect_triggered(bool, QVariant);

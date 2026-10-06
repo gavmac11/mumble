@@ -1135,6 +1135,13 @@ QMovie *LogDocument::createAnimation(const QUrl &url, const QByteArray &imageDat
 	return nullptr;
 }
 
+#ifdef USE_FILE_SHARING
+QString Log::fileCardToHtml(const QByteArray &transferId) {
+	return QStringLiteral("<br /><img src=\"data:application/mumble-file;base64,%1\" alt=\"%2\" />")
+		.arg(QString::fromLatin1(transferId.toBase64()), QString::fromLatin1(transferId.toHex()));
+}
+#endif
+
 QVariant LogDocument::loadResource(int type, const QUrl &url) {
 	// Ignore requests for all external resources
 	// that aren't images. We don't support any of them.
@@ -1145,6 +1152,19 @@ QVariant LogDocument::loadResource(int type, const QUrl &url) {
 
 	// Only accept data URLs, not external resources
 	if (url.isValid() && url.scheme() == QLatin1String("data")) {
+#ifdef USE_FILE_SHARING
+		{
+			QByteArray format;
+			const QByteArray payload = Log::imageDataFromDataUrl(url, format);
+			if (!payload.isEmpty() && format == QByteArray("mumble-file") && m_fileCardLookup) {
+				QImage card;
+				if (m_fileCardLookup(payload, card) && !card.isNull()) {
+					addResource(type, url, card);
+					return card;
+				}
+			}
+		}
+#endif
 		if (m_animateImages) {
 			if (QMovie *movie = m_qmAnimatedImages.value(url)) {
 				// The image is already being animated. The document's resource cache may have been
