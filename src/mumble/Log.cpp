@@ -1307,7 +1307,19 @@ void LogDocument::logWebmUnsupported() {
 }
 
 bool LogDocument::isChatVideo(const QUrl &url) const {
-	return m_qmChatVideos.contains(url);
+	if (m_qmChatVideos.contains(url))
+		return true;
+
+	// Videos whose player was destroyed at the capacity limit keep their last
+	// image in the document under the original data-URL - they still count, so
+	// clicking them can re-create the player. Only the data-URL's MIME type is
+	// inspected here: the payload (potentially a whole video) stays encoded.
+	if (url.scheme() != QLatin1String("data") || !url.host().isEmpty()) {
+		return false;
+	}
+	const QString spec = url.toString(QUrl::FullyEncoded | QUrl::RemoveScheme);
+	const int comma    = static_cast< int >(spec.indexOf(QLatin1Char(',')));
+	return comma > 0 && spec.left(comma).startsWith(QLatin1String("video/webm"));
 }
 
 void LogDocument::toggleChatVideo(const QUrl &url) {

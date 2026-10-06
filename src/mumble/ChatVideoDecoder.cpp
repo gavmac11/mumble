@@ -10,6 +10,13 @@
 // The FFmpeg headers have to be wrapped in extern "C" explicitly (they do not
 // do so themselves). PaddedImage.h includes libavutil/mem.h and therefore has
 // to come after this block as well, so that declaration linkage is consistent.
+// The pragma guards keep clang from flagging FFmpeg's own headers under
+// -Wsign-conversion/-Wimplicit-int-conversion (compiled as errors).
+#if defined(__APPLE__) && defined(__clang__)
+#	pragma clang diagnostic push
+#	pragma clang diagnostic ignored "-Wsign-conversion"
+#	pragma clang diagnostic ignored "-Wimplicit-int-conversion"
+#endif
 extern "C" {
 #	include <libavcodec/avcodec.h>
 #	include <libavformat/avformat.h>
@@ -17,6 +24,9 @@ extern "C" {
 #	include <libswresample/swresample.h>
 #	include <libswscale/swscale.h>
 }
+#if defined(__APPLE__) && defined(__clang__)
+#	pragma clang diagnostic pop
+#endif
 
 #include "PaddedImage.h"
 
@@ -166,33 +176,36 @@ bool ChatVideoDecoder::openInternal() {
 	// iteration read it to the end.
 	m_avioPos = 0;
 
-	m_avioBuf = static_cast< unsigned char * >(av_malloc(AVIO_BUFFER_SIZE));
-	if (!m_avioBuf)
+	unsigned char *avioBuf = static_cast< unsigned char * >(av_malloc(AVIO_BUFFER_SIZE));
+	if (!avioBuf)
 		return false;
 
-	m_avioCtx = avio_alloc_context(m_avioBuf, AVIO_BUFFER_SIZE, 0, this, &ChatVideoDecoder::avioReadPacket, nullptr,
+	m_avioCtx = avio_alloc_context(avioBuf, AVIO_BUFFER_SIZE, 0, this, &ChatVideoDecoder::avioReadPacket, nullptr,
 								   &ChatVideoDecoder::avioSeek);
 	if (!m_avioCtx) {
-		av_free(m_avioBuf);
-		m_avioBuf = nullptr;
+		av_free(avioBuf);
 		return false;
 	}
+	// From here on the AVIO context owns the buffer: it is freed through the
+	// context (see freeAvio()), whose internal pointer is authoritative - FFmpeg
+	// may replace the buffer originally handed to it.
 
 	m_fmtCtx = avformat_alloc_context();
 	if (!m_fmtCtx) {
-		avio_context_free(&m_avioCtx);
+		freeAvio();
 		return false;
 	}
 	m_fmtCtx->pb     = m_avioCtx;
 	m_fmtCtx->flags |= AVFMT_FLAG_CUSTOM_IO;
 
-	// Note: on success, avformat_open_input takes ownership of the AVIOContext
-	// (avformat_close_input frees it, including its buffer). On failure it does
-	// not, so it has to be freed manually below.
+	// AVFMT_FLAG_CUSTOM_IO keeps the AVIO context ours to free - avformat_close_input()
+	// does not touch it (see freeAvio()).
 	const AVInputFormat *format = av_find_input_format("matroska");
 	if (avformat_open_input(&m_fmtCtx, "", format, nullptr) < 0) {
-		avformat_free_context(m_fmtCtx);
-		avio_context_free(&m_avioCtx);
+		// On failure avformat_open_input frees the user-supplied format context
+		// (and clears the pointer).
+		m_fmtCtx = nullptr;
+		freeAvio();
 		return false;
 	}
 
@@ -244,15 +257,27 @@ void ChatVideoDecoder::closeInternal() {
 		av_packet_free(&m_packet);
 	}
 	if (m_fmtCtx) {
+		// Does not free the custom AVIO context (AVFMT_FLAG_CUSTOM_IO) - that is
+		// what freeAvio() below is for.
 		avformat_close_input(&m_fmtCtx);
-	} else if (m_avioCtx) {
-		// The context was never handed over to the demuxer - free it ourselves.
-		avio_context_free(&m_avioCtx);
 	}
+	freeAvio();
 	m_videoStreamIndex = m_audioStreamIndex = -1;
 	m_durationMs                           = 0;
 	m_videoEof = m_audioEof = m_demuxEof = false;
 	m_swsWidth = m_swsHeight             = 0;
+}
+
+void ChatVideoDecoder::freeAvio() {
+	if (!m_avioCtx)
+		return;
+
+	// Mirrors the cleanup of FFmpeg's own custom-AVIO example (avio_read_callback):
+	// the context's internal buffer pointer is freed first (it may have been
+	// replaced and differ from the buffer originally allocated), then the context
+	// itself.
+	av_freep(&m_avioCtx->buffer);
+	avio_context_free(&m_avioCtx);
 }
 
 void ChatVideoDecoder::requestWork() {
@@ -427,8 +452,13 @@ bool ChatVideoDecoder::decodeAudioStep(AudioChunk &audioChunk, bool flush) {
 		constexpr qint64 BYTES_PER_SAMPLE = AUDIO_OUT_CHANNELS * static_cast< qint64 >(sizeof(int16_t));
 		QByteArray pcm(maxOutSamples * BYTES_PER_SAMPLE, Qt::Uninitialized);
 		uint8_t *outPtr[1] = { reinterpret_cast< uint8_t * >(pcm.data()) };
-		const int outSamples =
-			swr_convert(m_swrCtx, outPtr, maxOutSamples, m_audio.frame->extended_data, m_audio.frame->nb_samples);
+		// Stock FFmpeg declares the input plane array of swr_convert() as
+		// `const uint8_t **`, which does not accept `uint8_t **` (extended_data)
+		// in C++ - only the custom FFmpeg snapshot's `const uint8_t * const *`
+		// does. const_cast adds the missing const (touching no pointee) so the
+		// call compiles against either declaration.
+		const uint8_t **inPtr = const_cast< const uint8_t ** >(m_audio.frame->extended_data);
+		const int outSamples  = swr_convert(m_swrCtx, outPtr, maxOutSamples, inPtr, m_audio.frame->nb_samples);
 		if (outSamples <= 0)
 			continue;
 

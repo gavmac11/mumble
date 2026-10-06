@@ -179,8 +179,15 @@ private:
 	QAudioSink *m_sink               = nullptr;
 	ChatVideoAudioSource *m_audioSource = nullptr;
 #endif
-	/// Stream time the current loop iteration started at (0 for the first one)
+	/// Stream time the current loop iteration started at (0 for the first one).
+	/// This anchors the due times of all frames and the loop gate - it is only
+	/// ever advanced when a new iteration begins, never on pause or clock seams.
 	qint64 m_loopAccumMs = 0;
+	/// The clock value at the last clock re-base (first play, pause, loop
+	/// restart, audio sink seam). The time sources' contributions count on top
+	/// of it, so latching the clock here keeps the clock position through
+	/// re-bases without shifting the frame schedule (m_loopAccumMs).
+	qint64 m_clockBaseMs = 0;
 	/// pts of the last decoded video frame (the last thing that has to be presented)
 	qint64 m_lastVideoPtsMs = 0;
 	/// Whether the clock is paced by the wall clock because the audio clock ran

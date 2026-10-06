@@ -55,21 +55,23 @@ QTextImageFormat LogTextBrowser::imageFormatAt(const QPoint &pos) const {
 void LogTextBrowser::mousePressEvent(QMouseEvent *event) {
 	// Single-clicking a chat video toggles between playing and paused. Everything
 	// else (anchors in particular) keeps the default QTextBrowser behavior.
+#ifdef USE_CHAT_WEBM
 	if (event->button() == Qt::LeftButton) {
 		const QTextImageFormat format = imageFormatAt(event->pos());
 		if (format.isValid()) {
-			const QUrl url(format.name());
-			if (url.scheme() == QLatin1String("data")) {
-				if (LogDocument *document = qobject_cast< LogDocument * >(this->document())) {
-					if (document->isChatVideo(url)) {
-						document->toggleChatVideo(url);
-						event->accept();
-						return;
-					}
+			if (LogDocument *document = qobject_cast< LogDocument * >(this->document())) {
+				const QUrl url(format.name());
+				// isChatVideo() also covers players evicted at the capacity limit:
+				// toggleChatVideo() re-creates those from the URL's data.
+				if (document->isChatVideo(url)) {
+					document->toggleChatVideo(url);
+					event->accept();
+					return;
 				}
 			}
 		}
 	}
+#endif // USE_CHAT_WEBM
 
 	QTextBrowser::mousePressEvent(event);
 }
@@ -77,14 +79,13 @@ void LogTextBrowser::mousePressEvent(QMouseEvent *event) {
 void LogTextBrowser::mouseMoveEvent(QMouseEvent *event) {
 	const QTextImageFormat format = imageFormatAt(event->pos());
 	bool overChatVideo             = false;
+#ifdef USE_CHAT_WEBM
 	if (format.isValid()) {
-		const QUrl url(format.name());
-		if (url.scheme() == QLatin1String("data")) {
-			if (const LogDocument *document = qobject_cast< LogDocument * >(this->document())) {
-				overChatVideo = document->isChatVideo(url);
-			}
+		if (const LogDocument *document = qobject_cast< LogDocument * >(this->document())) {
+			overChatVideo = document->isChatVideo(QUrl(format.name()));
 		}
 	}
+#endif // USE_CHAT_WEBM
 
 	if (overChatVideo != m_overChatVideo) {
 		m_overChatVideo = overChatVideo;

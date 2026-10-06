@@ -12,10 +12,20 @@
 
 #ifdef USE_CHAT_WEBM
 
+// The FFmpeg headers use constructs that clang flags under -Wsign-conversion and
+// -Wimplicit-int-conversion (the project compiles with them as errors).
+#	if defined(__APPLE__) && defined(__clang__)
+#		pragma clang diagnostic push
+#		pragma clang diagnostic ignored "-Wsign-conversion"
+#		pragma clang diagnostic ignored "-Wimplicit-int-conversion"
+#	endif
 extern "C" {
 #	include <libavutil/channel_layout.h>
 #	include <libavutil/samplefmt.h>
 }
+#	if defined(__APPLE__) && defined(__clang__)
+#		pragma clang diagnostic pop
+#	endif
 
 struct AVFormatContext;
 struct AVCodecContext;
@@ -128,6 +138,9 @@ private:
 
 	bool openInternal();
 	void closeInternal();
+	/// Frees the custom AVIO context (and its buffer) - ours to free because of
+	/// AVFMT_FLAG_CUSTOM_IO, no matter whether the demuxer ever saw it
+	void freeAvio();
 	/// Feeds the current (or the flush) packet into the given stream's decoder
 	/// and, on success, fills the respective output struct.
 	/// @param flush Whether the decoder should be drained (EOF reached)
@@ -145,9 +158,8 @@ private:
 	bool m_demuxEof         = false;
 	bool m_shutdownRequested = false;
 
-	AVIOContext *m_avioCtx   = nullptr;
-	unsigned char *m_avioBuf = nullptr;
-	qint64 m_avioPos         = 0;
+	AVIOContext *m_avioCtx = nullptr;
+	qint64 m_avioPos       = 0;
 
 	AVFormatContext *m_fmtCtx = nullptr;
 	AVPacket *m_packet        = nullptr;

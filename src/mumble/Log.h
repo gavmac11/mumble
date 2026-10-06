@@ -282,10 +282,14 @@ public:
 	/// playing one is paused (frozen at its current frame).
 	static constexpr int MAX_PLAYING_CHAT_VIDEOS = 4;
 
-	/// Returns whether the given data-URL is registered as a chat video in this document
+	/// Returns whether the given data-URL refers to a chat video in this document.
+	/// This includes players destroyed earlier at the capacity limit: their last
+	/// image stays in the document under the original data-URL, and clicking it
+	/// re-creates the player (see toggleChatVideo).
 	bool isChatVideo(const QUrl &url) const;
-	/// Toggles playback of the chat video registered under the given data-URL. If the player
-	/// was destroyed earlier (capacity eviction), it is re-created from the URL's data.
+	/// Toggles playback of the chat video referred to by the given data-URL. If the
+	/// player was destroyed earlier (capacity eviction), it is re-created from the
+	/// URL's data.
 	void toggleChatVideo(const QUrl &url);
 #endif
 

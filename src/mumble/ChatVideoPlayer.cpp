@@ -165,6 +165,20 @@ bool ChatVideoPlayer::ensureWorker() {
 		return false;
 	}
 
+#ifdef USE_CHAT_WEBM_AUDIO
+	if (decodeAudio && !m_decoder->decodingAudio()) {
+		// The clip carries no decodable audio (a silent video, or an audio codec
+		// this FFmpeg build lacks). The audio clock would never advance in that
+		// case - the sink cannot report anything as played - so playback is paced
+		// against the wall clock from the start instead.
+		m_sink->stop();
+		delete m_sink;
+		m_sink        = nullptr;
+		m_audioSource = nullptr;  // child of this, deleted with the player
+		m_wallPaced   = true;
+	}
+#endif
+
 	m_thread = new QThread(this);
 	m_decoder->moveToThread(m_thread);
 	connect(m_thread, &QThread::finished, m_decoder, &QObject::deleteLater);
@@ -224,7 +238,8 @@ bool ChatVideoPlayer::ensureAudioSink() {
 		if (sink->error() != QAudio::NoError && sink->error() != QAudio::UnderrunError && m_state == Playing) {
 			qWarning("ChatVideoPlayer: audio output error - continuing without sound");
 			// Fall back to the wall clock, continuing from the current position.
-			m_loopAccumMs = currentClockMs();
+			// (Only the clock base moves - the frame schedule stays put.)
+			m_clockBaseMs = currentClockMs();
 			m_audioSource->clear();
 			m_audioSource = nullptr;
 			m_wallPaced   = true;
@@ -269,7 +284,7 @@ qint64 ChatVideoPlayer::currentClockMs() const {
 #else
 	base = m_tsWallBase;
 #endif
-	return m_loopAccumMs + (source - base);
+	return m_clockBaseMs + (source - base);
 }
 
 bool ChatVideoPlayer::hasAudioOutput() const {
@@ -308,8 +323,11 @@ void ChatVideoPlayer::start() {
 	if (m_state == Poster) {
 		// First play: the stream starts over from zero.
 		m_loopAccumMs    = 0;
+		m_clockBaseMs    = 0;
 		m_lastVideoPtsMs = 0;
-		m_wallPaced      = false;
+		// Without a working audio clock (a sink could not be opened, or the clip
+		// has no decodable audio) the wall clock paces playback from the start.
+		m_wallPaced = !hasAudioOutput();
 	} else if (m_decoderAtEof && m_videoQueue.isEmpty()
 #ifdef USE_CHAT_WEBM_AUDIO
 			   && (!m_audioSource || bufferedAudioBytes() == 0)
@@ -322,9 +340,10 @@ void ChatVideoPlayer::start() {
 		// next presentation tick instead.
 		m_lastVideoPtsMs = 0;
 	}
-	// Resuming: m_loopAccumMs keeps the value frozen at pause time; re-basing
-	// discards whatever the wall clock counted in the meantime (the audio time
-	// source froze on its own while the sink was suspended).
+	// Resuming: m_loopAccumMs (the anchor of the frame due times) keeps the value
+	// of the current iteration; re-basing discards whatever the wall clock counted
+	// in the meantime (the audio time source froze on its own while the sink was
+	// suspended) and the clock base latched at pause time restores the position.
 	rebaseClock();
 
 #ifdef USE_CHAT_WEBM_AUDIO
@@ -356,9 +375,15 @@ void ChatVideoPlayer::pause() {
 		m_sink->suspend();
 #endif
 
-	// Freeze the clock. The audio time source freezes on its own while the sink is
-	// suspended; the wall clock is re-based when resuming (see start()).
-	m_loopAccumMs = currentClockMs();
+	// Freeze the clock: the audio time source stops on its own while the sink is
+	// suspended, and re-basing on resume resets both time sources' contributions
+	// to zero. The pre-pause clock value is therefore latched into the clock base
+	// here. The frame due times (pts + m_loopAccumMs) are deliberately left
+	// alone: m_loopAccumMs anchors the frame schedule of the current iteration
+	// and must not absorb the time already played, or every queued frame's due
+	// time would shift by it and the video would freeze for that span after
+	// resuming.
+	m_clockBaseMs = currentClockMs();
 
 	// Show the play overlay again so it stays discoverable that the video is paused.
 	const QImage base = m_lastCleanFrame.isNull() ? m_poster : m_lastCleanFrame;
@@ -450,6 +475,7 @@ void ChatVideoPlayer::maybeLoop(qint64 clockMs) {
 	// position. Deriving the offset from the actual clock (instead of adding the
 	// nominal duration) keeps loops drift-free.
 	m_loopAccumMs = clockMs;
+	m_clockBaseMs = clockMs;
 	m_wallPaced   = false;
 	rebaseClock();
 
@@ -480,7 +506,9 @@ void ChatVideoPlayer::presentTick() {
 		if (webmDebugEnabled()) {
 			qInfo("ChatVideoPlayer: reviving idle audio sink");
 		}
-		m_loopAccumMs = currentClockMs();
+		// Only the clock base moves (the fresh sink's time source starts over);
+		// the frame schedule stays put.
+		m_clockBaseMs = currentClockMs();
 		m_sink->disconnect(this);
 		m_sink->stop();
 		delete m_sink;
@@ -495,28 +523,34 @@ void ChatVideoPlayer::presentTick() {
 	}
 
 	// All content is decoded and played out - the audio clock would stall from
-	// All content is decoded and played out - the audio clock would stall from
 	// here on (the sink is dry). Switch to the wall clock, offset to the current
 	// position, so that the last frames can still become due and looping can
 	// kick in.
 	if (!m_wallPaced && m_audioSource && m_decoderAtEof && bufferedAudioBytes() == 0
 		&& m_sink->state() != QAudio::ActiveState) {
-		m_wallPaced = true;
-		m_loopAccumMs += m_sink->processedUSecs() / 1000 - m_tsAudioBase;
+		m_wallPaced   = true;
+		m_clockBaseMs += m_sink->processedUSecs() / 1000 - m_tsAudioBase;
 		rebaseClock();
 		if (webmDebugEnabled()) {
 			qInfo("ChatVideoPlayer: audio clock ran dry - switching to wall clock at %lldms",
-				  static_cast< long long >(m_loopAccumMs));
+				  static_cast< long long >(m_clockBaseMs));
 		}
 	}
 #endif
 
 	const qint64 clockMs = currentClockMs();
 	if (webmDebugEnabled() && (++m_debugTick % 33) == 0) {
+#ifdef USE_CHAT_WEBM_AUDIO
 		qInfo("ChatVideoPlayer: tick clock=%lldms queue=%lld audioBuf=%lld delivered=%lld eof=%d",
 			  static_cast< long long >(clockMs), static_cast< long long >(m_videoQueue.size()),
 			  static_cast< long long >(bufferedAudioBytes()),
-			  static_cast< long long >(m_audioSource->deliveredBytes()), m_decoderAtEof ? 1 : 0);
+			  static_cast< long long >(m_audioSource ? m_audioSource->deliveredBytes() : 0),
+			  m_decoderAtEof ? 1 : 0);
+#else
+		qInfo("ChatVideoPlayer: tick clock=%lldms queue=%lld eof=%d",
+			  static_cast< long long >(clockMs), static_cast< long long >(m_videoQueue.size()),
+			  m_decoderAtEof ? 1 : 0);
+#endif
 	}
 	while (!m_videoQueue.isEmpty()) {
 		const TimedFrame &frame = m_videoQueue.first();

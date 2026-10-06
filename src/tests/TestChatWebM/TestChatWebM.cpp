@@ -644,11 +644,14 @@ private slots:
 	void audioPlaybackAdvancesClockAndResumes();
 	void loopsAfterEnd();
 	void resumeAtClipEndRestartsImmediately();
+	void pauseResumeKeepsFrameSchedule();
+	void silentVideoPacesOnWallClock();
 	void releasesPlayerOnClear();
 	void retainsPlayerUntilLastReferenceIsRemoved();
 	void releasesPlayerOnMaximumBlockEviction();
 	void playingCapPausesOldest();
 	void totalCapDestroysOldest();
+	void evictedVideoIsRecreatedOnToggle();
 	void scalesVideoWithChatWindow();
 	void audioDecodesToPcm();
 	void pacingMath();
@@ -917,6 +920,79 @@ void TestChatWebM::resumeAtClipEndRestartsImmediately() {
 	document.toggleChatVideo(url);
 }
 
+void TestChatWebM::pauseResumeKeepsFrameSchedule() {
+	if (TINY_WEBM.isEmpty() || !ChatVideoDecoder::isSupported()) {
+		QSKIP("WebM test fixture not available");
+	}
+
+	LogDocument document(nullptr, true);
+	const QUrl url = webmImageUrl(TINY_WEBM);
+	document.setHtml(webmImageHtml(TINY_WEBM));
+	QVERIFY(document.resource(QTextDocument::ImageResource, url).canConvert< QImage >());
+	ChatVideoPlayer *player = document.findChildren< ChatVideoPlayer * >().first();
+
+	document.toggleChatVideo(url);
+	QTRY_VERIFY(player->isPlaying());
+
+	// Play past the point where the decoder has buffered the whole clip (it runs
+	// ahead of the presentation), then pause mid-presentation. The frames that
+	// are still due (the fixture is 2 s at 8 fps - the last frame is due at
+	// 1875 ms) have to keep their due times across the pause.
+	QTRY_VERIFY_WITH_TIMEOUT(player->decoderAtEof(), 3000);
+	QTRY_VERIFY_WITH_TIMEOUT(player->currentClockMs() > 1200, 3000);
+	document.toggleChatVideo(url);
+	QCOMPARE(player->isPlaying(), false);
+
+	// Resume: the clean frame at the pause position is shown right away
+	document.toggleChatVideo(url);
+	QCOMPARE(player->isPlaying(), true);
+	const QImage frameAtResume = document.resource(QTextDocument::ImageResource, url).value< QImage >();
+
+	// The frames still queued at the pause are due within clip time (at most at
+	// 1875 ms, the last frame of the fixture), so the video has to advance well
+	// within a second of real time. A pause that shifts the frames' due times by
+	// the clock position at pause instead freezes the video for that whole span:
+	// the earliest queued frame only becomes due at its pts plus the position
+	// the clip was paused at (>= 1.5 s here).
+	bool imageAdvanced = false;
+	qint64 waitedMs    = 0;
+	while (!imageAdvanced && waitedMs < 1000) {
+		QTest::qWait(50);
+		waitedMs += 50;
+		imageAdvanced = document.resource(QTextDocument::ImageResource, url).value< QImage >() != frameAtResume;
+	}
+	QVERIFY2(imageAdvanced, "the video stayed frozen after resuming (frame due times shifted by the paused clock)");
+
+	document.toggleChatVideo(url);
+}
+
+void TestChatWebM::silentVideoPacesOnWallClock() {
+	if (TINY_WEBM_SILENT.isEmpty() || !ChatVideoDecoder::isSupported()) {
+		QSKIP("WebM test fixture not available");
+	}
+
+	LogDocument document(nullptr, true);
+	const QUrl url = webmImageUrl(TINY_WEBM_SILENT);
+	document.setHtml(webmImageHtml(TINY_WEBM_SILENT));
+	QVERIFY(document.resource(QTextDocument::ImageResource, url).canConvert< QImage >());
+	ChatVideoPlayer *player = document.findChildren< ChatVideoPlayer * >().first();
+	const QImage poster      = document.resource(QTextDocument::ImageResource, url).value< QImage >();
+
+	document.toggleChatVideo(url);
+	QTRY_VERIFY(player->isPlaying());
+
+	// A clip without decodable audio has no audio clock to pace against: no
+	// audio output is opened for it and the wall clock drives playback right
+	// away instead of the video staying on its poster until the very end.
+	QVERIFY(!player->hasAudioOutput());
+	QTest::qWait(600);
+	QVERIFY2(player->currentClockMs() >= 300, "the playback clock did not advance (silent video is unpaced)");
+	QVERIFY2(document.resource(QTextDocument::ImageResource, url).value< QImage >() != poster,
+			 "the silent video stayed on its poster");
+
+	document.toggleChatVideo(url);
+}
+
 void TestChatWebM::releasesPlayerOnClear() {
 
 	LogDocument document(nullptr, true);
@@ -1029,6 +1105,44 @@ void TestChatWebM::totalCapDestroysOldest() {
 
 	// The oldest player was destroyed to make room for the newest one
 	QCOMPARE(document.findChildren< ChatVideoPlayer * >().size(), LogDocument::MAX_CHAT_VIDEOS);
+}
+
+void TestChatWebM::evictedVideoIsRecreatedOnToggle() {
+	if (TINY_WEBM_SILENT.isEmpty() || !ChatVideoDecoder::isSupported()) {
+		QSKIP("WebM test fixture not available");
+	}
+
+	LogDocument document(nullptr, true);
+	QUrl oldestUrl;
+	for (int i = 0; i <= LogDocument::MAX_CHAT_VIDEOS; ++i) {
+		const QByteArray data = distinctWebM(i);
+		QTextCursor cursor(&document);
+		cursor.movePosition(QTextCursor::End);
+		cursor.insertHtml(webmImageHtml(data));
+		// Image resources load lazily - fetch it once to actually create the player
+		QVERIFY(document.resource(QTextDocument::ImageResource, webmImageUrl(data)).canConvert< QImage >());
+		if (i == 0) {
+			oldestUrl = webmImageUrl(data);
+		}
+	}
+	QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+	QCOMPARE(document.findChildren< ChatVideoPlayer * >().size(), LogDocument::MAX_CHAT_VIDEOS);
+
+	// The oldest clip's player was evicted, but its image (and data-URL) stayed:
+	// the video still counts as such and toggling it re-creates the player
+	// instead of leaving its play overlay inert.
+	QVERIFY2(document.isChatVideo(oldestUrl), "an evicted video is no longer recognized as a chat video");
+	document.toggleChatVideo(oldestUrl);
+	ChatVideoPlayer *player = document.findChildren< ChatVideoPlayer * >().last();
+	QVERIFY(player);
+	QCOMPARE(player->isPlaying(), true);
+	// The re-creation evicted the next-oldest video in turn (its player is
+	// gone after the deferred deletion ran)
+	QTest::qWait(10);
+	QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+	QCOMPARE(document.findChildren< ChatVideoPlayer * >().size(), LogDocument::MAX_CHAT_VIDEOS);
+
+	player->toggle();
 }
 
 void TestChatWebM::scalesVideoWithChatWindow() {
