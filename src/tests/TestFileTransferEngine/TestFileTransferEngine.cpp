@@ -57,6 +57,8 @@ private slots:
 	void secondTransferWhileFirstReady();
 	void readyTransferDoesNotExpire();
 	void firstContactPinFlags();
+	void incomingAbortCleansUpSafely();
+	void passwordSpoolIsBounded();
 
 private:
 	QString writeTestFile(qsizetype size);
@@ -620,6 +622,129 @@ void TestFileTransferEngine::firstContactPinFlags() {
 										 PQFT::FTTransferInfo::State::Ready),
 								 30000);
 	}
+}
+
+// Review regression: an incoming ABORT travels onControlMessage ->
+// processControlForReceive -> cleanupReceive, where the job pointer handed
+// down used to be a reference to the map's own shared_ptr — erasing the map
+// entry destroyed the job mid-cleanup (use-after-free on job.spool).
+void TestFileTransferEngine::incomingAbortCleansUpSafely() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config trickled;
+	trickled.sendRateBytesPerSecond = 32 * 1024;   // one 16 KiB chunk per tick
+	trickled.chunkSize              = 16 * 1024;
+	pair.alice.setConfig(trickled);
+	pair.bob.setConfig(trickled);
+
+	QSignalSpy bobUpdates(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	QSignalSpy aliceUpdates(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
+
+	const QString source = writeTestFile(200 * 1024);
+	QVERIFY(!source.isEmpty());
+	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(),
+								  { BobSession }),
+			 200ull * 1024);
+
+	// Wait until the transfer is live (manifest verified, chunks trickling),
+	// then abort from the sender side.
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(bobUpdates, QByteArray(),
+									 PQFT::FTTransferInfo::State::Transferring),
+							 30000);
+	pair.alice.abortTransfer(QByteArray());   // invalid id: must not disturb anything
+
+	QByteArray transferId;
+	for (const auto &argument : bobUpdates) {
+		const PQFT::FTTransferInfo info = argument.at(0).value< PQFT::FTTransferInfo >();
+		if (info.state == PQFT::FTTransferInfo::State::Transferring) {
+			transferId = info.transferId;
+		}
+	}
+	QVERIFY(!transferId.isEmpty());
+	pair.alice.abortTransfer(transferId);
+
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(bobUpdates, transferId,
+									 PQFT::FTTransferInfo::State::Aborted),
+							 10000);
+	QVERIFY(sawState(aliceUpdates, transferId, PQFT::FTTransferInfo::State::Aborted));
+
+	// Partial output is gone.
+	const QString dir =
+		QDir::temp().absoluteFilePath("mumble-ft/" + QString::fromLatin1(transferId.toHex()));
+	QTRY_VERIFY_WITH_TIMEOUT(!QFile::exists(dir + "/content.bin"), 10000);
+}
+
+// Review regression: while the password prompt is up, records were spooled
+// before any validation — repeating one chunk grew the spool past the
+// manifest's size (a 200 KB transfer reached 1.8 MB) and kept refreshing the
+// idle timer. Index, length and duplicates are now checked before writing,
+// so the flood fails the transfer instead.
+void TestFileTransferEngine::passwordSpoolIsBounded() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = 0;
+	config.chunkSize              = 16 * 1024;
+	pair.alice.setConfig(config);
+	pair.bob.setConfig(config);
+
+	QSignalSpy bobUpdates(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	QSignalSpy bobPassword(&pair.bob, &PQFT::FileTransferEngine::passwordRequired);
+
+	const QString source = writeTestFile(200 * 1024);   // 204,800 bytes: 13 chunks
+	QVERIFY(!source.isEmpty());
+	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", true,
+								  QByteArray("some password"), { BobSession }),
+			 200ull * 1024);
+
+	QByteArray passwordTransfer;
+	QTRY_VERIFY_WITH_TIMEOUT(
+		[&]() {
+			for (const auto &argument : bobPassword) {
+				passwordTransfer = argument.at(0).toByteArray();
+				return true;
+			}
+			return false;
+		}(),
+		30000);
+	QVERIFY(!passwordTransfer.isEmpty());
+
+	// The reviewer's flood: 100 redeliveries of chunk 0 while the password
+	// prompt is up. The first repeat must be fatal; nothing may be spooled
+	// beyond the single legitimate copy.
+	pair.onChunkDelivered = [&pair](const QByteArray &transferId, quint64 index, quint64 total,
+									const QByteArray &data) {
+		if (index != 0) {
+			return;
+		}
+		static bool flooded = false;
+		if (!flooded) {
+			flooded = true;
+			for (int i = 0; i < 100; ++i) {
+				pair.bob.onDataMessage(AliceSession, transferId, index, total, data);
+			}
+		}
+	};
+
+	bool failedWithGenericError = false;
+	QTRY_VERIFY_WITH_TIMEOUT(
+		[&]() {
+			for (const auto &argument : bobUpdates) {
+				const PQFT::FTTransferInfo info = argument.at(0).value< PQFT::FTTransferInfo >();
+				if (info.transferId == passwordTransfer
+					&& info.state == PQFT::FTTransferInfo::State::Failed) {
+					failedWithGenericError = info.error.contains("Decryption failed");
+					return true;
+				}
+			}
+			return false;
+		}(),
+		30000);
+	QVERIFY(failedWithGenericError);
+
+	const QString dir =
+		QDir::temp().absoluteFilePath("mumble-ft/" + QString::fromLatin1(passwordTransfer.toHex()));
+	QTRY_VERIFY_WITH_TIMEOUT(!QFile::exists(dir + "/content.bin")
+								 && !QFile::exists(dir + "/chunks.spool"),
+							 10000);
 }
 
 QTEST_MAIN(TestFileTransferEngine)

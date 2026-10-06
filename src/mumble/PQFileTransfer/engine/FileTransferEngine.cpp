@@ -221,7 +221,7 @@ void FileTransferEngine::processControlForSend(SendJob &job, SendPeer &peer,
 	maybeStartHandshakePhase2(job);
 }
 
-void FileTransferEngine::processControlForReceive(const std::shared_ptr< ReceiveJob > &jobPtr,
+void FileTransferEngine::processControlForReceive(std::shared_ptr< ReceiveJob > jobPtr,
 												  quint8 type, const QByteArray &body) {
 	ReceiveJob &job = *jobPtr;
 
@@ -265,6 +265,7 @@ void FileTransferEngine::processControlForReceive(const std::shared_ptr< Receive
 			}
 		}
 		job.receivedBits = QByteArray(static_cast< qsizetype >((manifest.chunkCount + 7) / 8), '\0');
+		job.spooledBits	= QByteArray(static_cast< qsizetype >((manifest.chunkCount + 7) / 8), '\0');
 		job.leafHashes.resize(static_cast< int >(manifest.chunkCount));
 		job.idleTimer->start(m_config.receiveIdleTimeoutMSecs);
 
@@ -298,7 +299,7 @@ void FileTransferEngine::processControlForReceive(const std::shared_ptr< Receive
 	}
 }
 
-void FileTransferEngine::drainEarlyChunks(const std::shared_ptr< ReceiveJob > &jobPtr) {
+void FileTransferEngine::drainEarlyChunks(std::shared_ptr< ReceiveJob > jobPtr) {
 	const QVector< QByteArray > early = std::move(jobPtr->earlyChunks);
 	jobPtr->earlyChunks.clear();
 	for (const QByteArray &blob : early) {
@@ -321,7 +322,7 @@ bool FileTransferEngine::openSpool(ReceiveJob &job) {
 	return true;
 }
 
-void FileTransferEngine::drainSpooledChunks(const std::shared_ptr< ReceiveJob > &jobPtr) {
+void FileTransferEngine::drainSpooledChunks(std::shared_ptr< ReceiveJob > jobPtr) {
 	ReceiveJob &job = *jobPtr;
 	if (!job.spool) {
 		return;
@@ -478,24 +479,63 @@ void FileTransferEngine::onDataMessage(unsigned int actorSession, const QByteArr
 	feedReceiveChunk(job, chunkIndex, data);
 }
 
-void FileTransferEngine::feedReceiveChunk(const std::shared_ptr< ReceiveJob > &jobPtr, quint64 index,
+void FileTransferEngine::feedReceiveChunk(std::shared_ptr< ReceiveJob > jobPtr, quint64 index,
 										  const QByteArray &ciphertext) {
 	ReceiveJob &job = *jobPtr;
 	if (job.waitingPassword) {
 		// The sender streams on without a readiness acknowledgement, so every
 		// chunk must be spooled to disk — a bounded memory buffer would
-		// silently drop everything after it filled.
+		// silently drop everything after it filled. A pending password must
+		// not suspend the protocol's bounds though: index, exact per-chunk
+		// length and duplicates are validated BEFORE anything is written, so a
+		// misbehaving relay cannot grow the spool past the manifest-implied
+		// size (or keep the transfer alive) by repeating records.
+		if (index >= job.manifest.chunkCount) {
+			updateReceiveState(job, FTTransferInfo::State::Failed, genericDecryptionError());
+			cleanupReceive(jobPtr);
+			return;
+		}
+		const quint64 expectedPlain = (index + 1 == job.manifest.chunkCount)
+										  ? job.manifest.fileSize - index * job.manifest.chunkSize
+										  : job.manifest.chunkSize;
+		if (static_cast< quint64 >(ciphertext.size()) != expectedPlain + TagSize) {
+			updateReceiveState(job, FTTransferInfo::State::Failed, genericDecryptionError());
+			cleanupReceive(jobPtr);
+			return;
+		}
+		const int byteIndex = static_cast< int >(index / 8);
+		const int bitMask   = 1 << static_cast< int >(index % 8);
+		if (job.spooledBits.at(byteIndex) & bitMask) {
+			// Duplicate delivery is fatal by protocol (§9) — same policy as the
+			// decrypt path, applied at spool time.
+			updateReceiveState(job, FTTransferInfo::State::Failed, genericDecryptionError());
+			cleanupReceive(jobPtr);
+			return;
+		}
+		const QByteArray record = spoolRecord(index, ciphertext);
+		// Every accepted record is exactly (framing 12 + tag 16 + expected
+		// plaintext) bytes and each index at most once, so this cap can only
+		// trip if that invariant is broken — enforced anyway to stay fail-closed.
+		const quint64 spoolCapacity =
+			job.manifest.fileSize + 28 * job.manifest.chunkCount;
 		if (!job.spool && !openSpool(job)) {
 			updateReceiveState(job, FTTransferInfo::State::Failed, tr("storage error"));
 			cleanupReceive(jobPtr);
 			return;
 		}
-		const QByteArray record = spoolRecord(index, ciphertext);
+		if (job.spoolBytes + static_cast< quint64 >(record.size()) > spoolCapacity) {
+			updateReceiveState(job, FTTransferInfo::State::Failed, tr("storage error"));
+			cleanupReceive(jobPtr);
+			return;
+		}
 		if (job.spool->write(record) != record.size()) {
 			updateReceiveState(job, FTTransferInfo::State::Failed, tr("storage error"));
 			cleanupReceive(jobPtr);
 			return;
 		}
+		job.spoolBytes += static_cast< quint64 >(record.size());
+		job.spooledBits[byteIndex] =
+			static_cast< char >(job.spooledBits.at(byteIndex) | bitMask);
 		return;
 	}
 	if (index >= job.manifest.chunkCount || job.fileKey.isEmpty()
@@ -562,7 +602,7 @@ void FileTransferEngine::feedReceiveChunk(const std::shared_ptr< ReceiveJob > &j
 	}
 }
 
-bool FileTransferEngine::tryCompleteReceive(const std::shared_ptr< ReceiveJob > &jobPtr) {
+bool FileTransferEngine::tryCompleteReceive(std::shared_ptr< ReceiveJob > jobPtr) {
 	ReceiveJob &job = *jobPtr;
 	if (!job.haveManifest || job.waitingPassword || job.receivedCount != job.manifest.chunkCount) {
 		return false;
@@ -923,11 +963,12 @@ void FileTransferEngine::cleanupSend(SendJob &job, bool keepCard) {
 	m_sendJobs.remove(job.transferId);
 }
 
-void FileTransferEngine::cleanupReceive(const std::shared_ptr< ReceiveJob > &jobPtr) {
+void FileTransferEngine::cleanupReceive(std::shared_ptr< ReceiveJob > jobPtr) {
 	ReceiveJob &job = *jobPtr;
-	// The map's entry may be the only owning reference: erase first and read
-	// everything the keys depend on before doing so. jobPtr keeps the job
-	// alive for the rest of the teardown.
+	// The map's entry may be the only owning reference. The by-value
+	// parameter took its own owning copy at the call, so erasing the entry
+	// here cannot destroy the job (or the shared_ptr the caller passed, which
+	// may literally live inside the map node) while we still work on it.
 	const QByteArray transferId	= job.transferId;
 	const unsigned int peerSession = job.peerSession;
 	// Temp files survive only for Ready transfers (until saved); every other
@@ -1138,7 +1179,7 @@ void FileTransferEngine::emitInfo(const FTTransferInfo &info) {
 	emit transferUpdated(info);
 }
 
-void FileTransferEngine::emitSaveDone(const std::shared_ptr< ReceiveJob > &jobPtr) {
+void FileTransferEngine::emitSaveDone(std::shared_ptr< ReceiveJob > jobPtr) {
 	ReceiveJob &job = *jobPtr;
 	job.lastState = FTTransferInfo::State::Saved;
 	FTTransferInfo info;

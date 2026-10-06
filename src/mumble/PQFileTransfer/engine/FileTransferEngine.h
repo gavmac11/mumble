@@ -179,6 +179,8 @@ private:
 		::QFile *spool = nullptr;   // open for appending while waitingPassword
 		QByteArray receivedBits;   // bit i set = chunk i verified
 		quint64 receivedCount  = 0;
+		QByteArray spooledBits;   // bit i set = chunk i spooled while a password was pending
+		quint64 spoolBytes	= 0;   // bytes written to the spool so far
 		QVector< QByteArray > leafHashes;   // chunk digests (merkleRoot builds the leaves)
 		QVector< QByteArray > earlyChunks;   // "u64be index" || ciphertext blobs
 		std::unique_ptr< QTimer > idleTimer;
@@ -197,7 +199,7 @@ private:
 	void processControlForSend(SendJob &job, SendPeer &peer, const QByteArray &payload);
 	/// Handles an already-authenticated control record (routed by
 	/// onControlMessage, which probed the sessions non-destructively).
-	void processControlForReceive(const std::shared_ptr< ReceiveJob > &jobPtr, quint8 type,
+	void processControlForReceive(std::shared_ptr< ReceiveJob > jobPtr, quint8 type,
 								  const QByteArray &body);
 	void startResponder(unsigned int actorSession, const QByteArray &m1Frame,
 						const QByteArray &peerFingerprint);
@@ -210,20 +212,20 @@ private:
 	void updateReceiveState(ReceiveJob &job, FTTransferInfo::State state, const QString &error = QString());
 	/// Takes the owning pointer: failure paths remove the job from the map,
 	/// which may drop the last reference — the parameter keeps it alive.
-	void feedReceiveChunk(const std::shared_ptr< ReceiveJob > &jobPtr, quint64 index,
+	void feedReceiveChunk(std::shared_ptr< ReceiveJob > jobPtr, quint64 index,
 						  const QByteArray &ciphertext);
-	void drainEarlyChunks(const std::shared_ptr< ReceiveJob > &jobPtr);
-	void drainSpooledChunks(const std::shared_ptr< ReceiveJob > &jobPtr);
+	void drainEarlyChunks(std::shared_ptr< ReceiveJob > jobPtr);
+	void drainSpooledChunks(std::shared_ptr< ReceiveJob > jobPtr);
 	bool openSpool(ReceiveJob &job);
-	bool tryCompleteReceive(const std::shared_ptr< ReceiveJob > &jobPtr);
+	bool tryCompleteReceive(std::shared_ptr< ReceiveJob > jobPtr);
 	void cleanupSend(SendJob &job, bool keepCard);
 	/// Removes the job from the map first (dropping the map's owning
 	/// reference) and keeps it alive through the pointer for the rest of the
 	/// teardown — reading job fields after the erase used to be a
 	/// use-after-free.
-	void cleanupReceive(const std::shared_ptr< ReceiveJob > &jobPtr);
+	void cleanupReceive(std::shared_ptr< ReceiveJob > jobPtr);
 	void emitInfo(const FTTransferInfo &info);
-	void emitSaveDone(const std::shared_ptr< ReceiveJob > &jobPtr);
+	void emitSaveDone(std::shared_ptr< ReceiveJob > jobPtr);
 	void emitSaveFailed(ReceiveJob &job);
 	std::shared_ptr< ReceiveJob > findReceiveByPeer(unsigned int peerSession,
 													const QByteArray &transferId);

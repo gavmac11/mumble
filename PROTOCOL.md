@@ -80,7 +80,11 @@ channel except the sender, **skipping users without `UserState.file_transfer_cap
 Chunk size: 16 KiB–1 MiB, default 256 KiB. Receivers enforce the exact per-chunk
 plaintext length implied by the manifest (full `chunk_size` for every chunk but the
 last, which carries the file's remainder) — the wire cap above only bounds the
-frame.
+frame. The same validation applies to chunks spooled while a password prompt is
+pending: index bounds, exact length and duplicate-index checks run before the
+record is written, and the spool is capped at the manifest-implied size
+(`file_size` + 28 B framing/tag per chunk), so a relay repeating records cannot
+grow a transfer beyond its signed size.
 
 ### Capability and limits
 - `UserState.file_transfer_capable` (field 25, next free after `screen_sharing`): set by
