@@ -60,7 +60,8 @@ void VersionCheck::performRequest() {
 	QNetworkReply *reply = Global::get().nam->get(request);
 	// Bound both the total duration and response size, including a slowly trickling response.
 	QTimer::singleShot(20000, reply, &QNetworkReply::abort);
-	connect(this, &QObject::destroyed, reply, &QNetworkReply::abort);
+	// The reply must clean itself up even if the window (and this checker) closes first.
+	connect(reply, &QNetworkReply::finished, reply, &QObject::deleteLater);
 	connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
 		constexpr qsizetype maximumSize = ReleaseUpdate::MaximumResponseSize;
 		m_response += reply->read(maximumSize + 1 - m_response.size());
@@ -76,7 +77,6 @@ void VersionCheck::performRequest() {
 		}
 		const bool success = reply->error() == QNetworkReply::NoError
 							 && cache->acceptResponse(status, m_response, reply->rawHeader("ETag"));
-		reply->deleteLater();
 		if (!success) {
 			if (!m_autoCheck) {
 				QMessageBox::warning(Global::get().mw, tr("Check for updates"),
