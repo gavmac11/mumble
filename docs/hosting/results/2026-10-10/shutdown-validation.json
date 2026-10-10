@@ -1,0 +1,42 @@
+{
+  "source_commit": "e3e1419649df1bbd10e84d149c5afb62a44cc3f1",
+  "base_foundation": "e9bced7e65f8324c970580364cabf068327a4a77",
+  "platform": "macOS 26.6.2 ARM64",
+  "qt": "6.11.1",
+  "compiler": "Apple Clang 21",
+  "build": "Release, dynamic Homebrew dependencies",
+  "baseline": {
+    "manager_exit_code": 134,
+    "manager_failure": "QThread destroyed while FileTransferWorker still running after 3022 ms",
+    "engine_exit_code": 1,
+    "unsaved_ready_directory_retained": true,
+    "saved_file_preserved": true
+  },
+  "fixed": {
+    "ctest_executables_passed": 4,
+    "ctest_executables_failed": 0,
+    "ctest_seconds": 16.79,
+    "engine_sanitized_qttest_cases_passed": 17,
+    "engine_sanitized_qttest_cases_failed": 0,
+    "engine_sanitized_qttest_cases_skipped": 0,
+    "sanitizers": [
+      "address",
+      "undefined"
+    ],
+    "external_dependencies_instrumented": false,
+    "leak_detection": false
+  },
+  "limits": [
+    "Cooperative cancellation between chunks, replay records and Merkle nodes; one blocking I/O or KDF operation is not preempted.",
+    "Native quit/dialog acceptance and Windows/Linux execution of this changed source remain outstanding.",
+    "Normal engine shutdown removes owned unsaved output; abrupt kill or failed filesystem removal is not covered.",
+    "Local dependencies target macOS 26; no older macOS compatibility claim."
+  ],
+  "evidence_sha256": {
+    "shutdown-baseline-busy.txt": "58ec5c858e66216ab4a288ba9709c1d0ee040355f572608c1d6f875e09da9076",
+    "shutdown-baseline-ready.txt": "7c42c5cf4ea409fbb572fde75a3c14b95e894c1dd305754bc3c356ef22e7ab94",
+    "shutdown-ctest.txt": "623899b55b6f91d95656758161b4e9ec3943f9de33e373e09ceef4cc2878b958",
+    "shutdown-junit.xml": "dd831d331f98b399e02c6d3c09987fd7f69e82d5ac295ed82094a7b82a75c5b3",
+    "shutdown-sanitized-tests.txt": "1710780b0e7e0a655ea00c46dd3ba269d160a542265629e80f1966ba13ff85ff"
+  }
+}
