@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-10-10T19:12:34.897116+00:00",
+  "scope": "Private D1 rehearsal on two real nested KVM guests; no GUI, media-quality, density, restore or commercial acceptance",
+  "installer_sha256": "c91f7abc6e15f6c26690fb70d3975a2ca7cc19c0002a3a32f30be898c1b928f9",
+  "package": {
+    "schema": 1,
+    "source_commit": "984d6674e8aa3304d4d9222ebaba5a408f584588",
+    "package_sha256": "c77f5c70c609fe6303d151f69f49821cd078a1d21bd8f21c73e4a5d1270c1974",
+    "package_version": "1.7.56~master+git984d6674",
+    "os": "debian-12",
+    "architecture": "amd64"
+  },
+  "package_ci": {
+    "run": 38077239024,
+    "job": 114286667738,
+    "pr_head": "d78218004ece5e3d51b5cf0d40031ee70cf37c1c",
+    "base": "7fc94bf23cfb7e773282fdd67f30982e5bd25b33"
+  },
+  "cloud_image": {
+    "distribution": "Debian 12",
+    "architecture": "amd64",
+    "version": "20261006-2623",
+    "variant": "generic",
+    "download_url": "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2",
+    "verified_sha512": "f631afb1d8123a29779f720f7f08a97e9f2ce5f5c705b8d9f753df8ed0c3afddeb34e4f254dfa41a6330e9a637387c80a8fe453d789446f9d8be7d7714d0ce7e"
+  },
+  "environment": {
+    "host": "Ubuntu 24.04.4 x86_64 VM with KVM access",
+    "guest_count": 2,
+    "guest_vcpus": 2,
+    "guest_ram_mib": 1536,
+    "guest_disk_gib": 8,
+    "qemu_runner_user": "1000:1000",
+    "runner_cpu_quota_cores": 2,
+    "runner_memory_gib": 3,
+    "runner_pids_limit": 128,
+    "runner_capabilities": [],
+    "existing_pilot_and_host_services_preserved": true,
+    "external_probe_client": "Apple Silicon macOS 26.6.2; protocol probe with this repository OCB2 bridge"
+  },
+  "checks": {
+    "second_guest_initially_had_no_server_or_managed_state": true,
+    "final_installer_first_invocation_passed_on_second_guest": true,
+    "same_pin_idempotent_on_both_guests": true,
+    "changed_package_hash_refused": true,
+    "configuration_drift_refused": true,
+    "external_superuser_login_passed_on_both": true,
+    "different_tls_identity_refused": true,
+    "wrong_join_password_refused": true,
+    "actual_guest_boot_ids_changed_on_both": true,
+    "server_and_firewall_active_after_both_reboots": true,
+    "configuration_credentials_and_tls_identity_preserved": true,
+    "second_guest_tcp_and_udp_relay_passed_before_and_after_reboot": true,
+    "first_guest_cgroup_limits_checked": true
+  },
+  "python_checks": {
+    "deployment_validation_tests": 4,
+    "hosting_accounting_and_auth_tests": 21,
+    "failures": 0,
+    "skips": 0
+  },
+  "probe_records": [
+    {
+      "file": "guest-a-external-tcp.json",
+      "sha256": "b5bf11a4f594748a588c05e85977646fb06ccd573413048c16237f00b0be5696",
+      "transport": "tcp",
+      "expected_deliveries": 60,
+      "observed_deliveries": 60,
+      "complete_fanout": true
+    },
+    {
+      "file": "guest-a-external-udp.json",
+      "sha256": "c5926599c0c3ee9533e69dfb7c96f164ba38ea97f653b506da52f491308045b6",
+      "transport": "udp",
+      "expected_deliveries": 60,
+      "observed_deliveries": 60,
+      "complete_fanout": true
+    },
+    {
+      "file": "guest-a-post-reboot-udp.json",
+      "sha256": "7efe1dcc8f56132160b4907d41894d6d5f83204df4e0612e0720c21db4a40241",
+      "transport": "udp",
+      "expected_deliveries": 60,
+      "observed_deliveries": 60,
+      "complete_fanout": true
+    },
+    {
+      "file": "guest-b-external-tcp.json",
+      "sha256": "f1799c2a91835d5d459a7d8083ee71016c84489443e091cabcd697d76badf962",
+      "transport": "tcp",
+      "expected_deliveries": 60,
+      "observed_deliveries": 60,
+      "complete_fanout": true
+    },
+    {
+      "file": "guest-b-external-udp.json",
+      "sha256": "fdf573470652169c12eca5eef96174b9f5477c88cc29922fe8ffa8b7ab80fbc8",
+      "transport": "udp",
+      "expected_deliveries": 60,
+      "observed_deliveries": 60,
+      "complete_fanout": true
+    },
+    {
+      "file": "guest-b-post-reboot-tcp.json",
+      "sha256": "80822448f38ab48e199f63782de1c6122aeb68c4f08c3dcad339d63e6e36f68a",
+      "transport": "tcp",
+      "expected_deliveries": 60,
+      "observed_deliveries": 60,
+      "complete_fanout": true
+    },
+    {
+      "file": "guest-b-post-reboot-udp.json",
+      "sha256": "f64738da1d408ac5d35cbff7858d5bba7d6dd6793c97187c8e7af16f048e9b2b",
+      "transport": "udp",
+      "expected_deliveries": 60,
+      "observed_deliveries": 60,
+      "complete_fanout": true
+    }
+  ],
+  "remaining": [
+    "encrypted backup and fresh-guest state restore",
+    "accounts/ACLs/bans and TLS identity recovery",
+    "timed schema/version rollback",
+    "installation fault injection",
+    "provider firewall and allocation reconciliation",
+    "frozen candidate signing/GUI/endurance",
+    "physical-host density and paid-pilot economics"
+  ]
+}
