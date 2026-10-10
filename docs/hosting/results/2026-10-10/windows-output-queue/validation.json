@@ -1,0 +1,242 @@
+{
+  "recorded_utc": "2026-10-10T22:04:26.856491+00:00",
+  "source_commit": "0e0671cf5d58cffe905c83e162dd287686a666f2",
+  "source_branch": "codex/server-output-queue",
+  "production_commit": "ae03575fb63b08b734ee5ff264e349f946d0fd19",
+  "source_tree_clean_before_evidence": true,
+  "source_blob_sha256": {
+    "src/Connection.cpp": "fb1a7b04a908591eb09a40f18963339ef2941cd9a656bdd08ee7c211f2f118db",
+    "src/Connection.h": "78dc75cdd4486ef6db8176f6e5bc32e27dc1c9f34c624145c02106467c79007b",
+    "src/murmur/ServerUser.cpp": "7a34cca79160cc2d2d1d3b026e547cf66ce4f583fe3ca4cf4b8ecc4dac4cb0ae",
+    "src/tests/TestConnectionOutputQueue/TestConnectionOutputQueue.cpp": "070c0d4a67f89669a00c309ebfa60dd5487498d02e9cf8e144d259215334c9dc",
+    "src/tests/TestFileTransferE2E/TestFileTransferE2E.cpp": "d33a62b58db97424e37d055018f83c4c4acf49f3606d03f1806d5d1c5f11f13e"
+  },
+  "os": {
+    "name": "Windows 10 Pro",
+    "version": "10.0.19045",
+    "architecture": "x64"
+  },
+  "compiler": {
+    "name": "MSVC",
+    "version": "19.51.36257.0",
+    "installation": "VS 2026 Build Tools"
+  },
+  "qt": {
+    "version": "6.10.0",
+    "linkage": "static",
+    "dependency_build_compiler": "MSVC 2022"
+  },
+  "dependencies": "vcpkg 2026-02 b1fe4a4257 / x64-windows-static-md; OpenSSL 3.6.1; FFmpeg 8.1 shared",
+  "configuration": "Release, Ninja unity build, C++20, dynamic MSVC runtime, symbols off, LTO off, strict warnings-as-errors enabled; tests/server on, packaging off",
+  "build": {
+    "targets": [
+      "mumble-server",
+      "TestConnectionOutputQueue",
+      "TestFileTransferE2E"
+    ],
+    "configure_exit_code": 0,
+    "build_exit_code": 0,
+    "source_compiler_policy": [
+      {
+        "target": "TestConnectionOutputQueue",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestFileTransferE2E",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_server_object_lib",
+        "checked_translation_units": 3,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      }
+    ],
+    "dependency_warning_policy": "Repository defaults retained for third-party and generated protobuf sources; -external:W0 retained for external headers. No source warning relaxation on queue, server or tested file-transfer translation units.",
+    "server_executable_sha256": "a92e85c24b6284eb5e5d4722ce10bd6967f20797917f0cf47a4fc5f823643880"
+  },
+  "tests": [
+    {
+      "suite": "TestConnectionOutputQueue",
+      "cases": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.139,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "admitsExactBoundary",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.042",
+          "result": "passed"
+        },
+        {
+          "name": "admitsLargestProtocolFrame",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.016",
+          "result": "passed"
+        },
+        {
+          "name": "disconnectedSocketDoesNotWrite",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "refusesFurtherWritesBeforeDeferredClose",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.015",
+          "result": "passed"
+        },
+        {
+          "name": "unboundedDefault",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.016",
+          "result": "passed"
+        },
+        {
+          "name": "emptyWriteDoesNotDisconnect",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.016",
+          "result": "passed"
+        },
+        {
+          "name": "largeQueueDoesNotOverflow",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.015",
+          "result": "passed"
+        },
+        {
+          "name": "destroyingConnectionCancelsDeferredClose",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.015",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "17df7a3d314db9cf657c6df6bc58135c852cef7132355f7289bb2f9f88d49cf7",
+      "txt_report": "TestConnectionOutputQueue.txt",
+      "junit_report": "TestConnectionOutputQueue.xml"
+    },
+    {
+      "suite": "TestFileTransferE2E",
+      "cases": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 9.157,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferE2E",
+          "time": "2.115",
+          "result": "passed"
+        },
+        {
+          "name": "endToEndTransfer",
+          "classname": "TestFileTransferE2E",
+          "time": "2.165",
+          "result": "passed"
+        },
+        {
+          "name": "endToEndPasswordTransfer",
+          "classname": "TestFileTransferE2E",
+          "time": "2.943",
+          "result": "passed"
+        },
+        {
+          "name": "capabilityGating",
+          "classname": "TestFileTransferE2E",
+          "time": "1.790",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferE2E",
+          "time": "0.141",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "7650f7c98ac845eb2060be8e4c1b4510d5e9e7a7bdf4eb3c98442edcfcdd451c",
+      "txt_report": "TestFileTransferE2E.txt",
+      "junit_report": "TestFileTransferE2E.xml"
+    }
+  ],
+  "ctest": {
+    "suites": 2,
+    "failures": 0,
+    "wall_seconds": 10.09,
+    "case_seconds": {
+      "TestFileTransferE2E": 10.0603,
+      "TestConnectionOutputQueue": 0.935732
+    },
+    "exit_code": 0,
+    "parallel": 2,
+    "qt_platform": "offscreen",
+    "output_capture": "Only QtTest text/JUnit -o flags temporarily appended to generated CTest registrations, restored byte-for-byte after the run. Repository implementation unchanged.",
+    "e2e_fixture": "Owned local server and two TLS/protobuf client connections; Windows child server environment clears QT_QPA_PLATFORM using the existing source fixture."
+  },
+  "scope": [
+    "Eight queue behavior cases plus QtTest initialization/cleanup",
+    "Real connected socket with controlled plaintext backlog checks queue boundaries, blocked writes, empty writes and deferred close/lifetime",
+    "File-transfer E2E plain/password relay and capability gating",
+    "Native server build"
+  ],
+  "not_run": [
+    "Windows paused-receiver TLS bulk relay and memory sampling",
+    "scripts/hosting/test_slow_receiver.py (macOS/Linux ps sampler; not Windows acceptance)",
+    "Windows ASan/UBSan",
+    "Full Windows suite or endurance",
+    "GUI, capture/focus, file-card Download or application restart",
+    "Packaging/signing/Windows 11 qualification"
+  ],
+  "preservation": "Original checkouts/settings/running applications retained. Test fixture uses its own server; tracked changes limited to the new evidence directory. Complete build/configure/compiler command logs and binaries remain private.",
+  "publication": {
+    "attributes": "* -text whitespace=cr-at-eol (scoped to this directory)",
+    "changes": [
+      "Anonymized XML hostnames",
+      "Replaced private CTest build path with <isolated-build-directory>"
+    ],
+    "test_results_changed": false,
+    "hash_policy": "Published file hashes describe exact stored report bytes. Private complete logs have a separate local ledger."
+  }
+}
