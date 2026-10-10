@@ -1,0 +1,17 @@
+# Transfer worker shutdown validation
+
+Source `e3e1419649df1bbd10e84d149c5afb62a44cc3f1`, based on foundation `e9bced7e65f8324c970580364cabf068327a4a77`.
+
+Quitting while the transfer worker was busy previously waited three seconds and then destroyed its still-running thread. The new manager regression reproduces the fatal `QThread` error on the unchanged implementation. The engine regression independently demonstrates that a completed but unsaved receive directory survived destruction, leaving decrypted output behind.
+
+The manager now requests interruption, quits the worker event loop and joins the worker before destroying the identity/cache that its callbacks use. File hashing, Merkle construction, unlimited sending and spool replay check interruption between bounded work units. Password derivation is checked before/after its indivisible operation. Shutdown removes each engine-owned receive directory, including Ready output. A file explicitly saved to the user's destination remains byte-for-byte intact. Normal Ready output remains available while the engine is alive.
+
+Four affected executables passed on Apple Silicon macOS 26.6.2 with Qt 6.11.1 in 16.79 seconds: manager, crypto, engine and the real-server TLS/relay suite. The engine's 17 QtTest cases also passed with address and undefined-behavior sanitizers instrumenting its test, engine, crypto, session and identity sources. Linked dependencies were not instrumented and macOS leak detection was disabled. Deterministic regressions interrupt device hashing after two reads, interrupt Merkle input/leaf/parent construction, and interrupt an unlimited send after its first encrypted chunk. Existing Merkle vectors and plain/password transfers still pass.
+
+The [machine-readable record](results/2026-10-10/shutdown-validation.json), [baseline crash](results/2026-10-10/shutdown-baseline-busy.txt), [baseline unsaved output](results/2026-10-10/shutdown-baseline-ready.txt), [focused CTest summary](results/2026-10-10/shutdown-ctest.txt) and [sanitized engine results](results/2026-10-10/shutdown-sanitized-tests.txt) retain the evidence.
+
+This makes destruction safe under cooperative busy work; it does not establish a universal shutdown deadline. One blocked filesystem call or Argon2 operation must finish before joining can complete. Abrupt process termination and unsuccessful filesystem removal are outside this normal-shutdown check. Interactive quit/device/media testing and native Windows/Linux execution of the changed source remain required. The dynamic local dependencies target macOS 26 and do not qualify macOS 15. S3/S5 remain open.
+
+The first native Windows run for this separate shutdown branch exposed MSVC C4018 at the new device-hashing size bound: an unsigned chunk size was compared with `int`'s signed maximum under warnings-as-errors. The follow-up casts that positive bound to the matching unsigned type without changing its value; invalid chunk/count tests also cover maximum-width inputs. Cross-platform reruns are required for that follow-up. The earlier foundation's full CI and package gates have passed; those results do not qualify this new shutdown source.
+
+Follow-up source `a6f9d089e68299c5f287d41bf20e112d275cab69` passes all four affected local executables in 18.07 seconds; see the [follow-up CTest result](results/2026-10-10/shutdown-signedness-ctest.txt). The original sanitizer results qualify the earlier source, not an instrumented rerun of this follow-up.

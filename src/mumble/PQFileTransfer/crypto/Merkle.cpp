@@ -8,7 +8,32 @@
 #include "PQFileTransfer/PQFTConstants.h"
 #include "PQFileTransfer/crypto/CryptoUtils.h"
 
+#include <QIODevice>
+
+#include <limits>
+
 namespace PQFT {
+
+QByteArray merkleRootFromDevice(QIODevice &source, quint32 chunkSize, quint64 chunkCount,
+								const std::function< bool() > &isCancelled) {
+	if ((isCancelled && isCancelled()) || chunkSize == 0
+		|| chunkSize > static_cast< quint32 >(std::numeric_limits< int >::max())
+		|| chunkCount > static_cast< quint64 >(std::numeric_limits< int >::max()) || !source.isReadable())
+		return {};
+	QVector< QByteArray > digests;
+	digests.reserve(static_cast< int >(chunkCount));
+	while (!source.atEnd()) {
+		if (isCancelled && isCancelled())
+			return {};
+		const QByteArray chunk = source.read(chunkSize);
+		if (chunk.isEmpty() || static_cast< quint64 >(digests.size()) >= chunkCount)
+			return {};
+		digests.append(merkleChunkHash(chunk));
+	}
+	if (static_cast< quint64 >(digests.size()) != chunkCount)
+		return {};
+	return merkleRoot(std::move(digests), isCancelled);
+}
 
 QByteArray merkleChunkHash(const QByteArray &chunk) {
 	return sha384({ chunk });
@@ -24,9 +49,11 @@ QByteArray merkleNode(const QByteArray &left, const QByteArray &right) {
 	return sha384({ prefix, left, right });
 }
 
-QByteArray merkleRoot(QVector< QByteArray > chunkHashes) {
+QByteArray merkleRoot(QVector< QByteArray > chunkHashes, const std::function< bool() > &isCancelled) {
+	if (isCancelled && isCancelled())
+		return QByteArray();
 	for (const QByteArray &hash : chunkHashes) {
-		if (hash.size() != HashSize)
+		if ((isCancelled && isCancelled()) || hash.size() != HashSize)
 			return QByteArray();
 	}
 
@@ -37,6 +64,8 @@ QByteArray merkleRoot(QVector< QByteArray > chunkHashes) {
 	QVector< QByteArray > level;
 	level.reserve(chunkHashes.size());
 	for (const QByteArray &chunkHash : chunkHashes) {
+		if (isCancelled && isCancelled())
+			return QByteArray();
 		level.append(merkleLeaf(chunkHash));
 	}
 
@@ -46,6 +75,8 @@ QByteArray merkleRoot(QVector< QByteArray > chunkHashes) {
 		QVector< QByteArray > next;
 		next.reserve((level.size() + 1) / 2);
 		for (qsizetype i = 0; i < level.size(); i += 2) {
+			if (isCancelled && isCancelled())
+				return QByteArray();
 			const QByteArray &left  = level.at(i);
 			const QByteArray &right = (i + 1 < level.size()) ? level.at(i + 1) : level.at(i);
 			next.append(merkleNode(left, right));

@@ -8,11 +8,15 @@
 #include "PQFileTransfer/engine/FileTransferSession.h"
 #include "Global.h"
 
+#include <QElapsedTimer>
+#include <QPointer>
+#include <QSemaphore>
 #include <QSignalSpy>
 #include <QTemporaryDir>
 #include <QTest>
 #include <QThread>
 
+#include <atomic>
 #include <memory>
 
 class TestFileTransferManager : public QObject {
@@ -93,6 +97,32 @@ private slots:
 		const QByteArray newFingerprint = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_newM1));
 		QCOMPARE(contact.at(0).at(1).toByteArray(), newFingerprint);
 		QCOMPARE(manager.m_pendingFirstContact.value(42).first, newFingerprint);
+	}
+
+	void shutdownJoinsBusyWorkerBeforeDestroyingEngine() {
+		QSemaphore entered;
+		std::atomic< bool > completed{ false };
+		auto manager                                      = std::make_unique< FileTransferManager >();
+		const QPointer< PQFT::FileTransferEngine > engine = manager->m_engine;
+		QVERIFY(QMetaObject::invokeMethod(
+			engine.data(),
+			[&entered, &completed]() {
+				QElapsedTimer watchdog;
+				watchdog.start();
+				entered.release();
+				while (!QThread::currentThread()->isInterruptionRequested() && watchdog.elapsed() < 10000) {
+					QThread::msleep(1);
+				}
+				completed.store(true);
+			},
+			Qt::QueuedConnection));
+		QVERIFY(entered.tryAcquire(1, 2000));
+		QElapsedTimer shutdown;
+		shutdown.start();
+		manager.reset();
+		QVERIFY(completed.load());
+		QVERIFY(engine.isNull());
+		QVERIFY2(shutdown.elapsed() < 3000, "Cooperative busy work did not stop before the former unsafe deadline");
 	}
 
 private:
