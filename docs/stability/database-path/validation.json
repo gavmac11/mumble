@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "platform": "macOS 26.6.2 ARM64 / Qt 6.11.1 shared / AppleClang 21",
+  "parent_head": "6646ec582",
+  "trigger": "Explicit database_location points to an existing directory; SQLite open fails",
+  "control": {
+    "result": "4 QtTest cases passed; configured-directory case failed because child exited normally after fallback",
+    "scope": "Only disposable databases; explicit config base and seeded owned fallback"
+  },
+  "fixed": {
+    "result": "5 QtTest cases passed, zero failures/skips",
+    "behavior": "Configured database open failure terminates with its SQL error before default search; valid explicit and unconfigured default still open intended database",
+    "fallback_hash_unchanged": true
+  },
+  "full_ctest": {
+    "enabled": 40,
+    "registered": 41,
+    "passed": 40,
+    "failed": 0,
+    "execution_skipped": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 46.98
+  },
+  "constraints": [
+    "Tests run the actual Database constructor in child processes; no live personal database in controls",
+    "Missing configured files still require the existing create/reset/quit choice",
+    "Signing, supported-version GUI/media, multi-platform native execution and frozen combined release are not qualified by this local run"
+  ]
+}

@@ -1,0 +1,12 @@
+********* Start testing of TestDatabasePath *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestDatabasePath::initTestCase()
+PASS   : TestDatabasePath::explicitFileAndDefault(explicit-existing-file)
+PASS   : TestDatabasePath::explicitFileAndDefault(unconfigured-default)
+FAIL!  : TestDatabasePath::configuredDirectoryCannotFallBack() Compared values are not the same
+   Actual   (child.exitStatus()) : NormalExit
+   Expected (QProcess::CrashExit): CrashExit
+   Loc: [$WORKSPACE/src/tests/TestDatabasePath/TestDatabasePath.cpp(90)]
+PASS   : TestDatabasePath::cleanupTestCase()
+Totals: 4 passed, 1 failed, 0 skipped, 0 blacklisted, 446ms
+********* Finished testing of TestDatabasePath *********
