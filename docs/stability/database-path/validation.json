@@ -27,5 +27,17 @@
     "Tests run the actual Database constructor in child processes; no live personal database in controls",
     "Missing configured files still require the existing create/reset/quit choice",
     "Signing, supported-version GUI/media, multi-platform native execution and frozen combined release are not qualified by this local run"
-  ]
+  ],
+  "windows_capture_followup": {
+    "original_source": "7993cdc830c7139b85cc4cb72efb12edfb3c0738",
+    "native_build": "PASS strict Release; Windows diagnostic capture assertion failed",
+    "cause": "Qt default Windows handler uses OutputDebugString for a child without a console",
+    "test_only_change": "Set QT_FORCE_STDERR_LOGGING=1 in negative child QProcessEnvironment before initialization",
+    "production_changed": false,
+    "assertions_weakened": false,
+    "rebuilt_mac_qt_test_cases_passed": 5,
+    "windows_confirmation": "pending",
+    "superseded_general_run": 38096010719,
+    "superseded_preview_run": 38096012672
+  }
 }

@@ -7,6 +7,7 @@
 #include <QCryptographicHash>
 #include <QFile>
 #include <QProcess>
+#include <QProcessEnvironment>
 #include <QSqlQuery>
 #include <QStandardPaths>
 #include <QTemporaryDir>
@@ -83,6 +84,11 @@ private slots:
 		const QByteArray before = fileHash(fallback);
 		QVERIFY(!before.isEmpty());
 		QProcess child;
+		// Windows' Qt default handler otherwise routes a child without a console
+		// to OutputDebugString. Capture the diagnostic without changing fatal exit.
+		QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
+		environment.insert("QT_FORCE_STDERR_LOGGING", "1");
+		child.setProcessEnvironment(environment);
 		child.start(QCoreApplication::applicationFilePath(),
 					{ "-platform", "offscreen", "--database-child", root.path(), "directory" });
 		QVERIFY(child.waitForStarted());
