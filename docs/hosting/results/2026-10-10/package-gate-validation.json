@@ -57,5 +57,43 @@
     "CTest executable counts do not establish that every internal Qt test ran without skips",
     "General CI 38079970506 Windows/Intel macOS follow-up is still pending at recording time",
     "Hosting D1/D2 measured package remains previous merge 984d6674e8aa3304d4d9222ebaba5a408f584588, not this package candidate"
-  ]
+  ],
+  "general_follow_up": {
+    "recorded_utc": "2026-10-10T20:01:21.402637+00:00",
+    "run": 38079970506,
+    "conclusion": "failure",
+    "reports": [
+      {
+        "artifact": "tests-ubuntu-24.04-x86_64",
+        "registered": 36,
+        "enabled": 35,
+        "failures": 0,
+        "failed_executables": []
+      },
+      {
+        "artifact": "tests-macos-15-arm64",
+        "registered": 36,
+        "enabled": 35,
+        "failures": 0,
+        "failed_executables": []
+      },
+      {
+        "artifact": "tests-macos-15-intel-x86_64",
+        "registered": 36,
+        "enabled": 35,
+        "failures": 0,
+        "failed_executables": []
+      },
+      {
+        "artifact": "tests-windows-2025-vs2026-x86_64",
+        "registered": 36,
+        "enabled": 35,
+        "failures": 1,
+        "failed_executables": [
+          "TestFileTransferE2E"
+        ]
+      }
+    ],
+    "independent_windows_diagnosis": "Child server inherits the offscreen test-runner platform but includes only the native Windows display plugin. Candidate c4262db21 passes native/offscreen local protocol cases; integration and new CI remain pending."
+  }
 }
