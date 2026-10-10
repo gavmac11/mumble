@@ -100,6 +100,7 @@ signals:
 
 private:
 	void setupEngineTransports();
+	void updateConnectionTransport();
 	QByteArray serverDigest() const;
 
 	std::unique_ptr< QThread > m_workerThread;

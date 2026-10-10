@@ -1253,6 +1253,7 @@ if(file-sharing)
 		"PQFileTransfer/engine/FileTransferEngine.h"
 		"PQFileTransfer/engine/FileTransferEngine.cpp"
 		"PQFileTransfer/engine/FileTransferManager.h"
+		"PQFileTransfer/engine/FileTransferTransport.h"
 		"PQFileTransfer/engine/FileTransferManager.cpp"
 		"PQFileTransfer/engine/FileTransferSession.h"
 		"PQFileTransfer/engine/FileTransferSession.cpp"

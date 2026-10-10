@@ -3723,6 +3723,10 @@ void MainWindow::serverConnected() {
 }
 
 void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString reason) {
+	if (Global::get().fileTransferManager) {
+		Global::get().fileTransferManager->disconnectCleanup();
+	}
+
 	// clear ChannelListener
 	Global::get().channelListenerManager->clear();
 
@@ -4947,9 +4951,9 @@ void MainWindow::startFileSend(const QString &path) {
 			// The once-per-launch ServerSync prompt was declined or failed; an
 			// explicit send must not degrade into a silent no-op.
 			const auto choice = QMessageBox::question(this, tr("File transfer"),
-													 tr("Sending files requires a one-time file-transfer "
-														"identity key. Set it up now?"),
-													 QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+													  tr("Sending files requires a one-time file-transfer "
+														 "identity key. Set it up now?"),
+													  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 			if (choice == QMessageBox::Yes && promptForFileTransferIdentity()) {
 				announceFileTransferCapability();
 			}
@@ -4978,7 +4982,7 @@ void MainWindow::startFileSend(const QString &path) {
 		}
 		FileSendDialog::Recipient recipient;
 		recipient.session = user->uiSession;
-		recipient.name	 = user->qsName;
+		recipient.name    = user->qsName;
 		QByteArray pinned;
 		recipient.trustState = static_cast< int >(manager->trustStateFor(user->uiSession, pinned));
 		recipients.append(recipient);
@@ -4990,8 +4994,7 @@ void MainWindow::startFileSend(const QString &path) {
 		return;
 	}
 
-	FileSendDialog dialog(fileInfo.fileName(), static_cast< quint64 >(fileInfo.size()), recipients,
-						  this);
+	FileSendDialog dialog(fileInfo.fileName(), static_cast< quint64 >(fileInfo.size()), recipients, this);
 	if (dialog.exec() != QDialog::Accepted) {
 		return;
 	}
@@ -5033,46 +5036,44 @@ bool MainWindow::promptForFileTransferIdentity() {
 		return false;
 	}
 
-if (!manager->identity()->hasIdentity()) {
+	if (!manager->identity()->hasIdentity()) {
 		while (true) {
-			bool ok						  = false;
-			const QString passphrase	  = QInputDialog::getText(
-				  this, tr("File-transfer identity"),
-				  tr("Choose a passphrase to protect your file-transfer identity key. You will need "
-					 "it every time you start the client."),
-				  QLineEdit::Password, QString(), &ok);
+			bool ok                  = false;
+			const QString passphrase = QInputDialog::getText(
+				this, tr("File-transfer identity"),
+				tr("Choose a passphrase to protect your file-transfer identity key. You will need "
+				   "it every time you start the client."),
+				QLineEdit::Password, QString(), &ok);
 			if (!ok || passphrase.size() < PQFT::MinPasswordLength) {
 				if (!ok) {
 					return false;
 				}
 				QMessageBox::information(this, tr("File-transfer identity"),
-											 tr("The passphrase must be at least 8 characters."));
+										 tr("The passphrase must be at least 8 characters."));
 				continue;
 			}
-			bool confirmedOk		   = false;
-			const QString confirmation = QInputDialog::getText(
-				this, tr("File-transfer identity"), tr("Repeat the passphrase:"), QLineEdit::Password,
-				QString(), &confirmedOk);
+			bool confirmedOk = false;
+			const QString confirmation =
+				QInputDialog::getText(this, tr("File-transfer identity"), tr("Repeat the passphrase:"),
+									  QLineEdit::Password, QString(), &confirmedOk);
 			if (!confirmedOk || confirmation != passphrase) {
-				QMessageBox::information(this, tr("File-transfer identity"),
-											 tr("The passphrases did not match."));
+				QMessageBox::information(this, tr("File-transfer identity"), tr("The passphrases did not match."));
 				continue;
 			}
 			if (manager->identity()->createIdentity(passphrase)) {
 				break;
 			}
 			QMessageBox::warning(this, tr("File-transfer identity"),
-									 tr("Could not create the identity key. Try again."));
+								 tr("Could not create the identity key. Try again."));
 		}
 	}
 
 	if (!manager->identity()->isUnlocked()) {
 		while (true) {
-			bool ok				 = false;
+			bool ok                  = false;
 			const QString passphrase = QInputDialog::getText(
-				this, tr("File-transfer identity"),
-				tr("Enter the passphrase of your file-transfer identity key:"), QLineEdit::Password,
-				QString(), &ok);
+				this, tr("File-transfer identity"), tr("Enter the passphrase of your file-transfer identity key:"),
+				QLineEdit::Password, QString(), &ok);
 			if (!ok) {
 				return false;
 			}
