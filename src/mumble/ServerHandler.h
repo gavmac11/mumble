@@ -189,9 +189,12 @@ public:
 	void banUser(unsigned int uiSession, const QString &reason, bool banCertificate, bool banIP);
 	void sendUserTextMessage(unsigned int uiSession, const QString &message_);
 	void sendChannelTextMessage(unsigned int channel, const QString &message_, bool tree);
-	void sendFileTransferControl(const QList< unsigned int > &targetSessions, const QByteArray &payload);
-	void sendFileData(const QByteArray &transferId, quint64 chunkIndex, std::optional< quint64 > chunkCount,
-					 const QByteArray &data);
+	// Invoked by name (queued, from the file-transfer worker thread) by
+	// FileTransferManager::setupEngineTransports - these must stay Q_INVOKABLE,
+	// or every engine send silently fails with "No such method".
+	Q_INVOKABLE void sendFileTransferControl(const QList< unsigned int > &targetSessions, const QByteArray &payload);
+	Q_INVOKABLE void sendFileData(const QByteArray &transferId, quint64 chunkIndex,
+								  std::optional< quint64 > chunkCount, const QByteArray &data);
 	void setUserComment(unsigned int uiSession, const QString &comment);
 	void setUserTexture(unsigned int uiSession, const QByteArray &qba);
 	void setTokens(const QStringList &tokens);

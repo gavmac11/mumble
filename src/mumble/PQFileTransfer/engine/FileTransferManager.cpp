@@ -14,9 +14,14 @@
 #include <QThread>
 
 #include <algorithm>
+#include <optional>
 
 FileTransferManager::FileTransferManager(QObject *parent) : QObject(parent) {
 	qRegisterMetaType< PQFT::FTTransferInfo >("PQFT::FTTransferInfo");
+	// The queued, by-name invokes in setupEngineTransports deliver these as
+	// Q_ARG payloads; unregistered types would be dropped at delivery time.
+	qRegisterMetaType< std::optional< quint64 > >();
+	qRegisterMetaType< QList< unsigned int > >();
 
 	if (Global::get().db) {
 		const QSqlDatabase connection = Global::get().db->connection();
@@ -42,6 +47,22 @@ FileTransferManager::~FileTransferManager() {
 }
 
 void FileTransferManager::setupEngineTransports() {
+	// The queued, by-name invokes below only resolve Q_INVOKABLE/slot methods.
+	// A plain method fails at runtime with "No such method" and silently drops
+	// every engine send - fail loudly instead of shipping that state.
+	const bool controlInvokable = ServerHandler::staticMetaObject.indexOfMethod(
+										  "sendFileTransferControl(QList<unsigned int>,QByteArray)")
+		>= 0;
+	const bool dataInvokable    = ServerHandler::staticMetaObject.indexOfMethod(
+			   "sendFileData(QByteArray,quint64,std::optional<quint64>,QByteArray)")
+			>= 0;
+	Q_ASSERT_X(controlInvokable && dataInvokable, "setupEngineTransports",
+			   "ServerHandler transport methods lost Q_INVOKABLE - engine sends would be dropped");
+	if (!controlInvokable || !dataInvokable) {
+		qCritical("File-transfer transport methods are not invokable; no transfer can be sent or received");
+		return;
+	}
+
 	// The engine calls these from the worker thread; sends are marshaled to
 	// the ServerHandler thread (which owns the socket).
 	m_engine->setTransport(
