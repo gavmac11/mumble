@@ -1,0 +1,21 @@
+********* Start testing of TestFileTransferEngine *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestFileTransferEngine::initTestCase()
+PASS   : TestFileTransferEngine::sendReceiveRoundTrip()
+PASS   : TestFileTransferEngine::passwordRoundTrip()
+PASS   : TestFileTransferEngine::wrongPasswordFailsClosed()
+PASS   : TestFileTransferEngine::duplicateChunkIsFatal()
+PASS   : TestFileTransferEngine::latePasswordSpoolsAllChunks()
+PASS   : TestFileTransferEngine::secondTransferWhileFirstReady()
+PASS   : TestFileTransferEngine::readyTransferDoesNotExpire()
+PASS   : TestFileTransferEngine::firstContactPinFlags()
+PASS   : TestFileTransferEngine::incomingAbortCleansUpSafely()
+PASS   : TestFileTransferEngine::passwordSpoolIsBounded()
+PASS   : TestFileTransferEngine::cancelledPromptTimerCannotRemoveReplacementHandshake(disconnect)
+PASS   : TestFileTransferEngine::cancelledPromptTimerCannotRemoveReplacementHandshake(declined-prompt)
+PASS   : TestFileTransferEngine::shutdownRemovesUnsavedPlaintext(ready-unsaved)
+PASS   : TestFileTransferEngine::shutdownRemovesUnsavedPlaintext(saved-file-preserved)
+PASS   : TestFileTransferEngine::unlimitedSendStopsOnWorkerInterruption()
+PASS   : TestFileTransferEngine::cleanupTestCase()
+Totals: 17 passed, 0 failed, 0 skipped, 0 blacklisted, 7373ms
+********* Finished testing of TestFileTransferEngine *********

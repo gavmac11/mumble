@@ -15,6 +15,10 @@
 #include <QByteArray>
 #include <QVector>
 
+#include <functional>
+
+class QIODevice;
+
 namespace PQFT {
 
 /// SHA-384 of one chunk (the leaf input).
@@ -28,7 +32,13 @@ QByteArray merkleNode(const QByteArray &left, const QByteArray &right);
 
 /// Root over the chunk digests, in order. `chunkHashes` must contain
 /// HashSize-sized entries (empty input yields the empty-input root).
-QByteArray merkleRoot(QVector< QByteArray > chunkHashes);
+/// A cancellation request returns an empty result, including during tree construction.
+QByteArray merkleRoot(QVector< QByteArray > chunkHashes, const std::function< bool() > &isCancelled = {});
+
+/// Hash a readable device from its current position, checking cancellation between chunks.
+/// Empty results indicate cancellation, invalid sizing, or a chunk count mismatch.
+QByteArray merkleRootFromDevice(QIODevice &source, quint32 chunkSize, quint64 chunkCount,
+								const std::function< bool() > &isCancelled = {});
 
 } // namespace PQFT
 

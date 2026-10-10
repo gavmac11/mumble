@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestFileTransferE2E" timestamp="2026-10-10T13:45:12" hostname="windows-validation-host" tests="5" failures="0" errors="0" skipped="0" time="9.295">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestFileTransferE2E" time="2.168" />
+  <testcase name="endToEndTransfer" classname="TestFileTransferE2E" time="2.226" />
+  <testcase name="endToEndPasswordTransfer" classname="TestFileTransferE2E" time="2.976" />
+  <testcase name="capabilityGating" classname="TestFileTransferE2E" time="1.769" />
+  <testcase name="cleanupTestCase" classname="TestFileTransferE2E" time="0.153" />
+</testsuite>

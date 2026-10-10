@@ -39,8 +39,11 @@ FileTransferManager::FileTransferManager(QObject *parent) : QObject(parent) {
 }
 
 FileTransferManager::~FileTransferManager() {
+	m_workerThread->requestInterruption();
 	m_workerThread->quit();
-	m_workerThread->wait(3000);
+	// The engine still uses this manager's identity and pin cache. Keep them
+	// alive until its current operation and worker-owned cleanup have finished.
+	m_workerThread->wait();
 }
 
 void FileTransferManager::setupEngineTransports() {

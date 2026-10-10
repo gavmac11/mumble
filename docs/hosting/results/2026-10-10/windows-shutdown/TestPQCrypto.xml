@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestPQCrypto" timestamp="2026-10-10T13:45:11" hostname="windows-validation-host" tests="30" failures="0" errors="0" skipped="0" time="0.579">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestPQCrypto" time="0.000" />
+  <testcase name="sha384Vector" classname="TestPQCrypto" time="0.002" />
+  <testcase name="hmacSha384Vector" classname="TestPQCrypto" time="0.000" />
+  <testcase name="constantTimeCompare" classname="TestPQCrypto" time="0.001" />
+  <testcase name="hkdfVectors" classname="TestPQCrypto" time="0.000" />
+  <testcase name="x25519Rfc7748" classname="TestPQCrypto" time="0.000" />
+  <testcase name="x25519RoundTrip" classname="TestPQCrypto" time="0.000" />
+  <testcase name="x25519SmallOrderRejected" classname="TestPQCrypto" time="0.000" />
+  <testcase name="aesGcmNistVector" classname="TestPQCrypto" time="0.000" />
+  <testcase name="aesGcmTamperFails" classname="TestPQCrypto" time="0.000" />
+  <testcase name="aesGcmEmptyPlaintext" classname="TestPQCrypto" time="0.000" />
+  <testcase name="mlkemRoundTrip" classname="TestPQCrypto" time="0.000" />
+  <testcase name="mlkemBadCiphertext" classname="TestPQCrypto" time="0.000" />
+  <testcase name="mldsaSignVerify" classname="TestPQCrypto" time="0.001" />
+  <testcase name="mldsaTamperFails" classname="TestPQCrypto" time="0.001" />
+  <testcase name="mldsaContextSeparated" classname="TestPQCrypto" time="0.001" />
+  <testcase name="argon2Vector" classname="TestPQCrypto" time="0.005" />
+  <testcase name="argon2Bounds" classname="TestPQCrypto" time="0.563" />
+  <testcase name="cborEncodeVector" classname="TestPQCrypto" time="0.000" />
+  <testcase name="cborRejectsNonCanonical" classname="TestPQCrypto" time="0.000" />
+  <testcase name="cborRejectsDuplicateKeys" classname="TestPQCrypto" time="0.000" />
+  <testcase name="merkleVectors" classname="TestPQCrypto" time="0.000" />
+  <testcase name="merkleRejectsBadLeaf" classname="TestPQCrypto" time="0.000" />
+  <testcase name="merkleCancellation(before-input)" classname="TestPQCrypto" time="0.000" />
+  <testcase name="merkleCancellation(validating-digests)" classname="TestPQCrypto" time="0.000" />
+  <testcase name="merkleCancellation(building-leaves)" classname="TestPQCrypto" time="0.000" />
+  <testcase name="merkleCancellation(building-parent-level)" classname="TestPQCrypto" time="0.000" />
+  <testcase name="deviceHashCancellation" classname="TestPQCrypto" time="0.000" />
+  <testcase name="deviceHashRejectsWrongCount" classname="TestPQCrypto" time="0.000" />
+  <testcase name="cleanupTestCase" classname="TestPQCrypto" time="0.000" />
+</testsuite>
