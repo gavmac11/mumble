@@ -1,0 +1,27 @@
+name: Hosting rehearsal tools
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/hosting/**'
+      - '.github/workflows/hosting-tools.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'scripts/hosting/**'
+      - '.github/workflows/hosting-tools.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - name: Validate package pins and relay accounting
+        run: |
+          python3 -m unittest discover -s scripts/hosting -p test_deploy_guest.py -v
+          python3 -m unittest discover -s scripts/hosting -p test_hosting_tools.py -v
