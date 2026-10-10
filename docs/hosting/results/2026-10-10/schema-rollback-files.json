@@ -1,0 +1,7 @@
+{
+  "schema_before_rollback": 11,
+  "restored_schema": 7,
+  "database_and_config_tls_hashes_match": true,
+  "stopped_upgrade_and_restored_files_seconds": 0.05276701200000389,
+  "managed_service_active": true
+}

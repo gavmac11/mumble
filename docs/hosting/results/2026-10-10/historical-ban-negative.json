@@ -1,0 +1,6 @@
+{
+  "case": "banned-peer-keeps-sending-without-closing",
+  "expected_failure_detected": true,
+  "seconds": 2.391130333766341,
+  "legacy_policy": true
+}

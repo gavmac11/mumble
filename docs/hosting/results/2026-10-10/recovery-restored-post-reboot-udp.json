@@ -1,0 +1,86 @@
+{
+  "schema_version": 2,
+  "scope": "synthetic video payload; no decoded media validation",
+  "transport": "udp",
+  "media_deliveries_by_transport": {
+    "tcp": 0,
+    "udp": 120
+  },
+  "crypto_library_sha256": "de25287be91ce8c08c929321113fa264416e5c332545bda0c5d91b8c9ed02da2",
+  "run_id": "cb01b777",
+  "probe_sha256": "124964da4b03e987f01de54aea33ce555faeb7b69902702005565f4f0ed56ef0",
+  "fixture_sha256": null,
+  "voice_fixture_sha256": null,
+  "start_time_utc": "2026-10-10T19:42:38.013377+00:00",
+  "end_time_utc": "2026-10-10T19:42:42.019526+00:00",
+  "clients": 3,
+  "senders": 1,
+  "stagger_video_frames": false,
+  "video_send_cap_mbps": 0,
+  "native_pacer_library_sha256": null,
+  "native_pacer_rejected_frames": 0,
+  "frames_per_second": 30,
+  "width": 1280,
+  "height": 720,
+  "requested_sender_payload_mbps": 0.1,
+  "requested_seconds": 2.0,
+  "actual_offer_seconds": 2.0006,
+  "generator_cpu_seconds_during_offer": 0.0824,
+  "generator_cpu_percent_of_one_core": 4.12,
+  "settle_seconds": 2,
+  "offered_payload_mbps": 0.0998,
+  "submitted_payload_mbps": 0.0998,
+  "offered_fragments": 60,
+  "accepted_fragments": 60,
+  "pacer_rejected_fragments": 0,
+  "accepted_not_submitted_by_deadline": 0,
+  "sent_fragments": 60,
+  "offered_expected_deliveries": 120,
+  "expected_deliveries": 120,
+  "undelivered_by_deadline": 0,
+  "total_missing_deliveries": 0,
+  "observed_unique_deliveries": 120,
+  "integrity_errors": [],
+  "complete_fanout": true,
+  "voice": {
+    "senders": 0,
+    "packet_duration_ms": null,
+    "sent_packets": 0,
+    "expected_deliveries": 0,
+    "observed_unique_deliveries": 0,
+    "undelivered_by_deadline": 0,
+    "offered_payload_mbps": 0.0,
+    "relay_delay_ms": null
+  },
+  "relay_delay_ms": {
+    "p50": 8.735,
+    "p95": 15.302,
+    "p99": 19.601,
+    "max": 19.651
+  },
+  "scheduled_frame_to_fragment_delivery_ms": {
+    "p50": 9.997,
+    "p95": 15.878,
+    "p99": 20.747,
+    "max": 20.796
+  },
+  "control_ping_rtt_ms": {
+    "p50": 10.525,
+    "p95": 27.03,
+    "p99": 27.096,
+    "max": 27.096
+  },
+  "encrypted_udp_ping_rtt_ms": {
+    "p50": 8.798,
+    "p95": 10.875,
+    "p99": 13.351,
+    "max": 13.351
+  },
+  "generator_event_loop_lag_ms": {
+    "p50": 1.123,
+    "p95": 2.567,
+    "p99": 5.825,
+    "max": 6.583
+  },
+  "captures": []
+}

@@ -1,0 +1,9 @@
+{
+  "checkpoint": "before-service-enable",
+  "phase": "restoring",
+  "runtime_binary_installed": true,
+  "database_installed": true,
+  "service_definition_installed": true,
+  "operator_identity_present": true,
+  "plaintext_stage_present": true
+}

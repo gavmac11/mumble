@@ -1,0 +1,100 @@
+{
+  "platform": "Two fresh Debian 12 amd64 nested KVM guests on the supplied Ubuntu host",
+  "source_commit": "86f6da1818b7959fdf8de3521f0d8c7954d4e98e",
+  "recovery_tool_source_commit": "c41941e9971d3746006028e9c80825108199ba6f",
+  "public_acceptance_fixture_source_commit": "86f6da1818b7959fdf8de3521f0d8c7954d4e98e",
+  "source_files_sha256": {
+    "scripts/hosting/historical_recovery.py": "fb38a3b2ed86919e356010632200cecf2b0c0a22e89bb50f164f234f08bff26c",
+    "scripts/hosting/test_historical_recovery.py": "458f22c67bfce1fded34a9076bcd21b2ce2ffd5c980e232c802284d13bbbb490",
+    "scripts/hosting/recovery_fixture.py": "0dd162749088a635105c67ee168a07482caa0df81f38de89a13aacaa91365824"
+  },
+  "profile": {
+    "format": 1,
+    "profile": "debian-12-historical-rehearsal",
+    "package_version": "1.3.4-4",
+    "package_sha256": "c7381408f4c2078844156ce7c38041648f7012ffc8eb0525e7855f7040966d5e",
+    "database_schema": 7
+  },
+  "export_encryption": "age X25519 with public recipient; ciphertext copied off the source guest; operator identity supplied directly only for restore",
+  "archive_retention_scope": "Private lab copy; durable off-host retention/key escrow not qualified",
+  "fresh_restore_passed": true,
+  "fresh_restore_operator_seconds": 53.937672451000026,
+  "restore_timing_scope": "Decryption, old runtime dependency download/installation, payload verification, service/firewall installation and local TLS readiness; excludes guest allocation/boot, age/python bootstrap, archive transfer and external checks",
+  "actual_recovered_guest_reboot": {
+    "boot_id_changed": true,
+    "server_and_firewall_active_and_enabled": true,
+    "external_state_checks_passed": true
+  },
+  "interruption_resume": {
+    "actual_guest_reboot": true,
+    "checkpoint": "after database/runtime/unit installation, before service enable",
+    "persistent_phase_after_reboot": "restoring",
+    "operator_identity_and_plaintext_tmpfs_stage_absent_after_boot": true,
+    "same_cipher_profile_port_resumed": true,
+    "external_state_checks_passed": true,
+    "resume_operator_seconds": 4.078185896000001
+  },
+  "negative_checks": [
+    "wrong trusted ciphertext hash refused before server mutation",
+    "actual wrong age identity refused before server mutation",
+    "ready existing deployment refused without PID/configuration/TLS/marker change"
+  ],
+  "permissions": {
+    "root_directory": "0750 root:_mumble-history",
+    "data_directory": "0750 _mumble-history:_mumble-history",
+    "state_directory": "0700 root:root",
+    "tls_private_key": "0640 root:_mumble-history"
+  },
+  "pre_validation_failure": {
+    "source": "Uncommitted prototype on the first disposable disk; rejected as acceptance evidence",
+    "service_exit": "200/CHDIR",
+    "root_directory_mode": "0700 despite service group ownership",
+    "reported_ready_incorrectly": true,
+    "external_connection_failed": true,
+    "fix": "Explicit service directory permissions and exact archived TLS leaf readiness before ready marker",
+    "failed_disk_retained_privately": true
+  },
+  "local_focused_checks": {
+    "tests": 54,
+    "failures": 0,
+    "skips": 0
+  },
+  "ci": {
+    "url": "https://github.com/gavmac11/mumble/actions/runs/38086044759",
+    "source_commit": "c41941e9971d3746006028e9c80825108199ba6f",
+    "tests": 54,
+    "failures": 0,
+    "skips": 0,
+    "conclusion": "success"
+  },
+  "legacy_ban_detail": "ServerSync may precede actual socket closure; closure is verified, not rejection before every authentication packet",
+  "open": [
+    "Other interruption checkpoints and same-boot abrupt process death",
+    "Modern frozen-candidate qualification",
+    "Historical encrypted UDP/audio readiness",
+    "Durable off-host retention and actual lost-key drill",
+    "Provider replacement timing/customer RTO",
+    "Native GUI and commercial launch acceptance"
+  ],
+  "evidence_sha256": {
+    "historical-encrypted-export.json": "eab54059cf272ee9cd33f40ad0d4e1774dd4a10a32f407876392cf87aec15f59",
+    "historical-encrypted-negatives.json": "1b9ce8587cd5ebfc02a82547581dfa6fea3b71441aadfe789e2b6230f6406e2c",
+    "historical-fresh-recovery.json": "197569c647a531bd802c7568df8d67ac78f8254a2d1388683f14aba8ad8df5d7",
+    "historical-recovered-state.json": "35af7081e47d0d06a057425445e334e8ceb742bc48c366f458755d31dc759435",
+    "historical-postreboot-state.json": "35af7081e47d0d06a057425445e334e8ceb742bc48c366f458755d31dc759435",
+    "historical-existing-state-refusal.json": "e3e1d577637ca5170f6639169d23b6e05ef7864e8cb4bdb14c594f5007e7d2af",
+    "historical-interruption-checkpoint.json": "214c8e01355426cb75a48f4e20e7f8bac1697f521d6a6f08fb2d33d1e6e4bb92",
+    "historical-interruption-afterboot.json": "7d28447d9f43ea25c4d87a1d7b0b0019e3af28a5d1c2abfb2fee1f17b6d6c3a9",
+    "historical-resumed-recovery.json": "a564a62fa009471efddf81ab0551009c226f106972ba7d55c4f05ef0a5e73153",
+    "historical-resumed-state.json": "35af7081e47d0d06a057425445e334e8ceb742bc48c366f458755d31dc759435",
+    "historical-focused-tests.txt": "0538dd60bbf9eeb66e9feb70ed06aac943766670226aeb9d0321b2a542ed8843",
+    "historical-ban-negative.json": "011e39feceb8c329413d4f52a2c4dd96ad5e2f4bf5333b8be9607b96b58f74e9",
+    "historical-modern-ban-negative.json": "880b6e62ac0d614e55d81ad9a40bd03bf7840310b22caef61f684ef7e2f00460",
+    "historical-modern-fixture-check.json": "b347af42383c382eb5e9ff7aabc8476b866acc30a329fc619c61fb8565d47d10"
+  },
+  "private_rehearsal_fixture_sha256": {
+    "historical-interruption-fixture.py": "e969126c7f2e06b0e6449a336c3408c983d433e7390d862536f04d12cbb3c001",
+    "legacy_recovery_fixture.py": "8d8435f59055448275206bb4b9f4386cc5a39bf3160e2897ee4e2fba75c96a52",
+    "historical-ban-negative.py": "7caf4b9c52457432b6cd0a43bb2aa2f078151aed421ab6daafc50ce01e7c1901"
+  }
+}

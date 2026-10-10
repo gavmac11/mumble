@@ -183,7 +183,18 @@ class Client:
         self.reader_task = asyncio.create_task(self.receive())
         version = integer(1, 0x10700) + integer(5, (1 << 48) | (7 << 32))
         await self.send(0, version + blob(2, b"hosting-relay-probe"))
-        await self.send(2, blob(1, self.name.encode()) + integer(5, 1))
+        authentication = blob(1, self.name.encode()) + integer(5, 1)
+        password_file = getattr(args, "server_password_file", None)
+        if password_file:
+            password = password_file.read_bytes()
+            if len(password) > 256 or b"\x00" in password:
+                raise ValueError("Server password file must contain one short UTF-8 password")
+            password = password.rstrip(b"\r\n")
+            if not password or b"\n" in password or b"\r" in password:
+                raise ValueError("Server password file must contain one short UTF-8 password")
+            password.decode("utf-8")
+            authentication += blob(2, password)
+        await self.send(2, authentication)
         await asyncio.wait_for(self.ready, 15)
         await self.send(9, integer(1, self.session) + integer(24, 1))
         if args.transport == "udp":
@@ -565,6 +576,8 @@ def main():
     cli.add_argument("--port", type=int, default=64758)
     cli.add_argument("--ca-file", type=Path)
     cli.add_argument("--server-name", help="Expected TLS certificate hostname")
+    cli.add_argument("--server-password-file", type=Path,
+                     help="Private single-line join password file; never included in result output")
     cli.add_argument("--transport", choices=("tcp", "udp"), default="tcp")
     cli.add_argument("--crypto-library", type=Path, help="Native OCB2 bridge; required for UDP")
     cli.add_argument("--native-pacer-library", type=Path, help="Use the actual C++ client queue through the test bridge")

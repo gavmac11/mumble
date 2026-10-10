@@ -1,0 +1,45 @@
+{
+  "platform": "Debian 12 amd64 nested KVM on supplied Ubuntu host",
+  "legacy_version": "1.3.4-4",
+  "legacy_package_sha256": "c7381408f4c2078844156ce7c38041648f7012ffc8eb0525e7855f7040966d5e",
+  "legacy_package_source": "Debian bookworm main signed APT metadata, deb.debian.org",
+  "upgrade_version": "1.7.56~master+git984d6674",
+  "upgrade_source_commit": "984d6674e8aa3304d4d9222ebaba5a408f584588",
+  "upgrade_package_sha256": "c77f5c70c609fe6303d151f69f49821cd078a1d21bd8f21c73e4a5d1270c1974",
+  "schema_path": [
+    7,
+    11,
+    7
+  ],
+  "database_integrity_checks_passed": true,
+  "restored_preupgrade_database_config_and_tls_hashes_match": true,
+  "protocol_state_checks_passed": [
+    "administrator password",
+    "TLS certificate",
+    "saved room",
+    "registered certificate account",
+    "group membership",
+    "allowed member entry",
+    "denied outsider entry",
+    "stored certificate ban",
+    "banned connection closed"
+  ],
+  "legacy_ban_detail": "Qt5 legacy server can emit ServerSync before a requested disconnect completes; post-rollback observed this transient state and then verified actual socket closure. This is not a claim that no authentication packet is emitted.",
+  "scope": "Dedicated lab database/service on loopback port 64739; existing managed deployment stayed active on its original port.",
+  "open": [
+    "Encrypted export/decrypt of this older-layout snapshot",
+    "Fresh replacement guest restoration of the older layout",
+    "Interruption/resume of historical version rollback",
+    "New foundation candidate qualification",
+    "Customer/provider recovery time promise"
+  ],
+  "evidence_sha256": {
+    "schema-preupgrade-check.json": "54fa6583fe46318afdf1d9236119bb324e87cc8578898d846d08cebd01c54b31",
+    "schema-postupgrade-check.json": "54fa6583fe46318afdf1d9236119bb324e87cc8578898d846d08cebd01c54b31",
+    "schema-postrollback-check.json": "35af7081e47d0d06a057425445e334e8ceb742bc48c366f458755d31dc759435",
+    "schema-rollback-files.json": "e4ed35a7b6d99a587344b07d4170433f9c257a4d3d8558653d7970f4f4938b8f",
+    "schema-rollback-time.json": "55580db9eb1f4c26847ebe580a5824c39869312dd66955e127aa4f4bf30e76f2",
+    "schema-fixture-record.json": "024793caf7be8fd4eb28d0448ba4eaaf29525fa768793c7675c2ff55c7fe017a",
+    "schema-snapshot.json": "a4b60139b72250a2e258fd56db6a2770c7c584eea95d946baab49ffd0d0bcbeb"
+  }
+}
