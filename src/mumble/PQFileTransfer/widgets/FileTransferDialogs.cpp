@@ -35,12 +35,12 @@ QImage renderQr(const QByteArray &payload) {
 
 	const int border = 4;
 	const int size   = qr.getSize() + border * 2;
-	QImage image(size, size, QImage::Format_Mono);
+	QImage image(size, size, QImage::Format_RGB32);
 	image.fill(Qt::white);
 	for (int y = 0; y < qr.getSize(); ++y) {
 		for (int x = 0; x < qr.getSize(); ++x) {
 			if (qr.getModule(x, y)) {
-				image.setPixel(x + border, y + border, 0);
+				image.setPixel(x + border, y + border, qRgb(0, 0, 0));
 			}
 		}
 	}

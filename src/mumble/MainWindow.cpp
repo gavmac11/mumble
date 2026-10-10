@@ -4064,6 +4064,15 @@ void MainWindow::customEvent(QEvent *evt) {
 
 
 void MainWindow::on_qteLog_anchorClicked(const QUrl &url) {
+#ifdef USE_FILE_SHARING
+	if (url.scheme() == QLatin1String("mumble-file")) {
+		bool ok = false;
+		const QByteArray transferId = PQFT::fileCardActionId(url, ok);
+		if (ok)
+			onFileCardClicked(transferId);
+		return;
+	}
+#endif
 	if (!handleSpecialContextMenu(url, QCursor::pos(), true)) {
 		if (url.scheme() != QLatin1String("file") && url.scheme() != QLatin1String("qrc") && !url.isRelative())
 			QDesktopServices::openUrl(url);
