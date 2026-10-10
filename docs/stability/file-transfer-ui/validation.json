@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "platform": "macOS 26.6.2 ARM64",
+  "production_implementation": "8002309ac",
+  "file_action_implementation": "a016b9dfc",
+  "native_saved_flow": {
+    "payload_bytes": 46,
+    "source_sha256": "445990b14ac558c0d929f89c2f8ec61a56051eb31f4a096672ee21909440c689",
+    "saved_sha256": "445990b14ac558c0d929f89c2f8ec61a56051eb31f4a096672ee21909440c689",
+    "client_binary_sha256": "0b35c3ed7dcda75bfd1a9c195e9e5eb14ceaa9420f597dcf9ebd1c9a80baab97",
+    "native_flow": "Restart both clients; saved localhost certificate pins; unlock existing identities; verified peer label retained; choose/send generated fixture; Tab/Return on log opens Save; explicitly choose owned recipient downloads; saved bytes identical",
+    "scope": "Developer binary using private revised Qt6.11.1 plugin; no shipping/signing/media/large-file/pair coverage qualification"
+  },
+  "binary_qr_control": {
+    "source_revision": "local",
+    "passed": false,
+    "groups": {
+      "local": [
+        {
+          "theme": "light",
+          "expected_bytes": 172,
+          "decoded_bytes": 22,
+          "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+          "decoded_sha256": "0c06a71033f56853575e277f80a98a61d431166687be7fcd5d1882ec5433b7c5",
+          "exact_match": false
+        },
+        {
+          "theme": "dark",
+          "expected_bytes": 172,
+          "decoded_bytes": 22,
+          "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+          "decoded_sha256": "0c06a71033f56853575e277f80a98a61d431166687be7fcd5d1882ec5433b7c5",
+          "exact_match": false
+        }
+      ]
+    }
+  },
+  "binary_qr_fixed": {
+    "source_revision": "local",
+    "passed": true,
+    "groups": {
+      "local": [
+        {
+          "theme": "light",
+          "expected_bytes": 172,
+          "decoded_bytes": 172,
+          "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+          "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+          "exact_match": true
+        },
+        {
+          "theme": "dark",
+          "expected_bytes": 172,
+          "decoded_bytes": 172,
+          "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+          "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+          "exact_match": true
+        }
+      ]
+    }
+  },
+  "decoder_packages": {
+    "zxing-cpp": "3.1.1",
+    "Pillow": "12.3.0"
+  },
+  "ctest": {
+    "registered": 40,
+    "executed": 39,
+    "failed": 0,
+    "skipped_during_execution": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "duration_seconds": 54.87
+  },
+  "ci": {
+    "source_head": "8002309ac",
+    "general_run": 38094906038,
+    "preview_run": 38094907890,
+    "status": "dispatched_pending_results"
+  },
+  "constraints": [
+    "Native save was built from production working-tree files subsequently committed at a016b9dfc; latest change only corrects QR payload encoding and adds the scanner gate",
+    "Native QR scan through a physical camera remains unrun; decoder reads actual exported production QLabel bitmaps",
+    "Developer Homebrew runtime with private Qt6.11.1 repair, not signed shipping installation",
+    "No large-file, complete platform-pair, media, endurance, integrated candidate or paid economics qualification"
+  ]
+}

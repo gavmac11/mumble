@@ -86,3 +86,7 @@ The revised private developer runtime survives the actual LAN removal, unlocks t
 Output queue CI `38089837376` is now complete: Windows, Ubuntu and both Mac architectures pass; preview/package `38089839141` passes all gates with publication skipped. These results qualify that source's automated checks only.
 
 The initial revised-head Mac configure attempt referenced a nonexistent renamed patch path. That integration mistake was corrected in `440c2fc01`; the preceding failed/cancelled attempts do not qualify shipping builds.
+
+## File verification and keyboard save
+
+[PR 38](https://github.com/gavmac11/mumble/pull/38) repairs the black safety QR, preserves its full binary payload and exposes the existing file-card action through a keyboard link. An independent decoder rejects the intermediate 22/172-byte result and accepts all 172 exact bytes in both themes. After two disposable Mac clients restart, their verified-peer labels persist and a generated 46-byte transfer saves through the native dialog with matching source/output hashes. All 39 enabled local suites pass after a full rebuild (54.87 seconds; 40 registered, OverlayTest disabled). [Evidence](../stability/file-transfer-ui/README.md) limits this to the private developer runtime. CI/preview `38094906038` / `38094907890` are pending, including new scanner gates for every client artifact. Shipping, physical devices/media, complete pair coverage, endurance and commercial qualification remain open.
