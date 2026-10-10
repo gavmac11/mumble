@@ -21,7 +21,7 @@
     "scope": "Current local build using experimental plugin path; not rebuilt shipping static dependency bundle"
   },
   "constraints": [
-    "No static Qt 6.10.0 dependency build fix yet",
+    "Qt6.10.0 static shipping build repair implemented; hosted/native preview validation pending",
     "No full native file transfer delivery",
     "No microphone/camera capture acceptance",
     "No macOS 15/27 native desktop coverage",
@@ -35,5 +35,19 @@
     "fixed_accessibility_sha256": "d6b5ee60b88d9ebb4554b8305b17810a112dff8fbe8bf30dfe5d4fec4285cc93",
     "native_check": "Vendor static archive construction passes against matching private Qt 6.11.1 source/SDK; Qt 6.10.0 static shipping SDK execution pending hosted CI",
     "qualification": "Implementation candidate; static shipping preview native flow pending"
+  },
+  "native_static_cocoa_contract": {
+    "qt_source_sdk_version": "6.11.1",
+    "library": "Static repaired Cocoa archive linked into standalone fixture against matching shared Core/Gui/Widgets SDK",
+    "static_archive_sha256": "90bd1f16066cdfb3292cb9b0ab5b7a0e22dc980aa15fa9c3bf5c0a489280004f",
+    "fixture_binary_sha256": "7a1d56aa8662f23c13bf0f5e4173cb28606b074ed68c5026099a2aed9f6ccbd4",
+    "observed": "Two insert/select/AX reads survive; fixture uses Q_IMPORT_PLUGIN and an empty dynamic plugin directory; owned window closed",
+    "qualification": "Vendor target compile/link/native import proof, not shipping all-static Qt6.10.0 SDK validation"
+  },
+  "ci": {
+    "source_head": "8cff59bbef08131fbbad1b272eca3689727b0979",
+    "general_run": 38092306537,
+    "preview_run": 38092308399,
+    "status": "dispatched_pending_results"
   }
 }
