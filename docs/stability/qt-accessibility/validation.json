@@ -46,7 +46,7 @@
     "source_head": "440c2fc01c9c36e2db7bfd312f1d17b68698465a",
     "general_run": 38094014363,
     "preview_run": 38094127750,
-    "status": "Corrected patch reference; dispatched pending results",
+    "status": "General CI: Ubuntu and both Mac architectures passed; Windows pending. Preview: all five build/test jobs passed; publication skipped.",
     "previous_attempt": {
       "general_run": 38093727237,
       "preview_run": 38093728926,
@@ -90,5 +90,27 @@
     "process_audit": [],
     "source_scope": "Working-tree production files subsequently committed at b9ba0c55e; developer binary built before the commit metadata changed"
   },
-  "revised_implementation_head": "b9ba0c55e"
+  "revised_implementation_head": "b9ba0c55e",
+  "native_packaged_arm64": {
+    "source_head": "440c2fc01c9c36e2db7bfd312f1d17b68698465a",
+    "package_run": 38094127750,
+    "artifact_id": 11685811495,
+    "zip_sha256": "23fc94c62c3508fc4ffe1b9f237408e1c881663837ab97cbc9c7ceca5b11a31d",
+    "binary_sha256": "dcd27cdaab69794b39897cc8508027d85848612a836eb505c3cb5f53143346a6",
+    "plugin_override": false,
+    "database_isolation": "Corrected profile points to an existing owned SQLite file; open handles verified before UI actions.",
+    "tests": {
+      "insert_favorite_then_accessibility_read": "PASS",
+      "actual_bonjour_discovery_then_unregister_then_accessibility_read": "PASS",
+      "normal_quit_with_QT_DEBUG_PLUGINS": "PASS"
+    },
+    "normal_quit_settings_marker": true,
+    "owned_processes_remaining": 0,
+    "latest_mumble_report": "Mumble-2026-10-10-154540.ips",
+    "limits": [
+      "Unsigned wrapper changes bundle identity/name and launcher only; no shipping signatures tested",
+      "Accessibility tree omits a visible favorite row after discovery removal; full accessibility semantics remain open",
+      "First harness launch pointed to directory and opened default database; excluded from native qualification; no pre-error user database snapshot exists"
+    ]
+  }
 }
