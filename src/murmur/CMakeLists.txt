@@ -21,6 +21,8 @@ find_pkg(Qt6 COMPONENTS Sql REQUIRED)
 add_library(mumble_server_object_lib OBJECT
 	"AudioReceiverBuffer.cpp"
 	"AudioReceiverBuffer.h"
+	"BandwidthRecord.cpp"
+	"BandwidthRecord.h"
 	"Cert.cpp"
 	"LegacyPasswordHash.cpp"
 	"Messages.cpp"
