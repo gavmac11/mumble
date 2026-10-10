@@ -37,16 +37,16 @@
   "native_static_cocoa_contract": {
     "qt_source_sdk_version": "6.11.1",
     "library": "Static repaired Cocoa archive linked into standalone fixture against matching shared Core/Gui/Widgets SDK",
-    "static_archive_sha256": "90bd1f16066cdfb3292cb9b0ab5b7a0e22dc980aa15fa9c3bf5c0a489280004f",
-    "fixture_binary_sha256": "7a1d56aa8662f23c13bf0f5e4173cb28606b074ed68c5026099a2aed9f6ccbd4",
-    "observed": "Two insert/select/AX reads survive; fixture uses Q_IMPORT_PLUGIN and an empty dynamic plugin directory; owned window closed",
-    "qualification": "Superseded first-patch archive proof; revised archive validation pending"
+    "static_archive_sha256": "9d589813ce42ecf230528b2542d08adf3e62ed4f781b5568b014bd176a1bf406",
+    "fixture_binary_sha256": "a36928d87c26d7c33b48665dbc0713e4b1de4458cb0853ac53be2eb55065de74",
+    "observed": "Two insert/select/AX reads survive; first read has incomplete row exposure, subsequent full tree shows fixture; no complete AX semantics qualification",
+    "qualification": "Revised vendor target compile/link/native import proof against matching shared Qt6.11.1, not shipping all-static Qt6.10.0"
   },
   "ci": {
-    "source_head": "8cff59bbef08131fbbad1b272eca3689727b0979",
-    "general_run": 38092306537,
-    "preview_run": 38092308399,
-    "status": "Superseded first patch only; revised-head dispatch pending"
+    "source_head": "b9ba0c55e",
+    "general_run": 38093727237,
+    "preview_run": 38093728926,
+    "status": "revised repair dispatched; pending results"
   },
   "initial_private_fixed_plugin_sha256": "d6278b36941ceeb3c13834afad81904a806338e8fe79fcf2c4c400891849dda0",
   "initial_fixed_observation": "Four insertion/selection/AX sequences survive; private plugin load verified; native Mumble Add Server survives, TLS fingerprint verified and connection shown, file identity decline/retry shown",
@@ -80,6 +80,8 @@
         "plugin_load_verified": true
       }
     },
-    "process_audit": []
-  }
+    "process_audit": [],
+    "source_scope": "Working-tree production files subsequently committed at b9ba0c55e; developer binary built before the commit metadata changed"
+  },
+  "revised_implementation_head": "b9ba0c55e"
 }
