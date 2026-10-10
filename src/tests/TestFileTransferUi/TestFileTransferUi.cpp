@@ -2,9 +2,12 @@
 // BSD-style license: see LICENSE at the source root.
 #include "Log.h"
 #include "PQFileTransfer/engine/FTCardRender.h"
+#include "PQFileTransfer/identity/FTIdentity.h"
 #include "PQFileTransfer/widgets/FileTransferDialogs.h"
 
 #include <QApplication>
+#include <QDir>
+#include <QFile>
 #include <QLabel>
 #include <QSignalSpy>
 #include <QTest>
@@ -30,7 +33,9 @@ private slots:
 		palette.setColor(QPalette::Window, dark ? Qt::black : Qt::white);
 		palette.setColor(QPalette::WindowText, dark ? Qt::white : Qt::black);
 		QApplication::setPalette(palette);
-		SafetyNumberDialog dialog("Private fixture", "00141 99734", "mumble-fixture-safety-number");
+		// Canonical safety CBOR includes zero/high bytes and must survive QR encoding intact.
+		const QByteArray payload = PQFT::safetyQrPayload(QByteArray(48, '\0'), QByteArray(48, '\xff'));
+		SafetyNumberDialog dialog("Private fixture", "00141 99734", payload);
 		QApplication::setPalette(original);
 		QImage qr;
 		for (auto *label : dialog.findChildren< QLabel * >()) {
@@ -38,6 +43,16 @@ private slots:
 				qr = label->pixmap().toImage();
 		}
 		QVERIFY(!qr.isNull());
+		// Optional exports let an independent scanner verify the real dialog bitmap.
+		const QString exportDir = qEnvironmentVariable("MUMBLE_QR_FIXTURE_EXPORT");
+		if (!exportDir.isEmpty()) {
+			QVERIFY(QDir().mkpath(exportDir));
+			const QString prefix = exportDir + "/" + QString::fromLatin1(QTest::currentDataTag());
+			QVERIFY(qr.save(prefix + ".png"));
+			QFile expected(prefix + ".bin");
+			QVERIFY(expected.open(QIODevice::WriteOnly));
+			QCOMPARE(expected.write(payload), payload.size());
+		}
 		QCOMPARE(qr.pixelColor(0, 0), QColor(Qt::white));
 		int black = 0, white = 0;
 		for (int y = 0; y < qr.height(); ++y) {

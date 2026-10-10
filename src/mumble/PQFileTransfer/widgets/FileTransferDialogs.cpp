@@ -11,6 +11,9 @@
 
 #include <qrcodegen.hpp>
 
+#include <cstdint>
+#include <vector>
+
 #include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QBrush>
@@ -30,8 +33,10 @@
 
 namespace {
 QImage renderQr(const QByteArray &payload) {
-	const QByteArray text = payload.isEmpty() ? QByteArray("mumble-file-transfer") : payload;
-	qrcodegen::QrCode qr = qrcodegen::QrCode::encodeText(text.constData(), qrcodegen::QrCode::Ecc::MEDIUM);
+	const QByteArray bytes = payload.isEmpty() ? QByteArray("mumble-file-transfer") : payload;
+	const auto *begin = reinterpret_cast< const std::uint8_t * >(bytes.constData());
+	const std::vector< std::uint8_t > content(begin, begin + bytes.size());
+	qrcodegen::QrCode qr = qrcodegen::QrCode::encodeBinary(content, qrcodegen::QrCode::Ecc::MEDIUM);
 
 	const int border = 4;
 	const int size   = qr.getSize() + border * 2;
