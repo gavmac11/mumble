@@ -27,6 +27,21 @@ if (static)
 	link_libraries(mumble_test_qt_plugins)
 endif()
 
+# Call from the directory that owns the test: CMake TEST properties are
+# directory-scoped, even though their executable targets are global.
+function(mumble_client_test_runtime test_name)
+	if(WIN32)
+		# Client-object tests live outside the application/DLL directory.
+		set_property(TEST ${test_name} APPEND PROPERTY ENVIRONMENT_MODIFICATION
+			"PATH=path_list_prepend:$<TARGET_FILE_DIR:mumble>")
+		get_target_property(ffmpeg_runtime_dir mumble_client_object_lib MUMBLE_FFMPEG_RUNTIME_DIRECTORY)
+		if(ffmpeg_runtime_dir)
+			set_property(TEST ${test_name} APPEND PROPERTY ENVIRONMENT_MODIFICATION
+				"PATH=path_list_prepend:${ffmpeg_runtime_dir}")
+		endif()
+	endif()
+endfunction()
+
 if(client)
 	add_subdirectory("TestReleaseUpdate")
 	add_subdirectory("TestAnimatedImages")
@@ -57,24 +72,6 @@ endif()
 if(server)
 	add_subdirectory("TestCrypt")
 	add_subdirectory("TestAudioReceiverBuffer")
-endif()
-
-if(WIN32 AND client)
-	# These tests link the client objects but live in a separate executable
-	# directory. Windows also needs the client's shared audio/FFmpeg DLLs in
-	# its loader search path; relying on the test's working directory hangs
-	# headless runs in a missing-DLL dialog before Qt can report an error.
-	get_target_property(ffmpeg_runtime_dir mumble_client_object_lib MUMBLE_FFMPEG_RUNTIME_DIRECTORY)
-	foreach(client_object_test IN ITEMS TestAnimatedImages TestChatWebM TestFileTransferManager)
-		if(TARGET ${client_object_test})
-			set_property(TEST ${client_object_test} APPEND PROPERTY ENVIRONMENT_MODIFICATION
-				"PATH=path_list_prepend:$<TARGET_FILE_DIR:mumble>")
-			if(ffmpeg_runtime_dir)
-				set_property(TEST ${client_object_test} APPEND PROPERTY ENVIRONMENT_MODIFICATION
-					"PATH=path_list_prepend:${ffmpeg_runtime_dir}")
-			endif()
-		endif()
-	endforeach()
 endif()
 
 # Shared tests

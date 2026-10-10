@@ -13,3 +13,5 @@ target_link_libraries(TestChatWebM PRIVATE mumble_client_object_lib Qt6::Test)
 
 add_test(NAME TestChatWebM COMMAND $<TARGET_FILE:TestChatWebM>)
 set_tests_properties(TestChatWebM PROPERTIES TIMEOUT 60)
+
+mumble_client_test_runtime(TestChatWebM)
