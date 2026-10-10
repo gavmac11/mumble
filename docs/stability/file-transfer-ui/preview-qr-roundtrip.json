@@ -1,0 +1,60 @@
+{
+  "source_revision": "8002309ac0a7e6c2850b7469957c27f2d04a584c",
+  "passed": true,
+  "groups": {
+    "preview-tests-windows-x64": [
+      {
+        "theme": "light",
+        "expected_bytes": 172,
+        "decoded_bytes": 172,
+        "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "exact_match": true
+      },
+      {
+        "theme": "dark",
+        "expected_bytes": 172,
+        "decoded_bytes": 172,
+        "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "exact_match": true
+      }
+    ],
+    "preview-tests-macos-arm64": [
+      {
+        "theme": "light",
+        "expected_bytes": 172,
+        "decoded_bytes": 172,
+        "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "exact_match": true
+      },
+      {
+        "theme": "dark",
+        "expected_bytes": 172,
+        "decoded_bytes": 172,
+        "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "exact_match": true
+      }
+    ],
+    "preview-tests-ubuntu-amd64": [
+      {
+        "theme": "light",
+        "expected_bytes": 172,
+        "decoded_bytes": 172,
+        "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "exact_match": true
+      },
+      {
+        "theme": "dark",
+        "expected_bytes": 172,
+        "decoded_bytes": 172,
+        "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "exact_match": true
+      }
+    ]
+  }
+}
