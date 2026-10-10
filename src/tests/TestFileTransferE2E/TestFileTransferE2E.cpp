@@ -28,6 +28,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QProcess>
+#include <QProcessEnvironment>
 #include <QSignalSpy>
 #include <QSslSocket>
 #include <QSqlDatabase>
@@ -289,6 +290,13 @@ bool TestFileTransferE2E::startMurmur() {
 	}
 
 	m_murmur.setProcessChannelMode(QProcess::ForwardedChannels);
+#ifdef Q_OS_WIN
+	// The test runner uses the offscreen plugin, while the static Windows
+	// server only imports the native platform plugin.
+	QProcessEnvironment serverEnvironment = QProcessEnvironment::systemEnvironment();
+	serverEnvironment.remove(QStringLiteral("QT_QPA_PLATFORM"));
+	m_murmur.setProcessEnvironment(serverEnvironment);
+#endif
 	// Unix servers detach by default. Keep the fixture owned by QProcess so
 	// startup failures are visible and cleanup cannot leave a daemon behind.
 	m_murmur.start(QStringLiteral(MUMBLE_TEST_MURMUR_BINARY), { "--foreground", "--ini", iniPath });
