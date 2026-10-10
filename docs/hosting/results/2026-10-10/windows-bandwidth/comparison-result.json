@@ -1,0 +1,8 @@
+{
+  "configure_exit_code": 0,
+  "width_build_exit_code": 0,
+  "width_run_exit_code": 0,
+  "baseline_build_exit_code": 0,
+  "baseline_test_exit_code": 7,
+  "baseline_warning_policy_relaxed": false
+}

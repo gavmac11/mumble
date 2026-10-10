@@ -1,0 +1,317 @@
+{
+  "recorded_utc": "2026-10-10T21:31:12.270308+00:00",
+  "pull_request": "https://github.com/gavmac11/mumble/pull/35",
+  "source_commit": "3c5b5ea3997e94c2292f1c52aaca2dea328a92ab",
+  "production_commit": "7c7d4578e5073d6262e8dea6069c01d4f7ebb128",
+  "source_tree_clean_before_evidence": true,
+  "os": {
+    "name": "Windows 10 Pro",
+    "version": "10.0.19045",
+    "architecture": "x64"
+  },
+  "compiler": {
+    "name": "MSVC",
+    "version": "19.51.36257.0",
+    "installation": "VS 2026 Build Tools"
+  },
+  "qt": {
+    "version": "6.10.0",
+    "linkage": "static",
+    "dependency_build_compiler": "MSVC 2022"
+  },
+  "environment": "vcpkg 2026-02 b1fe4a4257 / x64-windows-static-md; OpenSSL 3.6.1; FFmpeg 8.1 shared",
+  "configuration": {
+    "type": "Release",
+    "generator": "Ninja",
+    "candidate_unity_build": true,
+    "baseline_unity_build": false,
+    "symbols": false,
+    "lto": false,
+    "strict_compiler_checks": true,
+    "cxx_standard": 20,
+    "runtime": "MSVC dynamic runtime (-MD)",
+    "packaging": false
+  },
+  "sizeof_bytes": {
+    "long": 4,
+    "qint64": 8,
+    "int": 4,
+    "void*": 8
+  },
+  "build": {
+    "targets": [
+      "TestBandwidthRecord",
+      "mumble-server"
+    ],
+    "configure_exit_code": 0,
+    "build_exit_code": 0,
+    "source_compiler_policy": [
+      {
+        "target": "TestBandwidthRecord",
+        "checked_translation_units": 1,
+        "flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false,
+        "external_headers": "Default -external:W0 dependency-header treatment retained."
+      },
+      {
+        "target": "mumble_server_object_lib",
+        "checked_translation_units": 3,
+        "flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false,
+        "external_headers": "Default -external:W0 dependency-header treatment retained."
+      },
+      {
+        "target": "TestBandwidthRecordBaseline",
+        "checked_translation_units": 4,
+        "flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false,
+        "external_headers": "Default -external:W0 dependency-header treatment retained."
+      },
+      {
+        "target": "WidthProbe",
+        "checked_translation_units": 1,
+        "flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false,
+        "external_headers": "Default -external:W0 dependency-header treatment retained."
+      }
+    ],
+    "dependency_warning_policy": "Repository defaults retained: selected third-party and generated protobuf sources disable warnings; corrected bandwidth/server/test sources retain /W4 /WX without source warning suppression. Complete configure/build/command logs retained privately.",
+    "compiler_errors": 0,
+    "server_binary_sha256": "2e1eeef31780ed771d50c20a7d7ae3b97915c37dcf40e982f603260e23133a16",
+    "component_binary_sha256": "fd1be9087da1660d277db1e23cbac9c3c5bb8eafab8d7ee498f3c6074d775d60"
+  },
+  "fixed_component": {
+    "qt_test_class": "TestBandwidthRecord",
+    "cases": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 0.26,
+    "case_results": [
+      {
+        "name": "initTestCase",
+        "seconds": 0.0,
+        "result": "passed"
+      },
+      {
+        "name": "fileChunksRetireTheirEntireByteCharge",
+        "seconds": 0.0,
+        "result": "passed"
+      },
+      {
+        "name": "rejectsExcessAtTheWindowsMultiplicationBoundary",
+        "seconds": 0.0,
+        "result": "passed"
+      },
+      {
+        "name": "longIdleSlotStillEnforcesTheConfiguredRate",
+        "seconds": 0.0,
+        "result": "passed"
+      },
+      {
+        "name": "maximumWidthChargesDoNotOverflowTheRollingSum",
+        "seconds": 0.0,
+        "result": "passed"
+      },
+      {
+        "name": "displayedBandwidthClampsInsteadOfWrapping",
+        "seconds": 0.0,
+        "result": "passed"
+      },
+      {
+        "name": "voiceSizedChargesKeepTheirExistingBehavior",
+        "seconds": 0.0,
+        "result": "passed"
+      },
+      {
+        "name": "refusedChargeDoesNotAdvanceOrOverwriteAcceptedState",
+        "seconds": 0.0,
+        "result": "passed"
+      },
+      {
+        "name": "invalidChargesCannotReduceOrBypassTheBudget",
+        "seconds": 0.0,
+        "result": "passed"
+      },
+      {
+        "name": "cleanupTestCase",
+        "seconds": 0.0,
+        "result": "passed"
+      }
+    ],
+    "txt_report": "TestBandwidthRecord.txt",
+    "junit_report": "TestBandwidthRecord.xml"
+  },
+  "fixed_ctest": {
+    "suites": 1,
+    "failures": 0,
+    "test_seconds": 0.418374,
+    "platform_environment": "QT_QPA_PLATFORM=offscreen; component uses QTEST_APPLESS_MAIN",
+    "output_capture": "Only text/JUnit -o options appended to generated CTest registration, then original registration restored byte-for-byte. No repository source edit."
+  },
+  "baseline": {
+    "extraction": {
+      "baseline_commit": "59eb5be1fc116630afd1bdd4501d07dc8cd60bdf",
+      "declaration_source": "src/murmur/ServerUser.h",
+      "declaration_byte_range": [
+        667,
+        1198
+      ],
+      "declaration_sha256": "c55dd29f4ccb95f03de3521a1eb6b1ff71a3f5903ad502a8f62982e8c2a5eff8",
+      "methods_source": "src/murmur/ServerUser.cpp",
+      "methods_byte_range": [
+        1291,
+        3122
+      ],
+      "methods_sha256": "47121856b0340c1425b0a3fc6206ea1580d87eb60e8360d12f03960d62e9563e",
+      "excerpt_contents_modified": false,
+      "adaptation": "Only standalone include guards/includes added around exact extracted declaration and methods; QtTest and Timer sources copied from the candidate. Original production files untouched.",
+      "test_source_sha256": "b1e3efa529d30f0356dfd0dfa80ba26b9745779a599b67535f817a17ef1d62a5",
+      "timer_header_equals_foundation": true,
+      "timer_methods_equal_foundation": true,
+      "build_policy": "Same repository compiler flag generator; Release, C++20, /W4 /WX /O2 /bigobj /options:strict. No baseline warning relaxation."
+    },
+    "build_and_run": {
+      "configure_exit_code": 0,
+      "width_build_exit_code": 0,
+      "width_run_exit_code": 0,
+      "baseline_build_exit_code": 0,
+      "baseline_test_exit_code": 7,
+      "baseline_warning_policy_relaxed": false
+    },
+    "component": {
+      "qt_test_class": "TestBandwidthRecord",
+      "cases": 10,
+      "failures": 7,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.127,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "seconds": 0.0,
+          "result": "passed"
+        },
+        {
+          "name": "fileChunksRetireTheirEntireByteCharge",
+          "seconds": 0.0,
+          "result": "failed",
+          "failure_message": "Compared values are not the same",
+          "failure_detail": "Actual   (static_cast< qint64 >(record.iSum)): 378548176\n   Expected (expected)                          : 377499600"
+        },
+        {
+          "name": "rejectsExcessAtTheWindowsMultiplicationBoundary",
+          "seconds": 0.0,
+          "result": "failed",
+          "failure_message": "'!record.addFrame(3000, 1)' returned FALSE. ()",
+          "failure_detail": ""
+        },
+        {
+          "name": "longIdleSlotStillEnforcesTheConfiguredRate",
+          "seconds": 0.0,
+          "result": "failed",
+          "failure_message": "'!record.addFrame(3 * 1024 * 1024, 1000)' returned FALSE. ()",
+          "failure_detail": ""
+        },
+        {
+          "name": "maximumWidthChargesDoNotOverflowTheRollingSum",
+          "seconds": 0.0,
+          "result": "failed",
+          "failure_message": "Compared values are not the same",
+          "failure_detail": "Actual   (static_cast< qint64 >(record.iSum)): -2\n   Expected (expected)                          : 4294967294"
+        },
+        {
+          "name": "displayedBandwidthClampsInsteadOfWrapping",
+          "seconds": 0.0,
+          "result": "failed",
+          "failure_message": "Compared values are not the same",
+          "failure_detail": "Actual   (record.bandwidth())               : 393210\n   Expected (std::numeric_limits< int >::max()): 2147483647"
+        },
+        {
+          "name": "voiceSizedChargesKeepTheirExistingBehavior",
+          "seconds": 0.0,
+          "result": "passed"
+        },
+        {
+          "name": "refusedChargeDoesNotAdvanceOrOverwriteAcceptedState",
+          "seconds": 0.0,
+          "result": "failed",
+          "failure_message": "'!record.addFrame(1024 * 1024, 1000)' returned FALSE. ()",
+          "failure_detail": ""
+        },
+        {
+          "name": "invalidChargesCannotReduceOrBypassTheBudget",
+          "seconds": 0.0,
+          "result": "failed",
+          "failure_message": "'!record.addFrame(-1, 1000)' returned FALSE. ()",
+          "failure_detail": ""
+        },
+        {
+          "name": "cleanupTestCase",
+          "seconds": 0.0,
+          "result": "passed"
+        }
+      ],
+      "txt_report": "TestBandwidthRecordBaseline.txt",
+      "junit_report": "TestBandwidthRecordBaseline.xml"
+    },
+    "binary_sha256": "4f36d4153a4c31860892f8c798c17c2349ccd5b9872113c4fbdda82c2a9223dc",
+    "compiler_failures": 0,
+    "failure_interpretation": "Windows execution reproduced 7 failed behavior cases; the only passing behavior case was voice-sized charges. Both 32-bit-long rate boundary assertions failed. The rolling-sum assertion observed -2 instead of 4294967294. No Windows sanitizer result is claimed."
+  },
+  "scope": [
+    "Native Windows component regression checks (8 behavior cases plus initialization/cleanup)",
+    "Build of corrected native server",
+    "Unchanged original declaration/methods comparison with identical tests and Timer code",
+    "Windows long/qint64/int/pointer width probe"
+  ],
+  "not_run": [
+    "Windows ASan/UBSan",
+    "Full Windows test suite",
+    "Windows server relay/integration tests",
+    "GUI, file-card Download, capture/focus retry or application restart",
+    "Packaging/signing or Windows 11 acceptance"
+  ],
+  "preservation": "Original checkouts, personal settings and running desktop/client/server applications preserved. Isolated build and standalone comparison remained outside tracked production sources.",
+  "publication": {
+    "sanitization": [
+      "Anonymized XML hostnames",
+      "Replaced private CTest build directory with <isolated-build-directory>",
+      "Replaced baseline QtTest failure-file paths with <baseline-comparison>/TestBandwidthRecord.cpp"
+    ],
+    "test_results_changed": false,
+    "complete_original_logs": "Retained privately; compiler commands, machine paths, extracted comparison sources and binaries omitted."
+  }
+}

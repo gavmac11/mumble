@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="Win32-ninja" tests="1" failures="0" disabled="0" skipped="0" hostname="windows-validation-host" time="0" timestamp="2026-10-10T14:30:01">
+  <testcase name="TestBandwidthRecord" classname="TestBandwidthRecord" time="0.418374" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+</testsuite>

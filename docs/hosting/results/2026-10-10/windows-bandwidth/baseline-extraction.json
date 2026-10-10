@@ -1,0 +1,21 @@
+{
+  "baseline_commit": "59eb5be1fc116630afd1bdd4501d07dc8cd60bdf",
+  "declaration_source": "src/murmur/ServerUser.h",
+  "declaration_byte_range": [
+    667,
+    1198
+  ],
+  "declaration_sha256": "c55dd29f4ccb95f03de3521a1eb6b1ff71a3f5903ad502a8f62982e8c2a5eff8",
+  "methods_source": "src/murmur/ServerUser.cpp",
+  "methods_byte_range": [
+    1291,
+    3122
+  ],
+  "methods_sha256": "47121856b0340c1425b0a3fc6206ea1580d87eb60e8360d12f03960d62e9563e",
+  "excerpt_contents_modified": false,
+  "adaptation": "Only standalone include guards/includes added around exact extracted declaration and methods; QtTest and Timer sources copied from the candidate. Original production files untouched.",
+  "test_source_sha256": "b1e3efa529d30f0356dfd0dfa80ba26b9745779a599b67535f817a17ef1d62a5",
+  "timer_header_equals_foundation": true,
+  "timer_methods_equal_foundation": true,
+  "build_policy": "Same repository compiler flag generator; Release, C++20, /W4 /WX /O2 /bigobj /options:strict. No baseline warning relaxation."
+}
