@@ -12,17 +12,17 @@
 
 #include <filesystem>
 
-#ifndef _WIN32
+#ifndef MUMBLE_TEST_WINDOWS
 #	include <cstdlib>
 #endif
 
-#ifdef __APPLE__
+#ifdef MUMBLE_TEST_MACOS
 #	include <unistd.h>
 #endif
 
 namespace {
 
-#ifndef _WIN32
+#ifndef MUMBLE_TEST_WINDOWS
 class EnvironmentVariableGuard {
 public:
 	explicit EnvironmentVariableGuard(const char *name)
@@ -43,7 +43,7 @@ private:
 };
 #endif
 
-#ifdef __APPLE__
+#ifdef MUMBLE_TEST_MACOS
 std::filesystem::path darwinUserTemporaryDirectory() {
 	const std::size_t pathLength = confstr(_CS_DARWIN_USER_TEMP_DIR, nullptr, 0);
 	if (pathLength == 0) {
@@ -65,7 +65,7 @@ class TestIPCUtils : public QObject {
 	Q_OBJECT
 private slots:
 
-#ifndef _WIN32
+#ifndef MUMBLE_TEST_WINDOWS
 	void usesXdgRuntimeDirectoryWhenSet() {
 		QTemporaryDir temporaryDirectory;
 		QVERIFY(temporaryDirectory.isValid());
@@ -81,7 +81,7 @@ private slots:
 	}
 #endif
 
-#ifdef __APPLE__
+#ifdef MUMBLE_TEST_MACOS
 	void usesDarwinUserTemporaryDirectoryWithoutXdgRuntimeDir() {
 		EnvironmentVariableGuard xdgRuntimeDirGuard("XDG_RUNTIME_DIR");
 		unsetenv("XDG_RUNTIME_DIR");
@@ -95,6 +95,15 @@ private slots:
 				== std::filesystem::weakly_canonical(expectedParent));
 		QVERIFY(runtimeDirectory.filename() == std::filesystem::path("info.mumble.Mumble"));
 		QVERIFY(std::filesystem::is_directory(runtimeDirectory));
+	}
+#endif
+
+#ifdef MUMBLE_TEST_WINDOWS
+	void windowsUsesNativePipeNames() {
+		QVERIFY(Mumble::getRuntimeDirectory().empty());
+		QVERIFY(Mumble::getOverlayPipePath() == std::filesystem::path("MumbleOverlayPipe"));
+		QVERIFY(Mumble::getOverlayPipeDevicePath() == LR"(\\.\pipe\MumbleOverlayPipe)");
+		QVERIFY(Mumble::getSocketPath("connection") == std::filesystem::path("connection"));
 	}
 #endif
 };

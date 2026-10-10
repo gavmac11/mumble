@@ -1,0 +1,45 @@
+{
+  "source_head": "e9bced7e65f8324c970580364cabf068327a4a77",
+  "general_run": 38082308206,
+  "general_conclusion": "success",
+  "preview_run": 38082308178,
+  "preview_conclusion": "success",
+  "preview_publication": "skipped",
+  "security_run": 38082308089,
+  "security_conclusion": "success",
+  "general_platforms": {
+    "tests-macos-15-intel-x86_64": {
+      "registered": 36,
+      "enabled_passed": 35,
+      "disabled": 1,
+      "failed": 0,
+      "skipped": 0,
+      "seconds_rounded_in_junit": 72.0
+    },
+    "tests-macos-15-arm64": {
+      "registered": 36,
+      "enabled_passed": 35,
+      "disabled": 1,
+      "failed": 0,
+      "skipped": 0,
+      "seconds_rounded_in_junit": 53.0
+    },
+    "tests-ubuntu-24.04-x86_64": {
+      "registered": 36,
+      "enabled_passed": 35,
+      "disabled": 1,
+      "failed": 0,
+      "skipped": 0,
+      "seconds_rounded_in_junit": 48.0
+    },
+    "tests-windows-2025-vs2026-x86_64": {
+      "registered": 36,
+      "enabled_passed": 35,
+      "disabled": 1,
+      "failed": 0,
+      "skipped": 0,
+      "seconds_rounded_in_junit": 182.0
+    }
+  },
+  "scope": "Native automated suites and package/install/launch gates; GUI/audio/video/endurance/signing acceptance still open."
+}

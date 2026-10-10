@@ -1,0 +1,300 @@
+{
+  "date": "2026-10-10",
+  "source_commit": "f25f046d41abc34ddeaab7cd4cdc8d3340ccb257",
+  "environment": {
+    "os": "macOS 26.6.2",
+    "architecture": "arm64",
+    "qt": "6.11.1",
+    "compiler": "Apple Clang 21.0.0",
+    "dependency_scope": "dynamic Homebrew; same configuration as foundation-validation.json"
+  },
+  "ctest": {
+    "summary": {
+      "name": "Darwin-c++",
+      "tests": "36",
+      "failures": "0",
+      "disabled": "1",
+      "skipped": "0",
+      "time": "47",
+      "timestamp": "2026-10-10T11:44:56"
+    },
+    "tests": [
+      {
+        "name": "TestReleaseUpdate",
+        "status": "run",
+        "seconds": "0.0448772",
+        "failure": false
+      },
+      {
+        "name": "TestAnimatedImages",
+        "status": "run",
+        "seconds": "1.12306",
+        "failure": false
+      },
+      {
+        "name": "TestChatWebM",
+        "status": "run",
+        "seconds": "19.2546",
+        "failure": false
+      },
+      {
+        "name": "TestVideoFramePacketizer",
+        "status": "run",
+        "seconds": "0.0731598",
+        "failure": false
+      },
+      {
+        "name": "TestVideoPacketPacer",
+        "status": "run",
+        "seconds": "0.143647",
+        "failure": false
+      },
+      {
+        "name": "TestVideoQualityProfile",
+        "status": "run",
+        "seconds": "0.0225316",
+        "failure": false
+      },
+      {
+        "name": "TestVideoViewUi",
+        "status": "run",
+        "seconds": "0.223198",
+        "failure": false
+      },
+      {
+        "name": "TestXMLTools",
+        "status": "run",
+        "seconds": "0.0583786",
+        "failure": false
+      },
+      {
+        "name": "TestFileTransferManager",
+        "status": "run",
+        "seconds": "0.743139",
+        "failure": false
+      },
+      {
+        "name": "TestFileTransferTransport",
+        "status": "run",
+        "seconds": "0.0209432",
+        "failure": false
+      },
+      {
+        "name": "TestPQCrypto",
+        "status": "run",
+        "seconds": "0.862105",
+        "failure": false
+      },
+      {
+        "name": "TestFTIdentity",
+        "status": "run",
+        "seconds": "3.85413",
+        "failure": false
+      },
+      {
+        "name": "TestFileTransferSession",
+        "status": "run",
+        "seconds": "0.471714",
+        "failure": false
+      },
+      {
+        "name": "TestFileTransferEngine",
+        "status": "run",
+        "seconds": "6.8459",
+        "failure": false
+      },
+      {
+        "name": "TestFileTransferE2E",
+        "status": "run",
+        "seconds": "7.36252",
+        "failure": false
+      },
+      {
+        "name": "TestSettingsJSONSerialization",
+        "status": "run",
+        "seconds": "0.978904",
+        "failure": false
+      },
+      {
+        "name": "OverlayTest",
+        "status": "disabled",
+        "seconds": "0",
+        "failure": false
+      },
+      {
+        "name": "TestCrypt",
+        "status": "run",
+        "seconds": "0.0695211",
+        "failure": false
+      },
+      {
+        "name": "TestAudioReceiverBuffer",
+        "status": "run",
+        "seconds": "0.0560868",
+        "failure": false
+      },
+      {
+        "name": "TestCaseInsensitiveQString",
+        "status": "run",
+        "seconds": "0.0576685",
+        "failure": false
+      },
+      {
+        "name": "TestCryptographicHash",
+        "status": "run",
+        "seconds": "0.067177",
+        "failure": false
+      },
+      {
+        "name": "TestCryptographicRandom",
+        "status": "run",
+        "seconds": "0.966615",
+        "failure": false
+      },
+      {
+        "name": "TestDatabase",
+        "status": "run",
+        "seconds": "0.137021",
+        "failure": false
+      },
+      {
+        "name": "TestServerDatabase",
+        "status": "run",
+        "seconds": "0.223764",
+        "failure": false
+      },
+      {
+        "name": "TestFFDHE",
+        "status": "run",
+        "seconds": "0.225985",
+        "failure": false
+      },
+      {
+        "name": "TestIPCUtils",
+        "status": "run",
+        "seconds": "0.321373",
+        "failure": false
+      },
+      {
+        "name": "TestPacketDataStream",
+        "status": "run",
+        "seconds": "0.0694815",
+        "failure": false
+      },
+      {
+        "name": "TestPasswordGenerator",
+        "status": "run",
+        "seconds": "0.0655876",
+        "failure": false
+      },
+      {
+        "name": "TestMumbleProtocol",
+        "status": "run",
+        "seconds": "0.0563277",
+        "failure": false
+      },
+      {
+        "name": "TestSelfSignedCertificate",
+        "status": "run",
+        "seconds": "0.529528",
+        "failure": false
+      },
+      {
+        "name": "TestServerAddress",
+        "status": "run",
+        "seconds": "0.0577732",
+        "failure": false
+      },
+      {
+        "name": "TestSSLLocks",
+        "status": "run",
+        "seconds": "2.07222",
+        "failure": false
+      },
+      {
+        "name": "TestStdAbs",
+        "status": "run",
+        "seconds": "0.0593397",
+        "failure": false
+      },
+      {
+        "name": "TestTimer",
+        "status": "run",
+        "seconds": "0.205975",
+        "failure": false
+      },
+      {
+        "name": "TestUnresolvedServerAddress",
+        "status": "run",
+        "seconds": "0.066168",
+        "failure": false
+      },
+      {
+        "name": "TestVersion",
+        "status": "run",
+        "seconds": "0.0741536",
+        "failure": false
+      }
+    ]
+  },
+  "regression_evidence": {
+    "queued_manager_events_before_fix": "2 failing cases: stale prompt delivered after disconnect, and old/new prompts both delivered for reused session. Initial failing variant emitted worker signals directly; final passing tests feed valid M1 records through manager/engine.",
+    "prompt_timers_before_fix": "Both disconnect and declined-prompt rows failed: old timer remained active.",
+    "final_manager_test_scope": "Real manager worker, inbound M1 parsing, GUI-thread event delivery, stale trust/password/blocked/state event rejection, and new handshake after reused session. No interactive dialogs or real sockets in this target.",
+    "final_timer_test_scope": "Cancelled timers stop; manually dispatched old timeout cannot erase replacement; retired timer is deleted.",
+    "windows_metaobject": "Direct Qt moc invocation with MUMBLE_TEST_WINDOWS generates Windows slot and excludes Unix/macOS slots. Native MSVC build remains pending."
+  },
+  "prior_ci": {
+    "source_commit": "63dd192a78ae721c21299b28f394b66bfaa7c30e",
+    "run": "https://github.com/gavmac11/mumble/actions/runs/38076146799",
+    "passing_reports": [
+      {
+        "artifact": "tests-ubuntu-24.04-x86_64",
+        "summary": {
+          "name": "Linux-c++",
+          "tests": "35",
+          "failures": "0",
+          "disabled": "1",
+          "skipped": "0",
+          "time": "47",
+          "timestamp": "2026-10-10T18:41:33"
+        }
+      },
+      {
+        "artifact": "tests-macos-15-arm64",
+        "summary": {
+          "name": "Darwin-c++",
+          "tests": "35",
+          "failures": "0",
+          "disabled": "1",
+          "skipped": "0",
+          "time": "59",
+          "timestamp": "2026-10-10T18:42:08"
+        }
+      },
+      {
+        "artifact": "tests-macos-15-intel-x86_64",
+        "summary": {
+          "name": "Darwin-c++",
+          "tests": "35",
+          "failures": "0",
+          "disabled": "1",
+          "skipped": "0",
+          "time": "57",
+          "timestamp": "2026-10-10T18:41:29"
+        }
+      }
+    ],
+    "windows_failure": "C2039: usesXdgRuntimeDirectoryWhenSet generated by moc but excluded by MSVC. Not a passing Windows run.",
+    "scope": "Earlier foundation only; these results do not qualify the new lifecycle/IPC commits."
+  },
+  "unverified": [
+    "updated native/static CI",
+    "interactive identity/recipient dialog behavior",
+    "bounded worker shutdown",
+    "six directed GUI platform pairs",
+    "native acceptance/signing/endurance",
+    "deployment/restore",
+    "supply/pilot/economics"
+  ]
+}

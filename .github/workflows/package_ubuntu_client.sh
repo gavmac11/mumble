@@ -15,8 +15,17 @@ artifact_name="Mumble-Ubuntu-24.04-${architecture}.deb"
 rm -rf "${package_dir}"
 mkdir -p "${package_root}/DEBIAN" "${dist_dir}"
 
-DESTDIR="${package_root}" cmake --install "${workspace}/build"
+DESTDIR="${package_root}" cmake --install "${workspace}/build" --component mumble_client
+# Desktop metadata and icons currently use CMake's default component. Stage
+# those as well, while excluding the server built only for relay regression tests.
+DESTDIR="${package_root}" cmake --install "${workspace}/build" --component Unspecified
+install -Dm644 "${workspace}/auxiliary_files/man_files/mumble.1" "${package_root}/usr/share/man/man1/mumble.1"
 install -Dm644 "${workspace}/LICENSE" "${package_root}/usr/share/doc/${package_name}/copyright"
+
+if [[ -e "${package_root}/usr/bin/mumble-server" || -e "${package_root}/etc/mumble/mumble-server.ini" ]]; then
+	echo "The client package unexpectedly contains server files." >&2
+	exit 1
+fi
 
 if [[ ! -x "${package_root}/usr/bin/mumble" ]]; then
 	echo "The staged package does not contain /usr/bin/mumble." >&2

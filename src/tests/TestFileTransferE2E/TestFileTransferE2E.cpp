@@ -24,9 +24,11 @@
 
 #include <QCryptographicHash>
 #include <QDir>
+#include <QElapsedTimer>
 #include <QFile>
 #include <QFileInfo>
 #include <QProcess>
+#include <QProcessEnvironment>
 #include <QSignalSpy>
 #include <QSslSocket>
 #include <QSqlDatabase>
@@ -288,20 +290,35 @@ bool TestFileTransferE2E::startMurmur() {
 	}
 
 	m_murmur.setProcessChannelMode(QProcess::ForwardedChannels);
-	m_murmur.start(QStringLiteral(MUMBLE_TEST_MURMUR_BINARY), { "--ini", iniPath });
+#ifdef Q_OS_WIN
+	// The test runner uses the offscreen plugin, while the static Windows
+	// server only imports the native platform plugin.
+	QProcessEnvironment serverEnvironment = QProcessEnvironment::systemEnvironment();
+	serverEnvironment.remove(QStringLiteral("QT_QPA_PLATFORM"));
+	m_murmur.setProcessEnvironment(serverEnvironment);
+#endif
+	// Unix servers detach by default. Keep the fixture owned by QProcess so
+	// startup failures are visible and cleanup cannot leave a daemon behind.
+	m_murmur.start(QStringLiteral(MUMBLE_TEST_MURMUR_BINARY), { "--foreground", "--ini", iniPath });
 	if (!m_murmur.waitForStarted(10000)) {
 		return false;
 	}
 
 	// First start generates the server certificate; give it up to 60 s
-	return waitFor(
-		[]() {
+	bool ready = false;
+	waitFor(
+		[this, &ready]() {
+			if (m_murmur.state() == QProcess::NotRunning) {
+				return true;
+			}
 			QTcpSocket probe;
 			probe.connectToHost(QHostAddress::LocalHost, MurmurPort);
 			probe.waitForConnected(200);
-			return probe.state() == QAbstractSocket::ConnectedState;
+			ready = probe.state() == QAbstractSocket::ConnectedState;
+			return ready;
 		},
 		60000);
+	return ready;
 }
 
 bool TestFileTransferE2E::waitFor(const std::function< bool() > &predicate, int timeoutMSecs) {

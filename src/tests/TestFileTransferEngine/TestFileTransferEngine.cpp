@@ -14,10 +14,12 @@
 #include "PQFileTransfer/crypto/CryptoUtils.h"
 #include "PQFileTransfer/crypto/SigMLDSA65.h"
 #include "PQFileTransfer/engine/FileTransferEngine.h"
+#include "PQFileTransfer/engine/FileTransferSession.h"
 #include "PQFileTransfer/identity/FTIdentity.h"
 
 #include <QDir>
 #include <QFile>
+#include <QPointer>
 #include <QSignalSpy>
 #include <QTemporaryDir>
 
@@ -59,6 +61,8 @@ private slots:
 	void firstContactPinFlags();
 	void incomingAbortCleansUpSafely();
 	void passwordSpoolIsBounded();
+	void cancelledPromptTimerCannotRemoveReplacementHandshake_data();
+	void cancelledPromptTimerCannotRemoveReplacementHandshake();
 
 private:
 	QString writeTestFile(qsizetype size);
@@ -79,7 +83,48 @@ void TestFileTransferEngine::initTestCase() {
 	m_bobFp   = PQFT::identityFingerprint(m_bob.publicKey);
 }
 
-void TestFileTransferEngine::cleanupTestCase() { }
+void TestFileTransferEngine::cleanupTestCase() {
+}
+
+void TestFileTransferEngine::cancelledPromptTimerCannotRemoveReplacementHandshake_data() {
+	QTest::addColumn< bool >("decline");
+	QTest::newRow("disconnect") << false;
+	QTest::newRow("declined-prompt") << true;
+}
+
+void TestFileTransferEngine::cancelledPromptTimerCannotRemoveReplacementHandshake() {
+	QFETCH(bool, decline);
+	PQFT::FileTransferEngine engine;
+	engine.setIdentity(m_bob.publicKey, {});
+	QSignalSpy prompts(&engine, &PQFT::FileTransferEngine::firstContact);
+	PQFT::FileTransferSession first(PQFT::FileTransferSession::Role::Initiator, { m_alice.publicKey, {} }, {});
+	engine.onControlMessage(AliceSession, first.buildM1());
+	QCOMPARE(prompts.size(), 1);
+	const QList< QTimer * > timers = engine.findChildren< QTimer * >();
+	QCOMPARE(timers.size(), 1);
+	const QPointer< QTimer > oldTimer = timers.first();
+	QVERIFY(oldTimer->isActive());
+	if (decline) {
+		engine.resolveFirstContact(AliceSession, false);
+	} else {
+		engine.abortAll();
+	}
+	QVERIFY(!oldTimer || !oldTimer->isActive());
+	PQFT::FileTransferSession replacement(PQFT::FileTransferSession::Role::Initiator, { m_alice.publicKey, {} }, {});
+	const QByteArray m1 = replacement.buildM1();
+	engine.onControlMessage(AliceSession, m1);
+	QCOMPARE(prompts.size(), 2);
+	// Even a timeout already dispatched before cancellation must not erase
+	// the replacement handshake with the same peer's session number.
+	if (oldTimer) {
+		QVERIFY(QMetaObject::invokeMethod(oldTimer.data(), "timeout", Qt::DirectConnection));
+	}
+	engine.onControlMessage(AliceSession, m1);
+	QCOMPARE(prompts.size(), 2);
+	QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+	QVERIFY(oldTimer.isNull());
+	engine.abortAll();
+}
 
 QString TestFileTransferEngine::writeTestFile(qsizetype size) {
 	const QString path = m_tempDir.filePath(QStringLiteral("payload-%1.bin").arg(size));

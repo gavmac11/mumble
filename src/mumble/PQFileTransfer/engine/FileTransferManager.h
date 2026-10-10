@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QString>
 
+#include <functional>
 #include <memory>
 #include <optional>
 
@@ -56,8 +57,8 @@ public:
 
 	/// Queue a file for sending to `recipients` (sessions with pinned
 	/// identities). Returns false when prerequisites are missing.
-	bool startSend(const QString &filePath, const QString &mimeType, bool passwordMode,
-				   const QByteArray &password, const QList< unsigned int > &recipients);
+	bool startSend(const QString &filePath, const QString &mimeType, bool passwordMode, const QByteArray &password,
+				   const QList< unsigned int > &recipients);
 
 	void abortTransfer(const QByteArray &transferId);
 	void saveTransferAs(const QByteArray &transferId, const QString &targetPath);
@@ -79,6 +80,9 @@ public:
 	/// Drop every in-flight transfer (disconnects, server changes).
 	void disconnectCleanup();
 
+	/// GUI-thread token for rejecting dialog results after a disconnect.
+	quint64 connectionGeneration() const { return m_connectionGeneration; }
+
 	/// Rebuild the session->fingerprint pin cache from the user list.
 	void refreshPinCache();
 
@@ -91,19 +95,24 @@ signals:
 	void transferUpdated(const PQFT::FTTransferInfo &info);
 	/// A peer contacted us for the first time: the mandatory safety-number
 	/// verification must happen before the handshake continues.
-	void firstContact(unsigned int peerSession, const QByteArray &peerFingerprint,
-					  const QString &safetyNumber);
+	void firstContact(unsigned int peerSession, const QByteArray &peerFingerprint, const QString &safetyNumber);
 	/// A pinned peer presented a different identity: hard-blocked.
 	void peerBlocked(unsigned int peerSession, const QString &peerName);
 	/// An incoming password-mode transfer needs its password.
 	void passwordRequired(const QByteArray &transferId, const QString &fileName);
 
 private:
+	friend class TestFileTransferManager;
 	void setupEngineTransports();
+	void updateConnectionTransport();
+	void forwardEngineEvent(std::function< void() > event);
 	QByteArray serverDigest() const;
 
+	quint64 m_connectionGeneration = 0; // GUI thread
+	quint64 m_engineGeneration     = 0; // worker thread
+
 	std::unique_ptr< QThread > m_workerThread;
-	PQFT::FileTransferEngine *m_engine = nullptr;   // lives on the worker thread
+	PQFT::FileTransferEngine *m_engine = nullptr; // lives on the worker thread
 
 	std::unique_ptr< FileTransferIdentity > m_identity;
 	std::unique_ptr< PeerTrustStore > m_trustStore;

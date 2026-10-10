@@ -191,7 +191,7 @@ public:
 	void sendChannelTextMessage(unsigned int channel, const QString &message_, bool tree);
 	void sendFileTransferControl(const QList< unsigned int > &targetSessions, const QByteArray &payload);
 	void sendFileData(const QByteArray &transferId, quint64 chunkIndex, std::optional< quint64 > chunkCount,
-					 const QByteArray &data);
+					  const QByteArray &data);
 	void setUserComment(unsigned int uiSession, const QString &comment);
 	void setUserTexture(unsigned int uiSession, const QByteArray &qba);
 	void setTokens(const QStringList &tokens);

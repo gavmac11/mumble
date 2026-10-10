@@ -27,6 +27,21 @@ if (static)
 	link_libraries(mumble_test_qt_plugins)
 endif()
 
+# Call from the directory that owns the test: CMake TEST properties are
+# directory-scoped, even though their executable targets are global.
+function(mumble_client_test_runtime test_name)
+	if(WIN32)
+		# Client-object tests live outside the application/DLL directory.
+		set_property(TEST ${test_name} APPEND PROPERTY ENVIRONMENT_MODIFICATION
+			"PATH=path_list_prepend:$<TARGET_FILE_DIR:mumble>")
+		get_target_property(ffmpeg_runtime_dir mumble_client_object_lib MUMBLE_FFMPEG_RUNTIME_DIRECTORY)
+		if(ffmpeg_runtime_dir)
+			set_property(TEST ${test_name} APPEND PROPERTY ENVIRONMENT_MODIFICATION
+				"PATH=path_list_prepend:${ffmpeg_runtime_dir}")
+		endif()
+	endif()
+endfunction()
+
 if(client)
 	add_subdirectory("TestReleaseUpdate")
 	add_subdirectory("TestAnimatedImages")
@@ -37,6 +52,8 @@ if(client)
 	add_subdirectory("TestVideoViewUi")
 	add_subdirectory("TestXMLTools")
 	if(file-sharing)
+		add_subdirectory("TestFileTransferManager")
+		add_subdirectory("TestFileTransferTransport")
 		add_subdirectory("TestPQCrypto")
 		add_subdirectory("TestFTIdentity")
 		add_subdirectory("TestFileTransferSession")

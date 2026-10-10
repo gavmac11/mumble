@@ -57,11 +57,15 @@ jobs:
               - os: windows-2025-vs2026
                 type: static
                 arch: x86_64
-                tests: 'OFF'
+                tests: 'ON'
+              - os: macos-15
+                type: static
+                arch: arm64
+                tests: 'ON'
               - os: macos-15-intel
                 type: static
                 arch: x86_64
-                tests: 'OFF'
+                tests: 'ON'
             
     runs-on: ${{ matrix.os }}
 
@@ -108,9 +112,18 @@ jobs:
 
     - name: Test
       if: matrix.tests == 'ON'
-      working-directory: ${{ github.workspace }}/build
       shell: bash
-      run: ctest --output-on-failure -C $BUILD_TYPE
+      run: bash .github/workflows/test.sh build "$BUILD_TYPE"
+
+    - name: Retain regression results
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: tests-${{ matrix.os }}-${{ matrix.arch }}
+        if-no-files-found: warn
+        path: |
+          build/test-results/
+          build/Testing/Temporary/
 
     - name: Verify FFmpeg installer payload
       if: startsWith(matrix.os, 'windows') && matrix.type == 'static' && github.event_name != 'pull_request'
