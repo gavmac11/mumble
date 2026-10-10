@@ -2,6 +2,10 @@
 
 Every successful `master` push in **Preview installers** publishes a new prerelease
 after the Windows, macOS, Ubuntu client, Debian server, and publication-test jobs pass.
+Each platform runs CTest from the same build used for its package; missing or empty
+test suites fail the job. JUnit reports and CTest logs are retained even after failures.
+The general build workflow also runs tests on Windows x64, Ubuntu x64, and both
+Apple Silicon and Intel macOS. These checks do not replace native GUI acceptance.
 The release tag, client version, and installer version all use `1.7.<workflow run number>`.
 PRs also consume run numbers, so gaps are expected. Concurrent pushes may cancel superseded
 builds; only completed builds are released. Minor/major version changes remain deliberate.

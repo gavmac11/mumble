@@ -21,7 +21,7 @@ env:
   CMAKE_OPTIONS: >-
     -Dclient=ON
     -Dserver=OFF
-    -Dtests=OFF
+    -Dtests=ON
     -Dsymbols=OFF
     -Dwarnings-as-errors=OFF
     -Dscreen-sharing=ON
@@ -88,6 +88,20 @@ jobs:
         run: |
           CMAKE_OPTIONS="${CMAKE_OPTIONS} -Dtranslations=OFF" \
             .github/workflows/build.sh "windows-2025-vs2026" "static" "x86_64"
+
+      - name: Gate installer publication on regression tests
+        shell: bash
+        run: bash .github/workflows/test.sh build "$BUILD_TYPE"
+
+      - name: Retain regression results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: preview-tests-windows-x64
+          if-no-files-found: warn
+          path: |
+            build/test-results/
+            build/Testing/Temporary/
 
       - name: Verify FFmpeg installer payload
         shell: pwsh
@@ -165,6 +179,20 @@ jobs:
         env:
           MUMBLE_BUILD_NUMBER: ${{ github.run_number }}
         run: .github/workflows/build.sh "macos-15" "static" "arm64"
+
+      - name: Gate installer publication on regression tests
+        shell: bash
+        run: bash .github/workflows/test.sh build "$BUILD_TYPE"
+
+      - name: Retain regression results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: preview-tests-macos-arm64
+          if-no-files-found: warn
+          path: |
+            build/test-results/
+            build/Testing/Temporary/
 
       - name: Prepare portable application bundle
         shell: bash
@@ -342,8 +370,8 @@ jobs:
     env:
       CMAKE_OPTIONS: >-
         -Dclient=ON
-        -Dserver=OFF
-        -Dtests=OFF
+        -Dserver=ON
+        -Dtests=ON
         -Dpackaging=OFF
         -Dsymbols=OFF
         -Dwarnings-as-errors=OFF
@@ -403,6 +431,20 @@ jobs:
         env:
           MUMBLE_BUILD_NUMBER: ${{ github.run_number }}
         run: .github/workflows/build.sh "ubuntu-24.04" "static" "x86_64"
+
+      - name: Gate installer publication on regression tests
+        shell: bash
+        run: bash .github/workflows/test.sh build "$BUILD_TYPE"
+
+      - name: Retain regression results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: preview-tests-ubuntu-amd64
+          if-no-files-found: warn
+          path: |
+            build/test-results/
+            build/Testing/Temporary/
 
       - name: Build Ubuntu package
         shell: bash
@@ -566,9 +608,18 @@ jobs:
         run: .github/workflows/build.sh "debian-12" "shared" "x86_64"
 
       - name: Test server build
-        working-directory: ${{ github.workspace }}/build
         shell: bash
-        run: ctest --output-on-failure -C "${BUILD_TYPE}"
+        run: bash .github/workflows/test.sh build "$BUILD_TYPE"
+
+      - name: Retain regression results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: preview-tests-debian-amd64
+          if-no-files-found: warn
+          path: |
+            build/test-results/
+            build/Testing/Temporary/
 
       - name: Verify Debian 12 runtime compatibility
         shell: bash
