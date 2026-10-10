@@ -37,6 +37,17 @@
     "shutdown-baseline-ready.txt": "7c42c5cf4ea409fbb572fde75a3c14b95e894c1dd305754bc3c356ef22e7ab94",
     "shutdown-ctest.txt": "623899b55b6f91d95656758161b4e9ec3943f9de33e373e09ceef4cc2878b958",
     "shutdown-junit.xml": "dd831d331f98b399e02c6d3c09987fd7f69e82d5ac295ed82094a7b82a75c5b3",
-    "shutdown-sanitized-tests.txt": "1710780b0e7e0a655ea00c46dd3ba269d160a542265629e80f1966ba13ff85ff"
+    "shutdown-sanitized-tests.txt": "1710780b0e7e0a655ea00c46dd3ba269d160a542265629e80f1966ba13ff85ff",
+    "shutdown-signedness-ctest.txt": "0aeea12a60f2ebc625d6d44c724218bf5101481c4a390046a8def54ee8c35b18",
+    "shutdown-signedness-junit.xml": "c5569cac225b48902abeb864d955bfebf9d14d83ccac0ae081b278b9fad1bb81"
+  },
+  "followup": {
+    "source_commit": "a6f9d089e68299c5f287d41bf20e112d275cab69",
+    "trigger": "Native Windows warnings-as-errors rejected signed/unsigned size comparison (MSVC C4018/C2220), run 38083448718 job 114304952511.",
+    "change": "Explicit unsigned bound with equivalent value; maximum-width invalid-input regression assertions.",
+    "local_ctest_executables_passed": 4,
+    "local_ctest_executables_failed": 0,
+    "local_ctest_seconds": 18.07,
+    "native_rerun_required": true
   }
 }
