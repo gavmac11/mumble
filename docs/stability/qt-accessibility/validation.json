@@ -43,10 +43,17 @@
     "qualification": "Revised vendor target compile/link/native import proof against matching shared Qt6.11.1, not shipping all-static Qt6.10.0"
   },
   "ci": {
-    "source_head": "b9ba0c55e",
-    "general_run": 38093727237,
-    "preview_run": 38093728926,
-    "status": "revised repair dispatched; pending results"
+    "source_head": "440c2fc01c9c36e2db7bfd312f1d17b68698465a",
+    "general_run": 38094014363,
+    "preview_run": 38094127750,
+    "status": "Corrected patch reference; dispatched pending results",
+    "previous_attempt": {
+      "general_run": 38093727237,
+      "preview_run": 38093728926,
+      "head": "b9ba0c55e",
+      "failure": "Mac configuration referenced a renamed patch that did not exist; corrected in 440c2fc01",
+      "general_cancelled_to_avoid_duplicate_work": true
+    }
   },
   "initial_private_fixed_plugin_sha256": "d6278b36941ceeb3c13834afad81904a806338e8fe79fcf2c4c400891849dda0",
   "initial_fixed_observation": "Four insertion/selection/AX sequences survive; private plugin load verified; native Mumble Add Server survives, TLS fingerprint verified and connection shown, file identity decline/retry shown",
