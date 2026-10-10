@@ -4,6 +4,7 @@
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include <QTest>
+#include <QBuffer>
 
 #include "PQFileTransfer/PQFTConstants.h"
 #include "PQFileTransfer/crypto/Argon2Wrap.h"
@@ -66,6 +67,10 @@ private slots:
 	// --- Merkle -------------------------------------------------------------------------
 	void merkleVectors();
 	void merkleRejectsBadLeaf();
+	void merkleCancellation_data();
+	void merkleCancellation();
+	void deviceHashCancellation();
+	void deviceHashRejectsWrongCount();
 };
 
 void TestPQCrypto::sha384Vector() {
@@ -453,6 +458,54 @@ void TestPQCrypto::merkleVectors() {
 	QVector< QByteArray > swapped = hashes;
 	swapped.swapItemsAt(0, 1);
 	QVERIFY(PQFT::merkleRoot(swapped) != PQFT::merkleRoot(hashes));
+}
+
+void TestPQCrypto::deviceHashCancellation() {
+	class InterruptingBuffer : public QBuffer {
+	public:
+		int reads = 0;
+
+	protected:
+		qint64 readData(char *data, qint64 size) override {
+			++reads;
+			return QBuffer::readData(data, size);
+		}
+	} source;
+	source.setData(QByteArray(8 * 16384, 'x'));
+	QVERIFY(source.open(QIODevice::ReadOnly | QIODevice::Unbuffered));
+	QVERIFY(PQFT::merkleRootFromDevice(source, 16384, 8, [&]() { return source.reads >= 2; }).isEmpty());
+	QCOMPARE(source.reads, 2);
+	QVERIFY(source.seek(0));
+	const QByteArray chunkHash = PQFT::merkleChunkHash(QByteArray(16384, 'x'));
+	QCOMPARE(PQFT::merkleRootFromDevice(source, 16384, 8), PQFT::merkleRoot(QVector< QByteArray >(8, chunkHash)));
+}
+
+void TestPQCrypto::deviceHashRejectsWrongCount() {
+	QBuffer source;
+	source.setData(QByteArray(32768, 'x'));
+	QVERIFY(source.open(QIODevice::ReadOnly));
+	QVERIFY(PQFT::merkleRootFromDevice(source, 16384, 1).isEmpty());
+	QVERIFY(source.seek(0));
+	QVERIFY(PQFT::merkleRootFromDevice(source, 16384, 3).isEmpty());
+	QVERIFY(source.seek(0));
+	QVERIFY(PQFT::merkleRootFromDevice(source, 0, 2).isEmpty());
+}
+
+void TestPQCrypto::merkleCancellation_data() {
+	QTest::addColumn< int >("cancelAt");
+	QTest::newRow("before-input") << 1;
+	QTest::newRow("validating-digests") << 5;
+	QTest::newRow("building-leaves") << 14;
+	QTest::newRow("building-parent-level") << 23;
+}
+
+void TestPQCrypto::merkleCancellation() {
+	QFETCH(int, cancelAt);
+	QVector< QByteArray > hashes(8, PQFT::merkleChunkHash(QByteArray("chunk")));
+	int checks = 0;
+	QVERIFY(PQFT::merkleRoot(hashes, [&]() { return ++checks == cancelAt; }).isEmpty());
+	QCOMPARE(checks, cancelAt);
+	QCOMPARE(PQFT::merkleRoot(hashes, []() { return false; }), PQFT::merkleRoot(hashes));
 }
 
 void TestPQCrypto::merkleRejectsBadLeaf() {

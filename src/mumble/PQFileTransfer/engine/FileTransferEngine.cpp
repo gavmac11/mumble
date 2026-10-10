@@ -19,11 +19,16 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QThread>
 
 namespace PQFT {
 
 namespace {
 constexpr int EarlyChunkBufferMax = 8;
+
+bool shutdownRequested() {
+	return QThread::currentThread()->isInterruptionRequested();
+}
 
 QByteArray blobForEarlyChunk(quint64 index, const QByteArray &ciphertext) {
 	return uint64be(index) + ciphertext;
@@ -67,7 +72,7 @@ FileTransferEngine::~FileTransferEngine() {
 	}
 	const QList< std::shared_ptr< ReceiveJob > > recvJobs = m_receiveJobs.values();
 	for (const auto &job : recvJobs) {
-		cleanupReceive(job);
+		cleanupReceive(job, false);
 	}
 }
 
@@ -303,6 +308,8 @@ void FileTransferEngine::drainEarlyChunks(std::shared_ptr< ReceiveJob > jobPtr) 
 	const QVector< QByteArray > early = std::move(jobPtr->earlyChunks);
 	jobPtr->earlyChunks.clear();
 	for (const QByteArray &blob : early) {
+		if (shutdownRequested())
+			return;
 		quint64 index = 0;
 		QByteArray ciphertext;
 		if (earlyChunkSplit(blob, index, ciphertext)) {
@@ -335,7 +342,7 @@ void FileTransferEngine::drainSpooledChunks(std::shared_ptr< ReceiveJob > jobPtr
 	if (!spool.open(QIODevice::ReadOnly)) {
 		return;   // nothing was ever spooled
 	}
-	forever {
+	while (!shutdownRequested()) {
 		QByteArray header = spool.read(4);
 		if (header.size() < 4) {
 			break;   // clean end (or a truncated spool: the Merkle/AEAD checks
@@ -614,7 +621,10 @@ bool FileTransferEngine::tryCompleteReceive(std::shared_ptr< ReceiveJob > jobPtr
 		return false;
 	}
 
-	if (merkleRoot(job.leafHashes) != job.manifest.merkleRoot) {
+	const QByteArray root = merkleRoot(job.leafHashes, shutdownRequested);
+	if (shutdownRequested())
+		return false;
+	if (root != job.manifest.merkleRoot) {
 		updateReceiveState(job, FTTransferInfo::State::Failed, genericDecryptionError());
 		cleanupReceive(jobPtr);
 		return false;
@@ -635,7 +645,8 @@ bool FileTransferEngine::tryCompleteReceive(std::shared_ptr< ReceiveJob > jobPtr
 quint64 FileTransferEngine::startSend(const QString &filePath, const QString &mimeType, bool passwordMode,
 									  QByteArray password, const QSet< unsigned int > &recipients) {
 	QFileInfo fileInfo(filePath);
-	if (!fileInfo.exists() || !fileInfo.isFile() || !fileInfo.isReadable() || fileInfo.size() <= 0) {
+	if (shutdownRequested() || !fileInfo.exists() || !fileInfo.isFile() || !fileInfo.isReadable()
+		|| fileInfo.size() <= 0) {
 		zeroize(password);
 		return 0;
 	}
@@ -652,29 +663,20 @@ quint64 FileTransferEngine::startSend(const QString &filePath, const QString &mi
 												static_cast< quint32 >(MaxChunkSize));
 	job->file			= new QFile(fileInfo.absoluteFilePath());
 	if (!job->file->open(QIODevice::ReadOnly)) {
-		delete job->file;
+		cleanupSend(*job, true);
 		zeroize(password);
 		return 0;
 	}
 	const quint32 chunkSize  = job->effectiveChunkSize;
 	const quint64 chunkCount = (job->fileSize + chunkSize - 1) / chunkSize;
 
-	// One hashing pass: chunk digests -> Merkle root
-	QVector< QByteArray > digests;
-	digests.reserve(static_cast< int >(chunkCount));
-	while (!job->file->atEnd()) {
-		const QByteArray chunk = job->file->read(chunkSize);
-		if (chunk.isEmpty()) {
-			break;
-		}
-		digests.append(merkleChunkHash(chunk));
-	}
-	if (static_cast< quint64 >(digests.size()) != chunkCount) {
-		delete job->file;
+	// One hashing pass, cancellable between bounded chunks and Merkle nodes.
+	job->merkleRoot = merkleRootFromDevice(*job->file, chunkSize, chunkCount, shutdownRequested);
+	if (shutdownRequested() || job->merkleRoot.isEmpty()) {
+		cleanupSend(*job, true);
 		zeroize(password);
 		return 0;
 	}
-	job->merkleRoot = merkleRoot(digests);
 	job->chunkCount = chunkCount;
 	job->fileKey	= randomBytes(KeySize);
 
@@ -697,6 +699,11 @@ quint64 FileTransferEngine::startSend(const QString &filePath, const QString &mi
 	// Per-recipient sessions (peers must be pinned already)
 	bool anyPeer = false;
 	for (unsigned int session : recipients) {
+		if (shutdownRequested()) {
+			cleanupSend(*job, true);
+			zeroize(password);
+			return 0;
+		}
 		const QByteArray pinned = m_pinLookup ? m_pinLookup(session) : QByteArray();
 		SendPeer peer;
 		peer.session  = session;
@@ -710,7 +717,7 @@ quint64 FileTransferEngine::startSend(const QString &filePath, const QString &mi
 		anyPeer = true;
 	}
 	if (!anyPeer) {
-		delete job->file;
+		cleanupSend(*job, true);
 		zeroize(password);
 		return 0;
 	}
@@ -785,6 +792,8 @@ void FileTransferEngine::maybeStartHandshakePhase2(SendJob &job) {
 }
 
 void FileTransferEngine::buildAndSendManifests(SendJob &job) {
+	if (shutdownRequested())
+		return;
 	// Password-layer material is shared by every recipient of the transfer
 	SecureBytes pwKey;
 	QByteArray salt;
@@ -802,6 +811,8 @@ void FileTransferEngine::buildAndSendManifests(SendJob &job) {
 	const QByteArray fpA = identityFingerprint(m_identityPk);
 
 	for (SendPeer &peer : job.peers) {
+		if (shutdownRequested())
+			return;
 		if (!peer.established || !peer.session_) {
 			continue;
 		}
@@ -899,6 +910,8 @@ void FileTransferEngine::sendNextChunks(SendJob &job, qint64 budgetBytes) {
 	const quint32 chunkSize = job.effectiveChunkSize;
 
 	while (budgetBytes > 0 && job.nextChunkIndex < job.chunkCount) {
+		if (shutdownRequested())
+			return;
 		const qint64 offset = static_cast< qint64 >(job.nextChunkIndex) * chunkSize;
 		if (!job.file->seek(offset)) {
 			finishSend(job, false, tr("Read error"));
@@ -969,7 +982,7 @@ void FileTransferEngine::cleanupSend(SendJob &job, bool keepCard) {
 	m_sendJobs.remove(job.transferId);
 }
 
-void FileTransferEngine::cleanupReceive(std::shared_ptr< ReceiveJob > jobPtr) {
+void FileTransferEngine::cleanupReceive(std::shared_ptr< ReceiveJob > jobPtr, bool keepReady) {
 	ReceiveJob &job = *jobPtr;
 	// The map's entry may be the only owning reference. The by-value
 	// parameter took its own owning copy at the call, so erasing the entry
@@ -977,9 +990,9 @@ void FileTransferEngine::cleanupReceive(std::shared_ptr< ReceiveJob > jobPtr) {
 	// may literally live inside the map node) while we still work on it.
 	const QByteArray transferId	= job.transferId;
 	const unsigned int peerSession = job.peerSession;
-	// Temp files survive only for Ready transfers (until saved); every other
-	// outcome removes all partial output (§13).
-	const bool keepTemp			   = (job.lastState == FTTransferInfo::State::Ready);
+	// Ready output may survive while the engine is alive. Shutdown also
+	// removes unsaved plaintext; files explicitly saved elsewhere are untouched.
+	const bool keepTemp            = (keepReady && job.lastState == FTTransferInfo::State::Ready);
 	const QString tempDir		   = job.tempDir;
 
 	if (!transferId.isEmpty()) {
@@ -1061,6 +1074,10 @@ void FileTransferEngine::saveTransferAs(const QByteArray &transferId, const QStr
 }
 
 void FileTransferEngine::providePassword(const QByteArray &transferId, QByteArray password) {
+	if (shutdownRequested()) {
+		zeroize(password);
+		return;
+	}
 	auto it = m_receiveJobs.find(transferId);
 	if (it == m_receiveJobs.end() || !it->get()->waitingPassword) {
 		zeroize(password);
@@ -1079,6 +1096,8 @@ void FileTransferEngine::providePassword(const QByteArray &transferId, QByteArra
 			return;
 		}
 		zeroize(password);
+		if (shutdownRequested())
+			return;
 
 		const QByteArray pwWrapKey =
 			passwordWrapKey(pwKey.toByteArray(), job.transferId, job.manifest.fpA, job.manifest.fpB);

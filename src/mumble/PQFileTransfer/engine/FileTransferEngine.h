@@ -224,7 +224,7 @@ private:
 	/// reference) and keeps it alive through the pointer for the rest of the
 	/// teardown — reading job fields after the erase used to be a
 	/// use-after-free.
-	void cleanupReceive(std::shared_ptr< ReceiveJob > jobPtr);
+	void cleanupReceive(std::shared_ptr< ReceiveJob > jobPtr, bool keepReady = true);
 	void emitInfo(const FTTransferInfo &info);
 	void emitSaveDone(std::shared_ptr< ReceiveJob > jobPtr);
 	void emitSaveFailed(ReceiveJob &job);

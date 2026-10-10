@@ -18,10 +18,14 @@
 #include "PQFileTransfer/identity/FTIdentity.h"
 
 #include <QDir>
+#include <QEventLoop>
 #include <QFile>
 #include <QPointer>
 #include <QSignalSpy>
+#include <QStandardPaths>
 #include <QTemporaryDir>
+#include <QThread>
+#include <QTimer>
 
 // A named namespace (not an anonymous one): the test class below has external
 // linkage and GCC's -Wsubobject-linkage rejects members whose type uses an
@@ -63,6 +67,9 @@ private slots:
 	void passwordSpoolIsBounded();
 	void cancelledPromptTimerCannotRemoveReplacementHandshake_data();
 	void cancelledPromptTimerCannotRemoveReplacementHandshake();
+	void shutdownRemovesUnsavedPlaintext_data();
+	void shutdownRemovesUnsavedPlaintext();
+	void unlimitedSendStopsOnWorkerInterruption();
 
 private:
 	QString writeTestFile(qsizetype size);
@@ -255,6 +262,91 @@ void TestFileTransferEngine::sendReceiveRoundTrip() {
 	QVERIFY(received.open(QIODevice::ReadOnly));
 	QCOMPARE(original.size(), received.size());
 	QCOMPARE(original.readAll(), received.readAll());
+}
+
+void TestFileTransferEngine::unlimitedSendStopsOnWorkerInterruption() {
+	const QString source = writeTestFile(8 * 16384);
+	QVERIFY(!source.isEmpty());
+	int chunks           = 0;
+	quint64 startedBytes = 0;
+	auto worker          = std::unique_ptr< QThread >(QThread::create([&]() {
+		EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+		PQFT::FileTransferEngine::Config fast;
+		fast.chunkSize              = 16384;
+		fast.sendRateBytesPerSecond = 0;
+		pair.alice.setConfig(fast);
+		QEventLoop loop;
+		QTimer watchdog;
+		watchdog.setSingleShot(true);
+		QObject::connect(&watchdog, &QTimer::timeout, &loop, &QEventLoop::quit);
+		pair.onChunkDelivered = [&](const QByteArray &, quint64, quint64, const QByteArray &) {
+			++chunks;
+			QThread::currentThread()->requestInterruption();
+			loop.quit();
+		};
+		startedBytes = pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession });
+		watchdog.start(5000);
+		loop.exec();
+	}));
+	worker->start();
+	const bool finished = worker->wait(10000);
+	if (!finished) {
+		worker->requestInterruption();
+		worker->quit();
+		worker->wait();
+	}
+	QVERIFY(finished);
+	QCOMPARE(startedBytes, quint64(8 * 16384));
+	QCOMPARE(chunks, 1);
+}
+
+void TestFileTransferEngine::shutdownRemovesUnsavedPlaintext_data() {
+	QTest::addColumn< bool >("saveFirst");
+	QTest::newRow("ready-unsaved") << false;
+	QTest::newRow("saved-file-preserved") << true;
+}
+
+void TestFileTransferEngine::shutdownRemovesUnsavedPlaintext() {
+	QFETCH(bool, saveFirst);
+	const QString source = writeTestFile(65536);
+	QVERIFY(!source.isEmpty());
+	const QString target = m_tempDir.filePath("shutdown-saved.bin");
+	QString receiveDirectory;
+	{
+		EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+		PQFT::FileTransferEngine::Config fast;
+		fast.sendRateBytesPerSecond = 0;
+		pair.alice.setConfig(fast);
+		QSignalSpy updates(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+		QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+		QTRY_VERIFY_WITH_TIMEOUT(sawState(updates, {}, PQFT::FTTransferInfo::State::Ready), 10000);
+		QByteArray transfer;
+		for (const auto &arguments : updates) {
+			const auto info = arguments.at(0).value< PQFT::FTTransferInfo >();
+			if (info.incoming && info.state == PQFT::FTTransferInfo::State::Ready) {
+				transfer = info.transferId;
+			}
+		}
+		QVERIFY(!transfer.isEmpty());
+		receiveDirectory = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/mumble-ft/"
+						   + QString::fromLatin1(transfer.toHex());
+		QVERIFY(QFile::exists(receiveDirectory + "/content.bin"));
+		if (saveFirst) {
+			pair.bob.saveTransferAs(transfer, target);
+			QVERIFY(QFile::exists(target));
+		}
+	}
+	const bool retainedPlaintext = QDir(receiveDirectory).exists();
+	// Remove only this fixture's residue after observing it, including on a
+	// deliberately unfixed build. Never sweep other transfers' directories.
+	QDir(receiveDirectory).removeRecursively();
+	QVERIFY2(!retainedPlaintext, "Engine shutdown retained the unsaved decrypted receive directory");
+	if (saveFirst) {
+		QFile original(source), saved(target);
+		QVERIFY(original.open(QIODevice::ReadOnly));
+		QVERIFY(saved.open(QIODevice::ReadOnly));
+		QCOMPARE(saved.readAll(), original.readAll());
+	}
 }
 
 void TestFileTransferEngine::passwordRoundTrip() {
