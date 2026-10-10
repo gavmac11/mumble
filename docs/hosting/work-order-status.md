@@ -19,7 +19,8 @@ Implemented:
 - Actual server disconnects now invoke transfer cleanup, aborting jobs and clearing transport/trust-prompt state before reconnect setup.
 - Connection generations reject stale worker trust/password/blocked/progress events after disconnect. Modal trust/recipient/card actions verify their original connection; recipient selection also checks the original channel and user objects.
 - Cancelled/declined handshake timers stop and retire. Even a previously dispatched timeout cannot erase a replacement handshake for a reused session number.
-- IPC tests receive an explicit platform definition shared by the compiler and Qt metaobject generator, fixing the newly exposed Windows build error; a Windows native-pipe check replaces an otherwise empty Windows target.
+- IPC tests receive an explicit platform definition shared by the compiler and Qt metaobject generator, fixing the newly exposed Windows build error; a Windows native-pipe check replaces an otherwise empty Windows target. Native compiler checks also caught and fixed the channel-ID signedness in the recipient guard.
+- Windows client-object tests receive explicit search paths for the client audio and FFmpeg DLLs. This addresses the next Windows installer-gate timeouts; generated properties and local tests pass, but a Windows rerun must confirm the fix.
 - Real-server test fixtures remain in the foreground so their lifetime and startup errors belong to the test process; restored the missing elapsed-timer include.
 
 ## Verified local evidence
@@ -34,16 +35,20 @@ The [lifecycle manifest](results/2026-10-10/lifecycle-validation.json) and [upda
 
 Remote CI for the earlier `63dd192a78ae721c21299b28f394b66bfaa7c30e` foundation passed all 34 enabled tests on Ubuntu shared, Intel macOS static and ARM macOS static. The preview jobs also passed ARM macOS packaging/launch, Ubuntu client packaging/clean installation/launch, and Debian server tests/package installation. Both Windows jobs failed at the same IPC metaobject mismatch; no preview was published. That failure has a local generator check and source fix now, but Windows execution and all updated-head results remain pending. These prior-head results do not qualify the new lifecycle commits.
 
+At `0600e623f6bab182e35af8572fd4e5ce707bcebc`, [general CI 38077627926](https://github.com/gavmac11/mumble/actions/runs/38077627926) passed all 35 enabled tests on Ubuntu shared, ARM macOS static and Intel macOS static (47/49/59 seconds). The [preview run 38077627792](https://github.com/gavmac11/mumble/actions/runs/38077627792) passed macOS, Ubuntu and Debian packaging/install/launch gates, but Windows timed out in `TestAnimatedImages` and `TestChatWebM` before emitting test output. Its other 28 enabled test executables passed, including the manager/transport/IPC checks; Windows preview builds 30 enabled tests because its server tests are omitted. The DLL-path candidate has a generated Windows-property check and passing local image/video/manager tests. Updated native execution remains pending; no preview was published.
+
+The supplied Ubuntu host was reachable. A separate [draft deployment PR 31](https://github.com/gavmac11/mumble/pull/31) implements and records the private D1 rehearsal: two real nested Debian 12 KVM guests, final-tool clean installation on the second guest, idempotence, package/configuration refusal, external TCP/encrypted UDP and administrator access, and real guest reboot with unchanged credentials/TLS/configuration. Its 25 Python checks and focused CI passed. This does not qualify state restore, schema rollback, a frozen release candidate, native GUI quality or commercial launch.
+
 ## Remaining work and gates
 
 | Order | State | Next concrete evidence |
 | --- | --- | --- |
 | S1 candidate triage | In progress | Required human review of PR 29/foundation; actual declined-identity retry and reconnect GUI checks; review preserved local capture changes; freeze an integrated candidate SHA. |
-| S2 regression CI | Implemented; remote results pending | All native/static jobs and clean package checks pass on the foundation; preserve candidate symbols; make exact-candidate checks part of stable promotion. Preview gating does not create stable-channel approval. |
+| S2 regression CI | Linux/macOS passed; Windows follow-up pending | All native/static jobs and clean package checks pass on the foundation; preserve candidate symbols; make exact-candidate checks part of stable promotion. Preview gating does not create stable-channel approval. |
 | S3 integration/lifecycle | Partly implemented | Actual GUI identity/recipient/card flows, capability replay, channel changes and media teardown; bounded worker shutdown under heavy transfer preparation; six directed platform pairs. Stale event/timer regressions are automated, but native dialog interaction remains unrun. |
 | S4 media budget/diagnostics | Not started in this branch | Measured bounded profile, visible refusal/counters, slow TCP receivers, file fan-out and mixed legacy clients. |
 | S5 native packaging/quality | Unrun | Signed Windows and notarized macOS candidates; clean supported OS/session acceptance; two-hour mixed GUI session, 100 cycles and 48-hour endurance. |
-| D1 deployment | Next parallel workstream | Pinned, verified, idempotent deployment on a fresh supported guest; external readiness and reboot recovery. |
+| D1 deployment | Private rehearsal passed in PR 31 | Review the final tool, then repeat with the frozen qualified candidate on the chosen provider. Signed manifest distribution, interruption/fault drills and provider ingress reconciliation remain open. |
 | D2 state recovery | Unrun | Consistent encrypted DB/config/TLS-state export; restore accounts/ACLs/bans/identity into a fresh guest; timed rollback across the supported schema boundary. |
 | P0 friendly preview | Not recruited | 3–5 consenting communities after preview entry gates; measured support minutes, video/file traffic and egress before supply investment. |
 | H1 guest lifecycle | Unrun | Persistent shared-IP TCP/UDP/SSH allocation, external VM limits, root-tenant reimage/credential reset and billing reconciliation. |

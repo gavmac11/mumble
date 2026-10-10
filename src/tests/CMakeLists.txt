@@ -59,6 +59,24 @@ if(server)
 	add_subdirectory("TestAudioReceiverBuffer")
 endif()
 
+if(WIN32 AND client)
+	# These tests link the client objects but live in a separate executable
+	# directory. Windows also needs the client's shared audio/FFmpeg DLLs in
+	# its loader search path; relying on the test's working directory hangs
+	# headless runs in a missing-DLL dialog before Qt can report an error.
+	get_target_property(ffmpeg_runtime_dir mumble_client_object_lib MUMBLE_FFMPEG_RUNTIME_DIRECTORY)
+	foreach(client_object_test IN ITEMS TestAnimatedImages TestChatWebM TestFileTransferManager)
+		if(TARGET ${client_object_test})
+			set_property(TEST ${client_object_test} APPEND PROPERTY ENVIRONMENT_MODIFICATION
+				"PATH=path_list_prepend:$<TARGET_FILE_DIR:mumble>")
+			if(ffmpeg_runtime_dir)
+				set_property(TEST ${client_object_test} APPEND PROPERTY ENVIRONMENT_MODIFICATION
+					"PATH=path_list_prepend:${ffmpeg_runtime_dir}")
+			endif()
+		endif()
+	endforeach()
+endif()
+
 # Shared tests
 add_subdirectory("TestCaseInsensitiveQString")
 add_subdirectory("TestCryptographicHash")
