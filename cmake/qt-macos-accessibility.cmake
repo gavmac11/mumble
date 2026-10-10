@@ -26,7 +26,7 @@ function(mumble_repair_qt_macos_accessibility)
         find_program(MUMBLE_QT_PATCH_EXECUTABLE patch REQUIRED)
         execute_process(
             COMMAND "${MUMBLE_QT_PATCH_EXECUTABLE}" --batch --fuzz=0 -p1
-                -i "${CMAKE_SOURCE_DIR}/docs/stability/qt-accessibility/qt-model-owned-accessibility.patch"
+                -i "${CMAKE_SOURCE_DIR}/docs/stability/qt-accessibility/qt-parent-owned-accessibility.patch"
             WORKING_DIRECTORY "${mumble_qt_cocoa_source_SOURCE_DIR}"
             RESULT_VARIABLE patch_result
             OUTPUT_VARIABLE patch_output
