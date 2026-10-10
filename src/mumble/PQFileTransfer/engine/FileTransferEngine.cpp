@@ -392,20 +392,26 @@ void FileTransferEngine::handleIncomingM1(unsigned int actorSession, const QByte
 			return;
 		}
 		PendingHandshake pending;
-		pending.peerSession	   = actorSession;
+		pending.peerSession     = actorSession;
 		pending.peerFingerprint = peerFp;
-		pending.m1Frame		   = payload;
-		pending.timeout		   = new QTimer(this);
+		pending.m1Frame         = payload;
+		pending.timeout         = std::make_unique< QTimer >(this).release();
 		pending.timeout->setSingleShot(true);
-		connect(pending.timeout, &QTimer::timeout, this,
-				[this, actorSession]() { m_pendingHandshakes.remove(actorSession); });
+		QTimer *timer = pending.timeout;
+		connect(timer, &QTimer::timeout, this, [this, actorSession, timer]() {
+			const auto it = m_pendingHandshakes.find(actorSession);
+			if (it != m_pendingHandshakes.end() && it->timeout == timer) {
+				m_pendingHandshakes.erase(it);
+			}
+			timer->deleteLater();
+		});
 		pending.timeout->start(60'000);
 		m_pendingHandshakes.insert(actorSession, std::move(pending));
 
 		FTTransferInfo info;
 		info.transferId  = QByteArray();
 		info.peerSession = actorSession;
-		info.incoming	= true;
+		info.incoming    = true;
 		info.state		 = FTTransferInfo::State::VerifyingIdentity;
 		emitInfo(info);
 		// Plain M1: the fingerprint is an unauthenticated claim until the
@@ -1118,7 +1124,18 @@ void FileTransferEngine::abortAll() {
 		// Synthetic pre-manifest keys are removed by cleanupReceive too
 		abortTransfer(key);
 	}
+	for (PendingHandshake &pending : m_pendingHandshakes) {
+		stopPendingHandshakeTimer(pending);
+	}
 	m_pendingHandshakes.clear();
+}
+
+void FileTransferEngine::stopPendingHandshakeTimer(PendingHandshake &pending) {
+	if (pending.timeout) {
+		pending.timeout->stop();
+		pending.timeout->deleteLater();
+		pending.timeout = nullptr;
+	}
 }
 
 void FileTransferEngine::resolveFirstContact(unsigned int peerSession, bool verified) {
@@ -1128,6 +1145,7 @@ void FileTransferEngine::resolveFirstContact(unsigned int peerSession, bool veri
 	}
 	PendingHandshake pending = std::move(it.value());
 	m_pendingHandshakes.erase(it);
+	stopPendingHandshakeTimer(pending);
 
 	if (verified) {
 		// The manager has pinned the fingerprint; run the M1 now

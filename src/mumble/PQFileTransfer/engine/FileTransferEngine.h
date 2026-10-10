@@ -195,6 +195,7 @@ private:
 		QByteArray m1Frame;
 		QTimer *timeout = nullptr;   // parented to the engine
 	};
+	static void stopPendingHandshakeTimer(PendingHandshake &pending);
 
 	void processControlForSend(SendJob &job, SendPeer &peer, const QByteArray &payload);
 	/// Handles an already-authenticated control record (routed by
