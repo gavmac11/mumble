@@ -1,0 +1,12 @@
+Windows shutdown validation: 7598ad7da8c5b1cece02ac4001a82dbfa6810000
+MSVC 19.51.36257.0, Qt 6.10.0 static, Windows 10 Pro 10.0.19045 x64.
+Release with warnings-as-errors: requested targets and server built successfully. Candidate did not produce C4018.
+Four requested CTest suites passed. QtTest internal file reports:
+  TestFileTransferManager: 6 cases, 0 failures, 0 errors, 0 skipped, 0.037s
+  TestPQCrypto: 30 cases, 0 failures, 0 errors, 0 skipped, 0.579s
+  TestFileTransferEngine: 17 cases, 0 failures, 0 errors, 0 skipped, 8.007s
+  TestFileTransferE2E: 5 cases, 0 failures, 0 errors, 0 skipped, 9.295s
+
+Checks cover cooperative worker shutdown, hash/send cancellation, invalid bounds, removal of unsaved plaintext, preservation of saved output, and plain/password server relay.
+No Windows sanitizer, GUI/Download, interactive media, endurance, signing or Windows 11 qualification is claimed.
+Exact source remained clean. Test output-file flags affected generated test registrations only and were restored.

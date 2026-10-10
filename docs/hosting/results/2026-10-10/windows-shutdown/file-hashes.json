@@ -1,0 +1,66 @@
+{
+  "source_commit": "7598ad7da8c5b1cece02ac4001a82dbfa6810000",
+  "algorithm": "SHA256",
+  "files": [
+    {
+      "path": "ctest.txt",
+      "sha256": "bd3ba072c0cbb239ad9a3f711e05f36723a115001bf124a1183427fdf36a4397",
+      "size_bytes": 618
+    },
+    {
+      "path": "ctest.xml",
+      "sha256": "39e81a83cc883862515221f01062fa1d5aad8d311bf31adf39b62a060af32e19",
+      "size_bytes": 833
+    },
+    {
+      "path": "TestFileTransferE2E.txt",
+      "sha256": "3b971818208f5ca84b88d53eb7f4903ee633ef02a0c0d9361686b4d4ae4a0aad",
+      "size_bytes": 558
+    },
+    {
+      "path": "TestFileTransferE2E.xml",
+      "sha256": "fbaf5151fa4f9014e733a42564d8886e04e0f54ed7ed28ba2f28aa58b27a2088",
+      "size_bytes": 897
+    },
+    {
+      "path": "TestFileTransferEngine.txt",
+      "sha256": "37490e12fa0c59f7c256ecc596b694a4b6510f352da9d3ed970fb184cd681a41",
+      "size_bytes": 1463
+    },
+    {
+      "path": "TestFileTransferEngine.xml",
+      "sha256": "f10761348854b145a9bb2a8fb1bfa6888088923902671d42b4c8721c39d0077a",
+      "size_bytes": 2227
+    },
+    {
+      "path": "TestFileTransferManager.txt",
+      "sha256": "92d492f00d301adc26c8d7018d74b391329a7ba33ed48b822f6b2ad8e370bd98",
+      "size_bytes": 724
+    },
+    {
+      "path": "TestFileTransferManager.xml",
+      "sha256": "a1d3d7de3d316259a27cd9763564335cbc8e14a2b34d836b4c11aa1d72df5e43",
+      "size_bytes": 1096
+    },
+    {
+      "path": "TestPQCrypto.txt",
+      "sha256": "b0c4cab09db9ce154e20636a931b4f0af411b08adfdc4d1f322c5310f3409be2",
+      "size_bytes": 1682
+    },
+    {
+      "path": "TestPQCrypto.xml",
+      "sha256": "4f4090a56b2f8cd8647a28eb02cffb69802186c10f1322db7007a772b6ff71e8",
+      "size_bytes": 2912
+    },
+    {
+      "path": "validation.json",
+      "sha256": "5de6ea71dbbaff5515f277ee0f95cdcffe6ea60c40d4a7bfc25ed0f3d84f8a64",
+      "size_bytes": 14069
+    },
+    {
+      "path": "validation.txt",
+      "sha256": "8120cee1e0b110eca53cbb01586fd712bab2a0f10d9b6ec45767e8a9cb23a10d",
+      "size_bytes": 1026
+    }
+  ]
+}
