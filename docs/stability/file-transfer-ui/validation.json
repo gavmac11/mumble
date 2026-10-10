@@ -84,5 +84,27 @@
     "Native QR scan through a physical camera remains unrun; decoder reads actual exported production QLabel bitmaps",
     "Developer Homebrew runtime with private Qt6.11.1 repair, not signed shipping installation",
     "No large-file, complete platform-pair, media, endurance, integrated candidate or paid economics qualification"
-  ]
+  ],
+  "native_windows": {
+    "source_head": "8002309ac0a7e6c2850b7469957c27f2d04a584c",
+    "producer_head": "08d8660d8155126d2181e46423c444faba9e8139",
+    "platform": "Windows 10 Pro 19045 x64 / MSVC 19.51 / Qt 6.10.0 static",
+    "strict_release_build": "/W4 /WX; client and server passed without source warning relaxation",
+    "qt_test_cases": {
+      "ui": 7,
+      "logger": 5,
+      "file_e2e": 5
+    },
+    "failures": 0,
+    "skips": 0,
+    "independent_qr_decode": {
+      "light_bytes": 172,
+      "dark_bytes": 172,
+      "both_exact": true,
+      "Pillow": "12.3.0",
+      "zxing-cpp": "3.1.1"
+    },
+    "producer_checksums_verified_against_committed_bytes": 16,
+    "limitations": "Offscreen UI and protocol tests; native Windows GUI, Windows 11 and signed package acceptance remain open"
+  }
 }

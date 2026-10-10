@@ -1,0 +1,13 @@
+Windows file-transfer UI validation: 8002309ac0a7e6c2850b7469957c27f2d04a584c
+MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022); Windows 10 Pro 10.0.19045 x64.
+Release/C++20; /W4 /WX /O2 /bigobj /options:strict; dynamic MSVC runtime; no source warning relaxation.
+mumble client/server, TestFileTransferUi, TestQtLogger and TestFileTransferE2E built successfully.
+TestFileTransferUi: 7 cases, 0 failures, 0 errors, 0 skipped, 0.019s.
+TestQtLogger: 5 cases, 0 failures, 0 errors, 0 skipped, 1.185s.
+TestFileTransferE2E: 5 cases, 0 failures, 0 errors, 0 skipped, 9.146s.
+Offscreen UI test emitted a QFontDatabase missing tests/lib/fonts warning; the warning is retained with its path sanitized.
+Pinned safety QR decode: light and dark payloads both matched all 172 bytes exactly (Pillow 12.3.0, zxing-cpp 3.1.1).
+CTest: three suites passed, 10.02s elapsed.
+Offscreen UI test covers light/dark safety QR, keyboard file action and invalid/unrelated action URLs; logger checks three subprocess modes; E2E uses an owned TLS/protobuf server.
+Windows bulk stalled-receiver/memory acceptance, sanitizer, full suite, GUI and packaging/signing were not run.
+Generated CTest output registrations restored; implementation and personal settings unchanged. Complete logs kept private.

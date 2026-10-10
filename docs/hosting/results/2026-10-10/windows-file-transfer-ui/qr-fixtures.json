@@ -1,0 +1,34 @@
+{
+  "source_commit": "8002309ac0a7e6c2850b7469957c27f2d04a584c",
+  "generated_by": "TestFileTransferUi via CMake test ENVIRONMENT",
+  "files": [
+    {
+      "name": "dark.bin",
+      "size_bytes": 172,
+      "sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+      "embedded_zero_bytes": true,
+      "high_bytes": true
+    },
+    {
+      "name": "dark.png",
+      "size_bytes": 2289,
+      "sha256": "91013684dd05794f842136f671efe5e2ab54711f0fad5b7cb60e8fa510ad89ec",
+      "width": 220,
+      "height": 220
+    },
+    {
+      "name": "light.bin",
+      "size_bytes": 172,
+      "sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+      "embedded_zero_bytes": true,
+      "high_bytes": true
+    },
+    {
+      "name": "light.png",
+      "size_bytes": 2289,
+      "sha256": "91013684dd05794f842136f671efe5e2ab54711f0fad5b7cb60e8fa510ad89ec",
+      "width": 220,
+      "height": 220
+    }
+  ]
+}
