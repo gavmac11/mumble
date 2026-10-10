@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "source_revision": "0e0671cf5d58cffe905c83e162dd287686a666f2",
+  "production_revision": "ae03575fb63b08b734ee5ff264e349f946d0fd19",
+  "baseline_production_revision": "7c7d4578e5073d6262e8dea6069c01d4f7ebb128",
+  "platform": "macOS 26.6.2 ARM64",
+  "qt": "6.11.1 dynamic",
+  "queue_limit_bytes": 16777216,
+  "unit_cases": 10,
+  "unit_failures": 0,
+  "unit_skips": 0,
+  "targeted_ctest_suites": 6,
+  "targeted_ctest_failures": 0,
+  "targeted_ctest_execution_skips": 0,
+  "general_ci_run": 38089837376,
+  "preview_ci_run": 38089839141,
+  "ci_status_at_recording": "in_progress",
+  "native_windows_status": "requested",
+  "debian_server_status": "build_in_progress",
+  "limits": [
+    "Unit fake socket controls plaintext queue deterministically; actual TLS file relay covers encrypted connection behavior.",
+    "No native microphone/camera, audible quality, legacy video, voice/video fairness, global event queue, global server memory or physical VPS density qualification.",
+    "Does not integrate independent transfer shutdown and historical recovery PRs."
+  ],
+  "report_sha256": {
+    "mac-baseline.json": "df457e232a8eb5ebf05c68875ff3b73110fdd8401a1b4d603b2f6882771e7608",
+    "mac-fixed.json": "4b35fb44c6c42bab868d23faad5f8453af335955a30d4ca920876757e72bcf94",
+    "mac-regression.txt": "101745a119bae75abfcdd27a88404ea169ab6fa8932387e7ec560bc9155afa4c",
+    "mac-unit.txt": "079c1ce80076f46127a650ccc0dfb8c808187082a93ce7135d70c5dd5a70c57f"
+  }
+}
