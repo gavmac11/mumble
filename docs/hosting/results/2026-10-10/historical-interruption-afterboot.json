@@ -1,0 +1,9 @@
+{
+  "boot_id": "c41fbe7a-8592-4c1f-a4b6-0bbf6bae1bc8",
+  "phase": "restoring",
+  "operator_identity_absent": true,
+  "plaintext_stage_absent": true,
+  "server_not_active": true,
+  "runtime_binary_retained": true,
+  "database_retained": true
+}

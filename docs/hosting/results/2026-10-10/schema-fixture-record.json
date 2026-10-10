@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "channel_id": 1,
+  "registered_user_id": 1,
+  "banned_certificate_sha1": "e57aa48ee1dd72234fbc5374fed5f12c4a3ea025",
+  "server_certificate_sha256": "8bc04459b09a4b889874db3fc035cfc62f542ec7495eb67934777ae691c42228",
+  "room": "Recovery Room",
+  "member": "recovery-member",
+  "group": "recovery-members"
+}

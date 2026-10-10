@@ -1,0 +1,10 @@
+{
+  "case": "ready-existing-server-refused",
+  "exit_code": 1,
+  "server_pid_unchanged": true,
+  "configuration_tls_marker_unchanged": true,
+  "database_schema": 7,
+  "database_integrity_ok": true,
+  "operator_identity_removed": true,
+  "plaintext_temporary_directories_removed": true
+}
