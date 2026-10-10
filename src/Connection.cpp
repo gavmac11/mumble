@@ -196,11 +196,36 @@ void Connection::sendMessage(const ::google::protobuf::Message &msg, Mumble::Pro
 }
 
 void Connection::sendMessage(const QByteArray &qbaMsg) {
-	if (qbaMsg.isEmpty() || qtsSocket->state() != QAbstractSocket::SocketState::ConnectedState) {
+	if (qbaMsg.isEmpty() || m_sendQueueBlocked || qtsSocket->state() != QAbstractSocket::SocketState::ConnectedState) {
 		return;
 	}
 
+	if (m_maxPendingSendBytes > 0) {
+		const qint64 plaintext = qtsSocket->bytesToWrite();
+		const qint64 encrypted = qtsSocket->encryptedBytesToWrite();
+		// Subtract rather than add potentially large queue sizes. Count both Qt
+		// buffers: bytesToWrite() alone excludes already encrypted output.
+		if (plaintext > m_maxPendingSendBytes || encrypted > m_maxPendingSendBytes - plaintext
+			|| qbaMsg.size() > m_maxPendingSendBytes - plaintext - encrypted) {
+			m_sendQueueBlocked = true;
+			// A synchronous abort can remove a ServerUser from a channel while
+			// its broadcast loop is still iterating that channel's users.
+			QMetaObject::invokeMethod(
+				this,
+				[this]() {
+					qWarning("Outgoing TCP queue exceeded connection limit; disconnecting slow peer");
+					disconnectSocket(true);
+				},
+				Qt::QueuedConnection);
+			return;
+		}
+	}
+
 	qtsSocket->write(qbaMsg);
+}
+
+void Connection::setMaxPendingSendBytes(qint64 bytes) {
+	m_maxPendingSendBytes = qMax< qint64 >(0, bytes);
 }
 
 void Connection::forceFlush() {

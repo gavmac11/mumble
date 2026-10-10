@@ -38,6 +38,9 @@ class Connection : public QObject {
 private:
 	Q_OBJECT
 	Q_DISABLE_COPY(Connection)
+	qint64 m_maxPendingSendBytes = 0;
+	bool m_sendQueueBlocked      = false;
+
 protected:
 	QSslSocket *qtsSocket;
 	QElapsedTimer qtLastPacket;
@@ -68,6 +71,9 @@ public:
 	void sendMessage(const ::google::protobuf::Message &msg, Mumble::Protocol::TCPMessageType msgType,
 					 QByteArray &cache);
 	void sendMessage(const QByteArray &qbaMsg);
+	/// Limit pending plaintext and encrypted output together. Zero leaves output unlimited.
+	/// A connection that exceeds the limit stops accepting output and closes asynchronously.
+	void setMaxPendingSendBytes(qint64 bytes);
 	void disconnectSocket(bool force = false);
 	void forceFlush();
 	qint64 activityTime() const;
