@@ -86,3 +86,5 @@ The revised private developer runtime survives the actual LAN removal, unlocks t
 Output queue CI `38089837376` is now complete: Windows, Ubuntu and both Mac architectures pass; preview/package `38089839141` passes all gates with publication skipped. These results qualify that source's automated checks only.
 
 The initial revised-head Mac configure attempt referenced a nonexistent renamed patch path. That integration mistake was corrected in `440c2fc01`; the preceding failed/cancelled attempts do not qualify shipping builds.
+
+2026-10-10 packaged Mac repair follow-up: exact `440c2fc01` preview passes native favorite insertion, actual Bonjour removal and normal debug-plugin quit without an experimental override. All preview build/test jobs pass; publication skipped. Missing accessibility rows remain open. An excluded first harness run exposed silent database fallback on a configured directory; the corrected run verifies its owned SQLite handle, and a fail-closed regression is next.
