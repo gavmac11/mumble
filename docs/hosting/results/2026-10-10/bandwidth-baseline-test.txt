@@ -1,0 +1,24 @@
+********* Start testing of TestBandwidthRecord *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestBandwidthRecord::initTestCase()
+FAIL!  : TestBandwidthRecord::fileChunksRetireTheirEntireByteCharge() Compared values are not the same
+   Actual   (static_cast< qint64 >(record.iSum)): 378548176
+   Expected (expected)                          : 377499600
+   Loc: [<workspace>/src/tests/TestBandwidthRecord/TestBandwidthRecord.cpp(30)]
+PASS   : TestBandwidthRecord::rejectsExcessAtTheWindowsMultiplicationBoundary()
+PASS   : TestBandwidthRecord::longIdleSlotStillEnforcesTheConfiguredRate()
+FAIL!  : TestBandwidthRecord::maximumWidthChargesDoNotOverflowTheRollingSum() Compared values are not the same
+   Actual   (static_cast< qint64 >(record.iSum)): -2
+   Expected (expected)                          : 4294967294
+   Loc: [<workspace>/src/tests/TestBandwidthRecord/TestBandwidthRecord.cpp(57)]
+FAIL!  : TestBandwidthRecord::displayedBandwidthClampsInsteadOfWrapping() Compared values are not the same
+   Actual   (record.bandwidth())               : 393210
+   Expected (std::numeric_limits< int >::max()): 2147483647
+   Loc: [<workspace>/src/tests/TestBandwidthRecord/TestBandwidthRecord.cpp(70)]
+PASS   : TestBandwidthRecord::voiceSizedChargesKeepTheirExistingBehavior()
+PASS   : TestBandwidthRecord::refusedChargeDoesNotAdvanceOrOverwriteAcceptedState()
+FAIL!  : TestBandwidthRecord::invalidChargesCannotReduceOrBypassTheBudget() '!record.addFrame(-1, 1000)' returned FALSE. ()
+   Loc: [<workspace>/src/tests/TestBandwidthRecord/TestBandwidthRecord.cpp(98)]
+PASS   : TestBandwidthRecord::cleanupTestCase()
+Totals: 6 passed, 4 failed, 0 skipped, 0 blacklisted, 3ms
+********* Finished testing of TestBandwidthRecord *********

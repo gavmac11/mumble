@@ -1,0 +1,7 @@
+********* Start testing of TestBandwidthRecord *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestBandwidthRecord::initTestCase()
+<private-lab>/meter-baseline-source/BandwidthRecord.cpp:27:35: runtime error: signed integer overflow: 2147483647 + 2147483647 cannot be represented in type 'int'
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <private-lab>/meter-baseline-source/BandwidthRecord.cpp:27:35 
+Received signal 6 (SIGABRT)
+         maximumWidthChargesDoNotOverflowTheRollingSum function time: 1ms, total time: 3ms

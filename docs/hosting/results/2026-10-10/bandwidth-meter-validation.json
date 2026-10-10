@@ -1,0 +1,70 @@
+{
+  "platform": "Apple Silicon macOS 26.6.2, Qt 6.11.1 dynamic, Apple Clang 21",
+  "source_commit": "7c7d4578e5073d6262e8dea6069c01d4f7ebb128",
+  "baseline": {
+    "original_source_commit": "59eb5be1fc116630afd1bdd4501d07dc8cd60bdf",
+    "method_implementation_unchanged_after_extraction": true,
+    "extracted_methods_sha256": "49ce9ed6333c8d29d3eec5d2f6a86712500e0f75f26c72db69eadf0b4bb14a04"
+  },
+  "baseline_cases": {
+    "total": 10,
+    "passed": 6,
+    "failed": 4,
+    "skipped": 0
+  },
+  "baseline_ubsan": {
+    "exit_code": 134,
+    "diagnosis": "signed integer overflow: 2147483647 + 2147483647 cannot be represented in int"
+  },
+  "fixed_cases": {
+    "total": 10,
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0
+  },
+  "fixed_asan_ubsan": {
+    "total": 10,
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "leak_detection": false,
+    "linked_dependencies_instrumented": false
+  },
+  "targeted_ctest": {
+    "executables": 5,
+    "failures": 0,
+    "skips": 0,
+    "seconds": 8.42,
+    "names": [
+      "TestBandwidthRecord",
+      "TestFileTransferE2E",
+      "TestMumbleProtocol",
+      "TestCrypt",
+      "TestAudioReceiverBuffer"
+    ]
+  },
+  "windows_boundary_tests": "Present; macOS execution passed, native Windows execution pending",
+  "production_policy": "Existing 360-slot/rate policy; full-width byte retirement, wide arithmetic and bounded statistics",
+  "open": [
+    "Native Windows and refreshed cross-platform/package CI",
+    "Whole-application sanitizer/native GUI acceptance",
+    "Measured hosting media profile and visible budget feedback",
+    "Slow TCP receiver/file fan-out behavior",
+    "Mixed legacy video clients",
+    "Physical-host density and commercial acceptance"
+  ],
+  "evidence_sha256": {
+    "bandwidth-baseline-test.txt": "08e687a6f4a186e69c71ff075c81a8c2213c6b64ed0ceb02ca4281e1515d79f3",
+    "bandwidth-baseline-test.xml": "e7540a5fe7e7de6dcafb7df9edc16be6b536654f35f20dd65d3e96c626765ce4",
+    "bandwidth-baseline-sanitizer.txt": "aeb2f320f15f16201c2bdd751ddc24c2d1f237a01eeab659b5a91767f8912581",
+    "bandwidth-fixed-sanitizer.txt": "3238f5f4654bb1932e9ec8bc3accf236b898d1b2c85777b0603ebbe8e20c31a5",
+    "bandwidth-fixed-sanitizer.xml": "37e21ac52ceb4beb766ff5ff11440eb8df939d46c918ef4832650684346e0380",
+    "bandwidth-regression-ctest.txt": "7382d701a5fa99e7a0faf079e150e77e34b54d6cb125ef7a9674e478c87f984c",
+    "bandwidth-regression-ctest.xml": "749f323e1e2f081897d7ca5815fa628f4c4c3f04161dd9d31a7047b25bd8d590"
+  },
+  "source_files_sha256": {
+    "src/murmur/BandwidthRecord.cpp": "79e34172352efa4fc61f4fe47dcb27705d1e040277db902778864f779223c9cf",
+    "src/murmur/BandwidthRecord.h": "776c522296ab4959225cdfaf48b9bcacc7490371fd68ff8bea9a40d74cd936b4",
+    "src/tests/TestBandwidthRecord/TestBandwidthRecord.cpp": "b1e3efa529d30f0356dfd0dfa80ba26b9745779a599b67535f817a17ef1d62a5"
+  }
+}
