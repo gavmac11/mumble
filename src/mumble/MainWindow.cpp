@@ -4981,8 +4981,8 @@ void MainWindow::startFileSend(const QString &path) {
 	}
 
 	QList< FileSendDialog::Recipient > recipients;
-	const quint64 generation = manager->connectionGeneration();
-	const int channelId      = self->cChannel->iId;
+	const quint64 generation     = manager->connectionGeneration();
+	const unsigned int channelId = self->cChannel->iId;
 	QHash< unsigned int, QPointer< const ClientUser > > recipientUsers;
 	for (const User *u : self->cChannel->qlUsers) {
 		const auto *user = static_cast< const ClientUser * >(u);
