@@ -124,7 +124,7 @@
   ],
   "unverified": [
     "GUI plain and password receiving / Download / saved-file correctness",
-    "GUI identity decline and retry",
+    "GUI identity retry after decline and identity creation/unlock",
     "GUI trust prompt, transfer cards and recipients across reconnect/channel changes",
     "Screen enumeration and capture of owned synthetic window",
     "Audio enumeration through GUI and capture from owned synthetic source",
@@ -133,7 +133,7 @@
     "Normal installer upgrade/uninstall and release signing",
     "Windows 11 acceptance"
   ],
-  "gui_blocker": "Sky window capture repeatedly timed out, including after fresh window selection and fully initialized client startup; coordinate input geometry unavailable; keyboard Tab did not produce a focused-element change. User desktop availability question pending; planning chat will coordinate usable unlocked session.",
+  "gui_blocker": "Despite user-confirmed unlocked desktop, native and owned synthetic window capture time out after fresh selection and JS reset. Coordinate mouse geometry is unavailable; indexed edit and literal-text operations failed verification. Some keyboard/menu interaction works. Native connection and initial identity decline passed; receiving/card click, retry and capture acceptance stay open.",
   "private_evidence_retained_locally": [
     "configure.log",
     "build.log",
@@ -149,7 +149,53 @@
     "general-ci-tests/",
     "package-layout.log",
     "package-extract.log",
-    "runtime-observations.txt"
+    "runtime-observations.txt",
+    "native-connected-identity-declined.txt",
+    "synthetic-key-input.txt",
+    "native-retry-diagnostics.json"
   ],
-  "preservation": "Earlier diagnostics worktree, original checkout, personal Mumble profile and installed client preserved. Lab uses disposable profiles, identities, test credentials and loopback-only server; credentials stay outside Git."
+  "preservation": "Earlier diagnostics worktree, original checkout, personal Mumble profile and installed client preserved. Lab uses disposable profiles, identities, test credentials and loopback-only server; credentials stay outside Git.",
+  "native_retry": {
+    "recorded_utc": "2026-10-10T20:23:16.076183+00:00",
+    "user_confirmed_desktop_unlocked": true,
+    "package_source_commit": "275c64053c5c20893f21d444db45f6705b6ce113",
+    "packaged_client_sha256": "89e52520b1590839e71b18429185c81c5008f430bbdd1676480a863d3319a873",
+    "native_runtime_version": "1.7.59",
+    "actual_os": "Windows 10 Pro 10.0.19045 x64",
+    "recovery": [
+      "Fresh returned-window selection",
+      "JavaScript kernel reset and fresh sky initialization",
+      "Native window activation",
+      "Owned synthetic Tk window to isolate Mumble from capture helper"
+    ],
+    "helper_results": {
+      "capture_mumble": "window capture timed out: timed out waiting on channel; after reset: FrameArrived timed out: timed out waiting on channel",
+      "capture_synthetic": "window capture timed out: timed out waiting on channel",
+      "mouse": "coordinate input geometry is unavailable",
+      "accessible_edit": "element 228 is not available in cached app state for mumble.exe",
+      "literal_text": "Typed loopback address was not visible in the native edit; no successful text-entry result claimed",
+      "keyboard": "Escape and menu accelerators changed native dialogs; Tab/F6 did not give the expected visible focus change. Owned synthetic input target received a test key and changed its title to show count 1.",
+      "session": "Clients, synthetic application, helper and DWM were all in session 1",
+      "display": "NVIDIA RTX 3080, reported OK with 2560x1440 at 300 Hz",
+      "diagnosis": "Capture failure reproduces outside Mumble after supported reset/reselection. Root cause is unproven. Some keyboard injection works; coordinate mouse interaction remains unavailable. No Windows graphics/security/privacy settings were changed."
+    },
+    "native_checks": [
+      {
+        "name": "Owned loopback server connection",
+        "result": "Native packaged client reached file-transfer identity dialog and Root channel. Test server certificate fingerprint was verified against the locally observed certificate and provisioned into the disposable databases through local setup, not a GUI security-prompt acceptance test."
+      },
+      {
+        "name": "File-transfer identity decline",
+        "result": "Escape dismissed the initial File-transfer identity dialog. Native user tree then displayed Root and This is you, StabilityLabA; chat became enabled. Client remained connected."
+      }
+    ],
+    "remaining": [
+      "Identity retry after decline via Send file",
+      "Identity creation/unlock and file/password dialogs",
+      "Trust, card, recipients, reconnect and channel-change acceptance",
+      "Actual GUI Download and saved-file correctness",
+      "Owned synthetic screen/audio capture"
+    ],
+    "lab_left_available": "Two isolated packaged client profiles and loopback-only server; client A connected with identity setup declined, client B relaunched against the same owned server. Synthetic diagnostic windows closed. No personal settings or unrelated applications altered."
+  }
 }
