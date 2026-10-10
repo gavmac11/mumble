@@ -1,0 +1,10 @@
+Internal ctest changing into directory: /work/queue-build
+Test project /work/queue-build
+    Start 3: TestBandwidthRecord
+1/2 Test #3: TestBandwidthRecord ..............   Passed    0.02 sec
+    Start 4: TestConnectionOutputQueue
+2/2 Test #4: TestConnectionOutputQueue ........   Passed    0.03 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.05 sec

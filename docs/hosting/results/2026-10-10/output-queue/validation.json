@@ -15,17 +15,32 @@
   "general_ci_run": 38089837376,
   "preview_ci_run": 38089839141,
   "ci_status_at_recording": "in_progress",
-  "native_windows_status": "requested",
-  "debian_server_status": "build_in_progress",
+  "native_windows_status": "strict_build_and_two_suites_passed",
+  "debian_server_status": "build_unit_and_real_tls_relay_passed",
   "limits": [
     "Unit fake socket controls plaintext queue deterministically; actual TLS file relay covers encrypted connection behavior.",
     "No native microphone/camera, audible quality, legacy video, voice/video fairness, global event queue, global server memory or physical VPS density qualification.",
     "Does not integrate independent transfer shutdown and historical recovery PRs."
   ],
   "report_sha256": {
+    "debian-ctest.txt": "a6adcc198d7bf9db0a7dc92c5602d6238138059108859cf5e34369890052c0f7",
+    "debian-relay.json": "f9686bad5d5d97dcd06746265193262f11b9162a366b3f94fba37432947e2efd",
     "mac-baseline.json": "df457e232a8eb5ebf05c68875ff3b73110fdd8401a1b4d603b2f6882771e7608",
     "mac-fixed.json": "4b35fb44c6c42bab868d23faad5f8453af335955a30d4ca920876757e72bcf94",
     "mac-regression.txt": "101745a119bae75abfcdd27a88404ea169ab6fa8932387e7ec560bc9155afa4c",
     "mac-unit.txt": "079c1ce80076f46127a650ccc0dfb8c808187082a93ce7135d70c5dd5a70c57f"
+  },
+  "native_windows_cases": 15,
+  "native_windows_failures": 0,
+  "native_windows_skips": 0,
+  "debian_environment": {
+    "os": "Debian 12 amd64 container on Ubuntu 24.04 host",
+    "qt": "6.4.2",
+    "openssl": "3.0.22",
+    "protobuf": "3.21.12",
+    "container_image_id": "sha256:9cea5f8ec6743fe6066e43228478f723db31f8ea4796c4eadbb1e99f880fe7f8",
+    "build_policy": "Release GCC 12, existing pilot -Wno-error=restrict exception for unchanged DataType.cpp",
+    "limits": "2 CPUs, 3 GiB, read-only root, no network, UID 1000, dropped capabilities; loopback relay in its own private profile",
+    "dependency_provenance": "source archive of exact 0e0671 commit, all submodules exported from the corresponding Git tree commit IDs"
   }
 }
