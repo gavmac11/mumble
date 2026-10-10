@@ -1,84 +1,86 @@
-Test project [workspace]/build/stability
+Test project [controlled-worktree]/build/stability
       Start  1: TestReleaseUpdate
- 1/38 Test  #1: TestReleaseUpdate ................   Passed    0.06 sec
+ 1/39 Test  #1: TestReleaseUpdate ................   Passed    0.03 sec
       Start  2: TestAnimatedImages
- 2/38 Test  #2: TestAnimatedImages ...............   Passed    0.50 sec
+ 2/39 Test  #2: TestAnimatedImages ...............   Passed    0.45 sec
       Start  3: TestChatWebM
- 3/38 Test  #3: TestChatWebM .....................   Passed   15.58 sec
+ 3/39 Test  #3: TestChatWebM .....................   Passed   15.49 sec
       Start  4: TestVideoFramePacketizer
- 4/38 Test  #4: TestVideoFramePacketizer .........   Passed    0.08 sec
+ 4/39 Test  #4: TestVideoFramePacketizer .........   Passed    0.09 sec
       Start  5: TestVideoPacketPacer
- 5/38 Test  #5: TestVideoPacketPacer .............   Passed    0.15 sec
+ 5/39 Test  #5: TestVideoPacketPacer .............   Passed    0.14 sec
       Start  6: TestVideoQualityProfile
- 6/38 Test  #6: TestVideoQualityProfile ..........   Passed    0.03 sec
+ 6/39 Test  #6: TestVideoQualityProfile ..........   Passed    0.02 sec
       Start  7: TestVideoViewUi
- 7/38 Test  #7: TestVideoViewUi ..................   Passed    0.24 sec
+ 7/39 Test  #7: TestVideoViewUi ..................   Passed    0.52 sec
       Start  8: TestXMLTools
- 8/38 Test  #8: TestXMLTools .....................   Passed    0.06 sec
+ 8/39 Test  #8: TestXMLTools .....................   Passed    0.06 sec
       Start  9: TestFileTransferManager
- 9/38 Test  #9: TestFileTransferManager ..........   Passed    0.27 sec
+ 9/39 Test  #9: TestFileTransferManager ..........   Passed    0.31 sec
       Start 10: TestFileTransferTransport
-10/38 Test #10: TestFileTransferTransport ........   Passed    0.03 sec
+10/39 Test #10: TestFileTransferTransport ........   Passed    0.02 sec
       Start 11: TestPQCrypto
-11/38 Test #11: TestPQCrypto .....................   Passed    0.56 sec
+11/39 Test #11: TestPQCrypto .....................   Passed    0.58 sec
       Start 12: TestFTIdentity
-12/38 Test #12: TestFTIdentity ...................   Passed    3.53 sec
+12/39 Test #12: TestFTIdentity ...................   Passed    3.80 sec
       Start 13: TestFileTransferSession
-13/38 Test #13: TestFileTransferSession ..........   Passed    0.07 sec
+13/39 Test #13: TestFileTransferSession ..........   Passed    0.07 sec
       Start 14: TestFileTransferEngine
-14/38 Test #14: TestFileTransferEngine ...........   Passed    6.74 sec
+14/39 Test #14: TestFileTransferEngine ...........   Passed    7.02 sec
       Start 15: TestFileTransferE2E
-15/38 Test #15: TestFileTransferE2E ..............   Passed    7.02 sec
+15/39 Test #15: TestFileTransferE2E ..............   Passed    7.48 sec
       Start 16: TestSettingsJSONSerialization
-16/38 Test #16: TestSettingsJSONSerialization ....   Passed    0.31 sec
+16/39 Test #16: TestSettingsJSONSerialization ....   Passed    0.29 sec
       Start 17: OverlayTest
-17/38 Test #17: OverlayTest ......................***Not Run (Disabled)   0.00 sec
+17/39 Test #17: OverlayTest ......................***Not Run (Disabled)   0.00 sec
       Start 18: TestCrypt
-18/38 Test #18: TestCrypt ........................   Passed    0.08 sec
+18/39 Test #18: TestCrypt ........................   Passed    0.09 sec
       Start 19: TestAudioReceiverBuffer
-19/38 Test #19: TestAudioReceiverBuffer ..........   Passed    0.06 sec
-      Start 20: TestBandwidthRecord
-20/38 Test #20: TestBandwidthRecord ..............   Passed    0.03 sec
-      Start 21: TestConnectionOutputQueue
-21/38 Test #21: TestConnectionOutputQueue ........   Passed    0.23 sec
-      Start 22: TestCaseInsensitiveQString
-22/38 Test #22: TestCaseInsensitiveQString .......   Passed    0.07 sec
-      Start 23: TestCryptographicHash
-23/38 Test #23: TestCryptographicHash ............   Passed    0.07 sec
-      Start 24: TestCryptographicRandom
-24/38 Test #24: TestCryptographicRandom ..........   Passed    0.95 sec
-      Start 25: TestDatabase
-25/38 Test #25: TestDatabase .....................   Passed    0.14 sec
-      Start 26: TestServerDatabase
-26/38 Test #26: TestServerDatabase ...............   Passed    0.25 sec
-      Start 27: TestFFDHE
-27/38 Test #27: TestFFDHE ........................   Passed    0.23 sec
-      Start 28: TestIPCUtils
-28/38 Test #28: TestIPCUtils .....................   Passed    0.03 sec
-      Start 29: TestPacketDataStream
-29/38 Test #29: TestPacketDataStream .............   Passed    0.06 sec
-      Start 30: TestPasswordGenerator
-30/38 Test #30: TestPasswordGenerator ............   Passed    0.07 sec
-      Start 31: TestMumbleProtocol
-31/38 Test #31: TestMumbleProtocol ...............   Passed    0.06 sec
-      Start 32: TestSelfSignedCertificate
-32/38 Test #32: TestSelfSignedCertificate ........   Passed    0.46 sec
-      Start 33: TestServerAddress
-33/38 Test #33: TestServerAddress ................   Passed    0.07 sec
-      Start 34: TestSSLLocks
-34/38 Test #34: TestSSLLocks .....................   Passed    2.09 sec
-      Start 35: TestStdAbs
-35/38 Test #35: TestStdAbs .......................   Passed    0.06 sec
-      Start 36: TestTimer
-36/38 Test #36: TestTimer ........................   Passed    0.21 sec
-      Start 37: TestUnresolvedServerAddress
-37/38 Test #37: TestUnresolvedServerAddress ......   Passed    0.06 sec
-      Start 38: TestVersion
-38/38 Test #38: TestVersion ......................   Passed    0.06 sec
+19/39 Test #19: TestAudioReceiverBuffer ..........   Passed    0.07 sec
+      Start 20: TestQtLogger
+20/39 Test #20: TestQtLogger .....................   Passed    0.24 sec
+      Start 21: TestBandwidthRecord
+21/39 Test #21: TestBandwidthRecord ..............   Passed    0.03 sec
+      Start 22: TestConnectionOutputQueue
+22/39 Test #22: TestConnectionOutputQueue ........   Passed    0.26 sec
+      Start 23: TestCaseInsensitiveQString
+23/39 Test #23: TestCaseInsensitiveQString .......   Passed    0.06 sec
+      Start 24: TestCryptographicHash
+24/39 Test #24: TestCryptographicHash ............   Passed    0.07 sec
+      Start 25: TestCryptographicRandom
+25/39 Test #25: TestCryptographicRandom ..........   Passed    0.97 sec
+      Start 26: TestDatabase
+26/39 Test #26: TestDatabase .....................   Passed    0.16 sec
+      Start 27: TestServerDatabase
+27/39 Test #27: TestServerDatabase ...............   Passed    0.25 sec
+      Start 28: TestFFDHE
+28/39 Test #28: TestFFDHE ........................   Passed    0.26 sec
+      Start 29: TestIPCUtils
+29/39 Test #29: TestIPCUtils .....................   Passed    0.02 sec
+      Start 30: TestPacketDataStream
+30/39 Test #30: TestPacketDataStream .............   Passed    0.07 sec
+      Start 31: TestPasswordGenerator
+31/39 Test #31: TestPasswordGenerator ............   Passed    0.07 sec
+      Start 32: TestMumbleProtocol
+32/39 Test #32: TestMumbleProtocol ...............   Passed    0.06 sec
+      Start 33: TestSelfSignedCertificate
+33/39 Test #33: TestSelfSignedCertificate ........   Passed    0.40 sec
+      Start 34: TestServerAddress
+34/39 Test #34: TestServerAddress ................   Passed    0.07 sec
+      Start 35: TestSSLLocks
+35/39 Test #35: TestSSLLocks .....................   Passed    2.08 sec
+      Start 36: TestStdAbs
+36/39 Test #36: TestStdAbs .......................   Passed    0.06 sec
+      Start 37: TestTimer
+37/39 Test #37: TestTimer ........................   Passed    0.37 sec
+      Start 38: TestUnresolvedServerAddress
+38/39 Test #38: TestUnresolvedServerAddress ......   Passed    0.11 sec
+      Start 39: TestVersion
+39/39 Test #39: TestVersion ......................   Passed    0.06 sec
 
-100% tests passed out of 37
+100% tests passed out of 38
 
-Total Test time (real) =  40.60 sec
+Total Test time (real) =  42.25 sec
 
 The following tests did not run:
 	 17 - OverlayTest (Disabled)

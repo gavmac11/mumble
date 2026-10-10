@@ -6,7 +6,7 @@ function(mumble_repair_qt_macos_accessibility)
     if(NOT APPLE OR NOT static OR NOT TARGET Qt6::QCocoaIntegrationPlugin)
         return()
     endif()
-    option(qt-cocoa-accessibility-repair "Repair parent-owned Qt 6.10.0 Cocoa accessibility elements" ON)
+    option(qt-cocoa-accessibility-repair "Repair model-owned Qt 6.10.0 Cocoa accessibility elements" ON)
     if(NOT qt-cocoa-accessibility-repair OR NOT Qt6_VERSION VERSION_EQUAL "6.10.0")
         return()
     endif()
@@ -26,7 +26,7 @@ function(mumble_repair_qt_macos_accessibility)
         find_program(MUMBLE_QT_PATCH_EXECUTABLE patch REQUIRED)
         execute_process(
             COMMAND "${MUMBLE_QT_PATCH_EXECUTABLE}" --batch --fuzz=0 -p1
-                -i "${CMAKE_SOURCE_DIR}/docs/stability/qt-accessibility/qt-parent-owned-accessibility.patch"
+                -i "${CMAKE_SOURCE_DIR}/docs/stability/qt-accessibility/qt-model-owned-accessibility.patch"
             WORKING_DIRECTORY "${mumble_qt_cocoa_source_SOURCE_DIR}"
             RESULT_VARIABLE patch_result
             OUTPUT_VARIABLE patch_output
@@ -37,7 +37,7 @@ function(mumble_repair_qt_macos_accessibility)
         endif()
         file(SHA256 "${accessibility_source}" source_digest)
     endif()
-    if(NOT source_digest STREQUAL "d6b5ee60b88d9ebb4554b8305b17810a112dff8fbe8bf30dfe5d4fec4285cc93")
+    if(NOT source_digest STREQUAL "8591bb3f34d20aa23a681352336b9e9fb8b379e07a56198d1faaff12e0ec2311")
         message(FATAL_ERROR "Unexpected Qt Cocoa accessibility source; refusing an unverified repair")
     endif()
 
@@ -53,5 +53,5 @@ function(mumble_repair_qt_macos_accessibility)
     endforeach()
     set_property(TARGET Qt6::QCocoaIntegrationPlugin PROPERTY IMPORTED_LOCATION "${repaired_archive}")
     add_dependencies(Qt6::QCocoaIntegrationPlugin mumble_qt_cocoa)
-    message(STATUS "Rebuilding Qt 6.10.0 Cocoa plugin with verified parent-owned accessibility repair")
+    message(STATUS "Rebuilding Qt 6.10.0 Cocoa plugin with verified model-owned accessibility repair")
 endfunction()
