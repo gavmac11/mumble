@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.24)
+project(QtAccessibilityRepro LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
+add_executable(QtAccessibilityRepro MACOSX_BUNDLE main.cpp)
+target_link_libraries(QtAccessibilityRepro PRIVATE Qt6::Widgets)
+set_target_properties(QtAccessibilityRepro PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER local.mumble.stability.qt-accessibility-repro MACOSX_BUNDLE_BUNDLE_NAME "Private Qt accessibility repro")

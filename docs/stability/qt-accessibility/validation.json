@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "platform": "macOS 26.6.2 ARM64",
+  "mumble_source_revision": "0e0671cf5d58cffe905c83e162dd287686a666f2",
+  "qt_source_tag": "v6.11.1",
+  "qt_source_file_sha256": "1788c9ee8d272df77233811427a357ee6b23fddf07bf034a5a3be3f58497633c",
+  "patch_sha256": "6b10222dcae2dc1802ee7d86084fa287a7979f1bba5ef41b2e8f3cdcb3ab37a1",
+  "private_control_plugin_sha256": "64bf72da1aa6373b7fc0ddc4db8932e0a222439b64e800409c78106dbe7fcf47",
+  "private_fixed_plugin_sha256": "d6278b36941ceeb3c13834afad81904a806338e8fe79fcf2c4c400891849dda0",
+  "control_observation": "Owned Qt-only fixture crashes at accessibilitySelectedChildren after first insert/select and Cua AX read; log confirms private unpatched plugin loaded",
+  "fixed_observation": "Four insertion/selection/AX sequences survive; private plugin load verified; native Mumble Add Server survives, TLS fingerprint verified and connection shown, file identity decline/retry shown",
+  "ctest": {
+    "registered": 38,
+    "executed": 37,
+    "failed": 0,
+    "skipped_during_execution": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "duration_seconds": 40.6,
+    "scope": "Current local build using experimental plugin path; not rebuilt shipping static dependency bundle"
+  },
+  "constraints": [
+    "No static Qt 6.10.0 dependency build fix yet",
+    "No full native file transfer delivery",
+    "No microphone/camera capture acceptance",
+    "No macOS 15/27 native desktop coverage",
+    "No signing/notarization or integrated candidate acceptance"
+  ],
+  "shipping_build_candidate": {
+    "qt_version": "6.10.0",
+    "source_commit": "5a8637e4516bc48a0b3f4b5ec3b18618b92e7222",
+    "source_archive_sha256": "69c4fe6b0f8b21e555c46ff0541d4f47e0a25bb01bfd81aeb2b10d447b01cb19",
+    "original_accessibility_sha256": "825577252232647c6dc01b57c808c1c6518036ec0eab1315038070aba28f295a",
+    "fixed_accessibility_sha256": "d6b5ee60b88d9ebb4554b8305b17810a112dff8fbe8bf30dfe5d4fec4285cc93",
+    "native_check": "Vendor static archive construction passes against matching private Qt 6.11.1 source/SDK; Qt 6.10.0 static shipping SDK execution pending hosted CI",
+    "qualification": "Implementation candidate; static shipping preview native flow pending"
+  }
+}
