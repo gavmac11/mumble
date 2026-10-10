@@ -4,9 +4,219 @@
   "platform": "macOS 26.6.2 ARM64",
   "client_binary_sha256": "b94236a0b0df001eb79076d6c80f583c05fe63cbfb3616956f6e47037c7d709f",
   "configuration": "Disposable private config/database/certificate/downloads, initially muted/deafened, update checks disabled",
-  "qualification": "Local dynamic developer bundle with launcher, not signed/notarized clean install or integrated frozen candidate",
-  "ui_status": "not_launched_controller_reports_mac_locked",
+  "qualification": "Local developer binary with experimental Qt 6.11.1 Cocoa patch passes limited GUI checks; original packaged Qt 6.10.0 preview reproduces crash; signing/notarization, complete transfer and media acceptance unrun",
+  "ui_status": "unmodified_developer_and_packaged_preview_crash; experimental_qt_patch_connection_and_identity_decline_retry_pass",
   "native_device_tests": "unrun",
-  "controller_action": "getApp on owned disposable bundle refused because Mac is locked",
-  "user_action": "optional unlock request pending; automated work continues"
+  "controller_action": "Private server entry, verified test TLS fingerprint, connected channel/user tree, initial identity setup cancelled, generated 46-byte test file chosen, retry setup reopened and cancelled",
+  "user_action": "User confirmed Mac unlocked; UI controller launched owned disposable bundle and edited server fields",
+  "crash_reports": [
+    {
+      "report_sha256": "70ac47ccbcbefb8bdd36847f3ca4807e65a336aaf0d3d505ba1cea8b9ca4e3b4",
+      "capture_time": "2026-10-10 15:18:23.5545 -0700",
+      "signal": "SIGSEGV",
+      "type": "EXC_BAD_ACCESS",
+      "triggered_thread": 0,
+      "frames": [
+        {
+          "imageOffset": 547212,
+          "symbol": "-[QMacAccessibilityElement accessibilitySelectedChildren]",
+          "symbolLocation": 196,
+          "imageIndex": 141
+        },
+        {
+          "imageOffset": 745048,
+          "symbol": "-[NSAccessibilityAttributeAccessorInfo getAttributeValue:forObject:]",
+          "symbolLocation": 60,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 10802292,
+          "symbol": "___NSAccessibilityEntryPointValueForAttribute_block_invoke.773",
+          "symbolLocation": 1520,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 10784544,
+          "symbol": "NSAccessibilityPerformEntryPointObject",
+          "symbolLocation": 44,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 2611796,
+          "symbol": "_NSAccessibilityEntryPointValueForAttribute",
+          "symbolLocation": 224,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 8225164,
+          "symbol": "-[NSObject(NSObjectAccessibilityAttributeAccessAdditions) accessibilityArrayAttributeCount:]",
+          "symbolLocation": 76,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 8229368,
+          "symbol": "-[NSObject(NSAccessibilityInternal) _accessibilityArrayAttributeCount:clientError:]",
+          "symbolLocation": 120,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 8243660,
+          "symbol": "GetAttributeValueCount",
+          "symbolLocation": 180,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 169180,
+          "symbol": "__AXCopyAttributeValueForHierarchy",
+          "symbolLocation": 156,
+          "imageIndex": 153
+        },
+        {
+          "imageOffset": 162200,
+          "symbol": "_AXXMIGCopyHierarchy",
+          "symbolLocation": 1588,
+          "imageIndex": 153
+        },
+        {
+          "imageOffset": 302868,
+          "symbol": "_XCopyHierarchy",
+          "symbolLocation": 588,
+          "imageIndex": 153
+        },
+        {
+          "imageOffset": 19924,
+          "symbol": "mshMIGPerform",
+          "symbolLocation": 208,
+          "imageIndex": 153
+        },
+        {
+          "imageOffset": 517336,
+          "symbol": "__CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE1_PERFORM_FUNCTION__",
+          "symbolLocation": 60,
+          "imageIndex": 154
+        },
+        {
+          "imageOffset": 517120,
+          "symbol": "__CFRunLoopDoSource1",
+          "symbolLocation": 504,
+          "imageIndex": 154
+        }
+      ]
+    },
+    {
+      "report_sha256": "4d980c2bd947b5afb1f020a2d69f13f197de2a3951b72191108647c40c70990c",
+      "capture_time": "2026-10-10 15:19:58.9541 -0700",
+      "signal": "SIGSEGV",
+      "type": "EXC_BAD_ACCESS",
+      "triggered_thread": 0,
+      "frames": [
+        {
+          "imageOffset": 547212,
+          "symbol": "-[QMacAccessibilityElement accessibilitySelectedChildren]",
+          "symbolLocation": 196,
+          "imageIndex": 141
+        },
+        {
+          "imageOffset": 745048,
+          "symbol": "-[NSAccessibilityAttributeAccessorInfo getAttributeValue:forObject:]",
+          "symbolLocation": 60,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 10802292,
+          "symbol": "___NSAccessibilityEntryPointValueForAttribute_block_invoke.773",
+          "symbolLocation": 1520,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 10784544,
+          "symbol": "NSAccessibilityPerformEntryPointObject",
+          "symbolLocation": 44,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 2611796,
+          "symbol": "_NSAccessibilityEntryPointValueForAttribute",
+          "symbolLocation": 224,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 8225164,
+          "symbol": "-[NSObject(NSObjectAccessibilityAttributeAccessAdditions) accessibilityArrayAttributeCount:]",
+          "symbolLocation": 76,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 8229368,
+          "symbol": "-[NSObject(NSAccessibilityInternal) _accessibilityArrayAttributeCount:clientError:]",
+          "symbolLocation": 120,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 8243660,
+          "symbol": "GetAttributeValueCount",
+          "symbolLocation": 180,
+          "imageIndex": 152
+        },
+        {
+          "imageOffset": 169180,
+          "symbol": "__AXCopyAttributeValueForHierarchy",
+          "symbolLocation": 156,
+          "imageIndex": 153
+        },
+        {
+          "imageOffset": 162200,
+          "symbol": "_AXXMIGCopyHierarchy",
+          "symbolLocation": 1588,
+          "imageIndex": 153
+        },
+        {
+          "imageOffset": 302868,
+          "symbol": "_XCopyHierarchy",
+          "symbolLocation": 588,
+          "imageIndex": 153
+        },
+        {
+          "imageOffset": 19924,
+          "symbol": "mshMIGPerform",
+          "symbolLocation": 208,
+          "imageIndex": 153
+        },
+        {
+          "imageOffset": 517336,
+          "symbol": "__CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE1_PERFORM_FUNCTION__",
+          "symbolLocation": 60,
+          "imageIndex": 154
+        },
+        {
+          "imageOffset": 517120,
+          "symbol": "__CFRunLoopDoSource1",
+          "symbolLocation": 504,
+          "imageIndex": 154
+        }
+      ]
+    }
+  ],
+  "experimental_runtime": {
+    "qt_version": "6.11.1",
+    "plugin_sha256": "d6278b36941ceeb3c13834afad81904a806338e8fe79fcf2c4c400891849dda0",
+    "control_plugin_sha256": "64bf72da1aa6373b7fc0ddc4db8932e0a222439b64e800409c78106dbe7fcf47",
+    "control": "Same Cocoa source/build configuration without two ownership guards crashes minimal Qt-only fixture",
+    "fixed": "Four row insert/select/AX inspections survive; patched Mumble server entry, connection, identity decline and retry survive",
+    "scope": "Private plugin path, no system Qt mutation; static shipping dependencies not rebuilt"
+  },
+  "preview": {
+    "source_revision": "0e0671cf5d58cffe905c83e162dd287686a666f2",
+    "workflow_run": 38089839141,
+    "artifact_id": 11683772604,
+    "zip_sha256": "be09b158a4e321ddb0b45c559777326ca311a62bb770a27558e24040e9a69570",
+    "binary_sha256": "c692b561a37bbb809b8d8cdaf720820db83a4feae848138aae0bb05d1db5f6b5",
+    "qualification": "Original packaged binary and libraries; copied disposable bundle with changed launcher and bundle identifier, no signing/notarization acceptance",
+    "qt_version": "6.10.0",
+    "observed": "Same accessibilitySelectedChildren SIGSEGV after Add Server OK and AX read"
+  },
+  "cleanup": {
+    "client": "Quit key sent; process absent, own settings clean-quit marker true, plugin unloads logged",
+    "server": "Only owned loopback server stopped by interrupt"
+  }
 }
