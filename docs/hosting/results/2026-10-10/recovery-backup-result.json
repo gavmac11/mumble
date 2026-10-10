@@ -1,0 +1,1 @@
+{"status": "backed_up", "backup_sha256": "132b894dab67c1406112e0baa5b94b868156535e3cc58f04bf42cf5bff6ff628", "source_commit": "984d6674e8aa3304d4d9222ebaba5a408f584588", "database_schema": 11, "service_pause_seconds": 0.084, "total_seconds": 0.122, "bytes": 1280504}

@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-10-10T19:54:26.019638+00:00",
+  "workflow_run": 38079970499,
+  "workflow_url": "https://github.com/gavmac11/mumble/actions/runs/38079970499",
+  "pr_head": "275c64053c5c20893f21d444db45f6705b6ce113",
+  "base": "7fc94bf23cfb7e773282fdd67f30982e5bd25b33",
+  "tested_pr_merge": "644c74a1235aac38c0d1e30871b91c60cf4df50b",
+  "conclusion": "success",
+  "preview_publication": "skipped",
+  "reports": [
+    {
+      "platform": "windows-x64",
+      "registered_executables": 31,
+      "enabled_executables": 30,
+      "disabled_executables": 1,
+      "ctest_failures": 0,
+      "ctest_report_time_seconds": 22.0,
+      "ctest_xml_sha256": "d92db73b00c9d0c90b83691f5caacfc99e76cd3021a78c690b46d3f45be464cb",
+      "artifact": "preview-tests-windows-x64"
+    },
+    {
+      "platform": "ubuntu-amd64",
+      "registered_executables": 36,
+      "enabled_executables": 35,
+      "disabled_executables": 1,
+      "ctest_failures": 0,
+      "ctest_report_time_seconds": 46.0,
+      "ctest_xml_sha256": "152daa717ca281dc1f0372d8e33924d59ffdb30ca0b7f2e8d73016f4224598fb",
+      "artifact": "preview-tests-ubuntu-amd64"
+    },
+    {
+      "platform": "macos-arm64",
+      "registered_executables": 31,
+      "enabled_executables": 30,
+      "disabled_executables": 1,
+      "ctest_failures": 0,
+      "ctest_report_time_seconds": 38.0,
+      "ctest_xml_sha256": "008bc60a5a6d2fa1438497aa4f7263d94cf7a72cbeb0fa70cdac337de18d4ad5",
+      "artifact": "preview-tests-macos-arm64"
+    },
+    {
+      "platform": "debian-amd64",
+      "registered_executables": 18,
+      "enabled_executables": 18,
+      "disabled_executables": 0,
+      "ctest_failures": 0,
+      "ctest_report_time_seconds": 6.0,
+      "ctest_xml_sha256": "3aad690a8bf16b19be3aa7ae99e9bacb12b3774651df1572a461b25d33dd40f2",
+      "artifact": "preview-tests-debian-amd64"
+    }
+  ],
+  "scope_notes": [
+    "CTest executable results and clean packaging/install/launch gates only; no native GUI, signing or endurance acceptance",
+    "OverlayTest remains disabled where registered",
+    "Windows TestChatWebM includes four embedding/budget/invalid-data checks; USE_CHAT_WEBM video/audio playback is currently non-Windows only",
+    "CTest executable counts do not establish that every internal Qt test ran without skips",
+    "General CI 38079970506 Windows/Intel macOS follow-up is still pending at recording time",
+    "Hosting D1/D2 measured package remains previous merge 984d6674e8aa3304d4d9222ebaba5a408f584588, not this package candidate"
+  ],
+  "general_follow_up": {
+    "recorded_utc": "2026-10-10T20:01:21.402637+00:00",
+    "run": 38079970506,
+    "conclusion": "failure",
+    "reports": [
+      {
+        "artifact": "tests-ubuntu-24.04-x86_64",
+        "registered": 36,
+        "enabled": 35,
+        "failures": 0,
+        "failed_executables": []
+      },
+      {
+        "artifact": "tests-macos-15-arm64",
+        "registered": 36,
+        "enabled": 35,
+        "failures": 0,
+        "failed_executables": []
+      },
+      {
+        "artifact": "tests-macos-15-intel-x86_64",
+        "registered": 36,
+        "enabled": 35,
+        "failures": 0,
+        "failed_executables": []
+      },
+      {
+        "artifact": "tests-windows-2025-vs2026-x86_64",
+        "registered": 36,
+        "enabled": 35,
+        "failures": 1,
+        "failed_executables": [
+          "TestFileTransferE2E"
+        ]
+      }
+    ],
+    "independent_windows_diagnosis": "Child server inherits the offscreen test-runner platform but includes only the native Windows display plugin. Candidate c4262db21 passes native/offscreen local protocol cases; integration and new CI remain pending."
+  }
+}

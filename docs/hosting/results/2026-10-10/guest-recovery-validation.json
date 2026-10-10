@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-10-10T19:48:17.758494+00:00",
+  "scope": "Current-schema private recovery and same-host reimage on real nested KVM guests; no historical rollback, GUI, density or commercial acceptance",
+  "tool_sha256": {
+    "guest_state.py": "f8799583ecf4131bdb48018dc5bad307e964d100e3922597c0d2ee96cc2f0722",
+    "deploy_guest.py": "c91f7abc6e15f6c26690fb70d3975a2ca7cc19c0002a3a32f30be898c1b928f9",
+    "recovery_fixture.py": "7d172432cad9825adc281e4cc3bee9ffd86c3b7320cc893ea8664a37ebf988a5",
+    "test_guest_state.py": "a80398ff4f58a380062d7bc3bb0de9036287e7969982e7f7704e29cbf22961df"
+  },
+  "package": {
+    "schema": 1,
+    "source_commit": "984d6674e8aa3304d4d9222ebaba5a408f584588",
+    "package_sha256": "c77f5c70c609fe6303d151f69f49821cd078a1d21bd8f21c73e4a5d1270c1974",
+    "package_version": "1.7.56~master+git984d6674",
+    "os": "debian-12",
+    "architecture": "amd64"
+  },
+  "package_ci": {
+    "run": 38077239024,
+    "job": 114286667738,
+    "pr_head": "d78218004ece5e3d51b5cf0d40031ee70cf37c1c",
+    "base": "7fc94bf23cfb7e773282fdd67f30982e5bd25b33"
+  },
+  "cloud_image": {
+    "distribution": "Debian 12",
+    "architecture": "amd64",
+    "version": "20261006-2623",
+    "variant": "generic",
+    "download_url": "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2",
+    "verified_sha512": "f631afb1d8123a29779f720f7f08a97e9f2ce5f5c705b8d9f753df8ed0c3afddeb34e4f254dfa41a6330e9a637387c80a8fe453d789446f9d8be7d7714d0ce7e"
+  },
+  "environment": {
+    "host": "Ubuntu 24.04.4 x86_64 VM with KVM access",
+    "guest_count": 3,
+    "guest_vcpus": 2,
+    "guest_ram_mib": 1536,
+    "guest_disk_gib": 8,
+    "qemu_runner_user": "1000:1000",
+    "runner_cpu_quota_cores": 2,
+    "runner_memory_gib": 3,
+    "runner_pids_limit": 128,
+    "runner_capabilities": [],
+    "existing_pilot_and_host_services_preserved": true,
+    "external_probe_client": "Apple Silicon macOS 26.6.2; protocol probe with this repository OCB2 bridge",
+    "guest_b_stopped_during_recovery": true,
+    "replacement_on_existing_host_and_cached_cloud_image": true,
+    "age_export_restore_guest": "1.1.1",
+    "age_unit_test_macos": "1.3.2"
+  },
+  "backup": {
+    "status": "backed_up",
+    "backup_sha256": "132b894dab67c1406112e0baa5b94b868156535e3cc58f04bf42cf5bff6ff628",
+    "source_commit": "984d6674e8aa3304d4d9222ebaba5a408f584588",
+    "database_schema": 11,
+    "service_pause_seconds": 0.084,
+    "total_seconds": 0.122,
+    "bytes": 1280504
+  },
+  "first_restore_command": {
+    "status": "restored",
+    "source_commit": "984d6674e8aa3304d4d9222ebaba5a408f584588",
+    "database_schema": 11,
+    "seconds": 45.924,
+    "external_readiness_required": true
+  },
+  "replacement_timing": {
+    "started_utc": "2026-10-10T19:43:16.465264+00:00",
+    "scope": "Owned nested KVM replacement; physical supply and provider allocation excluded",
+    "phases": {
+      "replacement_started": 2.072,
+      "replacement_prerequisites_ready": 157.206,
+      "archive_and_identity_ready": 158.839,
+      "restored_and_identity_removed": 210.325,
+      "external_administrator_and_state_ready": 211.098,
+      "external_tcp_relay_ready": 215.87,
+      "external_udp_relay_ready": 220.737
+    },
+    "restore_result": {
+      "status": "restored",
+      "source_commit": "984d6674e8aa3304d4d9222ebaba5a408f584588",
+      "database_schema": 11,
+      "seconds": 50.954,
+      "external_readiness_required": true
+    },
+    "external_state_checks": {
+      "mode": "check",
+      "administrator_login": true,
+      "tls_identity_matches": true,
+      "permanent_channel_matches": true,
+      "registered_certificate_login": true,
+      "member_channel_entry_allowed": true,
+      "outsider_channel_entry_denied": true,
+      "group_membership_matches": true,
+      "acl_rules_match": true,
+      "certificate_ban_matches": true,
+      "banned_certificate_login_denied": true
+    },
+    "status": "passed",
+    "ended_utc": "2026-10-10T19:46:57.201150+00:00"
+  },
+  "checks": {
+    "private_recovery_identity_never_on_source_guest": true,
+    "source_join_and_admin_state_after_backup": true,
+    "fresh_guest_wrong_cipher_pin_refused_before_state_creation": true,
+    "existing_deployment_refused_after_valid_decryption": true,
+    "external_registered_account_room_acl_groups_certificate_ban_tls_preserved": true,
+    "actual_recovered_guest_boot_id_changed": true,
+    "seven_managed_config_tls_credentials_hashes_match": true,
+    "db_schema_11_and_integrity_preserved": true,
+    "tcp_and_encrypted_udp_complete_fanout_before_and_after_reboot": true,
+    "reimaged_allocation_restored_from_same_ciphertext_and_package": true,
+    "operator_identity_removed_from_replacement_ram": true,
+    "original_recovered_disk_preserved": true
+  },
+  "limits": {
+    "server_memory_max_bytes": 536870912,
+    "server_cpu_quota_cores": 1,
+    "server_tasks_max": 128,
+    "server_open_files_max": 4096
+  },
+  "python_checks": {
+    "deployment": 4,
+    "recovery": 12,
+    "accounting_authentication": 21,
+    "total": 37,
+    "failures": 0,
+    "skips": 0
+  },
+  "raw_records": [
+    {
+      "file": "recovery-seed.json",
+      "sha256": "3b1dc8969a2cf54ab5c3839202a8d5af410661ea4f6fd69101bf121c9804326d"
+    },
+    {
+      "file": "recovery-post-backup-fixture.json",
+      "sha256": "365da794397c8b01321e4336fcca1ba7819bf4547f45ac2ac717d29d3b1c0960"
+    },
+    {
+      "file": "recovery-restored-fixture.json",
+      "sha256": "365da794397c8b01321e4336fcca1ba7819bf4547f45ac2ac717d29d3b1c0960"
+    },
+    {
+      "file": "recovery-post-reboot-audit.json",
+      "sha256": "1200b69f4e077e38a2489dd77bad89cafdf1ff00ca3319e05fcbdc8d7cf782a0"
+    },
+    {
+      "file": "recovery-restored-post-reboot-fixture.json",
+      "sha256": "365da794397c8b01321e4336fcca1ba7819bf4547f45ac2ac717d29d3b1c0960"
+    },
+    {
+      "file": "recovery-restored-udp.json",
+      "sha256": "1b9560ae322183df762affb8b7895694cf60a2dd993f56e8c8fcabf3dc2aed31"
+    },
+    {
+      "file": "recovery-restored-post-reboot-tcp.json",
+      "sha256": "64640147b855d45b3813fd95c99f25a591ddf573f13b3b2bd16e0c6c04564af3"
+    },
+    {
+      "file": "recovery-restored-post-reboot-udp.json",
+      "sha256": "982475bb370daed05cb4d647aa0007682c772169d4bdb4d38d23f578127de07d"
+    },
+    {
+      "file": "recovery-source-post-backup-tcp.json",
+      "sha256": "370ab60e4f7598fd5579084f00c102d0516391a1f3f47d50020785b354e832e0"
+    },
+    {
+      "file": "recovery-reimaged-tcp.json",
+      "sha256": "8ed0b782b8d38ec0e32ba7600f8ced37914c3c4ca0d820a7866cf6ad0afd9afc"
+    },
+    {
+      "file": "recovery-reimaged-udp.json",
+      "sha256": "04b2f686c032378ae7cec46a4d4e52786693b7a1e6204fdb8a9e7da7e740d5e1"
+    },
+    {
+      "file": "recovery-timed-reimage-result.json",
+      "sha256": "72a622363a98a5607f26b85ed3a138f3ce33f7f94d9b3359b6f24b1a72541400"
+    },
+    {
+      "file": "recovery-backup-result.json",
+      "sha256": "9ca9f926eef3b9ad2b550c265f1e1949bd3d32f21b7e66915d6ec068cec84986"
+    },
+    {
+      "file": "recovery-restore-result.json",
+      "sha256": "1dd1e477df1b0a510182adb81fa74c24ca82649bff266e12ad6a3e7315ade7ad"
+    }
+  ],
+  "remaining": [
+    "Historical schema/version migration and timed pre-upgrade rollback",
+    "Interrupted restore resume and key-loss/fault drills",
+    "Scheduled off-guest retention and authenticated backup-record distribution",
+    "Provider allocation and replacement-capacity failure",
+    "Frozen candidate signing, native GUI interoperability and endurance",
+    "Physical-host density, consenting cohorts and measured pilot economics"
+  ]
+}

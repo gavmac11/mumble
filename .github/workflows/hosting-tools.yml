@@ -21,7 +21,10 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v6
-      - name: Validate package pins and relay accounting
+      - name: Install recovery encryption tool
+        run: sudo apt-get update && sudo apt-get install -y age
+      - name: Validate package pins, recovery and relay accounting
         run: |
           python3 -m unittest discover -s scripts/hosting -p test_deploy_guest.py -v
+          python3 -m unittest discover -s scripts/hosting -p test_guest_state.py -v
           python3 -m unittest discover -s scripts/hosting -p test_hosting_tools.py -v

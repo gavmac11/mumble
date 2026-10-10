@@ -1,0 +1,35 @@
+{
+  "started_utc": "2026-10-10T19:43:16.465264+00:00",
+  "scope": "Owned nested KVM replacement; physical supply and provider allocation excluded",
+  "phases": {
+    "replacement_started": 2.072,
+    "replacement_prerequisites_ready": 157.206,
+    "archive_and_identity_ready": 158.839,
+    "restored_and_identity_removed": 210.325,
+    "external_administrator_and_state_ready": 211.098,
+    "external_tcp_relay_ready": 215.87,
+    "external_udp_relay_ready": 220.737
+  },
+  "restore_result": {
+    "status": "restored",
+    "source_commit": "984d6674e8aa3304d4d9222ebaba5a408f584588",
+    "database_schema": 11,
+    "seconds": 50.954,
+    "external_readiness_required": true
+  },
+  "external_state_checks": {
+    "mode": "check",
+    "administrator_login": true,
+    "tls_identity_matches": true,
+    "permanent_channel_matches": true,
+    "registered_certificate_login": true,
+    "member_channel_entry_allowed": true,
+    "outsider_channel_entry_denied": true,
+    "group_membership_matches": true,
+    "acl_rules_match": true,
+    "certificate_ban_matches": true,
+    "banned_certificate_login_denied": true
+  },
+  "status": "passed",
+  "ended_utc": "2026-10-10T19:46:57.201150+00:00"
+}
