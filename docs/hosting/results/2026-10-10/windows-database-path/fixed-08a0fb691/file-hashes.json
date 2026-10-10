@@ -1,0 +1,76 @@
+{
+  "source_commit": "08a0fb6913832a0820f9047cc8bc145b4a8afe62",
+  "algorithm": "SHA256",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+      "size_bytes": 29
+    },
+    {
+      "path": "child-directory-stderr.txt",
+      "sha256": "1cb33517648d016bb5e68fa5794609efe9a7f7b6e5e2ab1ab40bf5a1da25938d",
+      "size_bytes": 145
+    },
+    {
+      "path": "child-observations.json",
+      "sha256": "5c35cc65c47e17ceb1aa1187d68488fc56aea8b23030481adabc23e8786a9606",
+      "size_bytes": 3062
+    },
+    {
+      "path": "ctest.txt",
+      "sha256": "982240c1dee24cd569870c6423c5402c59a854aac26f2b141763e6fc6ba52671",
+      "size_bytes": 501
+    },
+    {
+      "path": "ctest.xml",
+      "sha256": "a72e0c9e3acda0961228b88e68c9f51ab329606e95ca53707020d612accdfc27",
+      "size_bytes": 655
+    },
+    {
+      "path": "test-run-result.json",
+      "sha256": "59e028d52799bbc3441427c1259ce8171c41dda75f380d7cccafb72867ddd4e7",
+      "size_bytes": 123
+    },
+    {
+      "path": "TestDatabasePath.txt",
+      "sha256": "fcf6b9ef2ba66ab5993ec457f1c831c43bf816cd9065926b41028816a013b268",
+      "size_bytes": 600
+    },
+    {
+      "path": "TestDatabasePath.xml",
+      "sha256": "e24148a259c18dc3eeb96ef0a662d3f2b22e1f610a57dbd64266457cd7b141a9",
+      "size_bytes": 946
+    },
+    {
+      "path": "TestFileTransferUi.txt",
+      "sha256": "d7b18ab72014a138a4fb8bac322c08f74acb005669de3e969453271a0c0b31b4",
+      "size_bytes": 913
+    },
+    {
+      "path": "TestFileTransferUi.xml",
+      "sha256": "fe4f1235e0e5fa680c9b2ca7c8a7911934071df0a94b5ae7ab4d657c35348627",
+      "size_bytes": 1344
+    },
+    {
+      "path": "TestQtLogger.txt",
+      "sha256": "362a941ed59d3692b1fce638424734f30f9547320df9c47775385f9bc67dabb5",
+      "size_bytes": 525
+    },
+    {
+      "path": "TestQtLogger.xml",
+      "sha256": "568984198b7b0a511ecb8fd33479315245a9b0c05af23627d0ab382f045e606b",
+      "size_bytes": 877
+    },
+    {
+      "path": "validation.json",
+      "sha256": "9c0958cb33d92245f6d911e903d3c72c73dc137f5427ed65b250604307279f4a",
+      "size_bytes": 16179
+    },
+    {
+      "path": "validation.txt",
+      "sha256": "37e5a1c55eb3351483cbcfc14714283e423cbdedfbf7927c2d16f328e6a9d40a",
+      "size_bytes": 1178
+    }
+  ]
+}

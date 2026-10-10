@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestFileTransferUi" timestamp="2026-10-10T16:53:40" hostname="windows-validation-host" tests="7" failures="0" errors="0" skipped="0" time="0.017">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestFileTransferUi" time="0.000" />
+  <testcase name="qrContrast(light)" classname="TestFileTransferUi" time="0.008">
+    <system-err>
+      QFontDatabase: Cannot find font directory &lt;isolated-build-directory&gt;/tests/lib/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+    </system-err>
+  </testcase>
+  <testcase name="qrContrast(dark)" classname="TestFileTransferUi" time="0.005" />
+  <testcase name="fileActionByKeyboard" classname="TestFileTransferUi" time="0.001" />
+  <testcase name="invalidActionUrls" classname="TestFileTransferUi" time="0.000" />
+  <testcase name="unrelatedDataIsNotAFileAction" classname="TestFileTransferUi" time="0.000" />
+  <testcase name="cleanupTestCase" classname="TestFileTransferUi" time="0.000" />
+</testsuite>

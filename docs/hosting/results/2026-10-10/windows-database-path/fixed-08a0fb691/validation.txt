@@ -1,0 +1,11 @@
+Windows database-path validation: 08a0fb6913832a0820f9047cc8bc145b4a8afe62
+MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022); Windows 10 Pro 10.0.19045 x64.
+Release/C++20; /W4 /WX /O2 /bigobj /options:strict; dynamic MSVC runtime; no source warning relaxation.
+mumble client, TestDatabasePath, TestQtLogger and TestFileTransferUi built successfully.
+TestDatabasePath: 5 cases, 0 failures, 0 errors, 0 skipped, 1.944s.
+TestQtLogger: 5 cases, 0 failures, 0 errors, 0 skipped, 1.132s.
+TestFileTransferUi: 7 cases, 0 failures, 0 errors, 0 skipped, 0.017s.
+CTest: three suites passed, 2.90s elapsed.
+Database test owns private settings/fallback databases and checks selected paths, expected fatal rejection and unchanged unselected/fallback hashes. Logger and offscreen file UI regressions also ran.
+Windows bulk stalled-receiver/memory acceptance, sanitizer, full suite, GUI and packaging/signing were not run.
+Parent stderr override unset; exact source sets it for the negative child only. CrashExit/nonzero/fatal text/fallback-hash assertions passed. Generated CTest registrations restored; personal settings unchanged. Complete logs kept private.
