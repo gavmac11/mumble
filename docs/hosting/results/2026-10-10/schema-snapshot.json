@@ -1,0 +1,11 @@
+{
+  "snapshot_schema": 7,
+  "snapshot_inventory": [
+    "mumble-server_1.3.4-4_amd64.deb",
+    "server.crt",
+    "server.ini",
+    "server.key",
+    "server.sqlite"
+  ],
+  "managed_service_active": true
+}

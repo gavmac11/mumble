@@ -1,0 +1,15 @@
+{
+  "stop_upgrade_to_external_state_check_seconds": 1.6170331668108702,
+  "includes": [
+    "SSH round trips",
+    "owned service stop",
+    "local pre-upgrade snapshot restore",
+    "old binary startup",
+    "external TLS state/ACL/certificate-ban check"
+  ],
+  "excludes": [
+    "encrypted decrypt",
+    "guest/provider replacement",
+    "package/runtime dependency installation"
+  ]
+}
