@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="Win32-ninja" tests="2" failures="0" disabled="0" skipped="0" hostname="windows-validation-host" time="10" timestamp="2026-10-10T15:03:53">
+  <testcase name="TestFileTransferE2E" classname="TestFileTransferE2E" time="10.0603" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestConnectionOutputQueue" classname="TestConnectionOutputQueue" time="0.935732" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+</testsuite>

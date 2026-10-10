@@ -1,0 +1,17 @@
+Test project /Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/build/stability
+    Start 15: TestFileTransferE2E
+1/6 Test #15: TestFileTransferE2E ..............   Passed    7.00 sec
+    Start 18: TestCrypt
+2/6 Test #18: TestCrypt ........................   Passed    0.07 sec
+    Start 19: TestAudioReceiverBuffer
+3/6 Test #19: TestAudioReceiverBuffer ..........   Passed    0.06 sec
+    Start 20: TestBandwidthRecord
+4/6 Test #20: TestBandwidthRecord ..............   Passed    0.02 sec
+    Start 21: TestConnectionOutputQueue
+5/6 Test #21: TestConnectionOutputQueue ........   Passed    0.22 sec
+    Start 31: TestMumbleProtocol
+6/6 Test #31: TestMumbleProtocol ...............   Passed    0.05 sec
+
+100% tests passed out of 6
+
+Total Test time (real) =   7.44 sec

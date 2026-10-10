@@ -19,6 +19,9 @@ ServerUser::ServerUser(Server *p, QSslSocket *socket)
 	: Connection(p, socket), ServerUserInfo(), s(nullptr), leakyBucket(p->iMessageLimit, p->iMessageBurst),
 	  m_pluginMessageBucket(p->iPluginMessageLimit, p->iPluginMessageBurst),
 	  m_fileControlBucket(p->iFileControlLimit, p->iFileControlBurst) {
+	// Covers the largest accepted protocol frame (8 MiB) with room for
+	// normal bursts, while bounding retained output to a stalled receiver.
+	setMaxPendingSendBytes(16 * 1024 * 1024);
 	sState       = ServerUser::Connected;
 	m_clientType = ClientType::REGULAR;
 	sUdpSocket   = INVALID_SOCKET;
