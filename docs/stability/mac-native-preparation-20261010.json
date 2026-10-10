@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "source_production_revision": "0e0671cf5d58cffe905c83e162dd287686a666f2",
+  "platform": "macOS 26.6.2 ARM64",
+  "client_binary_sha256": "b94236a0b0df001eb79076d6c80f583c05fe63cbfb3616956f6e47037c7d709f",
+  "configuration": "Disposable private config/database/certificate/downloads, initially muted/deafened, update checks disabled",
+  "qualification": "Local dynamic developer bundle with launcher, not signed/notarized clean install or integrated frozen candidate",
+  "ui_status": "not_launched_controller_reports_mac_locked",
+  "native_device_tests": "unrun",
+  "controller_action": "getApp on owned disposable bundle refused because Mac is locked",
+  "user_action": "optional unlock request pending; automated work continues"
+}
