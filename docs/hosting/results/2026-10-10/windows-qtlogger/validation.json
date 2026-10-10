@@ -1,0 +1,377 @@
+{
+  "recorded_utc": "2026-10-10T23:15:33.330228+00:00",
+  "source_commit": "440c2fc01c9c36e2db7bfd312f1d17b68698465a",
+  "source_branch": "codex/macos-accessibility-runtime",
+  "pull_request": "https://github.com/gavmac11/mumble/pull/37",
+  "production_commit": "b9ba0c55e7451ce0dd1a89a85bb2a9827aa007f8",
+  "source_tree_clean_before_evidence": true,
+  "source_blob_sha256": {
+    "src/Logger.cpp": "bdc1cc6e73183b546701fd8a5752cd2a9575086e01ece68430ce04d0727ee6eb",
+    "src/Logger.h": "69b2971d5caa58d0eaffa4ff1020661c74f05835ae6670abd208466c2cc984e0",
+    "src/mumble/main.cpp": "0d1a8a07070ace3aef83a6546e5f2b9af39ee25fbb6061810e5c05c2e9326fc6",
+    "src/tests/TestQtLogger/TestQtLogger.cpp": "c84796c66c92c5fb93eb9121602066dae87d94825f09094f975d4d266c3085af",
+    "src/Connection.cpp": "fb1a7b04a908591eb09a40f18963339ef2941cd9a656bdd08ee7c211f2f118db",
+    "src/Connection.h": "78dc75cdd4486ef6db8176f6e5bc32e27dc1c9f34c624145c02106467c79007b",
+    "src/tests/TestFileTransferE2E/TestFileTransferE2E.cpp": "d33a62b58db97424e37d055018f83c4c4acf49f3606d03f1806d5d1c5f11f13e"
+  },
+  "os": {
+    "name": "Windows 10 Pro",
+    "version": "10.0.19045",
+    "architecture": "x64"
+  },
+  "compiler": {
+    "name": "MSVC",
+    "version": "19.51.36257.0",
+    "installation": "VS 2026 Build Tools"
+  },
+  "qt": {
+    "version": "6.10.0",
+    "linkage": "static",
+    "dependency_build_compiler": "MSVC 2022"
+  },
+  "dependencies": "vcpkg 2026-02 b1fe4a4257 / x64-windows-static-md; OpenSSL 3.6.1; FFmpeg 8.1 shared",
+  "configuration": "Release, Ninja unity build, C++20, dynamic MSVC runtime, symbols off, LTO off, strict warnings-as-errors enabled; tests/server on, packaging off",
+  "build": {
+    "targets": [
+      "mumble",
+      "mumble-server",
+      "TestQtLogger",
+      "TestConnectionOutputQueue",
+      "TestFileTransferE2E"
+    ],
+    "configure_exit_code": 0,
+    "build_exit_code": 0,
+    "source_compiler_policy": [
+      {
+        "target": "TestQtLogger",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestConnectionOutputQueue",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestFileTransferE2E",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_client_object_lib",
+        "checked_translation_units": 10,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_server_object_lib",
+        "checked_translation_units": 3,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "shared",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      }
+    ],
+    "dependency_warning_policy": "Repository defaults retained for third-party and generated protobuf sources; -external:W0 retained for external headers. No source warning relaxation on client/logger, queue, server or tested file-transfer translation units.",
+    "server_executable_sha256": "fe1106dc4f6b812febadd17c38b599c2f947642b072cf41b5a0b7f9292928046",
+    "client_executable_sha256": "40d92ba27e5c9cb2804e5d1944faaab4ab07e474815dd29596d90470b747c3a7"
+  },
+  "tests": [
+    {
+      "suite": "TestQtLogger",
+      "cases": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.129,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestQtLogger",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "lateQtLog(prior-handler)",
+          "classname": "TestQtLogger",
+          "time": "0.385",
+          "result": "passed"
+        },
+        {
+          "name": "lateQtLog(repeated-init)",
+          "classname": "TestQtLogger",
+          "time": "0.378",
+          "result": "passed"
+        },
+        {
+          "name": "lateQtLog(later-handler-owner)",
+          "classname": "TestQtLogger",
+          "time": "0.363",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestQtLogger",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "07419a8864ea9b028dc7c73a9d06964528a550cc446ae56693519277d56c28af",
+      "txt_report": "TestQtLogger.txt",
+      "junit_report": "TestQtLogger.xml"
+    },
+    {
+      "suite": "TestConnectionOutputQueue",
+      "cases": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.135,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "admitsExactBoundary",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.036",
+          "result": "passed"
+        },
+        {
+          "name": "admitsLargestProtocolFrame",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.017",
+          "result": "passed"
+        },
+        {
+          "name": "disconnectedSocketDoesNotWrite",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "refusesFurtherWritesBeforeDeferredClose",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.015",
+          "result": "passed"
+        },
+        {
+          "name": "unboundedDefault",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.016",
+          "result": "passed"
+        },
+        {
+          "name": "emptyWriteDoesNotDisconnect",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.016",
+          "result": "passed"
+        },
+        {
+          "name": "largeQueueDoesNotOverflow",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.016",
+          "result": "passed"
+        },
+        {
+          "name": "destroyingConnectionCancelsDeferredClose",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.016",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "d931a925f409f752ffe4fa539168b7629466cd37f339020f5aad98ba33f710c8",
+      "txt_report": "TestConnectionOutputQueue.txt",
+      "junit_report": "TestConnectionOutputQueue.xml"
+    },
+    {
+      "suite": "TestFileTransferE2E",
+      "cases": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 9.296,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferE2E",
+          "time": "2.152",
+          "result": "passed"
+        },
+        {
+          "name": "endToEndTransfer",
+          "classname": "TestFileTransferE2E",
+          "time": "2.237",
+          "result": "passed"
+        },
+        {
+          "name": "endToEndPasswordTransfer",
+          "classname": "TestFileTransferE2E",
+          "time": "3.011",
+          "result": "passed"
+        },
+        {
+          "name": "capabilityGating",
+          "classname": "TestFileTransferE2E",
+          "time": "1.757",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferE2E",
+          "time": "0.135",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "98c98211c482417ae0dbf56a0b8961ed49c7db8f8a77fcf5be41e503a6834e8a",
+      "txt_report": "TestFileTransferE2E.txt",
+      "junit_report": "TestFileTransferE2E.xml"
+    }
+  ],
+  "ctest": {
+    "suites": 3,
+    "failures": 0,
+    "wall_seconds": 10.16,
+    "case_seconds": {
+      "TestFileTransferE2E": 10.1316,
+      "TestQtLogger": 1.92533,
+      "TestConnectionOutputQueue": 0.935912
+    },
+    "exit_code": 0,
+    "parallel": 2,
+    "qt_platform": "offscreen",
+    "output_capture": "Only QtTest text/JUnit -o flags temporarily appended to generated CTest registrations, restored byte-for-byte after the run. Repository implementation unchanged.",
+    "e2e_fixture": "Owned local server and two TLS/protobuf client connections; Windows child server environment clears QT_QPA_PLATFORM using the existing source fixture."
+  },
+  "scope": [
+    "Late Qt logging subprocess after spdlog shutdown: prior handler restoration, repeated initialization, later handler owner preserved",
+    "Full native client build with restoreQtMessageHandler on main return",
+    "Eight queue behavior cases plus QtTest initialization/cleanup",
+    "Real connected socket with controlled plaintext backlog checks queue boundaries, blocked writes, empty writes and deferred close/lifetime",
+    "File-transfer E2E plain/password relay and capability gating",
+    "Native server build",
+    "Cocoa vendor repair is Mac-only and was not applied on Windows"
+  ],
+  "not_run": [
+    "Native Windows GUI/quit or plugin-unload crash reproduction",
+    "Mac Cocoa vendor repair qualification",
+    "Windows paused-receiver TLS bulk relay and memory sampling",
+    "scripts/hosting/test_slow_receiver.py (macOS/Linux ps sampler; not Windows acceptance)",
+    "Windows ASan/UBSan",
+    "Full Windows suite or endurance",
+    "GUI, capture/focus, file-card Download or application restart",
+    "Packaging/signing/Windows 11 qualification"
+  ],
+  "preservation": "Prior private report/log hashes verified unchanged. Prior recorded compiler commands and executables preserved before explicitly requested build reuse. Original checkouts/settings/running applications retained. Test fixture uses its own server; tracked changes limited to the new evidence directory. Complete build/configure/compiler command logs and binaries remain private.",
+  "publication": {
+    "attributes": "* -text whitespace=cr-at-eol (scoped to this directory)",
+    "changes": [
+      "Anonymized XML hostnames",
+      "Replaced private CTest build path with <isolated-build-directory>"
+    ],
+    "test_results_changed": false,
+    "hash_policy": "Published file hashes describe exact stored report bytes. Private complete logs have a separate local ledger."
+  },
+  "cmake_options": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_UNITY_BUILD": "ON",
+    "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+    "bundled-cli11": "OFF",
+    "bundled-spdlog": "OFF",
+    "client": "ON",
+    "database-mysql-tests": "OFF",
+    "database-postgresql-tests": "OFF",
+    "database-sqlite-tests": "ON",
+    "file-sharing": "ON",
+    "ice": "OFF",
+    "lto": "OFF",
+    "overlay": "OFF",
+    "packaging": "OFF",
+    "plugins": "OFF",
+    "server": "ON",
+    "static": "ON",
+    "symbols": "OFF",
+    "test-lto": "OFF",
+    "tests": "ON",
+    "translations": "OFF",
+    "warnings-as-errors": "ON"
+  }
+}

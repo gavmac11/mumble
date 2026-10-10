@@ -1,0 +1,12 @@
+Internal ctest changing into directory: <isolated-build-directory>
+Test project <isolated-build-directory>
+    Start 15: TestFileTransferE2E
+    Start 22: TestConnectionOutputQueue
+1/3 Test #22: TestConnectionOutputQueue ........   Passed    0.94 sec
+    Start 20: TestQtLogger
+2/3 Test #20: TestQtLogger .....................   Passed    1.93 sec
+3/3 Test #15: TestFileTransferE2E ..............   Passed   10.13 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =  10.16 sec
