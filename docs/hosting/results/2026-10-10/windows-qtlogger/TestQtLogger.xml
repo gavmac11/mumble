@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestQtLogger" timestamp="2026-10-10T16:14:58" hostname="windows-validation-host" tests="5" failures="0" errors="0" skipped="0" time="1.129">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestQtLogger" time="0.000" />
+  <testcase name="lateQtLog(prior-handler)" classname="TestQtLogger" time="0.385" />
+  <testcase name="lateQtLog(repeated-init)" classname="TestQtLogger" time="0.378" />
+  <testcase name="lateQtLog(later-handler-owner)" classname="TestQtLogger" time="0.363" />
+  <testcase name="cleanupTestCase" classname="TestQtLogger" time="0.000" />
+</testsuite>
