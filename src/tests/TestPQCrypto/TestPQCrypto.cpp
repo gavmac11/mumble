@@ -6,6 +6,8 @@
 #include <QTest>
 #include <QBuffer>
 
+#include <limits>
+
 #include "PQFileTransfer/PQFTConstants.h"
 #include "PQFileTransfer/crypto/Argon2Wrap.h"
 #include "PQFileTransfer/crypto/CanonicalCBOR.h"
@@ -489,6 +491,8 @@ void TestPQCrypto::deviceHashRejectsWrongCount() {
 	QVERIFY(PQFT::merkleRootFromDevice(source, 16384, 3).isEmpty());
 	QVERIFY(source.seek(0));
 	QVERIFY(PQFT::merkleRootFromDevice(source, 0, 2).isEmpty());
+	QVERIFY(PQFT::merkleRootFromDevice(source, std::numeric_limits< quint32 >::max(), 2).isEmpty());
+	QVERIFY(PQFT::merkleRootFromDevice(source, 16384, std::numeric_limits< quint64 >::max()).isEmpty());
 }
 
 void TestPQCrypto::merkleCancellation_data() {

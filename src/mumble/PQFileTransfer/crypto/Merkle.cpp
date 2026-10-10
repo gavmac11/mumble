@@ -16,7 +16,8 @@ namespace PQFT {
 
 QByteArray merkleRootFromDevice(QIODevice &source, quint32 chunkSize, quint64 chunkCount,
 								const std::function< bool() > &isCancelled) {
-	if ((isCancelled && isCancelled()) || chunkSize == 0 || chunkSize > std::numeric_limits< int >::max()
+	if ((isCancelled && isCancelled()) || chunkSize == 0
+		|| chunkSize > static_cast< quint32 >(std::numeric_limits< int >::max())
 		|| chunkCount > static_cast< quint64 >(std::numeric_limits< int >::max()) || !source.isReadable())
 		return {};
 	QVector< QByteArray > digests;
