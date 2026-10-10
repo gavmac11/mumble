@@ -1,0 +1,6 @@
+{
+  "case": "modern-banned-peer-reaches-ServerSync",
+  "expected_failure_detected": true,
+  "seconds": 0.3237578752450645,
+  "legacy_policy": false
+}

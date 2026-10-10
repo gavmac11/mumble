@@ -1,0 +1,17 @@
+{
+  "checks": [
+    {
+      "case": "wrong-cipher-pin",
+      "exit_code": 1,
+      "server_state_untouched": true,
+      "error": "Historical operation stopped: ValueError: Historical ciphertext differs from the trusted operator pin"
+    },
+    {
+      "case": "wrong-operator-key",
+      "exit_code": 1,
+      "server_state_untouched": true,
+      "error": "Historical operation stopped: RuntimeError: age failed (exit 1); output withheld"
+    }
+  ],
+  "wrong_operator_key_removed": true
+}
