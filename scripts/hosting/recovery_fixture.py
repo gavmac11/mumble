@@ -141,8 +141,18 @@ async def run(args):
             banned = await connect(BANNED, join, 'banned')
             banned_hash = hashlib.sha1(ssl.PEM_cert_to_DER_cert(
                 (args.secrets / 'banned.crt').read_text())).hexdigest()
-            await admin.send(8, integer(1, banned.session) + blob(3, b'Recovery certificate ban')
-                             + integer(4, 1) + integer(5, 1) + integer(6, 0))
+            if args.legacy_ban:
+                # The old server lacks the certificate-only UserRemove extension.
+                # A documentation IP avoids banning every NAT/loopback client.
+                address = bytes.fromhex('00000000000000000000ffffc000027b')
+                entry = (blob(1, address) + integer(2, 128) + blob(3, BANNED.encode())
+                         + blob(4, banned_hash.encode()) + blob(5, b'Private schema rollback fixture'))
+                await admin.send(10, blob(1, entry))
+                await admin.send(8, integer(1, banned.session)
+                                 + blob(3, b'Fixture kick after saving certificate ban'))
+            else:
+                await admin.send(8, integer(1, banned.session) + blob(3, b'Recovery certificate ban')
+                                 + integer(4, 1) + integer(5, 1) + integer(6, 0))
             await admin.send(10, integer(2, 1))
             bans = await admin.wait(10)
             if not any(one(values(entry), 4) == banned_hash.encode() for entry in bans.get(1, [])):
@@ -189,17 +199,35 @@ async def run(args):
             raise AssertionError('Saved certificate ban was not recovered')
         denied = Peer(args, BANNED, join, 'banned')
         peers.append(denied)
+        sync_before_close = False
         try:
             await denied.connect()
+            if args.legacy_ban:
+                sync_before_close = True
+                # Qt5 may finish queued authentication after requesting disconnect.
+                # Require closure within a single total deadline, even if data keeps arriving.
+                deadline = time.monotonic() + 2
+                while True:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise TimeoutError
+                    await asyncio.wait_for(denied.packet(), remaining)
+        except TimeoutError:
+            raise AssertionError('Banned certificate connection remained open')
         except (RuntimeError, asyncio.IncompleteReadError, OSError):
             pass
         else:
             raise AssertionError('Banned certificate unexpectedly logged in')
-        return {'mode': args.mode, 'administrator_login': True, 'tls_identity_matches': True,
+        result = {'mode': args.mode, 'administrator_login': True, 'tls_identity_matches': True,
                 'permanent_channel_matches': True, 'registered_certificate_login': True,
                 'member_channel_entry_allowed': True, 'outsider_channel_entry_denied': True,
                 'group_membership_matches': True, 'acl_rules_match': True,
                 'certificate_ban_matches': True, 'banned_certificate_login_denied': True}
+        if args.legacy_ban:
+            del result['banned_certificate_login_denied']
+            result.update(banned_certificate_connection_closed=True,
+                          banned_server_sync_before_close=sync_before_close)
+        return result
     finally:
         await asyncio.gather(*(peer.close() for peer in peers), return_exceptions=True)
 
@@ -213,6 +241,8 @@ def main():
     parser.add_argument('--ca-file', type=Path, required=True)
     parser.add_argument('--secrets', type=Path, required=True)
     parser.add_argument('--record', type=Path, required=True)
+    parser.add_argument('--legacy-ban', action='store_true',
+                        help='Explicit old-server BanList/closed-socket check; modern login denial stays strict')
     args = parser.parse_args()
     try:
         print(json.dumps(asyncio.run(run(args))))
