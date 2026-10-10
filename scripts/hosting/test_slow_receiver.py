@@ -10,7 +10,7 @@ This does not measure native devices, cryptographic file engines, VM density,
 queued cross-thread media callbacks or audio/video fairness under saturation.
 """
 
-import argparse, asyncio, hashlib, json, os, socket, ssl, subprocess, time
+import argparse, asyncio, hashlib, json, os, socket, ssl, struct, subprocess, time
 from pathlib import Path
 from relay_probe import blob, integer, read_varint
 
