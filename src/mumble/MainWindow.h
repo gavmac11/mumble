@@ -345,6 +345,8 @@ public slots:
 
 	void startFileSend(const QString &path);
 	void bootstrapFileTransferIdentity();
+	bool promptForFileTransferIdentity();
+	void announceFileTransferCapability();
 	void onFileCardClicked(const QByteArray &transferId);
 	/// Card lookup for the chat log document.
 	bool fileTransferCardInfo(const QByteArray &transferId, QImage &out) const;

@@ -14,6 +14,7 @@
 #include <QThread>
 
 #include <algorithm>
+#include <optional>
 
 FileTransferManager::FileTransferManager(QObject *parent) : QObject(parent) {
 	qRegisterMetaType< PQFT::FTTransferInfo >("PQFT::FTTransferInfo");
@@ -44,22 +45,30 @@ FileTransferManager::~FileTransferManager() {
 void FileTransferManager::setupEngineTransports() {
 	// The engine calls these from the worker thread; sends are marshaled to
 	// the ServerHandler thread (which owns the socket).
+	// Capture payloads by value in queued functors so method signatures are
+	// checked by the compiler and argument types need no name registration.
+	// The receiver context cancels queued calls if the handler is destroyed.
 	m_engine->setTransport(
 		[](unsigned int targetSession, const QByteArray &payload) {
 			auto sh = Global::get().sh;
 			if (sh) {
-				QMetaObject::invokeMethod(sh.get(), "sendFileTransferControl", Qt::QueuedConnection,
-										  Q_ARG(QList< unsigned int >, QList< unsigned int >{ targetSession }),
-										  Q_ARG(QByteArray, payload));
+				QMetaObject::invokeMethod(
+					sh.get(),
+					[handler = sh.get(), targetSession, payload]() {
+						handler->sendFileTransferControl({ targetSession }, payload);
+					},
+					Qt::QueuedConnection);
 			}
 		},
 		[](const QByteArray &transferId, quint64 index, quint64 total, const QByteArray &data) {
 			auto sh = Global::get().sh;
 			if (sh) {
-				QMetaObject::invokeMethod(sh.get(), "sendFileData", Qt::QueuedConnection,
-										  Q_ARG(QByteArray, transferId), Q_ARG(quint64, index),
-										  Q_ARG(std::optional< quint64 >, std::optional< quint64 >(total)),
-										  Q_ARG(QByteArray, data));
+				QMetaObject::invokeMethod(
+					sh.get(),
+					[handler = sh.get(), transferId, index, total, data]() {
+						handler->sendFileData(transferId, index, std::optional< quint64 >(total), data);
+					},
+					Qt::QueuedConnection);
 			}
 		});
 
