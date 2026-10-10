@@ -1,0 +1,65 @@
+{
+  "source_commit": "7993cdc830c7139b85cc4cb72efb12edfb3c0738",
+  "QT_FORCE_STDERR_LOGGING": "1",
+  "diagnostic_only": true,
+  "scope": "Supplementary direct invocations of the unchanged TestDatabasePath --database-child entry point using new privately seeded fixtures. No error-mode overrides, debugger, fatal-handler replacement or warning relaxation. stdout/stderr preserved byte-for-byte locally.",
+  "records": [
+    {
+      "mode": "file",
+      "return_code": 0,
+      "windows_return_code_hex": "0x00000000",
+      "timed_out": false,
+      "stdout_bytes": 0,
+      "stderr_bytes": 27,
+      "fatal_diagnostic_in_stderr": false,
+      "private_database_before_sha256": {
+        "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+        "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+      },
+      "private_database_after_sha256": {
+        "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+        "explicit.sqlite": "518b38f8644a149718cde1790fe9393827df888462b7b89caeacadc82aacbecb"
+      },
+      "fallback_hash_unchanged": true,
+      "unselected_hash_unchanged": true
+    },
+    {
+      "mode": "default",
+      "return_code": 0,
+      "windows_return_code_hex": "0x00000000",
+      "timed_out": false,
+      "stdout_bytes": 0,
+      "stderr_bytes": 27,
+      "fatal_diagnostic_in_stderr": false,
+      "private_database_before_sha256": {
+        "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+        "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+      },
+      "private_database_after_sha256": {
+        "mumble.sqlite": "518b38f8644a149718cde1790fe9393827df888462b7b89caeacadc82aacbecb",
+        "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+      },
+      "fallback_hash_unchanged": false,
+      "unselected_hash_unchanged": true
+    },
+    {
+      "mode": "directory",
+      "return_code": 3221226505,
+      "windows_return_code_hex": "0xc0000409",
+      "timed_out": false,
+      "stdout_bytes": 0,
+      "stderr_bytes": 193,
+      "fatal_diagnostic_in_stderr": true,
+      "private_database_before_sha256": {
+        "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+        "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+      },
+      "private_database_after_sha256": {
+        "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+        "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+      },
+      "fallback_hash_unchanged": true,
+      "unselected_hash_unchanged": true
+    }
+  ]
+}
