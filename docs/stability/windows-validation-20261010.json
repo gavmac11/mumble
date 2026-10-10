@@ -1,0 +1,155 @@
+{
+  "recorded_utc": "2026-10-10T20:00:12.370727+00:00",
+  "foundation_commit": "275c64053c5c20893f21d444db45f6705b6ce113",
+  "fixture_fix_commit": "c4262db21ac282460288e976630b1cd2d82b5426",
+  "fix_branch": "codex/stability-windows-fixture-fix",
+  "foundation_modified_or_pushed": false,
+  "os": {
+    "name": "Windows 10 Pro",
+    "version": "10.0.19045",
+    "build": 19045,
+    "architecture": "x64",
+    "windows_11_qualified": false
+  },
+  "dependencies": {
+    "compiler": "MSVC 19.51.36257.0 / VS 2026 Build Tools",
+    "qt": "6.10.0 static (dependency build: MSVC 2022)",
+    "openssl": "3.6.1",
+    "ffmpeg": "8.1 shared",
+    "vcpkg_triplet": "x64-windows-static-md",
+    "vcpkg_environment": "2026-02 / b1fe4a4257",
+    "environment_archive_sha256": "1bad50d8a5b6c31ac6665dc25f68ca234a4fd913b9db6e33dfe4dde4c8abc6ac",
+    "ffmpeg_archive_sha256": "e184e012ca9a3527ed45d61f8e250c50b07b8661d90849820ea754239049efb4"
+  },
+  "local_build": {
+    "configuration": "Release with symbols, Ninja, unity build, LTO off",
+    "client": true,
+    "server": true,
+    "tests": true,
+    "translations": false,
+    "ice": false,
+    "overlay": false,
+    "plugins": false,
+    "mysql_tests": false,
+    "postgresql_tests": false,
+    "sqlite_tests": true,
+    "packaging": false,
+    "source_when_built": "275c64053c5c20893f21d444db45f6705b6ce113",
+    "client_sha256": "b6a5a7f25705d4fc966dbe24e9eaa67e5cea7be4b9d814b5e4447e188026e92a",
+    "server_sha256": "644c439cf03f78a54565bedef5d6af4afbbbbd3767c658e9c6defc827504978c",
+    "fixture_fixed_test_sha256": "e80be0d5830e527b522f7b2dcb93d1a73efefbecaeb38b8e47af4ae1e3dd9e37"
+  },
+  "preview_package": {
+    "run_id": 38079970499,
+    "url": "https://github.com/gavmac11/mumble/actions/runs/38079970499",
+    "artifact": "Mumble-Windows-x64",
+    "artifact_id": 11680383338,
+    "version": "1.7.59",
+    "sha256": "d065454bcace0fcc323f94b49c135c7d3a7b61f4edaa27996dca265709ad0091",
+    "published_checksum_matches": true,
+    "signature": "NotSigned",
+    "extracted_client_sha256": "89e52520b1590839e71b18429185c81c5008f430bbdd1676480a863d3319a873",
+    "deployment": "Burn layout and MSI administrative extraction into isolated test directory; existing installation preserved",
+    "normal_installer_upgrade_tested": false
+  },
+  "checks": [
+    {
+      "name": "Preview Windows CTest",
+      "source": "foundation",
+      "passed_enabled_suites": 30,
+      "failed_suites": 0,
+      "disabled_suites": 1,
+      "note": "OverlayTest disabled; server-dependent E2E omitted"
+    },
+    {
+      "name": "Local full CTest with QT_QPA_PLATFORM=offscreen",
+      "source": "foundation",
+      "passed_enabled_suites": 34,
+      "failed_suites": [
+        "TestFileTransferE2E"
+      ],
+      "disabled_suites": 1,
+      "e2e_failure_seconds": 62.06,
+      "cause": "Child static Windows server inherits offscreen platform selection but imports only windows plugin; observed native Qt startup-error dialog. Test exited naturally before transfer."
+    },
+    {
+      "name": "Local E2E with QT_QPA_PLATFORM unset",
+      "source": "foundation, unmodified binary",
+      "passed_suites": 1,
+      "seconds": 9.16
+    },
+    {
+      "name": "Local E2E with QT_QPA_PLATFORM=offscreen",
+      "source": "fixture fix c4262db21",
+      "passed_suites": 1,
+      "seconds": 9.7
+    },
+    {
+      "name": "QtTest internal file output",
+      "source": "fixture fix c4262db21",
+      "passed_cases": 5,
+      "failed_cases": 0,
+      "skipped_cases": 0,
+      "seconds": 8.866,
+      "cases": [
+        "initTestCase",
+        "endToEndTransfer",
+        "endToEndPasswordTransfer",
+        "capabilityGating",
+        "cleanupTestCase"
+      ],
+      "scope": "Owned local TLS/protobuf server relay, real engines, file contents verified by the test. Dialog/trust actions supplied directly by harness; no GUI claim."
+    },
+    {
+      "name": "General Windows CI",
+      "run_id": 38079970506,
+      "url": "https://github.com/gavmac11/mumble/actions/runs/38079970506",
+      "source": "foundation",
+      "status": "failure",
+      "failed_suite": "TestFileTransferE2E",
+      "e2e_failure_seconds": 60.43,
+      "passed_enabled_suites": 34,
+      "disabled_suites": 1,
+      "diagnosis": "Matches locally reproduced startup failure in test and timing; CI stdout itself lacks Qt internal output."
+    },
+    {
+      "name": "AnimatedImages and ChatWebM runtime path change",
+      "source": "foundation",
+      "result": "Both pass locally and in preview; resolved CTest properties prepend client and FFmpeg runtime directories from each test-owning CMake directory."
+    },
+    {
+      "name": "Packaged native startup",
+      "result": "Two isolated packaged clients reached Mumble main windows, responded, and initialized WASAPI. Mute/deaf enabled; no voice transmission, audio recordings, personal profile copies or customer server connections."
+    }
+  ],
+  "unverified": [
+    "GUI plain and password receiving / Download / saved-file correctness",
+    "GUI identity decline and retry",
+    "GUI trust prompt, transfer cards and recipients across reconnect/channel changes",
+    "Screen enumeration and capture of owned synthetic window",
+    "Audio enumeration through GUI and capture from owned synthetic source",
+    "Actual Windows chat WebM playback (feature currently excluded on Windows; suite tests embedding, budget and invalid data)",
+    "Endurance and resource/leak qualification",
+    "Normal installer upgrade/uninstall and release signing",
+    "Windows 11 acceptance"
+  ],
+  "gui_blocker": "Sky window capture repeatedly timed out, including after fresh window selection and fully initialized client startup; coordinate input geometry unavailable; keyboard Tab did not produce a focused-element change. User desktop availability question pending; planning chat will coordinate usable unlocked session.",
+  "private_evidence_retained_locally": [
+    "configure.log",
+    "build.log",
+    "local-ctest.xml",
+    "local-ctest.log",
+    "e2e-native-exact-head.xml",
+    "e2e-offscreen-fixed.xml",
+    "e2e-fixed-qtest.txt",
+    "e2e-fixed-qtest.xml",
+    "ctest-inventory.json",
+    "general-ci-windows-failure.log",
+    "preview-tests/",
+    "general-ci-tests/",
+    "package-layout.log",
+    "package-extract.log",
+    "runtime-observations.txt"
+  ],
+  "preservation": "Earlier diagnostics worktree, original checkout, personal Mumble profile and installed client preserved. Lab uses disposable profiles, identities, test credentials and loopback-only server; credentials stay outside Git."
+}

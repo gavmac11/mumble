@@ -992,6 +992,7 @@ if(screen-sharing)
 		)
 
 		file(GLOB FFMPEG_RUNTIME_LIBRARIES CONFIGURE_DEPENDS "${FFMPEG_DIR}/bin/*.dll")
+		set_property(TARGET mumble_client_object_lib PROPERTY MUMBLE_FFMPEG_RUNTIME_DIRECTORY "${FFMPEG_DIR}/bin")
 		if(NOT FFMPEG_RUNTIME_LIBRARIES)
 			message(FATAL_ERROR "No FFmpeg runtime libraries found in ${FFMPEG_DIR}/bin")
 		endif()

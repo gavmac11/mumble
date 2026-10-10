@@ -9,3 +9,5 @@ target_include_directories(TestFileTransferManager PRIVATE "${CMAKE_SOURCE_DIR}/
 target_link_libraries(TestFileTransferManager PRIVATE mumble_client_object_lib Qt6::Test)
 add_test(NAME TestFileTransferManager COMMAND $<TARGET_FILE:TestFileTransferManager>)
 set_tests_properties(TestFileTransferManager PROPERTIES TIMEOUT 30 WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
+
+mumble_client_test_runtime(TestFileTransferManager)
