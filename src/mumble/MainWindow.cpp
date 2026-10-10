@@ -93,6 +93,7 @@
 #include <QAccessible>
 #include <QtCore/QDir>
 #include <QtCore/QMimeDatabase>
+#include <QtCore/QPointer>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QUrlQuery>
 #include <QtGui/QClipboard>
@@ -4857,6 +4858,7 @@ void MainWindow::onFileCardClicked(const QByteArray &transferId) {
 		return;
 	}
 	const PQFT::FTTransferInfo info = it.value();
+	const quint64 generation        = manager->connectionGeneration();
 
 	switch (info.state) {
 		case PQFT::FTTransferInfo::State::Ready: {
@@ -4865,32 +4867,30 @@ void MainWindow::onFileCardClicked(const QByteArray &transferId) {
 				baseDir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
 			}
 			const QString suggested = baseDir + "/" + info.fileName;
-			QString target			 = QFileDialog::getSaveFileName(this, tr("Save file"), suggested,
-																	  QString(), nullptr,
-																	  QFileDialog::DontConfirmOverwrite);
-			if (!target.isEmpty()) {
+			QString target          = QFileDialog::getSaveFileName(this, tr("Save file"), suggested, QString(), nullptr,
+																   QFileDialog::DontConfirmOverwrite);
+			if (!target.isEmpty() && generation == manager->connectionGeneration()) {
 				Global::get().s.qsFTDownloadDir = QFileInfo(target).absolutePath();
 				manager->saveTransferAs(transferId, target);
 			}
 			break;
 		}
 		case PQFT::FTTransferInfo::State::WaitingPassword: {
-			bool ok		  = false;
-			const QString pw = QInputDialog::getText(
-				this, tr("Password required"),
-				tr("Enter the password to decrypt \"%1\":").arg(info.fileName.toHtmlEscaped()),
-				QLineEdit::Password, QString(), &ok);
-			if (ok && !pw.isEmpty()) {
+			bool ok = false;
+			const QString pw =
+				QInputDialog::getText(this, tr("Password required"),
+									  tr("Enter the password to decrypt \"%1\":").arg(info.fileName.toHtmlEscaped()),
+									  QLineEdit::Password, QString(), &ok);
+			if (ok && !pw.isEmpty() && generation == manager->connectionGeneration()) {
 				manager->providePassword(transferId, pw.toUtf8());
 			}
 			break;
 		}
 		case PQFT::FTTransferInfo::State::Handshaking:
 		case PQFT::FTTransferInfo::State::Transferring: {
-			const auto button = QMessageBox::question(
-				this, tr("Cancel transfer?"), tr("Cancel this file transfer?"),
-				QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-			if (button == QMessageBox::Yes) {
+			const auto button = QMessageBox::question(this, tr("Cancel transfer?"), tr("Cancel this file transfer?"),
+													  QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+			if (button == QMessageBox::Yes && generation == manager->connectionGeneration()) {
 				manager->abortTransfer(transferId);
 			}
 			break;
@@ -4902,14 +4902,16 @@ void MainWindow::onFileCardClicked(const QByteArray &transferId) {
 
 void MainWindow::onFileFirstContact(unsigned int peerSession, const QByteArray &peerFingerprint,
 									const QString &safetyNumber) {
-	Q_UNUSED(peerFingerprint);
-
 	auto *manager = Global::get().fileTransferManager;
 	if (!manager) {
 		return;
 	}
-	const ClientUser *user = ClientUser::get(peerSession);
-	const QString name	  = user ? user->qsName : tr("Unknown user");
+	const QPointer< ClientUser > user = ClientUser::get(peerSession);
+	if (!user) {
+		return;
+	}
+	const QString name       = user->qsName;
+	const quint64 generation = manager->connectionGeneration();
 
 	QByteArray qrPayload;
 	if (manager->identity() && manager->identity()->isUnlocked()) {
@@ -4918,6 +4920,11 @@ void MainWindow::onFileFirstContact(unsigned int peerSession, const QByteArray &
 
 	SafetyNumberDialog dialog(name, safetyNumber, qrPayload, this);
 	const bool verified = (dialog.exec() == QDialog::Accepted) && dialog.verified();
+	// Modal dialogs process disconnects and user-list changes. Never apply
+	// their result to a replacement connection or a reused session number.
+	if (generation != manager->connectionGeneration() || !user || ClientUser::get(peerSession) != user.data()) {
+		return;
+	}
 
 	if (verified) {
 		manager->pinPeer(peerSession, true);
@@ -4927,11 +4934,10 @@ void MainWindow::onFileFirstContact(unsigned int peerSession, const QByteArray &
 
 void MainWindow::onFilePeerBlocked(unsigned int peerSession, const QString &peerName) {
 	Q_UNUSED(peerSession);
-	Global::get().l->log(
-		Log::CriticalError,
-		tr("Blocked a file transfer from %1: their file-transfer identity has CHANGED. Contact them "
-		   "through a channel you trust and re-verify before accepting files again.")
-			.arg(peerName.toHtmlEscaped()));
+	Global::get().l->log(Log::CriticalError,
+						 tr("Blocked a file transfer from %1: their file-transfer identity has CHANGED. Contact them "
+							"through a channel you trust and re-verify before accepting files again.")
+							 .arg(peerName.toHtmlEscaped()));
 }
 
 void MainWindow::onFilePasswordRequired(const QByteArray &transferId, const QString &fileName) {
@@ -4975,6 +4981,9 @@ void MainWindow::startFileSend(const QString &path) {
 	}
 
 	QList< FileSendDialog::Recipient > recipients;
+	const quint64 generation = manager->connectionGeneration();
+	const int channelId      = self->cChannel->iId;
+	QHash< unsigned int, QPointer< const ClientUser > > recipientUsers;
 	for (const User *u : self->cChannel->qlUsers) {
 		const auto *user = static_cast< const ClientUser * >(u);
 		if (!user || user == self || !user->bFileTransferCapable) {
@@ -4986,6 +4995,7 @@ void MainWindow::startFileSend(const QString &path) {
 		QByteArray pinned;
 		recipient.trustState = static_cast< int >(manager->trustStateFor(user->uiSession, pinned));
 		recipients.append(recipient);
+		recipientUsers.insert(user->uiSession, user);
 	}
 	if (recipients.isEmpty()) {
 		QMessageBox::information(this, tr("File transfer"),
@@ -5000,6 +5010,22 @@ void MainWindow::startFileSend(const QString &path) {
 	}
 	const QList< unsigned int > sessions = dialog.selectedSessions();
 	if (sessions.isEmpty()) {
+		return;
+	}
+	self = ClientUser::get(Global::get().uiSession);
+	bool recipientsChanged =
+		generation != manager->connectionGeneration() || !self || !self->cChannel || self->cChannel->iId != channelId;
+	for (unsigned int session : sessions) {
+		const QPointer< const ClientUser > user = recipientUsers.value(session);
+		if (!user || ClientUser::get(session) != user.data() || !user->bFileTransferCapable || !self
+			|| user->cChannel != self->cChannel) {
+			recipientsChanged = true;
+		}
+	}
+	if (recipientsChanged) {
+		QMessageBox::information(
+			this, tr("File transfer"),
+			tr("The connection, channel or recipients changed. Choose the file and recipients again."));
 		return;
 	}
 
