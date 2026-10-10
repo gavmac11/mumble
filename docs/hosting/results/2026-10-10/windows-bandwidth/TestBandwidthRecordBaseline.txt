@@ -1,0 +1,27 @@
+********* Start testing of TestBandwidthRecord *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestBandwidthRecord::initTestCase()
+FAIL!  : TestBandwidthRecord::fileChunksRetireTheirEntireByteCharge() Compared values are not the same
+   Actual   (static_cast< qint64 >(record.iSum)): 378548176
+   Expected (expected)                          : 377499600
+<baseline-comparison>/TestBandwidthRecord.cpp(31) : failure location
+FAIL!  : TestBandwidthRecord::rejectsExcessAtTheWindowsMultiplicationBoundary() '!record.addFrame(3000, 1)' returned FALSE. ()
+<baseline-comparison>/TestBandwidthRecord.cpp(39) : failure location
+FAIL!  : TestBandwidthRecord::longIdleSlotStillEnforcesTheConfiguredRate() '!record.addFrame(3 * 1024 * 1024, 1000)' returned FALSE. ()
+<baseline-comparison>/TestBandwidthRecord.cpp(47) : failure location
+FAIL!  : TestBandwidthRecord::maximumWidthChargesDoNotOverflowTheRollingSum() Compared values are not the same
+   Actual   (static_cast< qint64 >(record.iSum)): -2
+   Expected (expected)                          : 4294967294
+<baseline-comparison>/TestBandwidthRecord.cpp(58) : failure location
+FAIL!  : TestBandwidthRecord::displayedBandwidthClampsInsteadOfWrapping() Compared values are not the same
+   Actual   (record.bandwidth())               : 393210
+   Expected (std::numeric_limits< int >::max()): 2147483647
+<baseline-comparison>/TestBandwidthRecord.cpp(71) : failure location
+PASS   : TestBandwidthRecord::voiceSizedChargesKeepTheirExistingBehavior()
+FAIL!  : TestBandwidthRecord::refusedChargeDoesNotAdvanceOrOverwriteAcceptedState() '!record.addFrame(1024 * 1024, 1000)' returned FALSE. ()
+<baseline-comparison>/TestBandwidthRecord.cpp(91) : failure location
+FAIL!  : TestBandwidthRecord::invalidChargesCannotReduceOrBypassTheBudget() '!record.addFrame(-1, 1000)' returned FALSE. ()
+<baseline-comparison>/TestBandwidthRecord.cpp(99) : failure location
+PASS   : TestBandwidthRecord::cleanupTestCase()
+Totals: 3 passed, 7 failed, 0 skipped, 0 blacklisted, 127ms
+********* Finished testing of TestBandwidthRecord *********

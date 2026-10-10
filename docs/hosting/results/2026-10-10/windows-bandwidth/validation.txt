@@ -1,0 +1,13 @@
+Windows bandwidth validation: 3c5b5ea3997e94c2292f1c52aaca2dea328a92ab
+Production source: 7c7d4578e5073d6262e8dea6069c01d4f7ebb128
+Windows 10 Pro 10.0.19045 x64; MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022).
+Release, C++20, dynamic MSVC runtime, strict /W4 /WX checks, no warning relaxation on bandwidth/server/test sources.
+sizeof(long)=4, sizeof(qint64)=8, sizeof(int)=4, sizeof(void*)=8.
+Corrected TestBandwidthRecord and mumble-server built successfully.
+Corrected component: 10 QtTest cases passed (8 behavior cases plus initialization/cleanup), 0 failed, 0 skipped; 0.260s.
+CTest: 1 suite passed; 0.418374s.
+Original foundation 59eb5be1fc116630afd1bdd4501d07dc8cd60bdf declaration/methods extracted byte-for-byte; identical test and Timer code.
+Original component compiled with the same strict warning policy: 3 QtTest cases passed, 7 failed, 0 skipped; 0.127s; exit code 7.
+The original implementation failed both Windows long-width rate boundary checks; the voice-sized behavior case passed.
+No Windows sanitizer, relay/integration, full-suite, GUI, packaging/signing or Windows 11 result is claimed.
+Production source remained clean. Original CTest registration was restored. Complete originals are retained privately.

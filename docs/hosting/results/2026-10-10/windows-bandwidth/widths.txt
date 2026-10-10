@@ -1,0 +1,4 @@
+sizeof(long)=4
+sizeof(qint64)=8
+sizeof(int)=4
+sizeof(void*)=8

@@ -75,6 +75,7 @@ if(server)
 endif()
 
 # Shared tests
+add_subdirectory("TestBandwidthRecord")
 add_subdirectory("TestCaseInsensitiveQString")
 add_subdirectory("TestCryptographicHash")
 add_subdirectory("TestCryptographicRandom")
