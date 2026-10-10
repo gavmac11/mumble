@@ -44,10 +44,12 @@ Remote CI for the earlier `63dd192a78ae721c21299b28f394b66bfaa7c30e` foundation 
 | S4 media budget/diagnostics | Not started in this branch | Measured bounded profile, visible refusal/counters, slow TCP receivers, file fan-out and mixed legacy clients. |
 | S5 native packaging/quality | Unrun | Signed Windows and notarized macOS candidates; clean supported OS/session acceptance; two-hour mixed GUI session, 100 cycles and 48-hour endurance. |
 | D1 deployment | Next parallel workstream | Pinned, verified, idempotent deployment on a fresh supported guest; external readiness and reboot recovery. |
-| D2 state recovery | Unrun | Consistent encrypted DB/config/TLS-state export; restore accounts/ACLs/bans/identity into a fresh guest; timed rollback across the supported schema boundary. |
+| D2 state recovery | Current-schema private restore/reimage passed | Historical schema/version migration and timed pre-upgrade rollback; interruption/resume, key-loss and off-guest retention drills. See the recovery rehearsal and its exact-package evidence. |
 | P0 friendly preview | Not recruited | 3–5 consenting communities after preview entry gates; measured support minutes, video/file traffic and egress before supply investment. |
 | H1 guest lifecycle | Unrun | Persistent shared-IP TCP/UDP/SSH allocation, external VM limits, root-tenant reimage/credential reset and billing reconciliation. |
 | H2 supply/density | Unrun | Written current terms and complete costs; physical-host multi-VM correlated load, noisy-neighbor isolation and headroom. Existing single-VM relay measurements are insufficient. |
 | P1 paid pilot / P2 launch | Unrun | Qualified gates first; 30-day paid cohort and measured contribution/support/refunds before public one-click launch. |
 
 The [release acceptance record](release-acceptance-record.md) remains unfilled. Do not convert automated build/test passes into native GUI or commercial acceptance.
+
+The separate [state recovery rehearsal](guest-state-recovery-rehearsal.md) adds encrypted managed-state export and fresh-guest recovery. Actual protocol checks recovered certificate registration, room/group/ACL behavior, certificate bans, credentials and TLS identity, then passed after reboot. A blank-disk replacement on the existing nested KVM host reached external state readiness at 211.098 seconds and TCP/encrypted UDP readiness by 220.737 seconds, including boot/package downloads. The exact package remains the prior D1 pin; these results do not qualify later foundation heads, provider provisioning or historical schema rollback. Thirty-seven focused Python checks pass without skips.

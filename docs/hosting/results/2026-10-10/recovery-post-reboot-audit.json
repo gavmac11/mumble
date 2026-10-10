@@ -1,0 +1,1 @@
+{"managed_files_match": true, "managed_files_checked": 7, "database_integrity_ok": true, "database_schema": 11, "boot_id_changed": true, "server_active": true, "firewall_active": true, "operator_identity_removed": true, "package_version": "1.7.56~master+git984d6674", "modes": {"sqlite": "0o600", "tls_key": "0o640", "credentials": "0o600"}}
