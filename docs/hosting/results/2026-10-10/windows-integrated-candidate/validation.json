@@ -1,0 +1,1114 @@
+{
+  "recorded_utc": "2026-10-11T00:07:53.330183+00:00",
+  "source_commit": "901014211cf1c8742fc50e1fc814c1c8e4878d6f",
+  "source_branch": "codex/stability-integrated-candidate",
+  "pull_request": "https://github.com/gavmac11/mumble/pull/40",
+  "candidate_commit": "901014211cf1c8742fc50e1fc814c1c8e4878d6f",
+  "source_tree_clean_before_evidence": true,
+  "source_blob_sha256": {
+    "src/mumble/Database.cpp": "b9db2983728427d8f70a3e4691efc74c7487b8a6ba6665acfa7f2bcc4af684c0",
+    "src/mumble/Global.cpp": "7b54f0e197fbf26b1627d26ea6e7c8e3f5754bb2385ce166bc6dfb8e43963163",
+    "src/Connection.cpp": "fb1a7b04a908591eb09a40f18963339ef2941cd9a656bdd08ee7c211f2f118db",
+    "src/murmur/Server.cpp": "347ea6d5465e1de845405de721ce7fc299c007c9c89dc65d4009951de07eef83",
+    "src/murmur/BandwidthRecord.h": "776c522296ab4959225cdfaf48b9bcacc7490371fd68ff8bea9a40d74cd936b4",
+    "src/murmur/BandwidthRecord.cpp": "79e34172352efa4fc61f4fe47dcb27705d1e040277db902778864f779223c9cf",
+    "src/Logger.cpp": "bdc1cc6e73183b546701fd8a5752cd2a9575086e01ece68430ce04d0727ee6eb",
+    "src/Logger.h": "69b2971d5caa58d0eaffa4ff1020661c74f05835ae6670abd208466c2cc984e0",
+    "src/mumble/main.cpp": "0d1a8a07070ace3aef83a6546e5f2b9af39ee25fbb6061810e5c05c2e9326fc6",
+    "src/mumble/CustomElements.cpp": "d8aa62363b1a9a784cba91a97dd4c73a1cafa12c001aa69e188c14bb68f9e99c",
+    "src/mumble/MainWindow.cpp": "9b8147678299761c9f5f39b4e4cb14fb1053b834e8ce10e64d8fb4f38e3d7c49",
+    "src/mumble/PQFileTransfer/engine/FileTransferManager.cpp": "29c9d56323cc37c740cf71fb0b9976b2f86726cab2aad52926f90cf36a31f5ad",
+    "src/mumble/PQFileTransfer/crypto/Merkle.cpp": "99b3ceda91baaadd2e9506579684d01933dadc998669b5b4f0d938fb2a6f8676",
+    "src/mumble/PQFileTransfer/engine/FileTransferEngine.cpp": "146dab5a3986768d255d6cac499b0e0b5542edc04d8fa835f3fa0806f2a58aa1",
+    "src/mumble/PQFileTransfer/identity/PeerTrustStore.cpp": "8d4527112e67eded5b53bc79e2ad7992a5368d08f00c569e91c7ec0aba29f9c3",
+    "scripts/hosting/verify_safety_qr.py": "09b5402e372abc452930ef19fb8c1f0c780f2708d1da7f4f935302fe602592e9",
+    "src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp": "6e2d1f6a3c93f551a0eadc6fb2cfaca280f760672bc77d00a7722acf216d16bf",
+    "src/tests/TestFileTransferManager/TestFileTransferManager.cpp": "3a92e2d6dc60668ac4793ab81ae102f45882244da5361118bdd3e77b0ba01714",
+    "src/tests/TestPQCrypto/TestPQCrypto.cpp": "f35d59fa8330a75bd70d1bc0001c7e77887647e83559c2b8ee74d0c74dae97dc",
+    "src/tests/TestFileTransferE2E/TestFileTransferE2E.cpp": "d33a62b58db97424e37d055018f83c4c4acf49f3606d03f1806d5d1c5f11f13e",
+    "src/tests/TestBandwidthRecord/TestBandwidthRecord.cpp": "b1e3efa529d30f0356dfd0dfa80ba26b9745779a599b67535f817a17ef1d62a5",
+    "src/tests/TestConnectionOutputQueue/TestConnectionOutputQueue.cpp": "070c0d4a67f89669a00c309ebfa60dd5487498d02e9cf8e144d259215334c9dc",
+    "src/tests/TestQtLogger/TestQtLogger.cpp": "c84796c66c92c5fb93eb9121602066dae87d94825f09094f975d4d266c3085af",
+    "src/tests/TestFileTransferUi/TestFileTransferUi.cpp": "1401ccd2bffd9c4fa5fb1303184ede4f5f41771fa9184ea38c0acc368d38ee27",
+    "src/tests/TestDatabasePath/TestDatabasePath.cpp": "8caacb8dd4ca92dea81052b5c64018fdb91262a163414fb753827db95dbc257b"
+  },
+  "os": {
+    "name": "Windows 10 Pro",
+    "version": "10.0.19045",
+    "architecture": "x64"
+  },
+  "compiler": {
+    "name": "MSVC",
+    "version": "19.51.36257.0",
+    "installation": "VS 2026 Build Tools"
+  },
+  "qt": {
+    "version": "6.10.0",
+    "linkage": "static",
+    "dependency_build_compiler": "MSVC 2022"
+  },
+  "dependencies": "vcpkg 2026-02 b1fe4a4257 / x64-windows-static-md; OpenSSL 3.6.1; FFmpeg 8.1 shared",
+  "configuration": "Release, Ninja unity build, C++20, dynamic MSVC runtime, symbols off, LTO off, strict warnings-as-errors enabled; tests/server on, packaging off",
+  "build": {
+    "targets": [
+      "mumble",
+      "mumble-server",
+      "TestFileTransferEngine",
+      "TestFileTransferManager",
+      "TestPQCrypto",
+      "TestFileTransferE2E",
+      "TestBandwidthRecord",
+      "TestConnectionOutputQueue",
+      "TestQtLogger",
+      "TestFileTransferUi",
+      "TestDatabasePath"
+    ],
+    "configure_exit_code": 0,
+    "build_exit_code": 0,
+    "source_compiler_policy": [
+      {
+        "target": "TestFileTransferEngine",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestFileTransferManager",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestPQCrypto",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestFileTransferE2E",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestBandwidthRecord",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestConnectionOutputQueue",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestQtLogger",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestFileTransferUi",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestDatabasePath",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_client_object_lib",
+        "checked_translation_units": 10,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble-server",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_server_object_lib",
+        "checked_translation_units": 3,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "shared",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      }
+    ],
+    "dependency_warning_policy": "Repository defaults retained for third-party and generated protobuf sources; -external:W0 retained for external headers. No source warning relaxation on client/logger/database or tested file-transfer translation units.",
+    "client_executable_sha256": "948a17a51589f82790880d8b861a4b1f8d45ccc53df89c6c62deec12b4f2576c",
+    "server_executable_sha256": "668ccc410ca4f5287a79bcd1e5efd926d1f8d4eba628d4d58c293598b78d2c9d",
+    "dependency_build_warning": "Existing liboqs unsupported-MSVC optimization-barrier warning retained in private full build log, with repository dependency warning policy unchanged."
+  },
+  "tests": [
+    {
+      "suite": "TestFileTransferEngine",
+      "cases": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 7.775,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferEngine",
+          "time": "0.002",
+          "result": "passed"
+        },
+        {
+          "name": "sendReceiveRoundTrip",
+          "classname": "TestFileTransferEngine",
+          "time": "0.073",
+          "result": "passed"
+        },
+        {
+          "name": "passwordRoundTrip",
+          "classname": "TestFileTransferEngine",
+          "time": "1.128",
+          "result": "passed"
+        },
+        {
+          "name": "wrongPasswordFailsClosed",
+          "classname": "TestFileTransferEngine",
+          "time": "1.110",
+          "result": "passed"
+        },
+        {
+          "name": "duplicateChunkIsFatal",
+          "classname": "TestFileTransferEngine",
+          "time": "0.124",
+          "result": "passed"
+        },
+        {
+          "name": "latePasswordSpoolsAllChunks",
+          "classname": "TestFileTransferEngine",
+          "time": "1.281",
+          "result": "passed"
+        },
+        {
+          "name": "secondTransferWhileFirstReady",
+          "classname": "TestFileTransferEngine",
+          "time": "0.251",
+          "result": "passed"
+        },
+        {
+          "name": "readyTransferDoesNotExpire",
+          "classname": "TestFileTransferEngine",
+          "time": "2.145",
+          "result": "passed"
+        },
+        {
+          "name": "firstContactPinFlags",
+          "classname": "TestFileTransferEngine",
+          "time": "0.674",
+          "result": "passed"
+        },
+        {
+          "name": "incomingAbortCleansUpSafely",
+          "classname": "TestFileTransferEngine",
+          "time": "0.010",
+          "result": "passed"
+        },
+        {
+          "name": "passwordSpoolIsBounded",
+          "classname": "TestFileTransferEngine",
+          "time": "0.662",
+          "result": "passed"
+        },
+        {
+          "name": "cancelledPromptTimerCannotRemoveReplacementHandshake(disconnect)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "cancelledPromptTimerCannotRemoveReplacementHandshake(declined-prompt)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "shutdownRemovesUnsavedPlaintext(ready-unsaved)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.123",
+          "result": "passed"
+        },
+        {
+          "name": "shutdownRemovesUnsavedPlaintext(saved-file-preserved)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.125",
+          "result": "passed"
+        },
+        {
+          "name": "unlimitedSendStopsOnWorkerInterruption",
+          "classname": "TestFileTransferEngine",
+          "time": "0.062",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferEngine",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "9e157d54fc7c7e81f1759633b23a28ee1a12e121e6c6cc09716eeb7307852e49",
+      "txt_report": "TestFileTransferEngine.txt",
+      "junit_report": "TestFileTransferEngine.xml"
+    },
+    {
+      "suite": "TestFileTransferManager",
+      "cases": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.04,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferManager",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "currentWorkerTrustPromptReachesGui",
+          "classname": "TestFileTransferManager",
+          "time": "0.009",
+          "result": "passed"
+        },
+        {
+          "name": "disconnectRejectsQueuedTrustEvents",
+          "classname": "TestFileTransferManager",
+          "time": "0.004",
+          "result": "passed"
+        },
+        {
+          "name": "reconnectAcceptsCurrentPromptForReusedSession",
+          "classname": "TestFileTransferManager",
+          "time": "0.004",
+          "result": "passed"
+        },
+        {
+          "name": "shutdownJoinsBusyWorkerBeforeDestroyingEngine",
+          "classname": "TestFileTransferManager",
+          "time": "0.018",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferManager",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "fd540289c812c70c891ca365ab8ac5110ae6d71fc5be4e928aaa06cfefb3fe1f",
+      "txt_report": "TestFileTransferManager.txt",
+      "junit_report": "TestFileTransferManager.xml"
+    },
+    {
+      "suite": "TestPQCrypto",
+      "cases": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.595,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "sha384Vector",
+          "classname": "TestPQCrypto",
+          "time": "0.002",
+          "result": "passed"
+        },
+        {
+          "name": "hmacSha384Vector",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "constantTimeCompare",
+          "classname": "TestPQCrypto",
+          "time": "0.001",
+          "result": "passed"
+        },
+        {
+          "name": "hkdfVectors",
+          "classname": "TestPQCrypto",
+          "time": "0.001",
+          "result": "passed"
+        },
+        {
+          "name": "x25519Rfc7748",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "x25519RoundTrip",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "x25519SmallOrderRejected",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "aesGcmNistVector",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "aesGcmTamperFails",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "aesGcmEmptyPlaintext",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "mlkemRoundTrip",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "mlkemBadCiphertext",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "mldsaSignVerify",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "mldsaTamperFails",
+          "classname": "TestPQCrypto",
+          "time": "0.002",
+          "result": "passed"
+        },
+        {
+          "name": "mldsaContextSeparated",
+          "classname": "TestPQCrypto",
+          "time": "0.001",
+          "result": "passed"
+        },
+        {
+          "name": "argon2Vector",
+          "classname": "TestPQCrypto",
+          "time": "0.005",
+          "result": "passed"
+        },
+        {
+          "name": "argon2Bounds",
+          "classname": "TestPQCrypto",
+          "time": "0.578",
+          "result": "passed"
+        },
+        {
+          "name": "cborEncodeVector",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "cborRejectsNonCanonical",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "cborRejectsDuplicateKeys",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "merkleVectors",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "merkleRejectsBadLeaf",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "merkleCancellation(before-input)",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "merkleCancellation(validating-digests)",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "merkleCancellation(building-leaves)",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "merkleCancellation(building-parent-level)",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "deviceHashCancellation",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "deviceHashRejectsWrongCount",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestPQCrypto",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "aa2527972180cefd731229d254a1cd6aea5578921300bedc873f1e2060a5a803",
+      "txt_report": "TestPQCrypto.txt",
+      "junit_report": "TestPQCrypto.xml"
+    },
+    {
+      "suite": "TestFileTransferE2E",
+      "cases": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 9.119,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferE2E",
+          "time": "2.134",
+          "result": "passed"
+        },
+        {
+          "name": "endToEndTransfer",
+          "classname": "TestFileTransferE2E",
+          "time": "2.170",
+          "result": "passed"
+        },
+        {
+          "name": "endToEndPasswordTransfer",
+          "classname": "TestFileTransferE2E",
+          "time": "2.864",
+          "result": "passed"
+        },
+        {
+          "name": "capabilityGating",
+          "classname": "TestFileTransferE2E",
+          "time": "1.798",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferE2E",
+          "time": "0.149",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "345059c661548da73f24fb223a32602ac9638590d51646a4839f1301fa1dc1fb",
+      "txt_report": "TestFileTransferE2E.txt",
+      "junit_report": "TestFileTransferE2E.xml"
+    },
+    {
+      "suite": "TestBandwidthRecord",
+      "cases": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.271,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestBandwidthRecord",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "fileChunksRetireTheirEntireByteCharge",
+          "classname": "TestBandwidthRecord",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "rejectsExcessAtTheWindowsMultiplicationBoundary",
+          "classname": "TestBandwidthRecord",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "longIdleSlotStillEnforcesTheConfiguredRate",
+          "classname": "TestBandwidthRecord",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "maximumWidthChargesDoNotOverflowTheRollingSum",
+          "classname": "TestBandwidthRecord",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "displayedBandwidthClampsInsteadOfWrapping",
+          "classname": "TestBandwidthRecord",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "voiceSizedChargesKeepTheirExistingBehavior",
+          "classname": "TestBandwidthRecord",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "refusedChargeDoesNotAdvanceOrOverwriteAcceptedState",
+          "classname": "TestBandwidthRecord",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "invalidChargesCannotReduceOrBypassTheBudget",
+          "classname": "TestBandwidthRecord",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestBandwidthRecord",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "57d8716248ae76a683ff157059702b20496ae9f6c2bcea434e3d5e7822b6db92",
+      "txt_report": "TestBandwidthRecord.txt",
+      "junit_report": "TestBandwidthRecord.xml"
+    },
+    {
+      "suite": "TestConnectionOutputQueue",
+      "cases": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.13,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "admitsExactBoundary",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.033",
+          "result": "passed"
+        },
+        {
+          "name": "admitsLargestProtocolFrame",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.016",
+          "result": "passed"
+        },
+        {
+          "name": "disconnectedSocketDoesNotWrite",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "refusesFurtherWritesBeforeDeferredClose",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.015",
+          "result": "passed"
+        },
+        {
+          "name": "unboundedDefault",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.015",
+          "result": "passed"
+        },
+        {
+          "name": "emptyWriteDoesNotDisconnect",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.016",
+          "result": "passed"
+        },
+        {
+          "name": "largeQueueDoesNotOverflow",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.015",
+          "result": "passed"
+        },
+        {
+          "name": "destroyingConnectionCancelsDeferredClose",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.016",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestConnectionOutputQueue",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "d931a925f409f752ffe4fa539168b7629466cd37f339020f5aad98ba33f710c8",
+      "txt_report": "TestConnectionOutputQueue.txt",
+      "junit_report": "TestConnectionOutputQueue.xml"
+    },
+    {
+      "suite": "TestQtLogger",
+      "cases": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.309,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestQtLogger",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "lateQtLog(prior-handler)",
+          "classname": "TestQtLogger",
+          "time": "0.446",
+          "result": "passed"
+        },
+        {
+          "name": "lateQtLog(repeated-init)",
+          "classname": "TestQtLogger",
+          "time": "0.489",
+          "result": "passed"
+        },
+        {
+          "name": "lateQtLog(later-handler-owner)",
+          "classname": "TestQtLogger",
+          "time": "0.370",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestQtLogger",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "07419a8864ea9b028dc7c73a9d06964528a550cc446ae56693519277d56c28af",
+      "txt_report": "TestQtLogger.txt",
+      "junit_report": "TestQtLogger.xml"
+    },
+    {
+      "suite": "TestFileTransferUi",
+      "cases": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.017,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "qrContrast(light)",
+          "classname": "TestFileTransferUi",
+          "time": "0.007",
+          "result": "passed"
+        },
+        {
+          "name": "qrContrast(dark)",
+          "classname": "TestFileTransferUi",
+          "time": "0.005",
+          "result": "passed"
+        },
+        {
+          "name": "fileActionByKeyboard",
+          "classname": "TestFileTransferUi",
+          "time": "0.002",
+          "result": "passed"
+        },
+        {
+          "name": "invalidActionUrls",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "unrelatedDataIsNotAFileAction",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "e6c90bff31cb2fedfce6455f1123a33b9c25c347d8a279ffbc5e06fcb9d0b2e3",
+      "txt_report": "TestFileTransferUi.txt",
+      "junit_report": "TestFileTransferUi.xml"
+    },
+    {
+      "suite": "TestDatabasePath",
+      "cases": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.961,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestDatabasePath",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "explicitFileAndDefault(explicit-existing-file)",
+          "classname": "TestDatabasePath",
+          "time": "0.669",
+          "result": "passed"
+        },
+        {
+          "name": "explicitFileAndDefault(unconfigured-default)",
+          "classname": "TestDatabasePath",
+          "time": "0.698",
+          "result": "passed"
+        },
+        {
+          "name": "configuredDirectoryCannotFallBack",
+          "classname": "TestDatabasePath",
+          "time": "0.591",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestDatabasePath",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "e2346bfae7bc687c4e6d105f4fec8d46f6f95fd98621f557dec789247c5b833d",
+      "txt_report": "TestDatabasePath.txt",
+      "junit_report": "TestDatabasePath.xml"
+    }
+  ],
+  "ctest": {
+    "suites": 9,
+    "failures": 0,
+    "wall_seconds": 17.41,
+    "case_seconds": {
+      "TestDatabasePath": 2.87177,
+      "TestFileTransferUi": 0.927664,
+      "TestFileTransferManager": 0.940967,
+      "TestPQCrypto": 1.42425,
+      "TestFileTransferEngine": 8.56913,
+      "TestFileTransferE2E": 9.92959,
+      "TestQtLogger": 1.69436,
+      "TestBandwidthRecord": 0.437574,
+      "TestConnectionOutputQueue": 0.50568
+    },
+    "exit_code": 0,
+    "parallel": 2,
+    "qt_platform": "offscreen",
+    "output_capture": "Only QtTest text/JUnit -o flags temporarily appended to generated CTest registrations, restored byte-for-byte after the run. Repository implementation unchanged.",
+    "parent_qt_force_stderr_logging": false,
+    "e2e_fixture": "Owned QTemporaryDir local server and two TLS/protobuf client connections; existing Windows source fixture removes QT_QPA_PLATFORM from the child server environment."
+  },
+  "scope": [
+    "Strict native Release client/server and all nine selected combined test targets",
+    "Worker shutdown/engine interruption, stale trust events, cancelled hashing and unsaved plaintext cleanup",
+    "Real local TLS/protobuf file-transfer server relay and plain/password transfers",
+    "Bandwidth arithmetic on Windows LLP64; controlled socket output queue boundaries and deferred close",
+    "Qt logger subprocess lifetime/handler ownership checks",
+    "Offscreen file-card actions/contrast and production safety QR export",
+    "Private explicit/default database path selection and negative CrashExit/nonzero/fatal text/fallback hash checks",
+    "Independent binary QR decode in light and dark themes"
+  ],
+  "not_run": [
+    "Full native Windows 40-suite matrix",
+    "Fresh native Windows 59 hosting checks",
+    "Windows sanitizer/endurance and paused-receiver memory acceptance",
+    "Integrated client native GUI Save/download or focus/capture acceptance",
+    "Packaging/signing or Windows 11 acceptance"
+  ],
+  "preservation": "Prior private report/log hashes verified unchanged. Prior recorded compiler commands and executables preserved before explicitly requested build reuse. Original checkouts/settings/running applications retained. Test fixture uses its own server; tracked changes limited to the new evidence directory. Complete build/configure/compiler command logs and binaries remain private.",
+  "publication": {
+    "attributes": "* -text whitespace=cr-at-eol (scoped to this directory)",
+    "changes": [
+      "Anonymized XML hostnames",
+      "Replaced private CTest build path with <isolated-build-directory>",
+      "Sanitized private paths in retained runtime warnings, without changing messages, cases or outcomes.",
+      "GUI observation contains sanitized metadata only; no profiles, credentials, passphrases, databases or native screenshots published."
+    ],
+    "test_results_changed": false,
+    "hash_policy": "Published file hashes describe exact stored report bytes. Private complete logs have a separate local ledger."
+  },
+  "database_test_isolation": {
+    "settings": "Global receives an explicit private-settings path inside QTemporaryDir",
+    "fallback": "Owned pre-created mumble.sqlite containing a synthetic sentinel",
+    "test_mode": "QStandardPaths::setTestModeEnabled(true)",
+    "personal_database_used": false,
+    "negative_case": "Exact source negative child sets QT_FORCE_STDERR_LOGGING=1 before initialization; no error-dialog suppression, fatal-handler replacement, exit-status masking or warning relaxation."
+  },
+  "runtime_warnings": {
+    "suites_with_warnings": [
+      "TestFileTransferUi"
+    ],
+    "handling": "Runtime warning text retained; private build paths replaced with <isolated-build-directory>. No test failure or warning was hidden."
+  },
+  "windows_acceptance_passed": true,
+  "prior_private_hash_verification": {
+    "mumble-database-path-20261010": 52,
+    "mumble-database-path-fixed-20261010": 36,
+    "mumble-file-ui-20261010": 39,
+    "mumble-qtlogger-20261010": 29
+  },
+  "independent_qr_decode": {
+    "result": {
+      "source_revision": "901014211cf1c8742fc50e1fc814c1c8e4878d6f",
+      "passed": true,
+      "groups": {
+        "local": [
+          {
+            "theme": "light",
+            "expected_bytes": 172,
+            "decoded_bytes": 172,
+            "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+            "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+            "exact_match": true
+          },
+          {
+            "theme": "dark",
+            "expected_bytes": 172,
+            "decoded_bytes": 172,
+            "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+            "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+            "exact_match": true
+          }
+        ]
+      }
+    },
+    "runtime": "Python 3.10.4, Pillow 12.3.0, zxing-cpp 3.1.1; previously provisioned private decoder environment",
+    "fixtures": "Actual CTest TestFileTransferUi MUMBLE_QR_FIXTURE_EXPORT images and binary payload, copied byte-for-byte to private evidence",
+    "private_fixture_sha256": {
+      "dark.bin": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+      "dark.png": "91013684dd05794f842136f671efe5e2ab54711f0fad5b7cb60e8fa510ad89ec",
+      "light.bin": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+      "light.png": "91013684dd05794f842136f671efe5e2ab54711f0fad5b7cb60e8fa510ad89ec"
+    }
+  },
+  "optional_gui_check": {
+    "source_commit": "901014211cf1c8742fc50e1fc814c1c8e4878d6f",
+    "installed_client_acceptance_passed": false,
+    "attempted": "Read-only Computer Use inspection of existing owned lab receiver before any UI action.",
+    "profile_isolation": {
+      "both_clients": "Explicit private settings and database paths inside owned lab cache",
+      "server": "Owned database; configured host 127.0.0.1 port 56210",
+      "binary": "Existing separately extracted preview; not the integrated build"
+    },
+    "observed": {
+      "target": "Private receiver Stability-B",
+      "window_binding": "Successful returned unique window; accessibility observation succeeded",
+      "connection": "Not connected",
+      "focus": "File-transfer identity passphrase input",
+      "blocking_modal": "Choose a passphrase to protect your file-transfer identity key."
+    },
+    "actions_taken": [],
+    "stop_reason": "Identity authentication/security prompt blocks workspace; no bypass or identity/settings changes permitted. Keyboard Save route not reached.",
+    "limitations": [
+      "No transfer sent",
+      "No saved output verified",
+      "No integrated GUI client launched",
+      "No capture retry, application restart or personal settings change"
+    ]
+  },
+  "cmake_options": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_UNITY_BUILD": "ON",
+    "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+    "bundled-cli11": "OFF",
+    "bundled-spdlog": "OFF",
+    "client": "ON",
+    "database-mysql-tests": "OFF",
+    "database-postgresql-tests": "OFF",
+    "database-sqlite-tests": "ON",
+    "file-sharing": "ON",
+    "ice": "OFF",
+    "lto": "OFF",
+    "overlay": "OFF",
+    "packaging": "OFF",
+    "plugins": "OFF",
+    "server": "ON",
+    "static": "ON",
+    "symbols": "OFF",
+    "test-lto": "OFF",
+    "tests": "ON",
+    "translations": "OFF",
+    "warnings-as-errors": "ON"
+  }
+}

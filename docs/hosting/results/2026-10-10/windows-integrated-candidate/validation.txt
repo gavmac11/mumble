@@ -1,0 +1,17 @@
+Windows integrated candidate validation: 901014211cf1c8742fc50e1fc814c1c8e4878d6f
+MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022); Windows 10 Pro 10.0.19045 x64.
+Release/C++20; /W4 /WX /O2 /bigobj /options:strict; dynamic MSVC runtime; no source warning relaxation.
+mumble client/server and all nine selected combined test targets built successfully.
+TestFileTransferEngine: 17 cases, 0 failures, 0 errors, 0 skipped, 7.775s.
+TestFileTransferManager: 6 cases, 0 failures, 0 errors, 0 skipped, 0.040s.
+TestPQCrypto: 30 cases, 0 failures, 0 errors, 0 skipped, 0.595s.
+TestFileTransferE2E: 5 cases, 0 failures, 0 errors, 0 skipped, 9.119s.
+TestBandwidthRecord: 10 cases, 0 failures, 0 errors, 0 skipped, 0.271s.
+TestConnectionOutputQueue: 10 cases, 0 failures, 0 errors, 0 skipped, 0.130s.
+TestQtLogger: 5 cases, 0 failures, 0 errors, 0 skipped, 1.309s.
+TestFileTransferUi: 7 cases, 0 failures, 0 errors, 0 skipped, 0.017s.
+TestDatabasePath: 5 cases, 0 failures, 0 errors, 0 skipped, 1.961s.
+CTest: nine suites passed, 17.41s elapsed.
+Combined worker/engine, crypto cancellation, connected file-transfer relay, bandwidth/queue, logger, file UI and private database cases passed. Actual light/dark production QR bitmaps decoded byte-for-byte to the full 172-byte binary payload.
+Full Windows matrix/hosting suite, bulk stalled-receiver memory, sanitizer and packaging/signing were not run. Optional GUI inspection stopped at the existing private receiver identity prompt; no input or restart; installed-client acceptance remains unqualified.
+Parent stderr override unset; database negative child uses source-controlled capture. CrashExit/nonzero/fatal text/fallback-hash assertions passed. Generated CTest registrations restored; personal settings unchanged. Complete logs kept private.
