@@ -36,8 +36,24 @@
     "production_changed": false,
     "assertions_weakened": false,
     "rebuilt_mac_qt_test_cases_passed": 5,
-    "windows_confirmation": "pending",
+    "windows_confirmation": "PASS at exact 08a0fb691: strict Release client build and all 17 database/logger/UI QtTest cases",
     "superseded_general_run": 38096010719,
     "superseded_preview_run": 38096012672
+  },
+  "native_windows": {
+    "source_head": "08a0fb6913832a0820f9047cc8bc145b4a8afe62",
+    "producer_fixed": "88b762917d505392982444db7fc1488d1a8c753d",
+    "producer_control": "9366f1ef0966d8635d5b25be19264c91e9f9c63a",
+    "cases_passed": 17,
+    "failures": 0,
+    "skips": 0,
+    "fatal_exit_hex": "0xC0000409",
+    "fatal_message_captured": true,
+    "private_fallback_hash_unchanged": true,
+    "checksums_verified": {
+      "control": 22,
+      "fixed": 15
+    },
+    "limits": "Native automated/offscreen; interactive Windows Download and GUI still unverified"
   }
 }
