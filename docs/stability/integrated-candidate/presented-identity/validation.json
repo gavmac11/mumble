@@ -67,7 +67,7 @@
   "latest_correction": {
     "source_head": "9b5b8e26684d6f2481591b11653397d390d39300",
     "evidence": "revision-9b5b8e",
-    "native_windows_linux": "pending",
+    "native_windows_linux": "Full builds/all 41 enabled suites passed; Windows1,159 cases,99 committed hashes verified",
     "opus_must_fix": "none; Should work still open"
   }
 }
