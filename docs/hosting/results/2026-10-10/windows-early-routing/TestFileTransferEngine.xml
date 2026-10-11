@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestFileTransferEngine" timestamp="2026-10-10T17:44:59" hostname="windows-validation-host" tests="22" failures="0" errors="0" skipped="0" time="9.447">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestFileTransferEngine" time="0.002" />
+  <testcase name="privateReceiveStorage(plaintext)" classname="TestFileTransferEngine" time="0.075" />
+  <testcase name="privateReceiveStorage(password-spool)" classname="TestFileTransferEngine" time="0.695" />
+  <testcase name="predictableReceivePathCannotRedirectWrites" classname="TestFileTransferEngine" time="0.137" />
+  <testcase name="earlyChunksKeepTheirTransferIdentity" classname="TestFileTransferEngine" time="0.130" />
+  <testcase name="unrelatedChunksDoNotExtendPendingReceive" classname="TestFileTransferEngine" time="0.353" />
+  <testcase name="sendReceiveRoundTrip" classname="TestFileTransferEngine" time="0.135" />
+  <testcase name="passwordRoundTrip" classname="TestFileTransferEngine" time="1.182" />
+  <testcase name="wrongPasswordFailsClosed" classname="TestFileTransferEngine" time="1.167" />
+  <testcase name="duplicateChunkIsFatal" classname="TestFileTransferEngine" time="0.122" />
+  <testcase name="latePasswordSpoolsAllChunks" classname="TestFileTransferEngine" time="1.338" />
+  <testcase name="secondTransferWhileFirstReady" classname="TestFileTransferEngine" time="0.253" />
+  <testcase name="readyTransferDoesNotExpire" classname="TestFileTransferEngine" time="2.140" />
+  <testcase name="firstContactPinFlags" classname="TestFileTransferEngine" time="0.692" />
+  <testcase name="incomingAbortCleansUpSafely" classname="TestFileTransferEngine" time="0.008" />
+  <testcase name="passwordSpoolIsBounded" classname="TestFileTransferEngine" time="0.692" />
+  <testcase name="cancelledPromptTimerCannotRemoveReplacementHandshake(disconnect)" classname="TestFileTransferEngine" time="0.000" />
+  <testcase name="cancelledPromptTimerCannotRemoveReplacementHandshake(declined-prompt)" classname="TestFileTransferEngine" time="0.000" />
+  <testcase name="shutdownRemovesUnsavedPlaintext(ready-unsaved)" classname="TestFileTransferEngine" time="0.122" />
+  <testcase name="shutdownRemovesUnsavedPlaintext(saved-file-preserved)" classname="TestFileTransferEngine" time="0.128" />
+  <testcase name="unlimitedSendStopsOnWorkerInterruption" classname="TestFileTransferEngine" time="0.074" />
+  <testcase name="cleanupTestCase" classname="TestFileTransferEngine" time="0.000" />
+</testsuite>

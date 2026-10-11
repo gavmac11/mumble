@@ -1,0 +1,11 @@
+{
+  "source_commit": "991c97537fce9fac6ca39f6b82cf092ed1f60af5",
+  "prior_private_storage_source": "2059ef27a1d9aec63298b21fdd118ce80a405f70",
+  "prior_private_storage_evidence": "d008662492da2e4c5574ff55f196f122438541d9",
+  "prior_ledger_entries_verified": 32,
+  "prior_client_server_and_test_binaries": "Five binaries copied and checksum verified on E: before requested reuse",
+  "prior_compile_commands": "Copied on E: and prior private compiler-command evidence retained",
+  "new_large_c_drive_copies": false,
+  "personal_mumble_state_changes": false,
+  "gui_or_authentication_actions": false
+}
