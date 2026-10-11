@@ -99,8 +99,10 @@ bool PeerTrustStore::removePin(const QByteArray &serverDigest, const QString &us
 	return execTrustQuery(query);
 }
 
-bool PeerTrustStore::lookup(PinnedPeer &out, const QByteArray &serverDigest,
-							const QString &username) const {
+bool PeerTrustStore::lookup(PinnedPeer &out, const QByteArray &serverDigest, const QString &username,
+							bool *querySucceeded) const {
+	if (querySucceeded)
+		*querySucceeded = false;
 	QSqlQuery query(m_db);
 	if (!query.prepare(QLatin1String("SELECT `server_digest`, `username`, `peer_fingerprint`, "
 									 "`safety_number`, `first_seen`, `verified` FROM `ft_pins` "
@@ -108,7 +110,12 @@ bool PeerTrustStore::lookup(PinnedPeer &out, const QByteArray &serverDigest,
 		return false;
 	query.addBindValue(serverDigest);
 	query.addBindValue(username);
-	if (!execTrustQuery(query) || !query.next())
+	if (!execTrustQuery(query))
+		return false;
+	const bool found = query.next();
+	if (querySucceeded)
+		*querySucceeded = !query.lastError().isValid();
+	if (!found)
 		return false;
 
 	out = rowToPeer(query);

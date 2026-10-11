@@ -104,8 +104,10 @@ public:
 					   quint64 chunkCountHint, const QByteArray &data);
 
 	// ---- Outbound requests (queued from the manager) ----
-	quint64 startSend(const QString &filePath, const QString &mimeType, bool passwordMode,
-					  QByteArray password, const QSet< unsigned int > &recipients);
+	/// Recipients map sessions to immutable expected fingerprints captured before queueing.
+	/// An empty value explicitly permits first use; sending never reads the receiver pin cache.
+	quint64 startSend(const QString &filePath, const QString &mimeType, bool passwordMode, QByteArray password,
+					  const QHash< unsigned int, QByteArray > &recipients);
 	void abortTransfer(const QByteArray &transferId);
 	/// Existing targets are replaced only after explicit user confirmation.
 	/// Otherwise creation is exclusive; failed writes leave the receive retryable.

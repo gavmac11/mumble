@@ -57,10 +57,23 @@ public:
 	/// creating or unlocking the identity.
 	void pushIdentityToEngine();
 
+	struct SendRecipient {
+		unsigned int session = 0;
+		QString name;
+		QByteArray fingerprint;
+		PQFT::TrustState trust = PQFT::TrustState::NewPeer;
+		QPointer< ClientUser > user;
+		QByteArray serverDigest;
+		quint64 generation     = 0;
+		unsigned int channelId = 0;
+	};
+	std::optional< SendRecipient > sendRecipient(unsigned int session) const;
+	bool sendRecipientStillCurrent(const SendRecipient &recipient) const;
+
 	/// Queue a file for sending to `recipients` (sessions with pinned
 	/// identities). Returns false when prerequisites are missing.
 	bool startSend(const QString &filePath, const QString &mimeType, bool passwordMode, const QByteArray &password,
-				   const QList< unsigned int > &recipients);
+				   const QList< SendRecipient > &recipients);
 
 	void abortTransfer(const QByteArray &transferId);
 	void saveTransferAs(const QByteArray &transferId, const QString &targetPath, bool replaceConfirmed = false);

@@ -385,7 +385,7 @@ void TestFileTransferE2E::endToEndTransfer() {
 	const QString source = writeTestFile("e2e-payload.bin", 1536 * 1024);   // 6 chunks
 	QVERIFY(!source.isEmpty());
 	QCOMPARE(alice.engine().startSend(source, "application/octet-stream", false, QByteArray(),
-									  { bob.sessionOf("bob") }),
+									  { { bob.sessionOf("bob"), bobFp } }),
 			 1536ull * 1024);
 
 	QByteArray readyTransfer;
@@ -450,8 +450,8 @@ void TestFileTransferE2E::endToEndPasswordTransfer() {
 
 	const QString source = writeTestFile("e2e-pw-payload.bin", 512 * 1024);
 	QVERIFY(!source.isEmpty());
-	QCOMPARE(alice.engine().startSend(source, "application/octet-stream", true,
-									  QByteArray("e2e file password"), { bob.sessionOf("dave") }),
+	QCOMPARE(alice.engine().startSend(source, "application/octet-stream", true, QByteArray("e2e file password"),
+									  { { bob.sessionOf("dave"), bobFp } }),
 			 512ull * 1024);
 
 	QByteArray passwordTransfer;
@@ -535,7 +535,7 @@ void TestFileTransferE2E::capabilityGating() {
 	const QString source = writeTestFile("e2e-gate-payload.bin", 64 * 1024);
 	QVERIFY(!source.isEmpty());
 	QCOMPARE(alice.engine().startSend(source, "application/octet-stream", false, QByteArray(),
-									  { bob.sessionOf("frank") }),
+									  { { bob.sessionOf("frank"), bobFp } }),
 			 64ull * 1024);
 
 	QByteArray readyTransfer;

@@ -85,8 +85,9 @@ void FileTransferManager::setupEngineTransports() {
 	connect(
 		engine, &PQFT::FileTransferEngine::firstContact, this,
 		[this](unsigned int peerSession, const QByteArray &peerFingerprint, const QString &safetyNumberStr,
-			   const QByteArray &, bool pinOnObservation) {
-			forwardEngineEvent([this, peerSession, peerFingerprint, safetyNumberStr, pinOnObservation]() {
+			   const QByteArray &pendingTransferId, bool pinOnObservation) {
+			forwardEngineEvent([this, peerSession, peerFingerprint, safetyNumberStr, pinOnObservation,
+								pendingTransferId]() {
 				ClientUser *user        = ClientUser::get(peerSession);
 				const QByteArray digest = serverDigest();
 				auto resume             = [this, peerSession](bool accepted) {
@@ -104,6 +105,8 @@ void FileTransferManager::setupEngineTransports() {
 					}
 					const auto state = m_trustStore->check(digest, user->qsName, peerFingerprint, safetyNumberStr);
 					if (state == PQFT::TrustState::Changed) {
+						if (!pendingTransferId.isEmpty())
+							abortTransfer(pendingTransferId);
 						m_pendingFirstContact.remove(peerSession);
 						resume(false);
 						refreshPinCache();
@@ -121,6 +124,8 @@ void FileTransferManager::setupEngineTransports() {
 						// Sender-side M4 has authenticated the key; receiver-side M1 remains memory-only.
 						if (m_trustStore->checkAndPin(digest, user->qsName, peerFingerprint, safetyNumberStr)
 							== PQFT::TrustState::Changed) {
+							if (!pendingTransferId.isEmpty())
+								abortTransfer(pendingTransferId);
 							resume(false);
 							emit peerBlocked(peerSession, user->qsName);
 							return;
@@ -251,14 +256,51 @@ void FileTransferManager::pushIdentityToEngine() {
 		Qt::QueuedConnection);
 }
 
+std::optional< FileTransferManager::SendRecipient > FileTransferManager::sendRecipient(unsigned int session) const {
+	ClientUser *user        = ClientUser::get(session);
+	const ClientUser *self  = ClientUser::get(Global::get().uiSession);
+	const QByteArray digest = serverDigest();
+	if (!user || user == self || !user->bFileTransferCapable || !self || !self->cChannel
+		|| user->cChannel != self->cChannel || !m_trustStore || digest.isEmpty() || !Global::get().s.bFTEnabled)
+		return std::nullopt;
+	PQFT::PinnedPeer peer;
+	bool querySucceeded = false;
+	const bool pinned   = m_trustStore->lookup(peer, digest, user->qsName, &querySucceeded);
+	if (!querySucceeded || (pinned && peer.fingerprint.size() != PQFT::HashSize))
+		return std::nullopt;
+	SendRecipient recipient;
+	recipient.session     = session;
+	recipient.name        = user->qsName;
+	recipient.fingerprint = pinned ? peer.fingerprint : QByteArray();
+	recipient.trust =
+		pinned ? (peer.verified ? PQFT::TrustState::Verified : PQFT::TrustState::Pinned) : PQFT::TrustState::NewPeer;
+	recipient.user         = user;
+	recipient.serverDigest = digest;
+	recipient.generation   = m_connectionGeneration;
+	recipient.channelId    = self->cChannel->iId;
+	return recipient;
+}
+
+bool FileTransferManager::sendRecipientStillCurrent(const SendRecipient &recipient) const {
+	const auto current = sendRecipient(recipient.session);
+	return current && current->user == recipient.user && current->name == recipient.name
+		   && current->fingerprint == recipient.fingerprint && current->trust == recipient.trust
+		   && current->serverDigest == recipient.serverDigest && current->generation == recipient.generation
+		   && current->channelId == recipient.channelId;
+}
+
 bool FileTransferManager::startSend(const QString &filePath, const QString &mimeType, bool passwordMode,
-									const QByteArray &password, const QList< unsigned int > &recipients) {
+									const QByteArray &password, const QList< SendRecipient > &recipients) {
 	if (!hasUsableIdentity() || m_engine == nullptr || !Global::get().s.bFTEnabled) {
 		return false;
 	}
-	QSet< unsigned int > sessions;
-	for (unsigned int session : recipients) {
-		sessions.insert(session);
+	QHash< unsigned int, QByteArray > sessions;
+	if (recipients.isEmpty())
+		return false;
+	for (const SendRecipient &recipient : recipients) {
+		if (!sendRecipientStillCurrent(recipient))
+			return false;
+		sessions.insert(recipient.session, recipient.fingerprint);
 	}
 	// Queue identity and connection updates before starting work on the engine.
 	pushIdentityToEngine();

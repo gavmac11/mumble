@@ -5006,19 +5006,24 @@ void MainWindow::startFileSend(const QString &path) {
 	QList< FileSendDialog::Recipient > recipients;
 	const quint64 generation     = manager->connectionGeneration();
 	const unsigned int channelId = self->cChannel->iId;
-	QHash< unsigned int, QPointer< const ClientUser > > recipientUsers;
+	QHash< unsigned int, FileTransferManager::SendRecipient > recipientChoices;
 	for (const User *u : self->cChannel->qlUsers) {
 		const auto *user = static_cast< const ClientUser * >(u);
 		if (!user || user == self || !user->bFileTransferCapable) {
 			continue;
 		}
+		const auto choice = manager->sendRecipient(user->uiSession);
+		if (!choice) {
+			QMessageBox::information(this, tr("File transfer"),
+									 tr("Could not read the recipient identity. Try again."));
+			return;
+		}
 		FileSendDialog::Recipient recipient;
 		recipient.session = user->uiSession;
 		recipient.name    = user->qsName;
-		QByteArray pinned;
-		recipient.trustState = static_cast< int >(manager->trustStateFor(user->uiSession, pinned));
+		recipient.trustState = static_cast< int >(choice->trust);
 		recipients.append(recipient);
-		recipientUsers.insert(user->uiSession, user);
+		recipientChoices.insert(user->uiSession, *choice);
 	}
 	if (recipients.isEmpty()) {
 		QMessageBox::information(this, tr("File transfer"),
@@ -5038,11 +5043,13 @@ void MainWindow::startFileSend(const QString &path) {
 	self = ClientUser::get(Global::get().uiSession);
 	bool recipientsChanged =
 		generation != manager->connectionGeneration() || !self || !self->cChannel || self->cChannel->iId != channelId;
+	QList< FileTransferManager::SendRecipient > selected;
 	for (unsigned int session : sessions) {
-		const QPointer< const ClientUser > user = recipientUsers.value(session);
-		if (!user || ClientUser::get(session) != user.data() || !user->bFileTransferCapable || !self
-			|| user->cChannel != self->cChannel) {
+		const auto choice = recipientChoices.constFind(session);
+		if (choice == recipientChoices.constEnd() || !manager->sendRecipientStillCurrent(choice.value())) {
 			recipientsChanged = true;
+		} else {
+			selected.append(choice.value());
 		}
 	}
 	if (recipientsChanged) {
@@ -5054,7 +5061,11 @@ void MainWindow::startFileSend(const QString &path) {
 
 	const QMimeType mimeType = QMimeDatabase().mimeTypeForFile(path);
 	// The card appears via the manager's first transferUpdated signal.
-	manager->startSend(path, mimeType.name(), dialog.passwordEnabled(), dialog.password(), sessions);
+	if (!manager->startSend(path, mimeType.name(), dialog.passwordEnabled(), dialog.password(), selected)) {
+		QMessageBox::information(
+			this, tr("File transfer"),
+			tr("The recipient identity could not be confirmed. Choose the file and recipients again."));
+	}
 }
 
 void MainWindow::bootstrapFileTransferIdentity() {

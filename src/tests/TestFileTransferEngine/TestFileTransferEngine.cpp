@@ -65,6 +65,7 @@ private slots:
 	void unrelatedChunksDoNotExtendPendingReceive();
 	void sendReceiveRoundTrip();
 	void incomingIdentitySurvivesPeerRename();
+	void selectedPinSurvivesCacheRemoval();
 	void passwordRoundTrip();
 	void wrongPasswordFailsClosed();
 	void duplicateChunkIsFatal();
@@ -266,7 +267,7 @@ void TestFileTransferEngine::sendingRespectsConfiguredRate() {
 	QSignalSpy updates(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
 	const QString source = writeTestFile(fileSize);
 	elapsed.start();
-	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { { BobSession, m_bobFp } }) > 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(updates, {}, PQFT::FTTransferInfo::State::Ready), 15000);
 	QVERIFY2(violation.isEmpty(), qPrintable(violation));
 }
@@ -302,7 +303,7 @@ void TestFileTransferEngine::slowSendMakesProgress() {
 	};
 	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
 	const QString source = writeTestFile(80 * 1024);
-	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { { BobSession, m_bobFp } }) > 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready)
 								 || sawState(received, {}, PQFT::FTTransferInfo::State::Failed),
 							 5000);
@@ -331,7 +332,9 @@ void TestFileTransferEngine::frequentRefillsPreserveElapsedCredit() {
 	config.chunkSize              = 16 * 1024;
 	pair.alice.setConfig(config);
 	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
-	QVERIFY(pair.alice.startSend(writeTestFile(64 * 1024), "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(writeTestFile(64 * 1024), "application/octet-stream", false, {},
+								 { { BobSession, m_bobFp } })
+			> 0);
 	QPointer< QTimer > pacer;
 	for (QTimer *timer : pair.alice.findChildren< QTimer * >()) {
 		if (timer->isActive() && timer->interval() == 50)
@@ -352,7 +355,7 @@ void TestFileTransferEngine::saveDoesNotDeleteUnrelatedPart() {
 	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
 	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
 	const QString source = writeTestFile(64 * 1024);
-	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { { BobSession, m_bobFp } }) > 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready), 10000);
 	QByteArray id;
 	for (const auto &args : received) {
@@ -391,7 +394,7 @@ void TestFileTransferEngine::confirmedSaveReplacesAtomically() {
 	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
 	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
 	const QString source = writeTestFile(80 * 1024);
-	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { { BobSession, m_bobFp } }) > 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready), 10000);
 	const QByteArray id  = received.last().first().value< PQFT::FTTransferInfo >().transferId;
 	const QString target = m_tempDir.filePath("confirmed-target.bin");
@@ -413,7 +416,7 @@ void TestFileTransferEngine::failedSavePreservesReceiveForRetry() {
 	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
 	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
 	const QString source = writeTestFile(96 * 1024);
-	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { { BobSession, m_bobFp } }) > 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready), 10000);
 	const QByteArray id     = received.last().first().value< PQFT::FTTransferInfo >().transferId;
 	const QString directory = m_tempDir.filePath("non-file-target");
@@ -454,7 +457,7 @@ void TestFileTransferEngine::saveSyncFailureIsRetryable() {
 	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
 	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
 	const QString source = writeTestFile(80 * 1024);
-	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { { BobSession, m_bobFp } }) > 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready), 10000);
 	const QByteArray id  = received.last().first().value< PQFT::FTTransferInfo >().transferId;
 	const QString target = m_tempDir.filePath("sync-failure-" + QString::fromUtf8(QTest::currentDataTag()) + ".bin");
@@ -528,8 +531,8 @@ void TestFileTransferEngine::simultaneousSendsShareRateLimit() {
 	const QString source       = writeTestFile(64 * 1024);
 	const QString secondSource = writeTestFile(80 * 1024);
 	elapsed.start();
-	QVERIFY(pair.alice.startSend(secondSource, "application/octet-stream", false, {}, { BobSession }) > 0);
-	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(secondSource, "application/octet-stream", false, {}, { { BobSession, m_bobFp } }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { { BobSession, m_bobFp } }) > 0);
 	auto finished = [&]() {
 		QSet< QByteArray > ids;
 		for (const auto &args : sent) {
@@ -574,7 +577,8 @@ void TestFileTransferEngine::unlimitedSendYieldsToQueuedAbort() {
 			QTimer::singleShot(0, &pair.alice, [&, id]() { pair.alice.abortTransfer(id); });
 	};
 	QSignalSpy updates(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
-	QVERIFY(pair.alice.startSend(writeTestFile(64 * 16 * 1024), "application/octet-stream", false, {}, { BobSession })
+	QVERIFY(pair.alice.startSend(writeTestFile(64 * 16 * 1024), "application/octet-stream", false, {},
+								 { { BobSession, m_bobFp } })
 			> 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(updates, {}, PQFT::FTTransferInfo::State::Aborted), 10000);
 	QVERIFY(chunks > 0 && chunks < 64);
@@ -590,7 +594,9 @@ void TestFileTransferEngine::synchronousChunkAbortStaysAborted() {
 		pair.alice.abortTransfer(id);
 	};
 	QSignalSpy updates(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
-	QVERIFY(pair.alice.startSend(writeTestFile(64 * 1024), "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(writeTestFile(64 * 1024), "application/octet-stream", false, {},
+								 { { BobSession, m_bobFp } })
+			> 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(updates, {}, PQFT::FTTransferInfo::State::Aborted), 10000);
 	QVERIFY(!sawState(updates, {}, PQFT::FTTransferInfo::State::Saved));
 }
@@ -614,8 +620,8 @@ void TestFileTransferEngine::abortingAnotherJobDoesNotStopPacing() {
 	QSignalSpy sent(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
 	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
 	const QString source = writeTestFile(64 * 1024);
-	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
-	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { 3 }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { { BobSession, m_bobFp } }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { { 3, m_bobFp } }) > 0);
 	QByteArray waiting;
 	for (const auto &args : sent) {
 		const auto info = args.first().value< PQFT::FTTransferInfo >();
@@ -660,7 +666,9 @@ void TestFileTransferEngine::synchronousCompletionAbortStaysAborted() {
 			pair.bob.onDataMessage(AliceSession, id, index, count, data);
 		});
 	QSignalSpy updates(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
-	QVERIFY(pair.alice.startSend(writeTestFile(64 * 1024), "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(writeTestFile(64 * 1024), "application/octet-stream", false, {},
+								 { { BobSession, m_bobFp } })
+			> 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(updates, {}, PQFT::FTTransferInfo::State::Aborted), 10000);
 	QVERIFY(!sawState(updates, {}, PQFT::FTTransferInfo::State::Saved));
 }
@@ -693,7 +701,9 @@ void TestFileTransferEngine::pausedDeliveryDoesNotReleaseUnboundedCredit() {
 	};
 	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
 	elapsed.start();
-	QVERIFY(pair.alice.startSend(writeTestFile(4 * 1024 * 1024), "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(writeTestFile(4 * 1024 * 1024), "application/octet-stream", false, {},
+								 { { BobSession, m_bobFp } })
+			> 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready), 10000);
 	QVERIFY2(violation.isEmpty(), qPrintable(violation));
 }
@@ -727,7 +737,7 @@ void TestFileTransferEngine::privateReceiveStorage() {
 	const QString source = writeTestFile(80 * 1024);
 	QVERIFY(!source.isEmpty());
 	QVERIFY(pair.alice.startSend(source, "application/octet-stream", passwordMode,
-								 QByteArray("private fixture password"), { BobSession })
+								 QByteArray("private fixture password"), { { BobSession, m_bobFp } })
 			> 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(sent, {}, PQFT::FTTransferInfo::State::Saved), 10000);
 	QByteArray transfer;
@@ -771,7 +781,7 @@ void TestFileTransferEngine::predictableReceivePathCannotRedirectWrites() {
 	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
 	const QString source = writeTestFile(1024);
 	QVERIFY(!source.isEmpty());
-	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { { BobSession, m_bobFp } }) > 0);
 	QVERIFY(!sent.isEmpty());
 	const QByteArray transfer = sent.first().first().value< PQFT::FTTransferInfo >().transferId;
 	const QString legacy      = QDir::temp().filePath("mumble-ft/" + QString::fromLatin1(transfer.toHex()));
@@ -816,7 +826,7 @@ void TestFileTransferEngine::earlyChunksKeepTheirTransferIdentity() {
 	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
 	const QString source = writeTestFile(32 * 1024);
 	QVERIFY(!source.isEmpty());
-	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { { BobSession, m_bobFp } }) > 0);
 	const QByteArray transfer = sent.first().first().value< PQFT::FTTransferInfo >().transferId;
 	// Complete M1/M3 while deliberately withholding the manifest.
 	while (!controls.isEmpty()) {
@@ -868,6 +878,34 @@ void TestFileTransferEngine::unrelatedChunksDoNotExtendPendingReceive() {
 			 "Stray chunks kept an unfinished handshake alive");
 }
 
+void TestFileTransferEngine::selectedPinSurvivesCacheRemoval() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	auto replacement = makeIdentity();
+	pair.bob.setIdentity(replacement.publicKey,
+						 [&replacement](QByteArray &sig, const QByteArray &msg, const QByteArray &ctx) {
+							 PQFT::SigMLDSA65 impl;
+							 return impl.sign(sig, replacement.secretKey, msg, ctx);
+						 });
+	// The GUI selected the known Bob key. A user-list refresh removed the worker's cache entry.
+	pair.alice.setPinLookup([](unsigned int) { return QByteArray(); });
+	PQFT::FileTransferEngine::Config fast;
+	fast.sendRateBytesPerSecond = 0;
+	pair.alice.setConfig(fast);
+	int chunks            = 0;
+	pair.onChunkDelivered = [&](const QByteArray &, quint64, quint64, const QByteArray &) { ++chunks; };
+	QSignalSpy sent(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	QVERIFY(
+		pair.alice.startSend(writeTestFile(32768), "application/octet-stream", false, {}, { { BobSession, m_bobFp } })
+		> 0);
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(sent, {}, PQFT::FTTransferInfo::State::Failed)
+								 || sawState(received, {}, PQFT::FTTransferInfo::State::Ready),
+							 2000);
+	QCOMPARE(chunks, 0);
+	QVERIFY(sawState(sent, {}, PQFT::FTTransferInfo::State::Failed));
+	QVERIFY(!sawState(received, {}, PQFT::FTTransferInfo::State::Ready));
+}
+
 void TestFileTransferEngine::incomingIdentitySurvivesPeerRename() {
 	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
 	QString liveName = QStringLiteral("Original sender");
@@ -877,7 +915,7 @@ void TestFileTransferEngine::incomingIdentitySurvivesPeerRename() {
 	};
 	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
 	const QString source = writeTestFile(32768);
-	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { { BobSession, m_bobFp } }) > 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready), 10000);
 	PQFT::FTTransferInfo ready;
 	for (const auto &args : received) {
@@ -912,8 +950,7 @@ void TestFileTransferEngine::sendReceiveRoundTrip() {
 
 	const QString source = writeTestFile(600 * 1024 + 17);   // 3 chunks at 256 KiB
 	QVERIFY(!source.isEmpty());
-	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(),
-								  { BobSession }),
+	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(), { { BobSession, m_bobFp } }),
 			 600ull * 1024 + 17);
 
 	// Drive the event loop until Bob reports Ready
@@ -981,7 +1018,7 @@ void TestFileTransferEngine::unlimitedSendStopsOnWorkerInterruption() {
 			QThread::currentThread()->requestInterruption();
 			loop.quit();
 		};
-		startedBytes = pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession });
+		startedBytes = pair.alice.startSend(source, "application/octet-stream", false, {}, { { BobSession, m_bobFp } });
 		watchdog.start(5000);
 		loop.exec();
 	}));
@@ -1015,7 +1052,7 @@ void TestFileTransferEngine::shutdownRemovesUnsavedPlaintext() {
 		fast.sendRateBytesPerSecond = 0;
 		pair.alice.setConfig(fast);
 		QSignalSpy updates(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
-		QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+		QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { { BobSession, m_bobFp } }) > 0);
 		QTRY_VERIFY_WITH_TIMEOUT(sawState(updates, {}, PQFT::FTTransferInfo::State::Ready), 10000);
 		QByteArray transfer;
 		for (const auto &arguments : updates) {
@@ -1057,8 +1094,8 @@ void TestFileTransferEngine::passwordRoundTrip() {
 
 	const QString source = writeTestFile(300 * 1024);   // 2 chunks
 	QVERIFY(!source.isEmpty());
-	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", true,
-								  QByteArray("correct horse battery staple"), { BobSession }),
+	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", true, QByteArray("correct horse battery staple"),
+								  { { BobSession, m_bobFp } }),
 			 300ull * 1024);
 
 	// The receiver parks at WaitingPassword
@@ -1117,7 +1154,7 @@ void TestFileTransferEngine::wrongPasswordFailsClosed() {
 	const QString source = writeTestFile(64 * 1024);
 	QVERIFY(!source.isEmpty());
 	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", true, QByteArray("the right password"),
-								  { BobSession }),
+								  { { BobSession, m_bobFp } }),
 			 64ull * 1024);
 
 	QByteArray passwordTransfer;
@@ -1168,7 +1205,7 @@ void TestFileTransferEngine::duplicateChunkIsFatal() {
 
 	const QString source = writeTestFile(32 * 1024);   // two 16 KiB chunks
 	QVERIFY(!source.isEmpty());
-	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(), { BobSession }),
+	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(), { { BobSession, m_bobFp } }),
 			 32ull * 1024);
 
 	// Redeliver chunk 0 while the transfer is in flight: a misbehaving relay
@@ -1232,8 +1269,8 @@ void TestFileTransferEngine::latePasswordSpoolsAllChunks() {
 	// 13 chunks — deliberately past the old 8-entry buffer
 	const QString source = writeTestFile(200 * 1024);
 	QVERIFY(!source.isEmpty());
-	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", true,
-								  QByteArray("a late password"), { BobSession }),
+	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", true, QByteArray("a late password"),
+								  { { BobSession, m_bobFp } }),
 			 200ull * 1024);
 
 	// Let the sender run to completion BEFORE any password is provided.
@@ -1281,8 +1318,7 @@ void TestFileTransferEngine::secondTransferWhileFirstReady() {
 
 	const QString first = writeTestFile(64 * 1024);
 	QVERIFY(!first.isEmpty());
-	QCOMPARE(pair.alice.startSend(first, "application/octet-stream", false, QByteArray(),
-								  { BobSession }),
+	QCOMPARE(pair.alice.startSend(first, "application/octet-stream", false, QByteArray(), { { BobSession, m_bobFp } }),
 			 64ull * 1024);
 
 	QByteArray firstTransfer;
@@ -1303,8 +1339,7 @@ void TestFileTransferEngine::secondTransferWhileFirstReady() {
 
 	const QString second = writeTestFile(100 * 1024);
 	QVERIFY(!second.isEmpty());
-	QCOMPARE(pair.alice.startSend(second, "application/octet-stream", false, QByteArray(),
-								  { BobSession }),
+	QCOMPARE(pair.alice.startSend(second, "application/octet-stream", false, QByteArray(), { { BobSession, m_bobFp } }),
 			 100ull * 1024);
 
 	QByteArray secondTransfer;
@@ -1358,8 +1393,7 @@ void TestFileTransferEngine::readyTransferDoesNotExpire() {
 
 	const QString source = writeTestFile(64 * 1024);
 	QVERIFY(!source.isEmpty());
-	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(),
-								  { BobSession }),
+	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(), { { BobSession, m_bobFp } }),
 			 64ull * 1024);
 
 	QByteArray readyTransfer;
@@ -1415,9 +1449,9 @@ void TestFileTransferEngine::firstContactPinFlags() {
 
 		const QString source = writeTestFile(64 * 1024);
 		QVERIFY(!source.isEmpty());
-		QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(),
-									  { BobSession }),
-				 64ull * 1024);
+		QCOMPARE(
+			pair.alice.startSend(source, "application/octet-stream", false, QByteArray(), { { BobSession, m_bobFp } }),
+			64ull * 1024);
 
 		QTRY_VERIFY_WITH_TIMEOUT(bobFirstContact.count() >= 1, 10000);
 		QCOMPARE(bobFirstContact.first().at(4).toBool(), false);
@@ -1445,8 +1479,7 @@ void TestFileTransferEngine::firstContactPinFlags() {
 
 		const QString source = writeTestFile(64 * 1024);
 		QVERIFY(!source.isEmpty());
-		QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(),
-									  { BobSession }),
+		QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(), { { BobSession, {} } }),
 				 64ull * 1024);
 
 		QTRY_VERIFY_WITH_TIMEOUT(aliceFirstContact.count() >= 1, 30000);
@@ -1474,8 +1507,7 @@ void TestFileTransferEngine::incomingAbortCleansUpSafely() {
 
 	const QString source = writeTestFile(200 * 1024);
 	QVERIFY(!source.isEmpty());
-	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(),
-								  { BobSession }),
+	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", false, QByteArray(), { { BobSession, m_bobFp } }),
 			 200ull * 1024);
 
 	// Wait until the transfer is live (manifest verified, chunks trickling),
@@ -1524,8 +1556,8 @@ void TestFileTransferEngine::passwordSpoolIsBounded() {
 
 	const QString source = writeTestFile(200 * 1024);   // 204,800 bytes: 13 chunks
 	QVERIFY(!source.isEmpty());
-	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", true,
-								  QByteArray("some password"), { BobSession }),
+	QCOMPARE(pair.alice.startSend(source, "application/octet-stream", true, QByteArray("some password"),
+								  { { BobSession, m_bobFp } }),
 			 200ull * 1024);
 
 	QByteArray passwordTransfer;

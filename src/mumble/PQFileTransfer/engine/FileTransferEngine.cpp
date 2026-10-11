@@ -718,7 +718,7 @@ bool FileTransferEngine::tryCompleteReceive(std::shared_ptr< ReceiveJob > jobPtr
 // Sending
 
 quint64 FileTransferEngine::startSend(const QString &filePath, const QString &mimeType, bool passwordMode,
-									  QByteArray password, const QSet< unsigned int > &recipients) {
+									  QByteArray password, const QHash< unsigned int, QByteArray > &recipients) {
 	QFileInfo fileInfo(filePath);
 	if (shutdownRequested() || !fileInfo.exists() || !fileInfo.isFile() || !fileInfo.isReadable()
 		|| fileInfo.size() <= 0) {
@@ -780,13 +780,19 @@ quint64 FileTransferEngine::startSend(const QString &filePath, const QString &mi
 
 	// Per-recipient sessions (peers must be pinned already)
 	bool anyPeer = false;
-	for (unsigned int session : recipients) {
+	for (auto recipient = recipients.cbegin(); recipient != recipients.cend(); ++recipient) {
 		if (shutdownRequested()) {
 			cleanupSend(*job, true);
 			zeroize(password);
 			return 0;
 		}
-		const QByteArray pinned = m_pinLookup ? m_pinLookup(session) : QByteArray();
+		const unsigned int session = recipient.key();
+		const QByteArray pinned    = recipient.value();
+		if (!pinned.isEmpty() && pinned.size() != HashSize) {
+			cleanupSend(*job, true);
+			zeroize(password);
+			return 0;
+		}
 		SendPeer peer;
 		peer.session  = session;
 		peer.pinnedFingerprint = pinned;
