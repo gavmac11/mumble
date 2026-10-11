@@ -19,7 +19,7 @@
     "scope": "Current local build using experimental plugin path; not rebuilt shipping static dependency bundle"
   },
   "constraints": [
-    "Qt6.10.0 static shipping build repair implemented; hosted/native preview validation pending",
+    "Static Qt6.10.0 repaired preview survives tested native favorite insertion, actual Bonjour removal and quit; full accessibility semantics still open",
     "No full native file transfer delivery",
     "No microphone/camera capture acceptance",
     "No macOS 15/27 native desktop coverage",
@@ -46,7 +46,7 @@
     "source_head": "440c2fc01c9c36e2db7bfd312f1d17b68698465a",
     "general_run": 38094014363,
     "preview_run": 38094127750,
-    "status": "General CI: Ubuntu and both Mac architectures passed; Windows pending. Preview: all five build/test jobs passed; publication skipped.",
+    "status": "General CI: all four platform jobs passed. Preview: all five build/test jobs passed; publication skipped.",
     "previous_attempt": {
       "general_run": 38093727237,
       "preview_run": 38093728926,
