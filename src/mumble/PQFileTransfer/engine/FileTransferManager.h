@@ -22,6 +22,7 @@
 #include <QMutex>
 #include <QObject>
 #include <QPointer>
+#include <QSet>
 #include <QString>
 
 #include <functional>
@@ -128,6 +129,7 @@ private:
 	void setupEngineTransports();
 	void updateConnectionTransport();
 	void forwardEngineEvent(std::function< void() > event);
+	void rejectReceive(const PQFT::FTTransferInfo &info, PQFT::TrustState state);
 	QByteArray serverDigest() const;
 	// Private dependency seam for isolated trust-store fixtures without a network or personal database.
 	std::function< QByteArray() > m_serverDigestProvider;
@@ -160,6 +162,10 @@ private:
 	};
 	QHash< unsigned int, PendingFirstContact > m_pendingFirstContact;
 	quint64 m_nextPromptToken = 0;
+	// GUI-thread state for rechecking save requests and preserving rejection diagnostics until abort.
+	QHash< QByteArray, PQFT::FTTransferInfo > m_readyReceived;
+	QHash< QByteArray, PQFT::FTTransferInfo > m_rejectedReceived;
+	QSet< QByteArray > m_savesInFlight;
 };
 
 #endif // MUMBLE_MUMBLE_PQFILETRANSFER_ENGINE_FILETRANSFERMANAGER_H_

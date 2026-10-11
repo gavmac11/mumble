@@ -65,17 +65,41 @@ void FileTransferManager::setupEngineTransports() {
 		engine, &PQFT::FileTransferEngine::transferUpdated, this,
 		[this](const PQFT::FTTransferInfo &info) {
 			forwardEngineEvent([this, info]() {
-				if (m_trustStore && info.incoming && info.state == PQFT::FTTransferInfo::State::Ready) {
-					QByteArray pinned;
-					const auto state = trustStateForTransfer(info, pinned);
-					if (state == PQFT::TrustState::NewPeer || state == PQFT::TrustState::Changed) {
-						abortTransfer(info.transferId);
-						auto failed  = info;
-						failed.state = PQFT::FTTransferInfo::State::Failed;
-						failed.error = tr("The sender's saved identity changed. Verify the sender and try again.");
-						emit transferUpdated(failed);
-						emit peerBlocked(info.peerSession, info.peerName);
+				if (info.incoming && !info.transferId.isEmpty()) {
+					if (info.state == PQFT::FTTransferInfo::State::Ready
+						|| info.state == PQFT::FTTransferInfo::State::Saved
+						|| info.state == PQFT::FTTransferInfo::State::Failed
+						|| info.state == PQFT::FTTransferInfo::State::Aborted)
+						m_savesInFlight.remove(info.transferId);
+					const auto rejected = m_rejectedReceived.constFind(info.transferId);
+					if (rejected != m_rejectedReceived.constEnd()) {
+						if (info.state == PQFT::FTTransferInfo::State::Saved) {
+							// A save authorized before rejection may already have completed. Report it truthfully.
+							m_rejectedReceived.remove(info.transferId);
+							emit transferUpdated(info);
+							return;
+						}
+						// Worker abort is cleanup; preserve the useful trust failure on the card.
+						if (info.state == PQFT::FTTransferInfo::State::Aborted
+							|| info.state == PQFT::FTTransferInfo::State::Failed) {
+							const auto failure = rejected.value();
+							m_rejectedReceived.remove(info.transferId);
+							emit transferUpdated(failure);
+						}
 						return;
+					}
+					if (info.state == PQFT::FTTransferInfo::State::Ready) {
+						QByteArray pinned;
+						const auto state = trustStateForTransfer(info, pinned);
+						if (state != PQFT::TrustState::Pinned && state != PQFT::TrustState::Verified) {
+							rejectReceive(info, state);
+							return;
+						}
+						m_readyReceived.insert(info.transferId, info);
+					} else if (info.state == PQFT::FTTransferInfo::State::Saved
+							   || info.state == PQFT::FTTransferInfo::State::Failed
+							   || info.state == PQFT::FTTransferInfo::State::Aborted) {
+						m_readyReceived.remove(info.transferId);
 					}
 				}
 				emit transferUpdated(info);
@@ -322,8 +346,36 @@ void FileTransferManager::abortTransfer(const QByteArray &transferId) {
 		m_engine, [this, transferId]() { m_engine->abortTransfer(transferId); }, Qt::QueuedConnection);
 }
 
+void FileTransferManager::rejectReceive(const PQFT::FTTransferInfo &info, PQFT::TrustState state) {
+	auto failed  = info;
+	failed.state = PQFT::FTTransferInfo::State::Failed;
+	failed.error = state == PQFT::TrustState::Changed
+					   ? tr("The sender's saved identity changed. Verify the sender and try again.")
+					   : tr("Cannot confirm the sender's saved identity. Verify the sender and try again.");
+	m_readyReceived.remove(info.transferId);
+	m_rejectedReceived.insert(info.transferId, failed);
+	abortTransfer(info.transferId);
+	emit transferUpdated(failed);
+	if (state == PQFT::TrustState::Changed)
+		emit peerBlocked(info.peerSession, info.peerName);
+}
+
 void FileTransferManager::saveTransferAs(const QByteArray &transferId, const QString &targetPath,
 										 bool replaceConfirmed) {
+	// A second request must not overwrite the outcome of the already authorized save.
+	if (m_savesInFlight.contains(transferId))
+		return;
+	const auto ready = m_readyReceived.constFind(transferId);
+	if (ready == m_readyReceived.constEnd())
+		return;
+	const auto info = ready.value();
+	QByteArray pinned;
+	const auto state = trustStateForTransfer(info, pinned);
+	if (state != PQFT::TrustState::Pinned && state != PQFT::TrustState::Verified) {
+		rejectReceive(info, state);
+		return;
+	}
+	m_savesInFlight.insert(transferId);
 	QMetaObject::invokeMethod(
 		m_engine,
 		[this, transferId, targetPath, replaceConfirmed]() {
@@ -439,6 +491,9 @@ void FileTransferManager::disconnectCleanup() {
 			Qt::QueuedConnection);
 	}
 	m_pendingFirstContact.clear();
+	m_readyReceived.clear();
+	m_rejectedReceived.clear();
+	m_savesInFlight.clear();
 	QMutexLocker lock(&m_pinCacheMutex);
 	m_pinCache.clear();
 	m_peerNameCache.clear();

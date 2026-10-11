@@ -12,6 +12,7 @@
 #include "Global.h"
 
 #include <QElapsedTimer>
+#include <QFile>
 #include <QPointer>
 #include <QSemaphore>
 #include <QSignalSpy>
@@ -219,7 +220,7 @@ private slots:
 		const bool expectedReady = change == QLatin1String("rename") || change == QLatin1String("disconnect");
 		QCOMPARE(forwarded.state,
 				 expectedReady ? PQFT::FTTransferInfo::State::Ready : PQFT::FTTransferInfo::State::Failed);
-		QCOMPARE(blocked.size(), expectedReady ? 0 : 1);
+		QCOMPARE(blocked.size(), change == QLatin1String("changed-key") ? 1 : 0);
 		QCOMPARE(forwarded.peerName, info.peerName);
 		QCOMPARE(forwarded.peerFingerprint, info.peerFingerprint);
 	}
@@ -289,6 +290,165 @@ private slots:
 		m_trustDb.close();
 		QVERIFY(!manager.sendRecipient(42));
 		QVERIFY(!manager.sendRecipientStillCurrent(*firstUse));
+	}
+
+	void receivedFileRechecksPinBeforeSave_data() {
+		QTest::addColumn< QString >("change");
+		QTest::newRow("verified") << QStringLiteral("verified");
+		QTest::newRow("pinned") << QStringLiteral("pinned");
+		QTest::newRow("removed") << QStringLiteral("removed");
+		QTest::newRow("changed") << QStringLiteral("changed");
+		QTest::newRow("storage-unavailable") << QStringLiteral("storage-unavailable");
+		QTest::newRow("save-retry") << QStringLiteral("save-retry");
+		QTest::newRow("duplicate-save") << QStringLiteral("duplicate-save");
+		QTest::newRow("no-trust-store") << QStringLiteral("no-trust-store");
+		QTest::newRow("removed-disconnect") << QStringLiteral("removed-disconnect");
+	}
+	void receivedFileRechecksPinBeforeSave() {
+		QFETCH(QString, change);
+		PQFT::SigMLDSA65 sig;
+		QByteArray senderPublic;
+		PQFT::SecureBytes senderSecret;
+		QVERIFY(sig.keypair(senderPublic, senderSecret));
+		QSemaphore entered, release;
+		// The receiver manager joins its worker before the sender and its signing key are destroyed.
+		PQFT::FileTransferEngine sender;
+		FileTransferManager receiver;
+		QVERIFY(setupTrustFixture(receiver));
+		QVERIFY(receiver.m_identity->createIdentity(QStringLiteral("owned-manager-roundtrip-passphrase")));
+		QVERIFY(receiver.m_identity->isUnlocked());
+		const QByteArray senderFp = PQFT::identityFingerprint(senderPublic);
+		const QString name        = m_peer->qsName;
+		QCOMPARE(receiver.m_trustStore->checkAndPin(m_serverDigest, name, senderFp, "owned safety"),
+				 PQFT::TrustState::Pinned);
+		if (change != QLatin1String("pinned"))
+			QVERIFY(receiver.m_trustStore->markVerified(m_serverDigest, name, senderFp));
+		receiver.refreshPinCache();
+		receiver.pushIdentityToEngine();
+		QVERIFY(QMetaObject::invokeMethod(
+			receiver.m_engine,
+			[&]() {
+				receiver.m_engine->setTransport(
+					[&sender](unsigned int, const QByteArray &frame) {
+						QMetaObject::invokeMethod(
+							&sender, [&sender, frame]() { sender.onControlMessage(41, frame); }, Qt::QueuedConnection);
+					},
+					{});
+			},
+			Qt::BlockingQueuedConnection));
+		sender.setIdentity(senderPublic, [&sig, &senderSecret](QByteArray &signature, const QByteArray &message,
+															   const QByteArray &context) {
+			return sig.sign(signature, senderSecret, message, context);
+		});
+		sender.setTransport([&receiver](unsigned int, const QByteArray &frame) { deliverControl(receiver, frame); },
+							[&receiver](const QByteArray &id, quint64 index, quint64 count, const QByteArray &data) {
+								MumbleProto::FileData message;
+								message.set_actor(42);
+								message.set_transfer_id(id.constData(), static_cast< size_t >(id.size()));
+								message.set_chunk_index(index);
+								message.set_chunk_count(count);
+								message.set_data(data.constData(), static_cast< size_t >(data.size()));
+								receiver.handleDataMessage(message);
+							});
+		QFile input(m_directory->filePath("owned-source.bin"));
+		QVERIFY(input.open(QIODevice::WriteOnly));
+		const QByteArray bytes(32768, 's');
+		QCOMPARE(input.write(bytes), static_cast< qint64 >(bytes.size()));
+		input.close();
+		QSignalSpy updates(&receiver, &FileTransferManager::transferUpdated);
+		QVERIFY(sender.startSend(input.fileName(), "application/octet-stream", false, {},
+								 { { 41, receiver.m_identity->fingerprint() } })
+				> 0);
+		QByteArray transfer;
+		QTRY_VERIFY_WITH_TIMEOUT(
+			[&]() {
+				for (const auto &args : updates) {
+					const auto info = args.first().value< PQFT::FTTransferInfo >();
+					if (info.state == PQFT::FTTransferInfo::State::Ready) {
+						transfer = info.transferId;
+						return info.peerName == name && info.peerFingerprint == senderFp;
+					}
+				}
+				return false;
+			}(),
+			5000);
+		if (change == QLatin1String("storage-unavailable"))
+			m_trustDb.close();
+		if (change == QLatin1String("no-trust-store"))
+			receiver.m_trustStore.reset();
+		if (change == QLatin1String("removed") || change == QLatin1String("changed")
+			|| change == QLatin1String("removed-disconnect")) {
+			QVERIFY(receiver.m_trustStore->removePin(m_serverDigest, name));
+			if (change == QLatin1String("changed")) {
+				const QByteArray other = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_newM1));
+				QCOMPARE(receiver.m_trustStore->checkAndPin(m_serverDigest, name, other, "replacement"),
+						 PQFT::TrustState::Pinned);
+			}
+		}
+		updates.clear();
+		QSignalSpy blocked(&receiver, &FileTransferManager::peerBlocked);
+		QString target = m_directory->filePath("owned-saved.bin");
+		if (change == QLatin1String("save-retry")) {
+			QFile existing(target);
+			QVERIFY(existing.open(QIODevice::WriteOnly));
+			QCOMPARE(existing.write("preserve existing"), qint64(17));
+			existing.close();
+			receiver.saveTransferAs(transfer, target);
+			QTRY_VERIFY_WITH_TIMEOUT(!updates.isEmpty(), 5000);
+			const auto retry = updates.last().first().value< PQFT::FTTransferInfo >();
+			QCOMPARE(retry.state, PQFT::FTTransferInfo::State::Ready);
+			QVERIFY(!retry.error.isEmpty());
+			QVERIFY(existing.open(QIODevice::ReadOnly));
+			QCOMPARE(existing.readAll(), QByteArray("preserve existing"));
+			existing.close();
+			updates.clear();
+			target = m_directory->filePath("owned-retry.bin");
+		}
+		if (change == QLatin1String("duplicate-save")) {
+			QVERIFY(QMetaObject::invokeMethod(
+				receiver.m_engine,
+				[&]() {
+					entered.release();
+					release.tryAcquire(1, 3000);
+				},
+				Qt::QueuedConnection));
+			QVERIFY(entered.tryAcquire(1, 2000));
+		}
+		receiver.saveTransferAs(transfer, target);
+		if (change == QLatin1String("removed-disconnect"))
+			receiver.disconnectCleanup();
+		if (change == QLatin1String("duplicate-save")) {
+			const bool removed = receiver.m_trustStore->removePin(m_serverDigest, name);
+			receiver.saveTransferAs(transfer, m_directory->filePath("owned-duplicate.bin"));
+			release.release();
+			QVERIFY(removed);
+		}
+		QTRY_VERIFY_WITH_TIMEOUT(!updates.isEmpty(), 5000);
+		// Drain actual worker cleanup and GUI forwarding so Aborted cannot hide the rejection.
+		QVERIFY(QMetaObject::invokeMethod(receiver.m_engine, []() {}, Qt::BlockingQueuedConnection));
+		QCoreApplication::sendPostedEvents(&receiver, QEvent::MetaCall);
+		const bool expectedSaved = change == QLatin1String("verified") || change == QLatin1String("pinned")
+								   || change == QLatin1String("save-retry")
+								   || change == QLatin1String("duplicate-save");
+		QCOMPARE(QFile::exists(target), expectedSaved);
+		if (expectedSaved) {
+			QFile output(target);
+			QVERIFY(output.open(QIODevice::ReadOnly));
+			QCOMPARE(output.readAll(), bytes);
+			QCOMPARE(updates.last().first().value< PQFT::FTTransferInfo >().state, PQFT::FTTransferInfo::State::Saved);
+		} else {
+			const auto failed = updates.last().first().value< PQFT::FTTransferInfo >();
+			QCOMPARE(failed.state, PQFT::FTTransferInfo::State::Failed);
+			QVERIFY(!failed.error.isEmpty());
+			if (change != QLatin1String("changed"))
+				QCOMPARE(
+					failed.error,
+					QStringLiteral("Cannot confirm the sender's saved identity. Verify the sender and try again."));
+		}
+		QCOMPARE(blocked.size(), change == QLatin1String("changed") ? 1 : 0);
+		QVERIFY(receiver.m_rejectedReceived.isEmpty());
+		QVERIFY(receiver.m_savesInFlight.isEmpty());
+		QVERIFY(!QFile::exists(m_directory->filePath("owned-duplicate.bin")));
 	}
 
 	void changedDialogContextDoesNotPin_data() {
