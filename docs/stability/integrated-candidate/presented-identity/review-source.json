@@ -1,0 +1,24 @@
+{
+  "source_head": "f337b951482e121964e9162221e96611f94e068e",
+  "files": {
+    "src/mumble/MainWindow.cpp": "7ce6cdec541f31b123b06ac1da5d25fecd9913867030e23511e802a93e874b6f",
+    "src/mumble/Messages.cpp": "191b170e2970e5f1b4b5fba1ccaf26e6e0e14162bc278825bf31e23794119650",
+    "src/mumble/PQFileTransfer/engine/FTSavePolicy.cpp": "cb8c14ba5a773297016ed891bfe846e5321b08ef4b372bc8a397d3bb5250c86c",
+    "src/mumble/PQFileTransfer/engine/FileTransferEngine.cpp": "c8a40be2bde34987e527eada46bb7b4728b9241f4be3fe285fad0f0ed617d469",
+    "src/mumble/PQFileTransfer/engine/FileTransferEngine.h": "896c534e67995b9ac8b29f69eb5e9a7e7891ccdfa9e4cbd6253cb53e8ba03bd7",
+    "src/mumble/PQFileTransfer/engine/FileTransferManager.cpp": "5e098b201b7a4adcf2bad78939842bf7c342159d25f99b97f4003aff31beaa71",
+    "src/mumble/PQFileTransfer/engine/FileTransferManager.h": "e1255495ce554d5e72e63acac2d7d6ee4b91fbc1e471fe2d8678183c43d49c35",
+    "src/mumble/PQFileTransfer/identity/PeerTrustStore.cpp": "8863a3171aa1583178cf2d602826c63d1d9b7ac1c391b56a813ba618bb9ec667",
+    "src/mumble/PQFileTransfer/identity/PeerTrustStore.h": "7632cd66d3f8bc31c1ea77d6166f07dbf8b2cbe63a09c184dd4164a511f86d82",
+    "src/tests/TestFTIdentity/TestFTIdentity.cpp": "a59f8cba72523321767eeca3cad7f09b8c5fe2ac261df30ca73661f89a40745f",
+    "src/tests/TestFileTransferE2E/TestFileTransferE2E.cpp": "d481f83ea3560fec553efceabd9d39ac293700c73c59c55d4244056749efe9df",
+    "src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp": "5cc6d99657cca8d183bcc5dd375ca0ae51667e2da109143c1931e1b75cdaa9e9",
+    "src/tests/TestFileTransferManager/TestFileTransferManager.cpp": "5337db57ccf028e30ae5a81b6d7b5b82d92a3934c0a5ccaeffeb0f32215e5f78",
+    "src/tests/TestFileTransferUi/TestFileTransferUi.cpp": "989b7296c869d588e1d158e935d9e8ec196615e5241bda106c9b45247ea6a9e4",
+    "src/mumble/PQFileTransfer/engine/FileTransferSession.cpp": "7b1b2b1e11a625347527ca6ef4b0b8541701ac593d46827e6a6f52a311c6bda0",
+    "src/mumble/PQFileTransfer/engine/FileTransferSession.h": "46e9dd86bc46b2471b8ce9add631c93bbce473908c166b33437653f883c6cc17",
+    "src/mumble/PQFileTransfer/engine/FTManifest.cpp": "43e9fa9c6e49036dbb26fb0a514bb296c7127f9b2a7640f25e2de0524eca3ef2",
+    "src/mumble/PQFileTransfer/identity/FTIdentity.cpp": "2c690310153c54c4da46063e15bb4f600af390f6a2322d9c2479c1d7116cc02f"
+  },
+  "scope": "Read-only immutable source snapshot; full app shipping/device and relay work remain open"
+}
