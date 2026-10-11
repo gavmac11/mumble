@@ -1,0 +1,13 @@
+{
+  "id": 114368621166,
+  "head_sha": "17f0807e25f8924948c0c391e96d5742c51f817a",
+  "conclusion": "success",
+  "details_url": "https://github.com/gavmac11/mumble/runs/114368621166",
+  "output": {
+    "title": "No new alerts in code changed by this pull request",
+    "summary": "[View all branch alerts](/gavmac11/mumble/security/code-scanning?query=pr%3A40+tool%3ACodeQL+is%3Aopen).",
+    "text": null,
+    "annotations_count": 0,
+    "annotations_url": "https://api.github.com/repos/gavmac11/mumble/check-runs/114368621166/annotations"
+  }
+}

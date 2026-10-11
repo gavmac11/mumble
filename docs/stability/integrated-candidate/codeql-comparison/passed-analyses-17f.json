@@ -1,0 +1,40 @@
+[
+  {
+    "id": 1930340771,
+    "ref": "refs/pull/40/merge",
+    "commit_sha": "82a172deb9184cfecfe7ad27545ead8230c7126e",
+    "analysis_key": ".github/workflows/code-ql.yml:codeql",
+    "environment": "{}",
+    "category": ".github/workflows/code-ql.yml:codeql",
+    "created_at": "2026-10-11T02:24:12Z",
+    "results_count": 33,
+    "tool": {
+      "name": "CodeQL",
+      "guid": null,
+      "version": "2.27.2"
+    },
+    "sarif_result_rule_families": [
+      "cpp",
+      "py"
+    ]
+  },
+  {
+    "id": 1930341130,
+    "ref": "refs/pull/40/merge",
+    "commit_sha": "82a172deb9184cfecfe7ad27545ead8230c7126e",
+    "analysis_key": ".github/workflows/code-ql.yml:CodeQL-Build",
+    "environment": "{\"os\":\"ubuntu-latest\"}",
+    "category": ".github/workflows/code-ql.yml:CodeQL-Build/os:ubuntu-latest",
+    "created_at": "2026-10-11T02:24:24Z",
+    "results_count": 33,
+    "tool": {
+      "name": "CodeQL",
+      "guid": null,
+      "version": "2.27.2"
+    },
+    "sarif_result_rule_families": [
+      "cpp",
+      "py"
+    ]
+  }
+]
