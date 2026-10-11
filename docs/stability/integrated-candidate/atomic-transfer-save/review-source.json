@@ -1,0 +1,11 @@
+{
+  "head": "3119729df9ef8fba512bbda1b8edcacd6a22271d",
+  "sha256": {
+    "TestFileTransferEngine.cpp": "64c530500e8db4a83109e360a925ab7eccf083aaf635fa4539d69bf605e0fa5f",
+    "FileTransferEngine.cpp": "318001c296100b867b76240d7aa49518800269a9f5bc18c44b28cda820777a10",
+    "MainWindow-save.cpp": "c421dd7ca30d3991d1fecbee262f3e6c03be6f682d35011b8ae3c9da74af70d3",
+    "FileTransferManager.h": "cb1d2393b7fa96e6a1553f184d233f35cfa50e88dec8b7b2690e7d749f9c6ea6",
+    "FileTransferEngine.h": "f4211b5575aee48db4d19f3f200d4ef98d7647f99905d358dfbe241443a1a61c",
+    "FileTransferManager.cpp": "d6504a392f3838941999e4be75ea32164b18a28075fd7c7e6cb09628391ecd82"
+  }
+}

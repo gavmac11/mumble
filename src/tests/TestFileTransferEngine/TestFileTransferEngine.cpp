@@ -89,6 +89,11 @@ private slots:
 	void slowSendMakesProgress_data();
 	void slowSendMakesProgress();
 	void frequentRefillsPreserveElapsedCredit();
+	void saveDoesNotDeleteUnrelatedPart();
+	void confirmedSaveReplacesAtomically();
+	void failedSavePreservesReceiveForRetry();
+	void saveSyncFailureIsRetryable_data();
+	void saveSyncFailureIsRetryable();
 
 private:
 	QString writeTestFile(qsizetype size);
@@ -340,6 +345,162 @@ void TestFileTransferEngine::frequentRefillsPreserveElapsedCredit() {
 		QVERIFY(QMetaObject::invokeMethod(pacer.data(), "timeout", Qt::DirectConnection));
 	}
 	QVERIFY(sawState(received, {}, PQFT::FTTransferInfo::State::Ready));
+}
+
+void TestFileTransferEngine::saveDoesNotDeleteUnrelatedPart() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	const QString source = writeTestFile(64 * 1024);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready), 10000);
+	QByteArray id;
+	for (const auto &args : received) {
+		const auto info = args.first().value< PQFT::FTTransferInfo >();
+		if (info.state == PQFT::FTTransferInfo::State::Ready)
+			id = info.transferId;
+	}
+	const QString target = m_tempDir.filePath("existing-target.bin");
+	QFile original(target);
+	QVERIFY(original.open(QIODevice::WriteOnly));
+	QCOMPARE(original.write("original target"), qint64(15));
+	original.close();
+	QFile unrelated(target + ".part");
+	QVERIFY(unrelated.open(QIODevice::WriteOnly));
+	QCOMPARE(unrelated.write("unrelated part"), qint64(14));
+	unrelated.close();
+	const qsizetype before = received.size();
+	pair.bob.saveTransferAs(id, target);
+	QVERIFY(received.size() > before);
+	QCOMPARE(received.last().first().value< PQFT::FTTransferInfo >().state, PQFT::FTTransferInfo::State::Ready);
+	QVERIFY(original.open(QIODevice::ReadOnly));
+	QCOMPARE(original.readAll(), QByteArray("original target"));
+	QVERIFY(unrelated.open(QIODevice::ReadOnly));
+	QCOMPARE(unrelated.readAll(), QByteArray("unrelated part"));
+	const QString retry = m_tempDir.filePath("retry-target.bin");
+	pair.bob.saveTransferAs(id, retry);
+	QCOMPARE(received.last().first().value< PQFT::FTTransferInfo >().state, PQFT::FTTransferInfo::State::Saved);
+	QFile output(retry);
+	QFile input(source);
+	QVERIFY(output.open(QIODevice::ReadOnly));
+	QVERIFY(input.open(QIODevice::ReadOnly));
+	QCOMPARE(output.readAll(), input.readAll());
+}
+
+void TestFileTransferEngine::confirmedSaveReplacesAtomically() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	const QString source = writeTestFile(80 * 1024);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready), 10000);
+	const QByteArray id  = received.last().first().value< PQFT::FTTransferInfo >().transferId;
+	const QString target = m_tempDir.filePath("confirmed-target.bin");
+	QFile original(target);
+	QVERIFY(original.open(QIODevice::WriteOnly));
+	QCOMPARE(original.write("original target"), qint64(15));
+	original.close();
+	pair.bob.saveTransferAs(id, target, true);
+	QCOMPARE(received.last().first().value< PQFT::FTTransferInfo >().state, PQFT::FTTransferInfo::State::Saved);
+	QFile output(target);
+	QFile input(source);
+	QVERIFY(output.open(QIODevice::ReadOnly));
+	QVERIFY(input.open(QIODevice::ReadOnly));
+	QCOMPARE(output.readAll(), input.readAll());
+	QCOMPARE(QDir(m_tempDir.path()).entryList({ ".mumble-ft-save-*" }, QDir::Files | QDir::Hidden).size(), 0);
+}
+
+void TestFileTransferEngine::failedSavePreservesReceiveForRetry() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	const QString source = writeTestFile(96 * 1024);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready), 10000);
+	const QByteArray id     = received.last().first().value< PQFT::FTTransferInfo >().transferId;
+	const QString directory = m_tempDir.filePath("non-file-target");
+	QVERIFY(QDir().mkpath(directory));
+	QFile sentinel(QDir(directory).filePath("sentinel"));
+	QVERIFY(sentinel.open(QIODevice::WriteOnly));
+	QCOMPARE(sentinel.write("preserved"), qint64(9));
+	sentinel.close();
+	pair.bob.saveTransferAs(id, directory, true);
+	const auto failed = received.last().first().value< PQFT::FTTransferInfo >();
+	QCOMPARE(failed.state, PQFT::FTTransferInfo::State::Ready);
+	QVERIFY(!failed.error.isEmpty());
+	QVERIFY(sentinel.open(QIODevice::ReadOnly));
+	QCOMPARE(sentinel.readAll(), QByteArray("preserved"));
+	const QString target = m_tempDir.filePath("save-retry.bin");
+	pair.bob.saveTransferAs(id, target);
+	QCOMPARE(received.last().first().value< PQFT::FTTransferInfo >().state, PQFT::FTTransferInfo::State::Saved);
+	QFile output(target);
+	QFile input(source);
+	QVERIFY(output.open(QIODevice::ReadOnly));
+	QVERIFY(input.open(QIODevice::ReadOnly));
+	QCOMPARE(output.readAll(), input.readAll());
+	QCOMPARE(QDir(m_tempDir.path()).entryList({ ".mumble-ft-save-*" }, QDir::Files | QDir::Hidden).size(), 0);
+}
+
+void TestFileTransferEngine::saveSyncFailureIsRetryable_data() {
+	QTest::addColumn< bool >("replace");
+	QTest::addColumn< bool >("afterPublication");
+	QTest::newRow("new-file-before-publication") << false << false;
+	QTest::newRow("replacement-before-publication") << true << false;
+	QTest::newRow("new-file-after-publication") << false << true;
+	QTest::newRow("replacement-after-publication") << true << true;
+}
+
+void TestFileTransferEngine::saveSyncFailureIsRetryable() {
+	QFETCH(bool, replace);
+	QFETCH(bool, afterPublication);
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	const QString source = writeTestFile(80 * 1024);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready), 10000);
+	const QByteArray id  = received.last().first().value< PQFT::FTTransferInfo >().transferId;
+	const QString target = m_tempDir.filePath("sync-failure-" + QString::fromUtf8(QTest::currentDataTag()) + ".bin");
+	if (replace) {
+		QFile old(target);
+		QVERIFY(old.open(QIODevice::WriteOnly));
+		QCOMPARE(old.write("original"), qint64(8));
+	}
+	const QStringList before = QDir(m_tempDir.path()).entryList(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
+	const auto fileSync      = pair.bob.m_syncSaveFile;
+	const auto publicationSync = pair.bob.m_syncSavePublication;
+	bool reachedWrittenStage   = false;
+	if (afterPublication) {
+		pair.bob.m_syncSavePublication = [](const QString &) { return false; };
+	} else {
+		pair.bob.m_syncSaveFile = [&](QFileDevice &stage) {
+			reachedWrittenStage = stage.pos() == 80 * 1024;
+			return false;
+		};
+	}
+	pair.bob.saveTransferAs(id, target, replace);
+	const auto failed = received.last().first().value< PQFT::FTTransferInfo >();
+	QCOMPARE(failed.state, PQFT::FTTransferInfo::State::Ready);
+	QVERIFY(!failed.error.isEmpty());
+	QVERIFY(!sawState(received, id, PQFT::FTTransferInfo::State::Saved));
+	QFile input(source);
+	QVERIFY(input.open(QIODevice::ReadOnly));
+	const QByteArray expected = input.readAll();
+	if (afterPublication || replace) {
+		QFile output(target);
+		QVERIFY(output.open(QIODevice::ReadOnly));
+		QCOMPARE(output.readAll(), afterPublication ? expected : QByteArray("original"));
+	} else {
+		QVERIFY(!QFile::exists(target));
+	}
+	if (!afterPublication) {
+		QVERIFY(reachedWrittenStage);
+		QCOMPARE(QDir(m_tempDir.path()).entryList(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot), before);
+	}
+	pair.bob.m_syncSaveFile        = fileSync;
+	pair.bob.m_syncSavePublication = publicationSync;
+	// An already-published file needs explicit confirmation on retry too.
+	pair.bob.saveTransferAs(id, target, replace || afterPublication);
+	QCOMPARE(received.last().first().value< PQFT::FTTransferInfo >().state, PQFT::FTTransferInfo::State::Saved);
+	QFile output(target);
+	QVERIFY(output.open(QIODevice::ReadOnly));
+	QCOMPARE(output.readAll(), expected);
 }
 
 void TestFileTransferEngine::simultaneousSendsShareRateLimit() {

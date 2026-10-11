@@ -18,12 +18,58 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QSaveFile>
+#include <QTemporaryFile>
 #include <QThread>
+
+#include <cerrno>
+#include <filesystem>
+
+#ifdef Q_OS_WIN
+#	include <io.h>
+#else
+#	include <fcntl.h>
+#	include <unistd.h>
+#endif
 
 namespace PQFT {
 
 namespace {
 constexpr int EarlyChunkBufferMax = 8;
+
+bool syncSaveFile(QFileDevice &file) {
+	if (!file.flush() || file.handle() < 0)
+		return false;
+#ifdef Q_OS_WIN
+	return ::_commit(file.handle()) == 0;
+#else
+	int result;
+	do {
+		result = ::fsync(file.handle());
+	} while (result != 0 && errno == EINTR);
+	return result == 0;
+#endif
+}
+
+bool syncSavePublication(const QString &targetPath) {
+#ifdef Q_OS_WIN
+	// Check a flush on the published file too. This does not claim Windows
+	// directory-journal or physical power-loss qualification.
+	QFile target(targetPath);
+	return target.open(QIODevice::ReadWrite) && syncSaveFile(target);
+#else
+	const QByteArray directory = QFile::encodeName(QFileInfo(targetPath).absolutePath());
+	const int fd               = ::open(directory.constData(), O_RDONLY | O_DIRECTORY);
+	if (fd < 0)
+		return false;
+	int result;
+	do {
+		result = ::fsync(fd);
+	} while (result != 0 && errno == EINTR);
+	::close(fd);
+	return result == 0;
+#endif
+}
 
 bool shutdownRequested() {
 	return QThread::currentThread()->isInterruptionRequested();
@@ -60,6 +106,8 @@ const QByteArray canonicalEmptyMap = QByteArray::fromHex("a0");
 } // namespace
 
 FileTransferEngine::FileTransferEngine(QObject *parent) : QObject(parent) {
+	m_syncSaveFile        = syncSaveFile;
+	m_syncSavePublication = syncSavePublication;
 	m_sendPaceTimer = std::make_unique< QTimer >(this);
 	connect(m_sendPaceTimer.get(), &QTimer::timeout, this, &FileTransferEngine::paceSends);
 }
@@ -1157,7 +1205,8 @@ void FileTransferEngine::abortTransfer(const QByteArray &transferId) {
 	}
 }
 
-void FileTransferEngine::saveTransferAs(const QByteArray &transferId, const QString &targetPath) {
+void FileTransferEngine::saveTransferAs(const QByteArray &transferId, const QString &targetPath,
+										bool replaceConfirmed) {
 	auto it = m_receiveJobs.find(transferId);
 	if (it == m_receiveJobs.end() || it->get()->lastState != FTTransferInfo::State::Ready) {
 		return;
@@ -1166,23 +1215,80 @@ void FileTransferEngine::saveTransferAs(const QByteArray &transferId, const QStr
 	ReceiveJob &job									  = *jobPtr;
 
 	const QFileInfo targetInfo(targetPath);
-	if (!targetInfo.dir().mkpath(".")) {
+	if (targetInfo.isSymLink() || !targetInfo.dir().mkpath(".")) {
 		emitSaveFailed(job);
 		return;
 	}
 
-	// Atomic rename when possible; cross-device falls back to copy+rename
-	if (QFile::rename(job.tempFile, targetPath)) {
-		emitSaveDone(jobPtr);
+	QFile source(job.tempFile);
+	if (!source.open(QIODevice::ReadOnly)) {
+		emitSaveFailed(job);
 		return;
 	}
-	const QString partPath = targetPath + ".part";
-	if (QFile::copy(job.tempFile, partPath) && QFile::rename(partPath, targetPath)) {
-		emitSaveDone(jobPtr);
-		return;
+	const auto copyReceived = [&](QIODevice &output) {
+		quint64 copied = 0;
+		while (!source.atEnd()) {
+			if (shutdownRequested())
+				return false;
+			const QByteArray block = source.read(256 * 1024);
+			if (block.isEmpty() || output.write(block) != block.size())
+				return false;
+			copied += static_cast< quint64 >(block.size());
+		}
+		return source.error() == QFile::NoError && copied == job.fileSize;
+	};
+	bool committed = false;
+	bool stageRemoved = true;
+	if (replaceConfirmed) {
+		QSaveFile output(targetPath);
+		// Never truncate the original as a fallback when staging is unavailable.
+		output.setDirectWriteFallback(false);
+		if (output.open(QIODevice::WriteOnly) && copyReceived(output) && m_syncSaveFile(output)) {
+			source.close();
+			committed = output.commit();
+		} else {
+			output.cancelWriting();
+		}
+	} else {
+		// Own an unpredictable stage in the destination directory. Publishing
+		// a hard link is atomic and refuses even a target created during the copy.
+		// A filesystem without hard-link support fails closed, leaving Ready.
+		QTemporaryFile stage(targetInfo.dir().filePath(".mumble-ft-save-XXXXXX"));
+		if (stage.open() && copyReceived(stage) && m_syncSaveFile(stage)) {
+			const QString stagePath = stage.fileName();
+			stage.close();
+			source.close();
+#ifdef Q_OS_WIN
+			const std::filesystem::path from(stagePath.toStdWString()), to(targetPath.toStdWString());
+#else
+			const std::filesystem::path from(QFile::encodeName(stagePath).constData()),
+				to(QFile::encodeName(targetPath).constData());
+#endif
+			std::error_code error;
+			if (stage.error() == QFile::NoError)
+				std::filesystem::create_hard_link(from, to, error);
+			else
+				error = std::make_error_code(std::errc::io_error);
+			committed = !error;
+			if (committed)
+				stageRemoved = stage.remove();
+		}
 	}
-	QFile::remove(partPath);
-	emitSaveFailed(job);
+	source.close();
+	if (!committed) {
+		emitSaveFailed(job);
+	} else if (!stageRemoved) {
+		emitSaveFailed(
+			job,
+			tr("The file was written, but its temporary copy could not be removed. Received data is kept for retry."));
+	} else if (!m_syncSavePublication(targetPath)) {
+		// Publication has already changed the destination. Do not pretend that
+		// this is a pre-commit failure or discard our retryable received copy.
+		emitSaveFailed(job, tr("The file was written, but disk synchronization could not be confirmed. Received data "
+							   "is kept for retry."));
+	} else {
+		emitSaveDone(jobPtr);
+	}
 }
 
 void FileTransferEngine::providePassword(const QByteArray &transferId, QByteArray password) {
@@ -1342,7 +1448,7 @@ void FileTransferEngine::emitSaveDone(std::shared_ptr< ReceiveJob > jobPtr) {
 	cleanupReceive(jobPtr);
 }
 
-void FileTransferEngine::emitSaveFailed(ReceiveJob &job) {
+void FileTransferEngine::emitSaveFailed(ReceiveJob &job, const QString &error) {
 	FTTransferInfo info;
 	info.transferId  = job.transferId;
 	info.peerSession = job.peerSession;
@@ -1350,7 +1456,7 @@ void FileTransferEngine::emitSaveFailed(ReceiveJob &job) {
 	info.fileName	= job.fileName;
 	info.fileSize	= job.fileSize;
 	info.state		 = FTTransferInfo::State::Ready;
-	info.error		 = tr("Could not save the file");
+	info.error       = error.isEmpty() ? tr("Could not save the file") : error;
 	emitInfo(info);
 }
 

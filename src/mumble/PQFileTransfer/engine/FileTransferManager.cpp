@@ -235,9 +235,13 @@ void FileTransferManager::abortTransfer(const QByteArray &transferId) {
 		m_engine, [this, transferId]() { m_engine->abortTransfer(transferId); }, Qt::QueuedConnection);
 }
 
-void FileTransferManager::saveTransferAs(const QByteArray &transferId, const QString &targetPath) {
+void FileTransferManager::saveTransferAs(const QByteArray &transferId, const QString &targetPath,
+										 bool replaceConfirmed) {
 	QMetaObject::invokeMethod(
-		m_engine, [this, transferId, targetPath]() { m_engine->saveTransferAs(transferId, targetPath); },
+		m_engine,
+		[this, transferId, targetPath, replaceConfirmed]() {
+			m_engine->saveTransferAs(transferId, targetPath, replaceConfirmed);
+		},
 		Qt::QueuedConnection);
 }
 

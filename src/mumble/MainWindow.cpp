@@ -4831,7 +4831,7 @@ void MainWindow::onFileTransferUpdated(const PQFT::FTTransferInfo &info) {
 	}
 
 	// Auto-save files from verified contacts when enabled
-	if (info.incoming && info.state == PQFT::FTTransferInfo::State::Ready
+	if (info.incoming && info.state == PQFT::FTTransferInfo::State::Ready && info.error.isEmpty()
 		&& Global::get().s.bFTAutoAcceptPinned && !Global::get().s.qsFTDownloadDir.isEmpty()) {
 		QByteArray pinnedFp;
 		if (manager->trustStateFor(info.peerSession, pinnedFp)
@@ -4879,8 +4879,22 @@ void MainWindow::onFileCardClicked(const QByteArray &transferId) {
 			QString target          = QFileDialog::getSaveFileName(this, tr("Save file"), suggested, QString(), nullptr,
 																   QFileDialog::DontConfirmOverwrite);
 			if (!target.isEmpty() && generation == manager->connectionGeneration()) {
+				bool replaceConfirmed = false;
+				if (QFileInfo::exists(target)) {
+					QMessageBox confirmation(
+						QMessageBox::Question, tr("Replace file?"),
+						tr("A file already exists at %1. Replace it?").arg(QDir::toNativeSeparators(target)),
+						QMessageBox::Yes | QMessageBox::No, this);
+					confirmation.setTextFormat(Qt::PlainText);
+					confirmation.setDefaultButton(QMessageBox::No);
+					if (confirmation.exec() != QMessageBox::Yes)
+						break;
+					replaceConfirmed = true;
+				}
+				if (generation != manager->connectionGeneration())
+					break;
 				Global::get().s.qsFTDownloadDir = QFileInfo(target).absolutePath();
-				manager->saveTransferAs(transferId, target);
+				manager->saveTransferAs(transferId, target, replaceConfirmed);
 			}
 			break;
 		}

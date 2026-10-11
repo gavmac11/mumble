@@ -1,0 +1,22 @@
+{
+  "source_commit": "09e9b92a28cdeb3d5dd0eb4e3d51eb512e99eaaa",
+  "prior_ledger_entries_verified": {
+    "mumble-rate-credit-20261010": 30,
+    "mumble-audio-wizard-20261010": 22,
+    "mumble-rate-credit-revised-20261010": 30,
+    "mumble-rate-credit-precision-20261010": 31,
+    "mumble-integrated-pacing-audio-20261010": 144,
+    "mumble-atomic-transfer-save-20261010": 31
+  },
+  "prior_atomic_source": "3119729df9ef8fba512bbda1b8edcacd6a22271d",
+  "prior_atomic_evidence": "472adfb9821366efa763965f31caf931f78479cd",
+  "prior_atomic_committed_checksum_entries_verified": 21,
+  "combined_candidate_source": "17f0807e25f8924948c0c391e96d5742c51f817a",
+  "combined_candidate_evidence": "e79a39fb94daf6ac01fed1a53866e905b2a8882a",
+  "prior_binaries": "All 44 existing build binaries and compiler commands copied and hash verified on E: before requested reuse; five exact 311 save binaries verified against recorded hashes; original full 17f 44-binary and older snapshots retained",
+  "snapshot_binary_count": 44,
+  "exact_prior_save_binary_count": 5,
+  "c_drive_copies_or_cleanup": false,
+  "personal_mumble_state_changes": false,
+  "gui_authentication_or_hardware_actions": false
+}
