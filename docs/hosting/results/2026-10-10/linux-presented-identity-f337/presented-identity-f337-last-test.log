@@ -1,0 +1,2323 @@
+Start testing: Oct 11 03:46 UTC
+----------------------------------------------------------
+1/42 Testing: TestAudioWizard
+1/42 Test: TestAudioWizard
+Command: "/work/build/tests/TestAudioWizard" "-platform" "offscreen"
+Directory: /work/build
+"TestAudioWizard" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestAudioWizard *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestAudioWizard::initTestCase()
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioInput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioInput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) QImage::scaled: Image is a null image
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) QImage::scaled: Image is a null image
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioInput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+PASS   : TestAudioWizard::unavailableDevices(pending-or-denied-input)
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioInput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioInput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) QImage::scaled: Image is a null image
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) QImage::scaled: Image is a null image
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioInput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+PASS   : TestAudioWizard::unavailableDevices(both-unavailable)
+PASS   : TestAudioWizard::cleanupTestCase()
+Totals: 4 passed, 0 failed, 0 skipped, 0 blacklisted, 21ms
+********* Finished testing of TestAudioWizard *********
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"TestAudioWizard" end time: Oct 11 03:46 UTC
+"TestAudioWizard" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/42 Testing: TestDatabasePath
+2/42 Test: TestDatabasePath
+Command: "/work/build/tests/TestDatabasePath" "-platform" "offscreen"
+Directory: /work/build/src/tests/TestDatabasePath
+"TestDatabasePath" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestDatabasePath *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestDatabasePath::initTestCase()
+PASS   : TestDatabasePath::explicitFileAndDefault(explicit-existing-file)
+PASS   : TestDatabasePath::explicitFileAndDefault(unconfigured-default)
+PASS   : TestDatabasePath::configuredDirectoryCannotFallBack(default-qt-handler)
+PASS   : TestDatabasePath::configuredDirectoryCannotFallBack(production-app-handler)
+PASS   : TestDatabasePath::cleanupTestCase()
+Totals: 6 passed, 0 failed, 0 skipped, 0 blacklisted, 2068ms
+********* Finished testing of TestDatabasePath *********
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+<end of output>
+Test time =   2.14 sec
+----------------------------------------------------------
+Test Passed.
+"TestDatabasePath" end time: Oct 11 03:46 UTC
+"TestDatabasePath" time elapsed: 00:00:02
+----------------------------------------------------------
+
+3/42 Testing: TestReleaseUpdate
+3/42 Test: TestReleaseUpdate
+Command: "/work/build/tests/TestReleaseUpdate"
+Directory: /work/build/src/tests/TestReleaseUpdate
+"TestReleaseUpdate" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestReleaseUpdate *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestReleaseUpdate::initTestCase()
+PASS   : TestReleaseUpdate::ordersVersionsNumerically()
+PASS   : TestReleaseUpdate::separatesChannels()
+PASS   : TestReleaseUpdate::ignoresDraftsLegacyTagsAndIncompletePackages()
+PASS   : TestReleaseUpdate::rejectsUntrustedLinks()
+PASS   : TestReleaseUpdate::handlesEmptyAndMalformedFeeds()
+PASS   : TestReleaseUpdate::choosesOnlySupportedPlatformPackages()
+PASS   : TestReleaseUpdate::persistsConditionalResponsesAndSeparatesFeeds()
+PASS   : TestReleaseUpdate::throttlesFailedAttemptsAcrossLaunchesButAllowsManualChecks()
+PASS   : TestReleaseUpdate::preservesGoodCacheOnInvalidResponses()
+PASS   : TestReleaseUpdate::recoversFromCorruptCache()
+PASS   : TestReleaseUpdate::honorsPersistedServerBackoffForManualChecks()
+PASS   : TestReleaseUpdate::cleanupTestCase()
+Totals: 13 passed, 0 failed, 0 skipped, 0 blacklisted, 45ms
+********* Finished testing of TestReleaseUpdate *********
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"TestReleaseUpdate" end time: Oct 11 03:46 UTC
+"TestReleaseUpdate" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/42 Testing: TestAnimatedImages
+4/42 Test: TestAnimatedImages
+Command: "/work/build/tests/TestAnimatedImages"
+Directory: /work/build/src/tests/TestAnimatedImages
+"TestAnimatedImages" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestAnimatedImages *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestAnimatedImages::initTestCase()
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+PASS   : TestAnimatedImages::acceptsRawGifMimeData()
+PASS   : TestAnimatedImages::pastesRawGifMimeDataWithStaticFallback()
+PASS   : TestAnimatedImages::rawGifHasStaticFallback()
+PASS   : TestAnimatedImages::releasesAnimationOnClear()
+PASS   : TestAnimatedImages::retainsAnimationUntilLastReferenceIsRemoved()
+PASS   : TestAnimatedImages::releasesAnimationOnMaximumBlockEviction()
+PASS   : TestAnimatedImages::scalesStaticImageWithChatWindow()
+PASS   : TestAnimatedImages::scalesAnimatedGifWithoutStoppingAnimation()
+PASS   : TestAnimatedImages::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 11ms
+********* Finished testing of TestAnimatedImages *********
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"TestAnimatedImages" end time: Oct 11 03:46 UTC
+"TestAnimatedImages" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/42 Testing: TestChatWebM
+5/42 Test: TestChatWebM
+Command: "/work/build/tests/TestChatWebM"
+Directory: /work/build/src/tests/TestChatWebM
+"TestChatWebM" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestChatWebM *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestChatWebM::initTestCase()
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+PASS   : TestChatWebM::acceptsWebmFileDrop()
+PASS   : TestChatWebM::refusesOversizedWebm()
+PASS   : TestChatWebM::videoToImgRejectsGarbage()
+PASS   : TestChatWebM::videoToImgBudgetTooLarge()
+[matroska,webm @ 0x5589817ca480] File ended prematurely at pos. 8 (0x8)
+[matroska,webm @ 0x5589817ca480] EBML header parsing failed
+PASS   : TestChatWebM::placeholderForUndecodableWebm()
+[matroska,webm @ 0x5589817c9780] File ended prematurely at pos. 8 (0x8)
+[matroska,webm @ 0x5589817c9780] EBML header parsing failed
+PASS   : TestChatWebM::validationDocumentCreatesNoPlayers()
+PASS   : TestChatWebM::posterDoesNotAutoplay()
+PASS   : TestChatWebM::clickTogglesPlayback()
+SKIP   : TestChatWebM::audioPlaybackAdvancesClockAndResumes() No audio output device available
+   Loc: [/work/source/src/tests/TestChatWebM/TestChatWebM.cpp(838)]
+PASS   : TestChatWebM::loopsAfterEnd()
+PASS   : TestChatWebM::resumeAtClipEndRestartsImmediately()
+PASS   : TestChatWebM::pauseResumeKeepsFrameSchedule()
+PASS   : TestChatWebM::silentVideoPacesOnWallClock()
+PASS   : TestChatWebM::releasesPlayerOnClear()
+PASS   : TestChatWebM::retainsPlayerUntilLastReferenceIsRemoved()
+PASS   : TestChatWebM::releasesPlayerOnMaximumBlockEviction()
+PASS   : TestChatWebM::playingCapPausesOldest()
+PASS   : TestChatWebM::totalCapDestroysOldest()
+PASS   : TestChatWebM::evictedVideoIsRecreatedOnToggle()
+PASS   : TestChatWebM::scalesVideoWithChatWindow()
+[opus @ 0x558981834bc0] Could not update timestamps for skipped samples.
+[opus @ 0x558981834bc0] Could not update timestamps for discarded samples.
+PASS   : TestChatWebM::audioDecodesToPcm()
+PASS   : TestChatWebM::pacingMath()
+PASS   : TestChatWebM::cleanupTestCase()
+Totals: 23 passed, 0 failed, 1 skipped, 0 blacklisted, 12239ms
+********* Finished testing of TestChatWebM *********
+<end of output>
+Test time =  12.31 sec
+----------------------------------------------------------
+Test Passed.
+"TestChatWebM" end time: Oct 11 03:46 UTC
+"TestChatWebM" time elapsed: 00:00:12
+----------------------------------------------------------
+
+6/42 Testing: TestVideoFramePacketizer
+6/42 Test: TestVideoFramePacketizer
+Command: "/work/build/tests/TestVideoFramePacketizer"
+Directory: /work/build/src/tests/TestVideoFramePacketizer
+"TestVideoFramePacketizer" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestVideoFramePacketizer *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestVideoFramePacketizer::initTestCase()
+PASS   : TestVideoFramePacketizer::rejectsInvalidFrames()
+PASS   : TestVideoFramePacketizer::preservesFrameMetadataAcrossFragments()
+PASS   : TestVideoFramePacketizer::cleanupTestCase()
+Totals: 4 passed, 0 failed, 0 skipped, 0 blacklisted, 0ms
+********* Finished testing of TestVideoFramePacketizer *********
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TestVideoFramePacketizer" end time: Oct 11 03:46 UTC
+"TestVideoFramePacketizer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/42 Testing: TestVideoPacketPacer
+7/42 Test: TestVideoPacketPacer
+Command: "/work/build/tests/TestVideoPacketPacer"
+Directory: /work/build/src/tests/TestVideoPacketPacer
+"TestVideoPacketPacer" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestVideoPacketPacer *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestVideoPacketPacer::initTestCase()
+PASS   : TestVideoPacketPacer::preservesPacketsAndAccountsForWireBytes()
+PASS   : TestVideoPacketPacer::eventLoopStallDoesNotFlushTheWholeFrame()
+PASS   : TestVideoPacketPacer::idleTimeDoesNotBankBurstCredit()
+PASS   : TestVideoPacketPacer::overloadBoundsMemoryAndWaitsForAnIndependentFrame()
+PASS   : TestVideoPacketPacer::invalidFrameDoesNotDestroyAcceptedBacklog()
+PASS   : TestVideoPacketPacer::largeKeyframeFinishesBeyondTheSoftAgeAndByteBudgets()
+PASS   : TestVideoPacketPacer::expiredPartialFrameIsAbandonedUntilNextKeyframe()
+PASS   : TestVideoPacketPacer::replacementKeyframeDoesNotBypassTheNextDeadline()
+PASS   : TestVideoPacketPacer::exposesDropsAndRequestsRecoveryOnceTheQueueDrains()
+PASS   : TestVideoPacketPacer::timerIsAsynchronousAndDestructionCancelsPendingPackets()
+PASS   : TestVideoPacketPacer::cleanupTestCase()
+Totals: 12 passed, 0 failed, 0 skipped, 0 blacklisted, 123ms
+********* Finished testing of TestVideoPacketPacer *********
+<end of output>
+Test time =   0.13 sec
+----------------------------------------------------------
+Test Passed.
+"TestVideoPacketPacer" end time: Oct 11 03:46 UTC
+"TestVideoPacketPacer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/42 Testing: TestVideoQualityProfile
+8/42 Test: TestVideoQualityProfile
+Command: "/work/build/tests/TestVideoQualityProfile"
+Directory: /work/build/src/tests/TestVideoQualityProfile
+"TestVideoQualityProfile" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestVideoQualityProfile *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestVideoQualityProfile::initTestCase()
+PASS   : TestVideoQualityProfile::derivesEncoderAndWireRatesFromTheSameBudget()
+PASS   : TestVideoQualityProfile::definesSourceAppropriateDefaults()
+PASS   : TestVideoQualityProfile::preservesSupportedEvenSizes()
+PASS   : TestVideoQualityProfile::roundsOddDimensionsDown()
+PASS   : TestVideoQualityProfile::constrainsScreenContentTo1080p()
+PASS   : TestVideoQualityProfile::constrainsWebcamContentTo720p()
+PASS   : TestVideoQualityProfile::rejectsInvalidAndTinyFrames()
+PASS   : TestVideoQualityProfile::cleanupTestCase()
+Totals: 9 passed, 0 failed, 0 skipped, 0 blacklisted, 0ms
+********* Finished testing of TestVideoQualityProfile *********
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"TestVideoQualityProfile" end time: Oct 11 03:46 UTC
+"TestVideoQualityProfile" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/42 Testing: TestVideoViewUi
+9/42 Test: TestVideoViewUi
+Command: "/work/build/tests/TestVideoViewUi" "-platform" "offscreen"
+Directory: /work/build/src/tests/TestVideoViewUi
+"TestVideoViewUi" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestVideoViewUi *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestVideoViewUi::initTestCase()
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+PASS   : TestVideoViewUi::fullscreenTracksExternalChanges()
+PASS   : TestVideoViewUi::fullscreenKeyboard()
+QWARN  : TestVideoViewUi::respectsThemeChanges() This plugin does not support propagateSizeHints()
+QWARN  : TestVideoViewUi::respectsThemeChanges() This plugin does not support propagateSizeHints()
+QWARN  : TestVideoViewUi::respectsThemeChanges() This plugin does not support propagateSizeHints()
+PASS   : TestVideoViewUi::respectsThemeChanges()
+PASS   : TestVideoViewUi::cleanupTestCase()
+Totals: 5 passed, 0 failed, 0 skipped, 0 blacklisted, 10ms
+********* Finished testing of TestVideoViewUi *********
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"TestVideoViewUi" end time: Oct 11 03:46 UTC
+"TestVideoViewUi" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/42 Testing: TestXMLTools
+10/42 Test: TestXMLTools
+Command: "/work/build/tests/TestXMLTools"
+Directory: /work/build/src/tests/TestXMLTools
+"TestXMLTools" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestXMLTools *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestXMLTools::initTestCase()
+PASS   : TestXMLTools::testParseExtractBody()
+PASS   : TestXMLTools::testParseConvertStyleBold()
+PASS   : TestXMLTools::testParseConvertStyleUnderline()
+PASS   : TestXMLTools::testParseConvertStyleItalic()
+PASS   : TestXMLTools::testParseKeepTags()
+PASS   : TestXMLTools::testParseDropEmptyFirstParagraphs()
+PASS   : TestXMLTools::testUndupNoopB()
+PASS   : TestXMLTools::testUndupNoopU()
+PASS   : TestXMLTools::testUndupNoopI()
+PASS   : TestXMLTools::testUndupNoopA()
+PASS   : TestXMLTools::testUndupSimpleB()
+PASS   : TestXMLTools::testUndupSimpleU()
+PASS   : TestXMLTools::testUndupSimpleI()
+PASS   : TestXMLTools::testUndupSimpleA()
+PASS   : TestXMLTools::testUndupMixedBU()
+PASS   : TestXMLTools::testUndupMixedBUIA()
+PASS   : TestXMLTools::testUndupWithSpace()
+PASS   : TestXMLTools::testUndupAnchor()
+PASS   : TestXMLTools::testUndupLinkSameHref()
+PASS   : TestXMLTools::testUndupLinkDifferingHref()
+PASS   : TestXMLTools::testUndupNoRootUndupTag()
+PASS   : TestXMLTools::testUndupUndupTagsRemoval()
+PASS   : TestXMLTools::testUndupStandard()
+PASS   : TestXMLTools::cleanupTestCase()
+Totals: 25 passed, 0 failed, 0 skipped, 0 blacklisted, 1ms
+********* Finished testing of TestXMLTools *********
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"TestXMLTools" end time: Oct 11 03:46 UTC
+"TestXMLTools" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/42 Testing: TestFileTransferUi
+11/42 Test: TestFileTransferUi
+Command: "/work/build/tests/TestFileTransferUi" "-platform" "offscreen"
+Directory: /work/build
+"TestFileTransferUi" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestFileTransferUi *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFileTransferUi::initTestCase()
+PASS   : TestFileTransferUi::automaticNames(rejected-0)
+PASS   : TestFileTransferUi::automaticNames(rejected-1)
+PASS   : TestFileTransferUi::automaticNames(rejected-2)
+PASS   : TestFileTransferUi::automaticNames(rejected-3)
+PASS   : TestFileTransferUi::automaticNames(rejected-4)
+PASS   : TestFileTransferUi::automaticNames(rejected-5)
+PASS   : TestFileTransferUi::automaticNames(rejected-6)
+PASS   : TestFileTransferUi::automaticNames(rejected-7)
+PASS   : TestFileTransferUi::automaticNames(rejected-8)
+PASS   : TestFileTransferUi::automaticNames(rejected-9)
+PASS   : TestFileTransferUi::automaticNames(rejected-10)
+PASS   : TestFileTransferUi::automaticNames(rejected-11)
+PASS   : TestFileTransferUi::automaticNames(rejected-12)
+PASS   : TestFileTransferUi::automaticNames(rejected-13)
+PASS   : TestFileTransferUi::automaticNames(rejected-14)
+PASS   : TestFileTransferUi::automaticNames(rejected-15)
+PASS   : TestFileTransferUi::automaticNames(rejected-16)
+PASS   : TestFileTransferUi::automaticNames(rejected-17)
+PASS   : TestFileTransferUi::automaticNames(rejected-18)
+PASS   : TestFileTransferUi::automaticNames(rejected-19)
+PASS   : TestFileTransferUi::automaticNames(rejected-20)
+PASS   : TestFileTransferUi::automaticNames(rejected-21)
+PASS   : TestFileTransferUi::automaticNames(rejected-22)
+PASS   : TestFileTransferUi::automaticNames(rejected-23)
+PASS   : TestFileTransferUi::automaticNames(rejected-24)
+PASS   : TestFileTransferUi::automaticNames(rejected-25)
+PASS   : TestFileTransferUi::automaticNames(rejected-26)
+PASS   : TestFileTransferUi::automaticNames(rejected-27)
+PASS   : TestFileTransferUi::automaticNames(rejected-28)
+PASS   : TestFileTransferUi::automaticNames(rejected-29)
+PASS   : TestFileTransferUi::automaticNames(rejected-30)
+PASS   : TestFileTransferUi::automaticNames(rejected-31)
+PASS   : TestFileTransferUi::automaticNames(rejected-32)
+PASS   : TestFileTransferUi::automaticNames(rejected-33)
+PASS   : TestFileTransferUi::automaticNames(rejected-34)
+PASS   : TestFileTransferUi::automaticNames(rejected-35)
+PASS   : TestFileTransferUi::automaticNames(rejected-36)
+PASS   : TestFileTransferUi::automaticNames(rejected-37)
+PASS   : TestFileTransferUi::automaticNames(rejected-38)
+PASS   : TestFileTransferUi::automaticNames(rejected-39)
+PASS   : TestFileTransferUi::automaticNames(rejected-40)
+PASS   : TestFileTransferUi::automaticNames(rejected-41)
+PASS   : TestFileTransferUi::automaticNames(rejected-42)
+PASS   : TestFileTransferUi::automaticNames(rejected-43)
+PASS   : TestFileTransferUi::automaticNames(rejected-44)
+PASS   : TestFileTransferUi::automaticNames(rejected-45)
+PASS   : TestFileTransferUi::automaticNames(rejected-46)
+PASS   : TestFileTransferUi::automaticNames(rejected-47)
+PASS   : TestFileTransferUi::automaticNames(rejected-48)
+PASS   : TestFileTransferUi::automaticNames(rejected-49)
+PASS   : TestFileTransferUi::automaticNames(rejected-50)
+PASS   : TestFileTransferUi::automaticNames(rejected-51)
+PASS   : TestFileTransferUi::automaticNames(rejected-52)
+PASS   : TestFileTransferUi::automaticNames(rejected-53)
+PASS   : TestFileTransferUi::automaticNames(rejected-54)
+PASS   : TestFileTransferUi::automaticNames(rejected-55)
+PASS   : TestFileTransferUi::automaticNames(accepted-56)
+PASS   : TestFileTransferUi::automaticNames(accepted-57)
+PASS   : TestFileTransferUi::automaticNames(accepted-58)
+PASS   : TestFileTransferUi::automaticNames(accepted-59)
+PASS   : TestFileTransferUi::automaticNames(accepted-60)
+PASS   : TestFileTransferUi::automaticNames(accepted-61)
+PASS   : TestFileTransferUi::automaticNames(accepted-62)
+PASS   : TestFileTransferUi::automaticNames(accepted-63)
+PASS   : TestFileTransferUi::automaticSaveEligibility()
+PASS   : TestFileTransferUi::manualHistoryDoesNotRedirectAutomaticSaving()
+PASS   : TestFileTransferUi::olderAutomaticFolderRequiresReview(missing)
+PASS   : TestFileTransferUi::olderAutomaticFolderRequiresReview(old)
+PASS   : TestFileTransferUi::olderAutomaticFolderRequiresReview(unknown-future)
+PASS   : TestFileTransferUi::olderAutomaticFolderRequiresReview(string)
+PASS   : TestFileTransferUi::olderAutomaticFolderRequiresReview(boolean)
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+PASS   : TestFileTransferUi::qrContrast(light)
+PASS   : TestFileTransferUi::qrContrast(dark)
+PASS   : TestFileTransferUi::fileActionByKeyboard()
+PASS   : TestFileTransferUi::invalidActionUrls()
+PASS   : TestFileTransferUi::unrelatedDataIsNotAFileAction()
+PASS   : TestFileTransferUi::cleanupTestCase()
+Totals: 78 passed, 0 failed, 0 skipped, 0 blacklisted, 19ms
+********* Finished testing of TestFileTransferUi *********
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferUi" end time: Oct 11 03:46 UTC
+"TestFileTransferUi" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/42 Testing: TestFileTransferManager
+12/42 Test: TestFileTransferManager
+Command: "/work/build/tests/TestFileTransferManager"
+Directory: /work/build
+"TestFileTransferManager" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestFileTransferManager *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFileTransferManager::initTestCase()
+PASS   : TestFileTransferManager::changedPresentedKeyDoesNotVerifyCachedPin()
+PASS   : TestFileTransferManager::joinedPeerChangedKeyIsBlockedBeforeDialog()
+PASS   : TestFileTransferManager::displayedKeyIsPinnedAndVerified()
+PASS   : TestFileTransferManager::joinedMatchingPeerKeepsVerificationWithoutDialog()
+PASS   : TestFileTransferManager::renamedPeerDoesNotBorrowAnotherKeysVerification()
+PASS   : TestFileTransferManager::incomingReadyUsesCapturedIdentity(rename)
+PASS   : TestFileTransferManager::incomingReadyUsesCapturedIdentity(disconnect)
+PASS   : TestFileTransferManager::incomingReadyUsesCapturedIdentity(changed-key)
+PASS   : TestFileTransferManager::incomingReadyUsesCapturedIdentity(removed-pin)
+PASS   : TestFileTransferManager::incomingReadyUsesCapturedIdentity(missing-name)
+PASS   : TestFileTransferManager::incomingReadyUsesCapturedIdentity(missing-key)
+PASS   : TestFileTransferManager::changedDialogContextDoesNotPin(rename)
+PASS   : TestFileTransferManager::changedDialogContextDoesNotPin(connection)
+PASS   : TestFileTransferManager::changedDialogContextDoesNotPin(session-reuse)
+PASS   : TestFileTransferManager::changedDialogContextDoesNotPin(channel)
+PASS   : TestFileTransferManager::changedDialogContextDoesNotPin(capability)
+PASS   : TestFileTransferManager::changedDialogContextDoesNotPin(disabled)
+PASS   : TestFileTransferManager::staleDialogCannotDeclineNewPrompt(different-key)
+PASS   : TestFileTransferManager::staleDialogCannotDeclineNewPrompt(same-key)
+PASS   : TestFileTransferManager::currentWorkerTrustPromptReachesGui()
+PASS   : TestFileTransferManager::disconnectRejectsQueuedTrustEvents()
+PASS   : TestFileTransferManager::reconnectAcceptsCurrentPromptForReusedSession()
+PASS   : TestFileTransferManager::shutdownJoinsBusyWorkerBeforeDestroyingEngine()
+PASS   : TestFileTransferManager::cleanupTestCase()
+Totals: 25 passed, 0 failed, 0 skipped, 0 blacklisted, 26ms
+********* Finished testing of TestFileTransferManager *********
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferManager" end time: Oct 11 03:46 UTC
+"TestFileTransferManager" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/42 Testing: TestFileTransferTransport
+13/42 Test: TestFileTransferTransport
+Command: "/work/build/tests/TestFileTransferTransport"
+Directory: /work/build/src/tests/TestFileTransferTransport
+"TestFileTransferTransport" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestFileTransferTransport *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFileTransferTransport::initTestCase()
+PASS   : TestFileTransferTransport::controlIsQueuedAndCopiesPayload()
+PASS   : TestFileTransferTransport::chunkValues(present-zero)
+PASS   : TestFileTransferTransport::chunkValues(wide-values)
+PASS   : TestFileTransferTransport::destroyedReceiverCancelsPendingCalls()
+PASS   : TestFileTransferTransport::replacementDoesNotReceiveOldConnectionData()
+PASS   : TestFileTransferTransport::executesOnReceiverThread()
+PASS   : TestFileTransferTransport::connectionSnapshotDoesNotFollowReplacement()
+PASS   : TestFileTransferTransport::queuedCallsDoNotRetainConnection()
+PASS   : TestFileTransferTransport::disconnectedTransportRejectsQueue()
+PASS   : TestFileTransferTransport::cleanupTestCase()
+Totals: 11 passed, 0 failed, 0 skipped, 0 blacklisted, 1ms
+********* Finished testing of TestFileTransferTransport *********
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferTransport" end time: Oct 11 03:46 UTC
+"TestFileTransferTransport" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/42 Testing: TestPQCrypto
+14/42 Test: TestPQCrypto
+Command: "/work/build/tests/TestPQCrypto"
+Directory: /work/build/src/tests/TestPQCrypto
+"TestPQCrypto" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestPQCrypto *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestPQCrypto::initTestCase()
+PASS   : TestPQCrypto::sha384Vector()
+PASS   : TestPQCrypto::hmacSha384Vector()
+PASS   : TestPQCrypto::constantTimeCompare()
+PASS   : TestPQCrypto::hkdfVectors()
+PASS   : TestPQCrypto::x25519Rfc7748()
+PASS   : TestPQCrypto::x25519RoundTrip()
+PASS   : TestPQCrypto::x25519SmallOrderRejected()
+PASS   : TestPQCrypto::aesGcmNistVector()
+PASS   : TestPQCrypto::aesGcmTamperFails()
+PASS   : TestPQCrypto::aesGcmEmptyPlaintext()
+PASS   : TestPQCrypto::mlkemRoundTrip()
+PASS   : TestPQCrypto::mlkemBadCiphertext()
+PASS   : TestPQCrypto::mldsaSignVerify()
+PASS   : TestPQCrypto::mldsaTamperFails()
+PASS   : TestPQCrypto::mldsaContextSeparated()
+PASS   : TestPQCrypto::argon2Vector()
+PASS   : TestPQCrypto::argon2Bounds()
+PASS   : TestPQCrypto::cborEncodeVector()
+PASS   : TestPQCrypto::cborRejectsNonCanonical()
+PASS   : TestPQCrypto::cborRejectsDuplicateKeys()
+PASS   : TestPQCrypto::merkleVectors()
+PASS   : TestPQCrypto::merkleRejectsBadLeaf()
+PASS   : TestPQCrypto::merkleCancellation(before-input)
+PASS   : TestPQCrypto::merkleCancellation(validating-digests)
+PASS   : TestPQCrypto::merkleCancellation(building-leaves)
+PASS   : TestPQCrypto::merkleCancellation(building-parent-level)
+PASS   : TestPQCrypto::deviceHashCancellation()
+PASS   : TestPQCrypto::deviceHashRejectsWrongCount()
+PASS   : TestPQCrypto::cleanupTestCase()
+Totals: 30 passed, 0 failed, 0 skipped, 0 blacklisted, 518ms
+********* Finished testing of TestPQCrypto *********
+<end of output>
+Test time =   0.52 sec
+----------------------------------------------------------
+Test Passed.
+"TestPQCrypto" end time: Oct 11 03:46 UTC
+"TestPQCrypto" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/42 Testing: TestFTIdentity
+15/42 Test: TestFTIdentity
+Command: "/work/build/tests/TestFTIdentity"
+Directory: /work/build/src/tests/TestFTIdentity
+"TestFTIdentity" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestFTIdentity *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFTIdentity::initTestCase()
+PASS   : TestFTIdentity::safetyNumberFormat()
+PASS   : TestFTIdentity::safetyNumberSymmetry()
+PASS   : TestFTIdentity::safetyNumberDistinct()
+PASS   : TestFTIdentity::qrPayload()
+PASS   : TestFTIdentity::identityLifecycle()
+PASS   : TestFTIdentity::identityWrongPassphrase()
+PASS   : TestFTIdentity::identityChangePassphrase()
+PASS   : TestFTIdentity::trustStoreTransitions()
+PASS   : TestFTIdentity::trustStoreChangedBlocks()
+PASS   : TestFTIdentity::trustStoreRemovePin()
+PASS   : TestFTIdentity::verificationMatchesExpectedKey()
+PASS   : TestFTIdentity::replacedPinDoesNotAcceptOldVerification()
+PASS   : TestFTIdentity::cleanupTestCase()
+Totals: 14 passed, 0 failed, 0 skipped, 0 blacklisted, 4587ms
+********* Finished testing of TestFTIdentity *********
+<end of output>
+Test time =   4.59 sec
+----------------------------------------------------------
+Test Passed.
+"TestFTIdentity" end time: Oct 11 03:46 UTC
+"TestFTIdentity" time elapsed: 00:00:04
+----------------------------------------------------------
+
+16/42 Testing: TestFileTransferSession
+16/42 Test: TestFileTransferSession
+Command: "/work/build/tests/TestFileTransferSession"
+Directory: /work/build/src/tests/TestFileTransferSession
+"TestFileTransferSession" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestFileTransferSession *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFileTransferSession::initTestCase()
+PASS   : TestFileTransferSession::happyPathDerivesSameKeys()
+PASS   : TestFileTransferSession::wrongPinFails()
+PASS   : TestFileTransferSession::tamperedHandshakeFails()
+PASS   : TestFileTransferSession::replayedFrameFails()
+PASS   : TestFileTransferSession::controlChannelSequencing()
+PASS   : TestFileTransferSession::sessionKekBoundToTransfer()
+PASS   : TestFileTransferSession::controlTamperFails()
+PASS   : TestFileTransferSession::manifestRoundTrip()
+PASS   : TestFileTransferSession::manifestTamperFails()
+PASS   : TestFileTransferSession::chunkRoundTrip()
+PASS   : TestFileTransferSession::fileKeyDoubleWrap()
+PASS   : TestFileTransferSession::cleanupTestCase()
+Totals: 13 passed, 0 failed, 0 skipped, 0 blacklisted, 10ms
+********* Finished testing of TestFileTransferSession *********
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferSession" end time: Oct 11 03:46 UTC
+"TestFileTransferSession" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/42 Testing: TestFileTransferEngine
+17/42 Test: TestFileTransferEngine
+Command: "/work/build/tests/TestFileTransferEngine"
+Directory: /work/build/src/tests/TestFileTransferEngine
+"TestFileTransferEngine" start time: Oct 11 03:46 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestFileTransferEngine *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFileTransferEngine::initTestCase()
+PASS   : TestFileTransferEngine::privateReceiveStorage(plaintext)
+PASS   : TestFileTransferEngine::privateReceiveStorage(password-spool)
+PASS   : TestFileTransferEngine::predictableReceivePathCannotRedirectWrites()
+PASS   : TestFileTransferEngine::earlyChunksKeepTheirTransferIdentity()
+PASS   : TestFileTransferEngine::unrelatedChunksDoNotExtendPendingReceive()
+PASS   : TestFileTransferEngine::sendReceiveRoundTrip()
+PASS   : TestFileTransferEngine::incomingIdentitySurvivesPeerRename()
+PASS   : TestFileTransferEngine::passwordRoundTrip()
+PASS   : TestFileTransferEngine::wrongPasswordFailsClosed()
+PASS   : TestFileTransferEngine::duplicateChunkIsFatal()
+PASS   : TestFileTransferEngine::latePasswordSpoolsAllChunks()
+PASS   : TestFileTransferEngine::secondTransferWhileFirstReady()
+PASS   : TestFileTransferEngine::readyTransferDoesNotExpire()
+PASS   : TestFileTransferEngine::firstContactPinFlags()
+PASS   : TestFileTransferEngine::incomingAbortCleansUpSafely()
+PASS   : TestFileTransferEngine::passwordSpoolIsBounded()
+PASS   : TestFileTransferEngine::cancelledPromptTimerCannotRemoveReplacementHandshake(disconnect)
+PASS   : TestFileTransferEngine::cancelledPromptTimerCannotRemoveReplacementHandshake(declined-prompt)
+PASS   : TestFileTransferEngine::shutdownRemovesUnsavedPlaintext(ready-unsaved)
+PASS   : TestFileTransferEngine::shutdownRemovesUnsavedPlaintext(saved-file-preserved)
+PASS   : TestFileTransferEngine::unlimitedSendStopsOnWorkerInterruption()
+PASS   : TestFileTransferEngine::sendingRespectsConfiguredRate(default)
+PASS   : TestFileTransferEngine::sendingRespectsConfiguredRate(below-one-chunk-per-tick)
+PASS   : TestFileTransferEngine::sendingRespectsConfiguredRate(slow)
+PASS   : TestFileTransferEngine::simultaneousSendsShareRateLimit()
+PASS   : TestFileTransferEngine::unlimitedSendYieldsToQueuedAbort()
+PASS   : TestFileTransferEngine::synchronousChunkAbortStaysAborted()
+PASS   : TestFileTransferEngine::abortingAnotherJobDoesNotStopPacing()
+PASS   : TestFileTransferEngine::synchronousCompletionAbortStaysAborted()
+PASS   : TestFileTransferEngine::pausedDeliveryDoesNotReleaseUnboundedCredit()
+PASS   : TestFileTransferEngine::slowSendMakesProgress(unchanged-config-refresh)
+PASS   : TestFileTransferEngine::slowSendMakesProgress(large-chunk-at-low-rate)
+PASS   : TestFileTransferEngine::frequentRefillsPreserveElapsedCredit()
+PASS   : TestFileTransferEngine::saveDoesNotDeleteUnrelatedPart()
+PASS   : TestFileTransferEngine::confirmedSaveReplacesAtomically()
+PASS   : TestFileTransferEngine::failedSavePreservesReceiveForRetry()
+PASS   : TestFileTransferEngine::saveSyncFailureIsRetryable(new-file-before-publication)
+PASS   : TestFileTransferEngine::saveSyncFailureIsRetryable(replacement-before-publication)
+PASS   : TestFileTransferEngine::saveSyncFailureIsRetryable(new-file-after-publication)
+PASS   : TestFileTransferEngine::saveSyncFailureIsRetryable(replacement-after-publication)
+PASS   : TestFileTransferEngine::cleanupTestCase()
+Totals: 42 passed, 0 failed, 0 skipped, 0 blacklisted, 22169ms
+********* Finished testing of TestFileTransferEngine *********
+<end of output>
+Test time =  22.18 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferEngine" end time: Oct 11 03:47 UTC
+"TestFileTransferEngine" time elapsed: 00:00:22
+----------------------------------------------------------
+
+18/42 Testing: TestFileTransferE2E
+18/42 Test: TestFileTransferE2E
+Command: "/work/build/tests/TestFileTransferE2E"
+Directory: /work/build/src/tests/TestFileTransferE2E
+"TestFileTransferE2E" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestFileTransferE2E *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+<X>2026-10-11 03:47:21.605 SSL: OpenSSL version is 'OpenSSL 3.0.22 25 Aug 2026'
+<W>2026-10-11 03:47:21.605 Initializing settings from /tmp/TestFileTransferE2E-xoTUXN/server/murmur.ini (basepath /tmp/TestFileTransferE2E-xoTUXN/server)
+<W>2026-10-11 03:47:21.606 MetaParams: TLS cipher preference is "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:AES256-SHA:AES128-SHA"
+<W>2026-10-11 03:47:22.780 Performed initial PBKDF2 benchmark. Will use 32000 iterations as default
+<W>2026-10-11 03:47:22.794 Murmur 1.7.0 running on Linux: Debian GNU/Linux 12 (bookworm) [x64]: Booting servers
+<W>2026-10-11 03:47:22.856 Created new server default instance
+<W>2026-10-11 03:47:22.871 0 => Server listening on 0.0.0.0:52187
+PASS   : TestFileTransferE2E::initTestCase()
+<W>2026-10-11 03:47:22.880 0 => Generating new server certificate.
+<W>2026-10-11 03:47:22.962 0 => Not registering server as public
+<W>2026-10-11 03:47:22.970 0 => <0:(-1)> New connection: 127.0.0.1:45556
+<W>2026-10-11 03:47:22.981 0 => <0:(-1)> New connection: 127.0.0.1:45568
+<W>2026-10-11 03:47:22.990 0 => <0:(-1)> Connection closed: The remote host closed the connection [1]
+<W>2026-10-11 03:47:23.005 0 => <0:(-1)> Client version 0.1.0 ( : file-transfer-e2e)
+<W>2026-10-11 03:47:23.013 0 => Starting voice thread
+<W>2026-10-11 03:47:23.022 0 => CELT codec switch -7ffffff5 0 (prefer -7ffffff5) (Opus 1)
+<W>2026-10-11 03:47:23.030 0 => <1:alice(-1)> Authenticated
+<W>2026-10-11 03:47:23.066 0 => <0:(-1)> New connection: 127.0.0.1:45576
+<W>2026-10-11 03:47:23.078 0 => <0:(-1)> Client version 0.1.0 ( : file-transfer-e2e)
+<W>2026-10-11 03:47:23.086 0 => <2:bob(-1)> Authenticated
+PASS   : TestFileTransferE2E::endToEndTransfer()
+<W>2026-10-11 03:47:24.857 0 => <2:bob(-1)> Connection closed: The remote host closed the connection [1]
+<W>2026-10-11 03:47:24.880 0 => <1:alice(-1)> Connection closed: The remote host closed the connection [1]
+<W>2026-10-11 03:47:24.894 0 => Ending voice thread
+<W>2026-10-11 03:47:24.930 0 => <0:(-1)> New connection: 127.0.0.1:39056
+<W>2026-10-11 03:47:24.941 0 => <0:(-1)> Client version 0.1.0 ( : file-transfer-e2e)
+<W>2026-10-11 03:47:24.953 0 => Starting voice thread
+<W>2026-10-11 03:47:24.961 0 => <3:carol(-1)> Authenticated
+<W>2026-10-11 03:47:25.003 0 => <0:(-1)> New connection: 127.0.0.1:39060
+<W>2026-10-11 03:47:25.015 0 => <0:(-1)> Client version 0.1.0 ( : file-transfer-e2e)
+<W>2026-10-11 03:47:25.023 0 => <4:dave(-1)> Authenticated
+PASS   : TestFileTransferE2E::endToEndPasswordTransfer()
+<W>2026-10-11 03:47:27.507 0 => <4:dave(-1)> Connection closed: The remote host closed the connection [1]
+<W>2026-10-11 03:47:27.525 0 => <3:carol(-1)> Connection closed: The remote host closed the connection [1]
+<W>2026-10-11 03:47:27.547 0 => Ending voice thread
+<W>2026-10-11 03:47:27.605 0 => <0:(-1)> New connection: 127.0.0.1:39070
+<W>2026-10-11 03:47:27.617 0 => <0:(-1)> Client version 0.1.0 ( : file-transfer-e2e)
+<W>2026-10-11 03:47:27.625 0 => Starting voice thread
+<W>2026-10-11 03:47:27.634 0 => <5:erin(-1)> Authenticated
+<W>2026-10-11 03:47:27.682 0 => <0:(-1)> New connection: 127.0.0.1:39072
+<W>2026-10-11 03:47:27.693 0 => <0:(-1)> Client version 0.1.0 ( : file-transfer-e2e)
+<W>2026-10-11 03:47:27.702 0 => <6:frank(-1)> Authenticated
+<W>2026-10-11 03:47:27.734 0 => <0:(-1)> New connection: 127.0.0.1:39084
+<W>2026-10-11 03:47:27.750 0 => <0:(-1)> Client version 0.1.0 ( : file-transfer-e2e)
+<W>2026-10-11 03:47:27.758 0 => <7:eve(-1)> Authenticated
+PASS   : TestFileTransferE2E::capabilityGating()
+<W>2026-10-11 03:47:29.070 Killing running servers
+<W>2026-10-11 03:47:29.079 0 => Ending voice thread
+<W>2026-10-11 03:47:29.088 0 => Stopped
+<W>2026-10-11 03:47:29.089 Shutting down
+PASS   : TestFileTransferE2E::cleanupTestCase()
+Totals: 5 passed, 0 failed, 0 skipped, 0 blacklisted, 7498ms
+********* Finished testing of TestFileTransferE2E *********
+<end of output>
+Test time =   7.51 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferE2E" end time: Oct 11 03:47 UTC
+"TestFileTransferE2E" time elapsed: 00:00:07
+----------------------------------------------------------
+
+19/42 Testing: TestSettingsJSONSerialization
+19/42 Test: TestSettingsJSONSerialization
+Command: "/work/build/tests/TestSettingsJSONSerialization"
+Directory: /work/build
+"TestSettingsJSONSerialization" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestSettingsJSONSerialization *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestSettingsJSONSerialization::initTestCase()
+PASS   : TestSettingsJSONSerialization::noDefaultValuesMatched()
+PASS   : TestSettingsJSONSerialization::testJSONSerialization()
+PASS   : TestSettingsJSONSerialization::cleanupTestCase()
+Totals: 4 passed, 0 failed, 0 skipped, 0 blacklisted, 3ms
+********* Finished testing of TestSettingsJSONSerialization *********
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"TestSettingsJSONSerialization" end time: Oct 11 03:47 UTC
+"TestSettingsJSONSerialization" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/42 Testing: OverlayTest
+20/42 Test: OverlayTest
+Command: ""
+Directory: /work/build/src/tests/OverlayTest
+"OverlayTest" start time: 
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"OverlayTest" end time: Oct 11 03:47 UTC
+"OverlayTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/42 Testing: TestCrypt
+21/42 Test: TestCrypt
+Command: "/work/build/tests/TestCrypt"
+Directory: /work/build/src/tests/TestCrypt
+"TestCrypt" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestCrypt *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestCrypt::initTestCase()
+PASS   : TestCrypt::testvectors()
+PASS   : TestCrypt::authcrypt()
+PASS   : TestCrypt::xexstarAttack()
+PASS   : TestCrypt::ivrecovery()
+PASS   : TestCrypt::reverserecovery()
+PASS   : TestCrypt::tamper()
+PASS   : TestCrypt::cleanupTestCase()
+Totals: 8 passed, 0 failed, 0 skipped, 0 blacklisted, 7ms
+********* Finished testing of TestCrypt *********
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TestCrypt" end time: Oct 11 03:47 UTC
+"TestCrypt" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/42 Testing: TestAudioReceiverBuffer
+22/42 Test: TestAudioReceiverBuffer
+Command: "/work/build/tests/TestAudioReceiverBuffer"
+Directory: /work/build/src/tests/TestAudioReceiverBuffer
+"TestAudioReceiverBuffer" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestAudioReceiverBuffer *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestAudioReceiverBuffer::initTestCase()
+PASS   : TestAudioReceiverBuffer::test_preconditions()
+PASS   : TestAudioReceiverBuffer::test_addReceiver()
+PASS   : TestAudioReceiverBuffer::test_addReceiverPositional()
+PASS   : TestAudioReceiverBuffer::test_forceAddReceiver()
+PASS   : TestAudioReceiverBuffer::test_preprocessBuffer()
+PASS   : TestAudioReceiverBuffer::test_getReceiverRange()
+QWARN  : TestAudioReceiverBuffer::test_encoding() Opening a new range
+QWARN  : TestAudioReceiverBuffer::test_encoding() Start: AudioReceiver{ receiver: ServerUser{ session: 2, version: "1.4.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 0, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() End: AudioReceiver{ receiver: ServerUser{ session: 0, version: "1.2.5", deaf: false, selfDeaf: false, ssContext: "" }, context: 0, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 2, version: "1.4.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 0, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 0, version: "1.2.5", deaf: false, selfDeaf: false, ssContext: "" }, context: 0, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Opening a new range
+QWARN  : TestAudioReceiverBuffer::test_encoding() Start: AudioReceiver{ receiver: ServerUser{ session: 1, version: "1.3.1", deaf: false, selfDeaf: false, ssContext: "" }, context: 3, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() End: AudioReceiver{ receiver: ServerUser{ session: 1, version: "1.3.1", deaf: false, selfDeaf: false, ssContext: "" }, context: 3, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 1, version: "1.3.1", deaf: false, selfDeaf: false, ssContext: "" }, context: 3, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Opening a new range
+QWARN  : TestAudioReceiverBuffer::test_encoding() Start: AudioReceiver{ receiver: ServerUser{ session: 8, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.4 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() End: AudioReceiver{ receiver: ServerUser{ session: 8, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.4 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 8, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.4 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Opening a new range
+QWARN  : TestAudioReceiverBuffer::test_encoding() Start: AudioReceiver{ receiver: ServerUser{ session: 10, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.2 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() End: AudioReceiver{ receiver: ServerUser{ session: 10, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.2 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 10, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.2 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Opening a new range
+QWARN  : TestAudioReceiverBuffer::test_encoding() Start: AudioReceiver{ receiver: ServerUser{ session: 3, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 1, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() End: AudioReceiver{ receiver: ServerUser{ session: 4, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 1, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 3, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 1, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 4, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 1, volAdj: 1 }
+QDEBUG : TestAudioReceiverBuffer::test_encoding() Sample receiver list required 5 encoding steps
+PASS   : TestAudioReceiverBuffer::test_encoding()
+PASS   : TestAudioReceiverBuffer::test_emptyRange()
+PASS   : TestAudioReceiverBuffer::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 1ms
+********* Finished testing of TestAudioReceiverBuffer *********
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TestAudioReceiverBuffer" end time: Oct 11 03:47 UTC
+"TestAudioReceiverBuffer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/42 Testing: TestQtLogger
+23/42 Test: TestQtLogger
+Command: "/work/build/tests/TestQtLogger"
+Directory: /work/build/src/tests/TestQtLogger
+"TestQtLogger" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestQtLogger *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestQtLogger::initTestCase()
+PASS   : TestQtLogger::lateQtLog(prior-handler)
+PASS   : TestQtLogger::lateQtLog(repeated-init)
+PASS   : TestQtLogger::lateQtLog(later-handler-owner)
+PASS   : TestQtLogger::fatalLogDoesNotRunStaticCleanup(qt-fatal-message)
+PASS   : TestQtLogger::fatalLogDoesNotRunStaticCleanup(direct-fatal-call)
+PASS   : TestQtLogger::cleanupTestCase()
+Totals: 7 passed, 0 failed, 0 skipped, 0 blacklisted, 16ms
+********* Finished testing of TestQtLogger *********
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"TestQtLogger" end time: Oct 11 03:47 UTC
+"TestQtLogger" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/42 Testing: TestBandwidthRecord
+24/42 Test: TestBandwidthRecord
+Command: "/work/build/tests/TestBandwidthRecord"
+Directory: /work/build/src/tests/TestBandwidthRecord
+"TestBandwidthRecord" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestBandwidthRecord *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestBandwidthRecord::initTestCase()
+PASS   : TestBandwidthRecord::fileChunksRetireTheirEntireByteCharge()
+PASS   : TestBandwidthRecord::rejectsExcessAtTheWindowsMultiplicationBoundary()
+PASS   : TestBandwidthRecord::longIdleSlotStillEnforcesTheConfiguredRate()
+PASS   : TestBandwidthRecord::maximumWidthChargesDoNotOverflowTheRollingSum()
+PASS   : TestBandwidthRecord::displayedBandwidthClampsInsteadOfWrapping()
+PASS   : TestBandwidthRecord::voiceSizedChargesKeepTheirExistingBehavior()
+PASS   : TestBandwidthRecord::refusedChargeDoesNotAdvanceOrOverwriteAcceptedState()
+PASS   : TestBandwidthRecord::invalidChargesCannotReduceOrBypassTheBudget()
+PASS   : TestBandwidthRecord::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 1ms
+********* Finished testing of TestBandwidthRecord *********
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"TestBandwidthRecord" end time: Oct 11 03:47 UTC
+"TestBandwidthRecord" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/42 Testing: TestConnectionOutputQueue
+25/42 Test: TestConnectionOutputQueue
+Command: "/work/build/tests/TestConnectionOutputQueue"
+Directory: /work/build/src/tests/TestConnectionOutputQueue
+"TestConnectionOutputQueue" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestConnectionOutputQueue *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestConnectionOutputQueue::initTestCase()
+PASS   : TestConnectionOutputQueue::admitsExactBoundary()
+PASS   : TestConnectionOutputQueue::admitsLargestProtocolFrame()
+PASS   : TestConnectionOutputQueue::disconnectedSocketDoesNotWrite()
+PASS   : TestConnectionOutputQueue::refusesFurtherWritesBeforeDeferredClose()
+PASS   : TestConnectionOutputQueue::unboundedDefault()
+PASS   : TestConnectionOutputQueue::emptyWriteDoesNotDisconnect()
+PASS   : TestConnectionOutputQueue::largeQueueDoesNotOverflow()
+PASS   : TestConnectionOutputQueue::destroyingConnectionCancelsDeferredClose()
+PASS   : TestConnectionOutputQueue::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 8ms
+********* Finished testing of TestConnectionOutputQueue *********
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"TestConnectionOutputQueue" end time: Oct 11 03:47 UTC
+"TestConnectionOutputQueue" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/42 Testing: TestCaseInsensitiveQString
+26/42 Test: TestCaseInsensitiveQString
+Command: "/work/build/tests/TestCaseInsensitiveQString"
+Directory: /work/build/src/tests/TestCaseInsensitiveQString
+"TestCaseInsensitiveQString" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestCaseInsensitiveQString *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestCaseInsensitiveQString::initTestCase()
+PASS   : TestCaseInsensitiveQString::equality()
+PASS   : TestCaseInsensitiveQString::inequality()
+PASS   : TestCaseInsensitiveQString::less_than()
+PASS   : TestCaseInsensitiveQString::less_equal()
+PASS   : TestCaseInsensitiveQString::greater_than()
+PASS   : TestCaseInsensitiveQString::greater_equal()
+PASS   : TestCaseInsensitiveQString::hash()
+PASS   : TestCaseInsensitiveQString::use_in_qhash()
+PASS   : TestCaseInsensitiveQString::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 0ms
+********* Finished testing of TestCaseInsensitiveQString *********
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"TestCaseInsensitiveQString" end time: Oct 11 03:47 UTC
+"TestCaseInsensitiveQString" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/42 Testing: TestCryptographicHash
+27/42 Test: TestCryptographicHash
+Command: "/work/build/tests/TestCryptographicHash"
+Directory: /work/build/src/tests/TestCryptographicHash
+"TestCryptographicHash" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestCryptographicHash *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestCryptographicHash::initTestCase()
+PASS   : TestCryptographicHash::sha1(1)
+PASS   : TestCryptographicHash::sha1(2)
+PASS   : TestCryptographicHash::sha1(3)
+PASS   : TestCryptographicHash::sha1(4)
+PASS   : TestCryptographicHash::sha256(1)
+PASS   : TestCryptographicHash::sha256(2)
+PASS   : TestCryptographicHash::sha256(3)
+PASS   : TestCryptographicHash::sha256(4)
+PASS   : TestCryptographicHash::staticHashVsObject()
+PASS   : TestCryptographicHash::multipleResultCalls()
+PASS   : TestCryptographicHash::addDataAfterResult()
+PASS   : TestCryptographicHash::cleanupTestCase()
+Totals: 13 passed, 0 failed, 0 skipped, 0 blacklisted, 2ms
+********* Finished testing of TestCryptographicHash *********
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TestCryptographicHash" end time: Oct 11 03:47 UTC
+"TestCryptographicHash" time elapsed: 00:00:00
+----------------------------------------------------------
+
+28/42 Testing: TestCryptographicRandom
+28/42 Test: TestCryptographicRandom
+Command: "/work/build/tests/TestCryptographicRandom"
+Directory: /work/build/src/tests/TestCryptographicRandom
+"TestCryptographicRandom" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestCryptographicRandom *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestCryptographicRandom::initTestCase()
+PASS   : TestCryptographicRandom::fillBuffer()
+PASS   : TestCryptographicRandom::uint32()
+PASS   : TestCryptographicRandom::uniform()
+PASS   : TestCryptographicRandom::cleanupTestCase()
+Totals: 5 passed, 0 failed, 0 skipped, 0 blacklisted, 2132ms
+********* Finished testing of TestCryptographicRandom *********
+<end of output>
+Test time =   2.14 sec
+----------------------------------------------------------
+Test Passed.
+"TestCryptographicRandom" end time: Oct 11 03:47 UTC
+"TestCryptographicRandom" time elapsed: 00:00:02
+----------------------------------------------------------
+
+29/42 Testing: TestDatabase
+29/42 Test: TestDatabase
+Command: "/work/build/tests/TestDatabase"
+Directory: /work/build/src/tests/TestDatabase
+"TestDatabase" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of DatabaseTest *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : DatabaseTest::initTestCase()
+QINFO  : DatabaseTest::hexConversions() Hex to binary
+QINFO  : DatabaseTest::hexConversions() Binary to hex
+QINFO  : DatabaseTest::hexConversions() Consistency checks
+PASS   : DatabaseTest::hexConversions()
+QINFO  : DatabaseTest::connect() Current backend: "SQLite"
+PASS   : DatabaseTest::connect()
+QINFO  : DatabaseTest::getBackendVersion() Current backend: "SQLite"
+QINFO  : DatabaseTest::getBackendVersion() Queried version: "3.40.1"
+PASS   : DatabaseTest::getBackendVersion()
+QINFO  : DatabaseTest::tableExistsInDB() Current backend: "SQLite"
+PASS   : DatabaseTest::tableExistsInDB()
+QINFO  : DatabaseTest::getExistingTables() Current backend: "SQLite"
+PASS   : DatabaseTest::getExistingTables()
+QINFO  : DatabaseTest::simpleExport() Current backend: "SQLite"
+PASS   : DatabaseTest::simpleExport()
+QINFO  : DatabaseTest::simpleImport() Current backend: "SQLite"
+PASS   : DatabaseTest::simpleImport()
+QINFO  : DatabaseTest::defaults() Current backend: "SQLite"
+PASS   : DatabaseTest::defaults()
+QINFO  : DatabaseTest::autoIncrement() Current backend: "SQLite"
+PASS   : DatabaseTest::autoIncrement()
+QINFO  : DatabaseTest::constraints() Current backend: "SQLite"
+QINFO  : DatabaseTest::constraints()   Current constraint:  0
+QINFO  : DatabaseTest::constraints()   Current constraint:  1
+PASS   : DatabaseTest::constraints()
+QINFO  : DatabaseTest::constraintFunctionality() Current backend: "SQLite"
+QINFO  : DatabaseTest::constraintFunctionality() Testing NOT NULL constraint
+QINFO  : DatabaseTest::constraintFunctionality() Testing UNIQUE constraint
+PASS   : DatabaseTest::constraintFunctionality()
+QINFO  : DatabaseTest::keys() Current backend: "SQLite"
+QINFO  : DatabaseTest::keys() Primary key
+QINFO  : DatabaseTest::keys() Composite primary key
+QINFO  : DatabaseTest::keys() Foreign key
+QINFO  : DatabaseTest::keys() Composite foreign key
+PASS   : DatabaseTest::keys()
+QINFO  : DatabaseTest::indices() Current backend: "SQLite"
+PASS   : DatabaseTest::indices()
+QINFO  : DatabaseTest::triggers() Current backend: "SQLite"
+QINFO  : DatabaseTest::triggers() Current timing: 0
+QINFO  : DatabaseTest::triggers() Current event: 0
+QINFO  : DatabaseTest::triggers() Current event: 1
+QINFO  : DatabaseTest::triggers() Current event: 2
+QINFO  : DatabaseTest::triggers() Current timing: 1
+QINFO  : DatabaseTest::triggers() Current event: 0
+QINFO  : DatabaseTest::triggers() Current event: 1
+QINFO  : DatabaseTest::triggers() Current event: 2
+PASS   : DatabaseTest::triggers()
+QINFO  : DatabaseTest::dataTypes() Current backend: "SQLite"
+QINFO  : DatabaseTest::dataTypes() Current data type: 0
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 1
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 2
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 3
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 4
+QINFO  : DatabaseTest::dataTypes() Sized: true
+QINFO  : DatabaseTest::dataTypes() Current data type: 5
+QINFO  : DatabaseTest::dataTypes() Sized: true
+QINFO  : DatabaseTest::dataTypes() Current data type: 6
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 7
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 8
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 9
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 10
+QINFO  : DatabaseTest::dataTypes() Sized: false
+PASS   : DatabaseTest::dataTypes()
+QINFO  : DatabaseTest::keyValueTable() Current backend: "SQLite"
+PASS   : DatabaseTest::keyValueTable()
+QINFO  : DatabaseTest::unicode() Current backend: "SQLite"
+QINFO  : DatabaseTest::unicode() Current symbol: "Ä"
+QINFO  : DatabaseTest::unicode() Current symbol: "è"
+QINFO  : DatabaseTest::unicode() Current symbol: "ß"
+QINFO  : DatabaseTest::unicode() Current symbol: "¼"
+QINFO  : DatabaseTest::unicode() Current symbol: "💚"
+QINFO  : DatabaseTest::unicode() Current symbol: "🚒"
+QINFO  : DatabaseTest::unicode() Current symbol: "ձ"
+QINFO  : DatabaseTest::unicode() Current symbol: "Φ"
+QINFO  : DatabaseTest::unicode() Current symbol: "ヲ"
+QINFO  : DatabaseTest::unicode() Current symbol: "𐌒"
+QINFO  : DatabaseTest::unicode() Current symbol: "Ю"
+QINFO  : DatabaseTest::unicode() Current symbol: "¥"
+QINFO  : DatabaseTest::unicode() Current symbol: "ℏ"
+QINFO  : DatabaseTest::unicode() Current symbol: "ℜ"
+QINFO  : DatabaseTest::unicode() Current symbol: "¯_(ツ)_/¯"
+PASS   : DatabaseTest::unicode()
+QINFO  : DatabaseTest::fetchMinimumFreeID() Current backend: "SQLite"
+PASS   : DatabaseTest::fetchMinimumFreeID()
+QINFO  : DatabaseTest::dateToEpoch() Current backend: "SQLite"
+QINFO  : DatabaseTest::dateToEpoch()    "'2016-08-11 17:15'"
+QINFO  : DatabaseTest::dateToEpoch()    "'2007-01-26'"
+QINFO  : DatabaseTest::dateToEpoch()    "'2007-01-26'"
+PASS   : DatabaseTest::dateToEpoch()
+QINFO  : DatabaseTest::savepoints() Current backend: "SQLite"
+PASS   : DatabaseTest::savepoints()
+PASS   : DatabaseTest::cleanupTestCase()
+Totals: 22 passed, 0 failed, 0 skipped, 0 blacklisted, 1623ms
+********* Finished testing of DatabaseTest *********
+<end of output>
+Test time =   1.63 sec
+----------------------------------------------------------
+Test Passed.
+"TestDatabase" end time: Oct 11 03:47 UTC
+"TestDatabase" time elapsed: 00:00:01
+----------------------------------------------------------
+
+30/42 Testing: TestServerDatabase
+30/42 Test: TestServerDatabase
+Command: "/work/build/tests/TestServerDatabase"
+Directory: /work/build/src/tests/TestDatabase/server
+"TestServerDatabase" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of ServerDatabaseTest *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : ServerDatabaseTest::initTestCase()
+QINFO  : ServerDatabaseTest::serverTable_server_management() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::serverTable_server_management()
+QINFO  : ServerDatabaseTest::logTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::logTable_general()
+QINFO  : ServerDatabaseTest::configTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::configTable_general()
+QINFO  : ServerDatabaseTest::channelTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::channelTable_general()
+QINFO  : ServerDatabaseTest::channelPropertyTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::channelPropertyTable_general()
+QINFO  : ServerDatabaseTest::userTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::userTable_general()
+QINFO  : ServerDatabaseTest::userPropertyTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::userPropertyTable_general()
+QINFO  : ServerDatabaseTest::groupTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::groupTable_general()
+QINFO  : ServerDatabaseTest::groupMemberTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::groupMemberTable_general()
+QINFO  : ServerDatabaseTest::aclTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::aclTable_general()
+QINFO  : ServerDatabaseTest::channelLinkTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::channelLinkTable_general()
+PASS   : ServerDatabaseTest::ipAddress_conversions()
+QINFO  : ServerDatabaseTest::banTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::banTable_general()
+QINFO  : ServerDatabaseTest::channelListenerTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::channelListenerTable_general()
+QINFO  : ServerDatabaseTest::database_schema_migration() Current schema version: 6
+QINFO  : ServerDatabaseTest::database_schema_migration() Current backend: "SQLite"
+QINFO  : ServerDatabaseTest::database_schema_migration() Migration successful
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "access_control_lists" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "bans" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_links" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_listeners" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_properties" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channels" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "config" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "group_members" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "groups" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "server_logs" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "user_properties" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "users" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "virtual_servers" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Current schema version: 7
+QINFO  : ServerDatabaseTest::database_schema_migration() Current backend: "SQLite"
+QINFO  : ServerDatabaseTest::database_schema_migration() Migration successful
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "access_control_lists" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "bans" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_links" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_listeners" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_properties" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channels" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "config" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "group_members" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "groups" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "server_logs" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "user_properties" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "users" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "virtual_servers" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Current schema version: 8
+QINFO  : ServerDatabaseTest::database_schema_migration() Current backend: "SQLite"
+QINFO  : ServerDatabaseTest::database_schema_migration() Migration successful
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "access_control_lists" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "bans" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_links" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_listeners" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_properties" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channels" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "config" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "group_members" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "groups" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "server_logs" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "user_properties" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "users" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "virtual_servers" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Current schema version: 9
+QINFO  : ServerDatabaseTest::database_schema_migration() Current backend: "SQLite"
+QINFO  : ServerDatabaseTest::database_schema_migration() Migration successful
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "access_control_lists" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "bans" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_links" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_listeners" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_properties" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channels" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "config" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "group_members" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "groups" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "server_logs" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "user_properties" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "users" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "virtual_servers" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Current schema version: 10
+QINFO  : ServerDatabaseTest::database_schema_migration() Current backend: "SQLite"
+QINFO  : ServerDatabaseTest::database_schema_migration() Migration successful
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "access_control_lists" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "bans" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_links" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_listeners" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_properties" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channels" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "config" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "group_members" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "groups" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "server_logs" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "user_properties" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "users" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "virtual_servers" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Current schema version: 11
+QINFO  : ServerDatabaseTest::database_schema_migration() Current backend: "SQLite"
+QINFO  : ServerDatabaseTest::database_schema_migration() Migration successful
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "access_control_lists" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "bans" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_links" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_listeners" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channel_properties" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "channels" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "config" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "group_members" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "groups" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "server_logs" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "user_properties" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "users" ...
+QINFO  : ServerDatabaseTest::database_schema_migration() Checking contents of table  "virtual_servers" ...
+PASS   : ServerDatabaseTest::database_schema_migration()
+QINFO  : ServerDatabaseTest::database_future_schema_migration() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::database_future_schema_migration()
+PASS   : ServerDatabaseTest::cleanupTestCase()
+Totals: 18 passed, 0 failed, 0 skipped, 0 blacklisted, 1662ms
+********* Finished testing of ServerDatabaseTest *********
+<end of output>
+Test time =   1.67 sec
+----------------------------------------------------------
+Test Passed.
+"TestServerDatabase" end time: Oct 11 03:47 UTC
+"TestServerDatabase" time elapsed: 00:00:01
+----------------------------------------------------------
+
+31/42 Testing: TestFFDHE
+31/42 Test: TestFFDHE
+Command: "/work/build/tests/TestFFDHE"
+Directory: /work/build/src/tests/TestFFDHE
+"TestFFDHE" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestFFDHE *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFFDHE::initTestCase()
+PASS   : TestFFDHE::exercise(ffdhe2048)
+PASS   : TestFFDHE::exercise(ffdhe3072)
+PASS   : TestFFDHE::exercise(ffdhe4096)
+PASS   : TestFFDHE::exercise(ffdhe6144)
+PASS   : TestFFDHE::exercise(ffdhe8192)
+PASS   : TestFFDHE::exercise(ffdhe2048_upper)
+PASS   : TestFFDHE::exercise(ffdhe2048_random)
+PASS   : TestFFDHE::exercise(noname)
+PASS   : TestFFDHE::exercise(typo)
+PASS   : TestFFDHE::exercise(trailingspace)
+PASS   : TestFFDHE::namedGroupsMethod()
+PASS   : TestFFDHE::cleanupTestCase()
+Totals: 13 passed, 0 failed, 0 skipped, 0 blacklisted, 3ms
+********* Finished testing of TestFFDHE *********
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TestFFDHE" end time: Oct 11 03:47 UTC
+"TestFFDHE" time elapsed: 00:00:00
+----------------------------------------------------------
+
+32/42 Testing: TestIPCUtils
+32/42 Test: TestIPCUtils
+Command: "/work/build/tests/TestIPCUtils"
+Directory: /work/build/src/tests/TestIPCUtils
+"TestIPCUtils" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestIPCUtils *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestIPCUtils::initTestCase()
+PASS   : TestIPCUtils::usesXdgRuntimeDirectoryWhenSet()
+PASS   : TestIPCUtils::cleanupTestCase()
+Totals: 3 passed, 0 failed, 0 skipped, 0 blacklisted, 1ms
+********* Finished testing of TestIPCUtils *********
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"TestIPCUtils" end time: Oct 11 03:47 UTC
+"TestIPCUtils" time elapsed: 00:00:00
+----------------------------------------------------------
+
+33/42 Testing: TestPacketDataStream
+33/42 Test: TestPacketDataStream
+Command: "/work/build/tests/TestPacketDataStream"
+Directory: /work/build/src/tests/TestPacketDataStream
+"TestPacketDataStream" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestPacketDataStream *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestPacketDataStream::initTestCase()
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::string(Empty)
+PASS   : TestPacketDataStream::string(Null)
+PASS   : TestPacketDataStream::string(Bærtur)
+PASS   : TestPacketDataStream::space()
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::undersize()
+PASS   : TestPacketDataStream::recursive()
+PASS   : TestPacketDataStream::cleanupTestCase()
+Totals: 646 passed, 0 failed, 0 skipped, 0 blacklisted, 3ms
+********* Finished testing of TestPacketDataStream *********
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TestPacketDataStream" end time: Oct 11 03:47 UTC
+"TestPacketDataStream" time elapsed: 00:00:00
+----------------------------------------------------------
+
+34/42 Testing: TestPasswordGenerator
+34/42 Test: TestPasswordGenerator
+Command: "/work/build/tests/TestPasswordGenerator"
+Directory: /work/build/src/tests/TestPasswordGenerator
+"TestPasswordGenerator" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestPasswordGenerator *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestPasswordGenerator::initTestCase()
+PASS   : TestPasswordGenerator::random()
+PASS   : TestPasswordGenerator::cleanupTestCase()
+Totals: 3 passed, 0 failed, 0 skipped, 0 blacklisted, 6ms
+********* Finished testing of TestPasswordGenerator *********
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TestPasswordGenerator" end time: Oct 11 03:47 UTC
+"TestPasswordGenerator" time elapsed: 00:00:00
+----------------------------------------------------------
+
+35/42 Testing: TestMumbleProtocol
+35/42 Test: TestMumbleProtocol
+Command: "/work/build/tests/TestMumbleProtocol"
+Directory: /work/build/src/tests/TestMumbleProtocol
+"TestMumbleProtocol" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestMumbleProtocol *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestMumbleProtocol::initTestCase()
+QWARN  : TestMumbleProtocol::test_ping_client_to_server() Using protocol version 1.7.0
+QWARN  : TestMumbleProtocol::test_ping_client_to_server() Using protocol version 1.7.0
+PASS   : TestMumbleProtocol::test_ping_client_to_server()
+QWARN  : TestMumbleProtocol::test_ping_server_to_client() Using protocol version 1.7.0
+QWARN  : TestMumbleProtocol::test_ping_server_to_client() Using protocol version 1.7.0
+PASS   : TestMumbleProtocol::test_ping_server_to_client()
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Using protocol version 1.3.0
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Partial re-encoding
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Removing positional data
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Using protocol version 1.5.0
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Partial re-encoding
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Removing positional data
+PASS   : TestMumbleProtocol::test_audio_client_to_server()
+QWARN  : TestMumbleProtocol::test_audio_server_to_client() Using protocol version 1.3.0
+QWARN  : TestMumbleProtocol::test_audio_server_to_client() Partial re-encoding
+QWARN  : TestMumbleProtocol::test_audio_server_to_client() Removing positional data
+QWARN  : TestMumbleProtocol::test_audio_server_to_client() Using protocol version 1.5.0
+QWARN  : TestMumbleProtocol::test_audio_server_to_client() Partial re-encoding
+QWARN  : TestMumbleProtocol::test_audio_server_to_client() Removing positional data
+PASS   : TestMumbleProtocol::test_audio_server_to_client()
+PASS   : TestMumbleProtocol::test_preEncode_audio_context()
+PASS   : TestMumbleProtocol::test_preEncode_volume_adjustments()
+PASS   : TestMumbleProtocol::cleanupTestCase()
+Totals: 8 passed, 0 failed, 0 skipped, 0 blacklisted, 1ms
+********* Finished testing of TestMumbleProtocol *********
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TestMumbleProtocol" end time: Oct 11 03:47 UTC
+"TestMumbleProtocol" time elapsed: 00:00:00
+----------------------------------------------------------
+
+36/42 Testing: TestSelfSignedCertificate
+36/42 Test: TestSelfSignedCertificate
+Command: "/work/build/tests/TestSelfSignedCertificate"
+Directory: /work/build/src/tests/TestSelfSignedCertificate
+"TestSelfSignedCertificate" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestSelfSignedCertificate *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestSelfSignedCertificate::initTestCase()
+PASS   : TestSelfSignedCertificate::exerciseClientCert()
+PASS   : TestSelfSignedCertificate::exerciseServerCert()
+PASS   : TestSelfSignedCertificate::cleanupTestCase()
+Totals: 4 passed, 0 failed, 0 skipped, 0 blacklisted, 654ms
+********* Finished testing of TestSelfSignedCertificate *********
+<end of output>
+Test time =   0.66 sec
+----------------------------------------------------------
+Test Passed.
+"TestSelfSignedCertificate" end time: Oct 11 03:47 UTC
+"TestSelfSignedCertificate" time elapsed: 00:00:00
+----------------------------------------------------------
+
+37/42 Testing: TestServerAddress
+37/42 Test: TestServerAddress
+Command: "/work/build/tests/TestServerAddress"
+Directory: /work/build/src/tests/TestServerAddress
+"TestServerAddress" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestServerAddress *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestServerAddress::initTestCase()
+PASS   : TestServerAddress::defaultCtor()
+PASS   : TestServerAddress::isValid()
+PASS   : TestServerAddress::ctor()
+PASS   : TestServerAddress::equals()
+PASS   : TestServerAddress::lessThan()
+PASS   : TestServerAddress::qhash()
+PASS   : TestServerAddress::match()
+PASS   : TestServerAddress::ipv6ToString()
+PASS   : TestServerAddress::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 0ms
+********* Finished testing of TestServerAddress *********
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"TestServerAddress" end time: Oct 11 03:47 UTC
+"TestServerAddress" time elapsed: 00:00:00
+----------------------------------------------------------
+
+38/42 Testing: TestSSLLocks
+38/42 Test: TestSSLLocks
+Command: "/work/build/tests/TestSSLLocks"
+Directory: /work/build/src/tests/TestSSLLocks
+"TestSSLLocks" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestSSLLocks *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestSSLLocks::initTestCase()
+PASS   : TestSSLLocks::stress()
+PASS   : TestSSLLocks::cleanupTestCase()
+Totals: 3 passed, 0 failed, 0 skipped, 0 blacklisted, 2005ms
+********* Finished testing of TestSSLLocks *********
+<end of output>
+Test time =   2.01 sec
+----------------------------------------------------------
+Test Passed.
+"TestSSLLocks" end time: Oct 11 03:47 UTC
+"TestSSLLocks" time elapsed: 00:00:02
+----------------------------------------------------------
+
+39/42 Testing: TestStdAbs
+39/42 Test: TestStdAbs
+Command: "/work/build/tests/TestStdAbs"
+Directory: /work/build/src/tests/TestStdAbs
+"TestStdAbs" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestStdAbs *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestStdAbs::initTestCase()
+PASS   : TestStdAbs::floatWorks()
+PASS   : TestStdAbs::cleanupTestCase()
+Totals: 3 passed, 0 failed, 0 skipped, 0 blacklisted, 0ms
+********* Finished testing of TestStdAbs *********
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"TestStdAbs" end time: Oct 11 03:47 UTC
+"TestStdAbs" time elapsed: 00:00:00
+----------------------------------------------------------
+
+40/42 Testing: TestTimer
+40/42 Test: TestTimer
+Command: "/work/build/tests/TestTimer"
+Directory: /work/build/src/tests/TestTimer
+"TestTimer" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestTimer *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestTimer::initTestCase()
+QWARN  : TestTimer::resolution() Total elapsed time: 150000 microseconds
+QWARN  : TestTimer::resolution() Number of elapsed changes: 148270
+QWARN  : TestTimer::resolution() Resolution: 1.01 microseconds
+PASS   : TestTimer::resolution()
+PASS   : TestTimer::order()
+PASS   : TestTimer::cleanupTestCase()
+Totals: 4 passed, 0 failed, 0 skipped, 0 blacklisted, 150ms
+********* Finished testing of TestTimer *********
+<end of output>
+Test time =   0.15 sec
+----------------------------------------------------------
+Test Passed.
+"TestTimer" end time: Oct 11 03:47 UTC
+"TestTimer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+41/42 Testing: TestUnresolvedServerAddress
+41/42 Test: TestUnresolvedServerAddress
+Command: "/work/build/tests/TestUnresolvedServerAddress"
+Directory: /work/build/src/tests/TestUnresolvedServerAddress
+"TestUnresolvedServerAddress" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestUnresolvedServerAddress *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestUnresolvedServerAddress::initTestCase()
+PASS   : TestUnresolvedServerAddress::defaultCtor()
+PASS   : TestUnresolvedServerAddress::isValid()
+PASS   : TestUnresolvedServerAddress::ctor()
+PASS   : TestUnresolvedServerAddress::caseInsensitive()
+PASS   : TestUnresolvedServerAddress::equals()
+QWARN  : TestUnresolvedServerAddress::lessThan() 0 -> :0
+QWARN  : TestUnresolvedServerAddress::lessThan() 1 -> :1
+QWARN  : TestUnresolvedServerAddress::lessThan() 2 -> :999
+QWARN  : TestUnresolvedServerAddress::lessThan() 3 -> aaaaa:0
+QWARN  : TestUnresolvedServerAddress::lessThan() 4 -> baaaa:0
+QWARN  : TestUnresolvedServerAddress::lessThan() 5 -> baaaa:1
+QWARN  : TestUnresolvedServerAddress::lessThan() 6 -> maaaa:0
+QWARN  : TestUnresolvedServerAddress::lessThan() 7 -> maaaa:100
+QWARN  : TestUnresolvedServerAddress::lessThan() 8 -> maaaa:64738
+QWARN  : TestUnresolvedServerAddress::lessThan() 9 -> naaaa:64738
+QWARN  : TestUnresolvedServerAddress::lessThan() 10 -> zaaaa:0
+QWARN  : TestUnresolvedServerAddress::lessThan() 11 -> zaaaa:65535
+PASS   : TestUnresolvedServerAddress::lessThan()
+PASS   : TestUnresolvedServerAddress::qhash()
+PASS   : TestUnresolvedServerAddress::cleanupTestCase()
+Totals: 9 passed, 0 failed, 0 skipped, 0 blacklisted, 0ms
+********* Finished testing of TestUnresolvedServerAddress *********
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"TestUnresolvedServerAddress" end time: Oct 11 03:47 UTC
+"TestUnresolvedServerAddress" time elapsed: 00:00:00
+----------------------------------------------------------
+
+42/42 Testing: TestVersion
+42/42 Test: TestVersion
+Command: "/work/build/tests/TestVersion"
+Directory: /work/build/src/tests/TestVersion
+"TestVersion" start time: Oct 11 03:47 UTC
+Output:
+----------------------------------------------------------
+********* Start testing of TestVersion *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestVersion::initTestCase()
+PASS   : TestVersion::legacy_encode()
+PASS   : TestVersion::legacy_decode()
+PASS   : TestVersion::legacy_consistency()
+PASS   : TestVersion::general_getMajor()
+PASS   : TestVersion::general_getMinor()
+PASS   : TestVersion::general_getPatch()
+PASS   : TestVersion::v2_encode()
+PASS   : TestVersion::v2_decode()
+PASS   : TestVersion::v2_limits()
+PASS   : TestVersion::config_decoding()
+PASS   : TestVersion::cleanupTestCase()
+Totals: 12 passed, 0 failed, 0 skipped, 0 blacklisted, 0ms
+********* Finished testing of TestVersion *********
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"TestVersion" end time: Oct 11 03:47 UTC
+"TestVersion" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 11 03:47 UTC

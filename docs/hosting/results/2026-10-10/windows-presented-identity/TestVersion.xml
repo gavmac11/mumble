@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestVersion" timestamp="2026-10-10T20:48:44" hostname="windows-validation-host" tests="12" failures="0" errors="0" skipped="0" time="0.003">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestVersion" time="0.000" />
+  <testcase name="legacy_encode" classname="TestVersion" time="0.000" />
+  <testcase name="legacy_decode" classname="TestVersion" time="0.000" />
+  <testcase name="legacy_consistency" classname="TestVersion" time="0.000" />
+  <testcase name="general_getMajor" classname="TestVersion" time="0.000" />
+  <testcase name="general_getMinor" classname="TestVersion" time="0.000" />
+  <testcase name="general_getPatch" classname="TestVersion" time="0.000" />
+  <testcase name="v2_encode" classname="TestVersion" time="0.000" />
+  <testcase name="v2_decode" classname="TestVersion" time="0.000" />
+  <testcase name="v2_limits" classname="TestVersion" time="0.000" />
+  <testcase name="config_decoding" classname="TestVersion" time="0.000" />
+  <testcase name="cleanupTestCase" classname="TestVersion" time="0.000" />
+</testsuite>

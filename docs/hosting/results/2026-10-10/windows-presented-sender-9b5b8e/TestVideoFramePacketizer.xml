@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestVideoFramePacketizer" timestamp="2026-10-10T21:02:00" hostname="windows-validation-host" tests="4" failures="0" errors="0" skipped="0" time="0.250">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestVideoFramePacketizer" time="0.000" />
+  <testcase name="rejectsInvalidFrames" classname="TestVideoFramePacketizer" time="0.000" />
+  <testcase name="preservesFrameMetadataAcrossFragments" classname="TestVideoFramePacketizer" time="0.000" />
+  <testcase name="cleanupTestCase" classname="TestVideoFramePacketizer" time="0.000" />
+</testsuite>

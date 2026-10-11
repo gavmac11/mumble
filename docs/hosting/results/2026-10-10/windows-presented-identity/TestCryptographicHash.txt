@@ -1,0 +1,17 @@
+********* Start testing of TestCryptographicHash *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestCryptographicHash::initTestCase()
+PASS   : TestCryptographicHash::sha1(1)
+PASS   : TestCryptographicHash::sha1(2)
+PASS   : TestCryptographicHash::sha1(3)
+PASS   : TestCryptographicHash::sha1(4)
+PASS   : TestCryptographicHash::sha256(1)
+PASS   : TestCryptographicHash::sha256(2)
+PASS   : TestCryptographicHash::sha256(3)
+PASS   : TestCryptographicHash::sha256(4)
+PASS   : TestCryptographicHash::staticHashVsObject()
+PASS   : TestCryptographicHash::multipleResultCalls()
+PASS   : TestCryptographicHash::addDataAfterResult()
+PASS   : TestCryptographicHash::cleanupTestCase()
+Totals: 13 passed, 0 failed, 0 skipped, 0 blacklisted, 6ms
+********* Finished testing of TestCryptographicHash *********

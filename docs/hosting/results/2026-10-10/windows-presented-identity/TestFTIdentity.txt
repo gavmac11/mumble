@@ -1,0 +1,18 @@
+********* Start testing of TestFTIdentity *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestFTIdentity::initTestCase()
+PASS   : TestFTIdentity::safetyNumberFormat()
+PASS   : TestFTIdentity::safetyNumberSymmetry()
+PASS   : TestFTIdentity::safetyNumberDistinct()
+PASS   : TestFTIdentity::qrPayload()
+PASS   : TestFTIdentity::identityLifecycle()
+PASS   : TestFTIdentity::identityWrongPassphrase()
+PASS   : TestFTIdentity::identityChangePassphrase()
+PASS   : TestFTIdentity::trustStoreTransitions()
+PASS   : TestFTIdentity::trustStoreChangedBlocks()
+PASS   : TestFTIdentity::trustStoreRemovePin()
+PASS   : TestFTIdentity::verificationMatchesExpectedKey()
+PASS   : TestFTIdentity::replacedPinDoesNotAcceptOldVerification()
+PASS   : TestFTIdentity::cleanupTestCase()
+Totals: 14 passed, 0 failed, 0 skipped, 0 blacklisted, 4392ms
+********* Finished testing of TestFTIdentity *********

@@ -60,7 +60,7 @@ TrustState PeerTrustStore::checkAndPin(const QByteArray &serverDigest, const QSt
 	}
 
 	QSqlQuery query(m_db);
-	if (!query.prepare(QLatin1String("INSERT OR REPLACE INTO `ft_pins` "
+	if (!query.prepare(QLatin1String("INSERT INTO `ft_pins` "
 									 "(`server_digest`, `username`, `peer_fingerprint`, "
 									 "`safety_number`, `first_seen`, `verified`) "
 									 "VALUES (?, ?, ?, ?, ?, 0)")))
@@ -77,14 +77,16 @@ TrustState PeerTrustStore::checkAndPin(const QByteArray &serverDigest, const QSt
 	return TrustState::Pinned;
 }
 
-bool PeerTrustStore::markVerified(const QByteArray &serverDigest, const QString &username) {
+bool PeerTrustStore::markVerified(const QByteArray &serverDigest, const QString &username,
+								  const QByteArray &expectedFingerprint) {
 	QSqlQuery query(m_db);
 	if (!query.prepare(QLatin1String("UPDATE `ft_pins` SET `verified` = 1 "
-									 "WHERE `server_digest` = ? AND `username` = ?")))
+									 "WHERE `server_digest` = ? AND `username` = ? AND `peer_fingerprint` = ?")))
 		return false;
 	query.addBindValue(serverDigest);
 	query.addBindValue(username);
-	return execTrustQuery(query);
+	query.addBindValue(expectedFingerprint);
+	return execTrustQuery(query) && query.numRowsAffected() == 1;
 }
 
 bool PeerTrustStore::removePin(const QByteArray &serverDigest, const QString &username) {
@@ -97,8 +99,10 @@ bool PeerTrustStore::removePin(const QByteArray &serverDigest, const QString &us
 	return execTrustQuery(query);
 }
 
-bool PeerTrustStore::lookup(PinnedPeer &out, const QByteArray &serverDigest,
-							const QString &username) const {
+bool PeerTrustStore::lookup(PinnedPeer &out, const QByteArray &serverDigest, const QString &username,
+							bool *querySucceeded) const {
+	if (querySucceeded)
+		*querySucceeded = false;
 	QSqlQuery query(m_db);
 	if (!query.prepare(QLatin1String("SELECT `server_digest`, `username`, `peer_fingerprint`, "
 									 "`safety_number`, `first_seen`, `verified` FROM `ft_pins` "
@@ -106,7 +110,12 @@ bool PeerTrustStore::lookup(PinnedPeer &out, const QByteArray &serverDigest,
 		return false;
 	query.addBindValue(serverDigest);
 	query.addBindValue(username);
-	if (!execTrustQuery(query) || !query.next())
+	if (!execTrustQuery(query))
+		return false;
+	const bool found = query.next();
+	if (querySucceeded)
+		*querySucceeded = !query.lastError().isValid();
+	if (!found)
 		return false;
 
 	out = rowToPeer(query);

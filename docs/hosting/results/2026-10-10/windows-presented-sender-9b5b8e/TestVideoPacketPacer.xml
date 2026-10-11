@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestVideoPacketPacer" timestamp="2026-10-10T21:02:00" hostname="windows-validation-host" tests="12" failures="0" errors="0" skipped="0" time="0.141">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestVideoPacketPacer" time="0.000" />
+  <testcase name="preservesPacketsAndAccountsForWireBytes" classname="TestVideoPacketPacer" time="0.000" />
+  <testcase name="eventLoopStallDoesNotFlushTheWholeFrame" classname="TestVideoPacketPacer" time="0.000" />
+  <testcase name="idleTimeDoesNotBankBurstCredit" classname="TestVideoPacketPacer" time="0.000" />
+  <testcase name="overloadBoundsMemoryAndWaitsForAnIndependentFrame" classname="TestVideoPacketPacer" time="0.000" />
+  <testcase name="invalidFrameDoesNotDestroyAcceptedBacklog" classname="TestVideoPacketPacer" time="0.002" />
+  <testcase name="largeKeyframeFinishesBeyondTheSoftAgeAndByteBudgets" classname="TestVideoPacketPacer" time="0.000" />
+  <testcase name="expiredPartialFrameIsAbandonedUntilNextKeyframe" classname="TestVideoPacketPacer" time="0.000" />
+  <testcase name="replacementKeyframeDoesNotBypassTheNextDeadline" classname="TestVideoPacketPacer" time="0.000" />
+  <testcase name="exposesDropsAndRequestsRecoveryOnceTheQueueDrains" classname="TestVideoPacketPacer" time="0.001" />
+  <testcase name="timerIsAsynchronousAndDestructionCancelsPendingPackets" classname="TestVideoPacketPacer" time="0.135" />
+  <testcase name="cleanupTestCase" classname="TestVideoPacketPacer" time="0.000" />
+</testsuite>

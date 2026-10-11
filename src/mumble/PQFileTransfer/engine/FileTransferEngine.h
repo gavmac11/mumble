@@ -50,6 +50,9 @@ struct FTTransferInfo {
 
 	QByteArray transferId;
 	unsigned int peerSession = 0;   // remote peer (sender when receiving)
+	// Incoming identity: name captured at handshake start, key authenticated by the session/manifest.
+	QString peerName;
+	QByteArray peerFingerprint;
 	bool incoming			  = false;
 	QString fileName;
 	QString mimeType;
@@ -90,6 +93,7 @@ public:
 
 	void setTransport(TransportControl control, TransportChunk chunk);
 	void setPinLookup(PinLookup lookup);
+	void setPeerNameLookup(std::function< QString(unsigned int) > lookup);
 	void setIdentity(QByteArray identityPublicKey, IdentitySign sign);
 	/// Call in the engine's owning thread; the manager queues configuration updates.
 	void setConfig(const Config &config);
@@ -100,8 +104,10 @@ public:
 					   quint64 chunkCountHint, const QByteArray &data);
 
 	// ---- Outbound requests (queued from the manager) ----
-	quint64 startSend(const QString &filePath, const QString &mimeType, bool passwordMode,
-					  QByteArray password, const QSet< unsigned int > &recipients);
+	/// Recipients map sessions to immutable expected fingerprints captured before queueing.
+	/// An empty value explicitly permits first use; sending never reads the receiver pin cache.
+	quint64 startSend(const QString &filePath, const QString &mimeType, bool passwordMode, QByteArray password,
+					  const QHash< unsigned int, QByteArray > &recipients);
 	void abortTransfer(const QByteArray &transferId);
 	/// Existing targets are replaced only after explicit user confirmation.
 	/// Otherwise creation is exclusive; failed writes leave the receive retryable.
@@ -168,6 +174,7 @@ private:
 
 	// --- receiving ---
 	struct ReceiveJob {
+		QString peerName;
 		QByteArray transferId;
 		unsigned int peerSession = 0;
 		FTManifest manifest;
@@ -259,6 +266,7 @@ private:
 	TransportControl m_transportControl;
 	TransportChunk m_transportChunk;
 	PinLookup m_pinLookup;
+	std::function< QString(unsigned int) > m_peerNameLookup;
 	std::unique_ptr< QTimer > m_sendPaceTimer;
 	QElapsedTimer m_sendPaceClock;
 	qint64 m_sendCreditMilliBytes = 0;

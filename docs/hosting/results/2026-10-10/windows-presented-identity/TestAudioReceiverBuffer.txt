@@ -1,0 +1,37 @@
+********* Start testing of TestAudioReceiverBuffer *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestAudioReceiverBuffer::initTestCase()
+PASS   : TestAudioReceiverBuffer::test_preconditions()
+PASS   : TestAudioReceiverBuffer::test_addReceiver()
+PASS   : TestAudioReceiverBuffer::test_addReceiverPositional()
+PASS   : TestAudioReceiverBuffer::test_forceAddReceiver()
+PASS   : TestAudioReceiverBuffer::test_preprocessBuffer()
+PASS   : TestAudioReceiverBuffer::test_getReceiverRange()
+QWARN  : TestAudioReceiverBuffer::test_encoding() Opening a new range
+QWARN  : TestAudioReceiverBuffer::test_encoding() Start: AudioReceiver{ receiver: ServerUser{ session: 2, version: "1.4.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 0, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() End: AudioReceiver{ receiver: ServerUser{ session: 0, version: "1.2.5", deaf: false, selfDeaf: false, ssContext: "" }, context: 0, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 2, version: "1.4.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 0, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 0, version: "1.2.5", deaf: false, selfDeaf: false, ssContext: "" }, context: 0, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Opening a new range
+QWARN  : TestAudioReceiverBuffer::test_encoding() Start: AudioReceiver{ receiver: ServerUser{ session: 1, version: "1.3.1", deaf: false, selfDeaf: false, ssContext: "" }, context: 3, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() End: AudioReceiver{ receiver: ServerUser{ session: 1, version: "1.3.1", deaf: false, selfDeaf: false, ssContext: "" }, context: 3, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 1, version: "1.3.1", deaf: false, selfDeaf: false, ssContext: "" }, context: 3, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Opening a new range
+QWARN  : TestAudioReceiverBuffer::test_encoding() Start: AudioReceiver{ receiver: ServerUser{ session: 8, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.4 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() End: AudioReceiver{ receiver: ServerUser{ session: 8, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.4 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 8, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.4 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Opening a new range
+QWARN  : TestAudioReceiverBuffer::test_encoding() Start: AudioReceiver{ receiver: ServerUser{ session: 10, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.2 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() End: AudioReceiver{ receiver: ServerUser{ session: 10, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.2 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 10, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.2 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Opening a new range
+QWARN  : TestAudioReceiverBuffer::test_encoding() Start: AudioReceiver{ receiver: ServerUser{ session: 3, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 1, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() End: AudioReceiver{ receiver: ServerUser{ session: 4, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 1, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 3, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 1, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() Processing AudioReceiver{ receiver: ServerUser{ session: 4, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 1, volAdj: 1 }
+QDEBUG : TestAudioReceiverBuffer::test_encoding() Sample receiver list required 5 encoding steps
+PASS   : TestAudioReceiverBuffer::test_encoding()
+PASS   : TestAudioReceiverBuffer::test_emptyRange()
+PASS   : TestAudioReceiverBuffer::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 3ms
+********* Finished testing of TestAudioReceiverBuffer *********
