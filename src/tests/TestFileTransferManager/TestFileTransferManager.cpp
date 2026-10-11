@@ -300,6 +300,9 @@ private slots:
 		QTest::newRow("changed") << QStringLiteral("changed");
 		QTest::newRow("storage-unavailable") << QStringLiteral("storage-unavailable");
 		QTest::newRow("save-retry") << QStringLiteral("save-retry");
+		QTest::newRow("duplicate-save") << QStringLiteral("duplicate-save");
+		QTest::newRow("no-trust-store") << QStringLiteral("no-trust-store");
+		QTest::newRow("removed-disconnect") << QStringLiteral("removed-disconnect");
 	}
 	void receivedFileRechecksPinBeforeSave() {
 		QFETCH(QString, change);
@@ -307,6 +310,7 @@ private slots:
 		QByteArray senderPublic;
 		PQFT::SecureBytes senderSecret;
 		QVERIFY(sig.keypair(senderPublic, senderSecret));
+		QSemaphore entered, release;
 		// The receiver manager joins its worker before the sender and its signing key are destroyed.
 		PQFT::FileTransferEngine sender;
 		FileTransferManager receiver;
@@ -370,7 +374,10 @@ private slots:
 			5000);
 		if (change == QLatin1String("storage-unavailable"))
 			m_trustDb.close();
-		if (change == QLatin1String("removed") || change == QLatin1String("changed")) {
+		if (change == QLatin1String("no-trust-store"))
+			receiver.m_trustStore.reset();
+		if (change == QLatin1String("removed") || change == QLatin1String("changed")
+			|| change == QLatin1String("removed-disconnect")) {
 			QVERIFY(receiver.m_trustStore->removePin(m_serverDigest, name));
 			if (change == QLatin1String("changed")) {
 				const QByteArray other = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_newM1));
@@ -379,6 +386,7 @@ private slots:
 			}
 		}
 		updates.clear();
+		QSignalSpy blocked(&receiver, &FileTransferManager::peerBlocked);
 		QString target = m_directory->filePath("owned-saved.bin");
 		if (change == QLatin1String("save-retry")) {
 			QFile existing(target);
@@ -396,13 +404,32 @@ private slots:
 			updates.clear();
 			target = m_directory->filePath("owned-retry.bin");
 		}
+		if (change == QLatin1String("duplicate-save")) {
+			QVERIFY(QMetaObject::invokeMethod(
+				receiver.m_engine,
+				[&]() {
+					entered.release();
+					release.tryAcquire(1, 3000);
+				},
+				Qt::QueuedConnection));
+			QVERIFY(entered.tryAcquire(1, 2000));
+		}
 		receiver.saveTransferAs(transfer, target);
+		if (change == QLatin1String("removed-disconnect"))
+			receiver.disconnectCleanup();
+		if (change == QLatin1String("duplicate-save")) {
+			const bool removed = receiver.m_trustStore->removePin(m_serverDigest, name);
+			receiver.saveTransferAs(transfer, m_directory->filePath("owned-duplicate.bin"));
+			release.release();
+			QVERIFY(removed);
+		}
 		QTRY_VERIFY_WITH_TIMEOUT(!updates.isEmpty(), 5000);
 		// Drain actual worker cleanup and GUI forwarding so Aborted cannot hide the rejection.
 		QVERIFY(QMetaObject::invokeMethod(receiver.m_engine, []() {}, Qt::BlockingQueuedConnection));
 		QCoreApplication::sendPostedEvents(&receiver, QEvent::MetaCall);
 		const bool expectedSaved = change == QLatin1String("verified") || change == QLatin1String("pinned")
-								   || change == QLatin1String("save-retry");
+								   || change == QLatin1String("save-retry")
+								   || change == QLatin1String("duplicate-save");
 		QCOMPARE(QFile::exists(target), expectedSaved);
 		if (expectedSaved) {
 			QFile output(target);
@@ -413,7 +440,15 @@ private slots:
 			const auto failed = updates.last().first().value< PQFT::FTTransferInfo >();
 			QCOMPARE(failed.state, PQFT::FTTransferInfo::State::Failed);
 			QVERIFY(!failed.error.isEmpty());
+			if (change != QLatin1String("changed"))
+				QCOMPARE(
+					failed.error,
+					QStringLiteral("Cannot confirm the sender's saved identity. Verify the sender and try again."));
 		}
+		QCOMPARE(blocked.size(), change == QLatin1String("changed") ? 1 : 0);
+		QVERIFY(receiver.m_rejectedReceived.isEmpty());
+		QVERIFY(receiver.m_savesInFlight.isEmpty());
+		QVERIFY(!QFile::exists(m_directory->filePath("owned-duplicate.bin")));
 	}
 
 	void changedDialogContextDoesNotPin_data() {

@@ -22,6 +22,7 @@
 #include <QMutex>
 #include <QObject>
 #include <QPointer>
+#include <QSet>
 #include <QString>
 
 #include <functional>
@@ -164,6 +165,7 @@ private:
 	// GUI-thread state for rechecking save requests and preserving rejection diagnostics until abort.
 	QHash< QByteArray, PQFT::FTTransferInfo > m_readyReceived;
 	QHash< QByteArray, PQFT::FTTransferInfo > m_rejectedReceived;
+	QSet< QByteArray > m_savesInFlight;
 };
 
 #endif // MUMBLE_MUMBLE_PQFILETRANSFER_ENGINE_FILETRANSFERMANAGER_H_

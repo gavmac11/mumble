@@ -66,10 +66,22 @@ void FileTransferManager::setupEngineTransports() {
 		[this](const PQFT::FTTransferInfo &info) {
 			forwardEngineEvent([this, info]() {
 				if (info.incoming && !info.transferId.isEmpty()) {
+					if (info.state == PQFT::FTTransferInfo::State::Ready
+						|| info.state == PQFT::FTTransferInfo::State::Saved
+						|| info.state == PQFT::FTTransferInfo::State::Failed
+						|| info.state == PQFT::FTTransferInfo::State::Aborted)
+						m_savesInFlight.remove(info.transferId);
 					const auto rejected = m_rejectedReceived.constFind(info.transferId);
 					if (rejected != m_rejectedReceived.constEnd()) {
+						if (info.state == PQFT::FTTransferInfo::State::Saved) {
+							// A save authorized before rejection may already have completed. Report it truthfully.
+							m_rejectedReceived.remove(info.transferId);
+							emit transferUpdated(info);
+							return;
+						}
 						// Worker abort is cleanup; preserve the useful trust failure on the card.
-						if (info.state == PQFT::FTTransferInfo::State::Aborted) {
+						if (info.state == PQFT::FTTransferInfo::State::Aborted
+							|| info.state == PQFT::FTTransferInfo::State::Failed) {
 							const auto failure = rejected.value();
 							m_rejectedReceived.remove(info.transferId);
 							emit transferUpdated(failure);
@@ -350,6 +362,9 @@ void FileTransferManager::rejectReceive(const PQFT::FTTransferInfo &info, PQFT::
 
 void FileTransferManager::saveTransferAs(const QByteArray &transferId, const QString &targetPath,
 										 bool replaceConfirmed) {
+	// A second request must not overwrite the outcome of the already authorized save.
+	if (m_savesInFlight.contains(transferId))
+		return;
 	const auto ready = m_readyReceived.constFind(transferId);
 	if (ready == m_readyReceived.constEnd())
 		return;
@@ -360,6 +375,7 @@ void FileTransferManager::saveTransferAs(const QByteArray &transferId, const QSt
 		rejectReceive(info, state);
 		return;
 	}
+	m_savesInFlight.insert(transferId);
 	QMetaObject::invokeMethod(
 		m_engine,
 		[this, transferId, targetPath, replaceConfirmed]() {
@@ -477,6 +493,7 @@ void FileTransferManager::disconnectCleanup() {
 	m_pendingFirstContact.clear();
 	m_readyReceived.clear();
 	m_rejectedReceived.clear();
+	m_savesInFlight.clear();
 	QMutexLocker lock(&m_pinCacheMutex);
 	m_pinCache.clear();
 	m_peerNameCache.clear();
