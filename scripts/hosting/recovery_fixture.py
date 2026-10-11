@@ -139,8 +139,12 @@ async def run(args):
             await admin.send(13, integer(1, channel_id) + integer(2, 0)
                              + blob(3, group) + blob(4, deny) + blob(4, allow))
             banned = await connect(BANNED, join, 'banned')
+            # This is the legacy Mumble wire-protocol ban identifier, not a TLS
+            # trust check. The server uses the DER certificate SHA1 (Server.cpp);
+            # changing it to SHA256 would invalidate the saved-ban rehearsal.
+            # TLS server identity above is recorded with SHA256 independently.
             banned_hash = hashlib.sha1(ssl.PEM_cert_to_DER_cert(
-                (args.secrets / 'banned.crt').read_text())).hexdigest()
+                (args.secrets / 'banned.crt').read_text()), usedforsecurity=False).hexdigest()
             if args.legacy_ban:
                 # The old server lacks the certificate-only UserRemove extension.
                 # A documentation IP avoids banning every NAT/loopback client.

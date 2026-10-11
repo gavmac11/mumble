@@ -186,6 +186,7 @@ def fresh_or_owned(sha256, port):
 
 def local_tls_ready(port, certificate, timeout=10):
     context = ssl.create_default_context(cafile=str(certificate))
+    context.minimum_version = ssl.TLSVersion.TLSv1_2
     # Local readiness pins the exact archived leaf, independent of its public DNS name.
     # The separate external probe still validates the public hostname and actual accounts.
     context.check_hostname = False
