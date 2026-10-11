@@ -99,5 +99,18 @@
     "early_routing_source": "991c97537fce9fac6ca39f6b82cf092ed1f60af5",
     "early_routing_mac_cases": 22,
     "qualification": "latest full Linux, Windows early routing and hosted exact-candidate gates pending; native/media/signing/endurance/hosting/commercial gates open"
+  },
+  "review_fix_qualification": {
+    "source": "004733f9266e765b5d32caf2f9be56031d5ac405",
+    "linux": "docs/hosting/results/2026-10-10/linux-integrated-review-fixes/validation.json",
+    "windows_early_routing": {
+      "source": "991c97537fce9fac6ca39f6b82cf092ed1f60af5",
+      "cases": 33,
+      "failed": 0,
+      "skipped": 0
+    },
+    "hosted_head": "101d94a0ffee4e00f24b4fbe8a427d620e534e10",
+    "hosted_builds_and_preview": "passed; publication skipped",
+    "combined_codeql": "failed: one high fixture SHA1 annotation; older master configuration warning"
   }
 }
