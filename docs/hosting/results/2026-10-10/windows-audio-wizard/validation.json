@@ -1,0 +1,271 @@
+{
+  "recorded_utc": "2026-10-11T01:41:48.101307+00:00",
+  "source_commit": "8c4269054798f6e3104426f1171dd77ef0a06465",
+  "source_branch": "codex/audio-wizard-unavailable-device",
+  "pull_request": "https://github.com/gavmac11/mumble/pull/47",
+  "production_commit": "8c4269054798f6e3104426f1171dd77ef0a06465",
+  "source_tree_clean_before_evidence": true,
+  "source_blob_sha256": {
+    "src/mumble/AudioWizard.cpp": "fb9299c4c50604ab0f9e0e30fd6d3ee42b45867768c9156ba09c0eb6273699f7",
+    "src/mumble/AudioWizard.h": "226730c74b6d9994d4e77699445fbd5167b096824e9846195b623d70446b424f",
+    "src/mumble/AudioWizard.ui": "c183bd3c773be41c97291aa6b3d8b53e66ab92333f2d5f07c44cd4e01d664876",
+    "src/mumble/AudioInput.cpp": "d350c61143f0c4825040640f4a82f013b953ead19cd0dfb9c7c24cbf5bfc6c45",
+    "src/mumble/AudioInput.h": "4a7ec81968db32a4caf52196eb27b2aa09a79c08a8ff9a8b29c7fa1f30fb03e1",
+    "src/mumble/AudioOutput.cpp": "820d75981ab1ecef27061476f9d67aa327afc1989085f13eaa9214fbe84e347c",
+    "src/mumble/AudioOutput.h": "43d049a12670f3fe4f2d9269fadab5d3f8cf0b12d0262b6ba03f1b59498cef2f",
+    "src/mumble/Global.cpp": "7b54f0e197fbf26b1627d26ea6e7c8e3f5754bb2385ce166bc6dfb8e43963163",
+    "src/tests/TestAudioWizard/TestAudioWizard.cpp": "2eb06422ed530252ec184cc1a64119da4f991826088ab923afa230808fbff6fe",
+    "src/tests/TestAudioWizard/CMakeLists.txt": "89323cdef931e5e0707eeaf993e8d3650874a8416a3620bcbb0e798858c57e7d",
+    "src/tests/CMakeLists.txt": "d9e3ccd0db002f6c96f6fc4441024cb031cffa003af29d5691a6b2e6cdd06919"
+  },
+  "os": {
+    "name": "Windows 10 Pro",
+    "version": "10.0.19045",
+    "architecture": "x64"
+  },
+  "compiler": {
+    "name": "MSVC",
+    "version": "19.51.36257.0",
+    "installation": "VS 2026 Build Tools"
+  },
+  "qt": {
+    "version": "6.10.0",
+    "linkage": "static",
+    "dependency_build_compiler": "MSVC 2022"
+  },
+  "dependencies": "vcpkg 2026-02 b1fe4a4257 / x64-windows-static-md; OpenSSL 3.6.1; FFmpeg 8.1 shared",
+  "configuration": "Release, Ninja unity build, C++20, dynamic MSVC runtime, symbols off, LTO off, strict warnings-as-errors enabled; tests/server on, packaging off",
+  "build": {
+    "targets": [
+      "mumble",
+      "mumble-server",
+      "TestAudioWizard"
+    ],
+    "configure_exit_code": 0,
+    "build_exit_code": 0,
+    "source_compiler_policy": [
+      {
+        "target": "TestAudioWizard",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_client_object_lib",
+        "checked_translation_units": 10,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble-server",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_server_object_lib",
+        "checked_translation_units": 3,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "shared",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      }
+    ],
+    "dependency_warning_policy": "Repository defaults retained for third-party and generated protobuf sources; -external:W0 retained for external headers. No source warning relaxation on client/logger/database or tested file-transfer translation units.",
+    "client_executable_sha256": "affc5576fad1de28505ea73a27687b91e3b4c6c2585ef11f68a21900deff0f55",
+    "server_executable_sha256": "379493bb0cef1ede81a5f63c65f63a30faa652b044685034440aeaf16b8b7e88",
+    "dependency_build_warning": "Existing liboqs unsupported-MSVC optimization-barrier warning retained in private full build log, with repository dependency warning policy unchanged."
+  },
+  "tests": [
+    {
+      "suite": "TestAudioWizard",
+      "cases": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.029,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestAudioWizard",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "unavailableDevices(pending-or-denied-input)",
+          "classname": "TestAudioWizard",
+          "time": "0.018",
+          "result": "passed"
+        },
+        {
+          "name": "unavailableDevices(both-unavailable)",
+          "classname": "TestAudioWizard",
+          "time": "0.008",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestAudioWizard",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "d61f6ed225bf24514813ce3beb23e7020df588edd4de2fab5e593865456023d0",
+      "txt_report": "TestAudioWizard.txt",
+      "junit_report": "TestAudioWizard.xml"
+    }
+  ],
+  "ctest": {
+    "suites": 1,
+    "failures": 0,
+    "wall_seconds": 0.9,
+    "case_seconds": {
+      "TestAudioWizard": 0.876664
+    },
+    "exit_code": 0,
+    "parallel": 2,
+    "qt_platform": "offscreen",
+    "output_capture": "Only QtTest text/JUnit -o flags temporarily appended to generated CTest registrations, restored byte-for-byte after the run. Repository implementation unchanged.",
+    "parent_qt_force_stderr_logging": false
+  },
+  "scope": [
+    "Strict native Release client/server and TestAudioWizard build",
+    "Offscreen Qt wizard fixture with null microphone input and synthetic silent/no output",
+    "Pending-or-denied input and both-unavailable cases keep device page incomplete and validation blocked",
+    "Microphone guidance remains when output alone recovers; unavailable-output guidance clears",
+    "Missing selected input/output registrars handled safely; rejection/destruction completes",
+    "Synthetic SilentOutput derived destructor waits for its thread before AudioOutput base teardown"
+  ],
+  "not_run": [
+    "Original Windows null-input crash baseline",
+    "Actual microphone/speaker devices, OS permission/capture prompts, device enumeration acceptance or native wizard/installed-client UI",
+    "Other integrated regression suites, full Windows matrix/hosting, fresh QR/rate/storage/fatal/database qualification",
+    "Windows sanitizer/endurance, packaging/signing or Windows 11 acceptance"
+  ],
+  "preservation": "Prior rate-credit five recorded binaries and compiler commands preserved byte-for-byte on E: before requested reuse. Prior private reports/ledger unchanged; C: source/build/reports/personal state untouched. New test/build/evidence uses E:, with established scoped normal-user-temp access rules copied only onto the new private fixture root. No native GUI, authentication, hardware/permission action, app restart, cleanup or C: copy. Complete logs/commands/binaries remain private.",
+  "publication": {
+    "attributes": "* -text whitespace=cr-at-eol (scoped to this directory)",
+    "changes": [
+      "Anonymized XML hostnames",
+      "Replaced private CTest build path with <isolated-build-directory>",
+      "Sanitized private paths in retained runtime warnings, without changing messages, cases or outcomes."
+    ],
+    "test_results_changed": false,
+    "hash_policy": "Published file hashes describe exact stored report bytes. Private complete logs have a separate local ledger."
+  },
+  "runtime_warnings": {
+    "suites_with_warnings": [
+      "TestAudioWizard"
+    ],
+    "handling": "Runtime warning text retained; private build paths replaced with <isolated-build-directory>. No test failure or warning was hidden."
+  },
+  "windows_acceptance_passed": true,
+  "fixture_isolation": {
+    "settings": "Explicit private config path inside owned QTemporaryDir; shortcuts cleared for fixture",
+    "registrars": "Synthetic input/output maps and current names temporarily substituted and restored using QScopeGuard",
+    "input": "Fixture create() returns nullptr and reports OS denial/pending guidance; no real microphone",
+    "output": "Silent synthetic AudioOutput or nullptr; derived destructor wait() joins before base teardown",
+    "audio_cleanup": "Audio::stop() called by scope guard before restoring maps/current names/global pointer",
+    "temp_acl": {
+      "effective_access_rules_match_previous_normal_temp_fixture": true,
+      "inherited_drive_grants_blocked": true,
+      "rule_count": 7,
+      "scope": "Access rules copied only to new private E: test temp; owner/group and personal/system ACLs unchanged"
+    },
+    "personal_settings_or_permissions_changed": false,
+    "native_gui_authentication_or_hardware_actions": false
+  },
+  "preservation_record": {
+    "source_commit": "8c4269054798f6e3104426f1171dd77ef0a06465",
+    "prior_rate_credit_source": "c80433c2c1a66a94b7b06f7fea9fa955e7495d3c",
+    "prior_rate_credit_evidence": "2ca049ddebdc60a97f523242f52ecbc3c8fc3bba",
+    "prior_ledger_entries_verified": 30,
+    "prior_client_server_and_test_binaries": "Five binaries copied and checksum verified on E: before requested build reuse",
+    "prior_compile_commands": "Copied on E:; private compiler-command evidence retained",
+    "c_drive_copies_or_cleanup": false,
+    "personal_mumble_state_changes": false,
+    "gui_authentication_or_hardware_actions": false
+  },
+  "cmake_options": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_UNITY_BUILD": "ON",
+    "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+    "bundled-cli11": "OFF",
+    "bundled-spdlog": "OFF",
+    "client": "ON",
+    "database-mysql-tests": "OFF",
+    "database-postgresql-tests": "OFF",
+    "database-sqlite-tests": "ON",
+    "file-sharing": "ON",
+    "ice": "OFF",
+    "lto": "OFF",
+    "overlay": "OFF",
+    "packaging": "OFF",
+    "plugins": "OFF",
+    "server": "ON",
+    "static": "ON",
+    "symbols": "OFF",
+    "test-lto": "OFF",
+    "tests": "ON",
+    "translations": "OFF",
+    "warnings-as-errors": "ON"
+  }
+}

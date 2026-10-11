@@ -1,0 +1,9 @@
+Windows audio-wizard validation: 8c4269054798f6e3104426f1171dd77ef0a06465
+MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022); Windows 10 Pro 10.0.19045 x64.
+Release/C++20; /W4 /WX /O2 /bigobj /options:strict; dynamic MSVC runtime; no source warning relaxation.
+mumble client/server and TestAudioWizard built successfully.
+TestAudioWizard: 4 cases, 0 failures, 0 errors, 0 skipped, 0.029s.
+CTest: one suite passed, 0.90s elapsed.
+Null-input and both-unavailable fixture cases pass: device-page progression blocked, appropriate guidance shown, output-only recovery remains blocked, missing registrars handled and wizard rejected normally. Synthetic output thread joined in derived destructor before base teardown.
+This qualifies only the exact offscreen wizard fixture and native builds. No actual hardware, OS microphone permission/capture approval, native installed UI, Windows negative baseline, full suite/hosting or sanitizer acceptance.
+Generated CTest registrations restored; source/personal state unchanged. Prior evidence/binaries preserved entirely on E:; no cleanup or C: copies. Complete logs kept private.
