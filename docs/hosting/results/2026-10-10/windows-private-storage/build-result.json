@@ -1,0 +1,14 @@
+{
+  "source_commit": "2059ef27a1d9aec63298b21fdd118ce80a405f70",
+  "configure_exit_code": 0,
+  "build_exit_code": 0,
+  "build_session": 56313,
+  "recorded_utc": "2026-10-11T00:33:13.182599+00:00",
+  "targets": [
+    "mumble",
+    "mumble-server",
+    "TestFileTransferEngine",
+    "TestFileTransferE2E",
+    "TestFileTransferManager"
+  ]
+}

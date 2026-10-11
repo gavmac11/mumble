@@ -1,0 +1,13 @@
+{
+  "source": "Normal user temporary directory access rules, read-only",
+  "target": "Owned E: test temporary root",
+  "effective_access_rules_match_normal_temp": true,
+  "inherited_drive_grants_blocked": true,
+  "source_rule_count": 8,
+  "actual_canonical_rule_count": 7,
+  "comparison": "Equivalent Allow rights grouped by principal/type/inheritance/propagation; Windows merged a redundant subset Allow entry",
+  "owner_or_group_changed": false,
+  "personal_or_system_permissions_changed": false,
+  "initial_attempt": "Complete descriptor copy denied by Windows with no ACL change; scoped access-only copy succeeded without owner/group changes",
+  "windows_permission_scope": "Normal per-user temporary directory access rules replicated only on private fixture root; Unix permission/symlink assertions remain conditional"
+}

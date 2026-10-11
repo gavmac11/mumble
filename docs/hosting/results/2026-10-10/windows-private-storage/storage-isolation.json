@@ -1,0 +1,12 @@
+{
+  "prior_fatal_source": "d8bb735ba17e89dbe723b458f36a02f4bc79918a",
+  "prior_fatal_evidence_commit": "5fbb53ef422eb1a996054c5b2ca2215f88fe0734",
+  "prior_fatal_private_ledger_entries_verified": 51,
+  "prior_fatal_compiler_commands_and_binaries": "Preserved byte-for-byte on E: before explicit build reuse",
+  "c_drive_cleanup": "One verified incomplete server snapshot copy discarded with explicit authorization; original source/build/reports and complete copies retained",
+  "checkout_build_compiler_test_temp_and_evidence": "Owned E: directories",
+  "test_temp_acl": "Equivalent effective access rules to normal user temporary directory, protected from E: drive inheritance",
+  "personal_mumble_state_changed": false,
+  "native_gui_or_authentication_actions": false,
+  "app_attachment": "PR42 attachment attempted twice; app could not confirm save (disk-full then transaction-state error); no app restart"
+}
