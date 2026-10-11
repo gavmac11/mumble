@@ -55,7 +55,31 @@
     "compiler_exception": "Existing -Wno-error=restrict; remaining strict flags retained",
     "source_archive_sha256": "1fa03982360b138303282653d7eea66e77bf76d9dae971e693d6e6282c87f6b2"
   },
-  "exact_combined_windows": "running full enabled test set",
+  "exact_combined_windows": {
+    "source_head": "17f0807e25f8924948c0c391e96d5742c51f817a",
+    "producer_commit": "e79a39fb94daf6ac01fed1a53866e905b2a8882a",
+    "strict_release_build": "complete client/server/all enabled test targets passed",
+    "ctest": {
+      "registered": 42,
+      "enabled": 41,
+      "passed": 41,
+      "disabled": [
+        "OverlayTest"
+      ]
+    },
+    "qt_cases": {
+      "passed": 1047,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "committed_checksums_verified": 98,
+    "existing_platform_limits": [
+      "Windows WebM decoder/playback branches compiled out; six ChatWebM drop/budget/init/cleanup cases executed",
+      "Unix permission/symlink branches conditional"
+    ],
+    "no_newly_disabled_tests": true
+  },
   "exact_hosted_matrix_security": "running; both actual C++/Python comparison configurations now present; no clean security result claimed",
   "remaining": [
     "Server recipient-only relay, delivery receipts/rate negotiation, downstream queue bounds",
