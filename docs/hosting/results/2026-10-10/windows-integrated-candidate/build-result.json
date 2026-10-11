@@ -1,0 +1,20 @@
+{
+  "source_commit": "901014211cf1c8742fc50e1fc814c1c8e4878d6f",
+  "configure_exit_code": 0,
+  "build_exit_code": 0,
+  "recorded_utc": "2026-10-11T00:07:31.779112+00:00",
+  "build_session": 37014,
+  "targets": [
+    "mumble",
+    "mumble-server",
+    "TestFileTransferEngine",
+    "TestFileTransferManager",
+    "TestPQCrypto",
+    "TestFileTransferE2E",
+    "TestBandwidthRecord",
+    "TestConnectionOutputQueue",
+    "TestQtLogger",
+    "TestFileTransferUi",
+    "TestDatabasePath"
+  ]
+}

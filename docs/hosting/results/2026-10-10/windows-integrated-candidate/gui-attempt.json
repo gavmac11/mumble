@@ -1,0 +1,25 @@
+{
+  "source_commit": "901014211cf1c8742fc50e1fc814c1c8e4878d6f",
+  "installed_client_acceptance_passed": false,
+  "attempted": "Read-only Computer Use inspection of existing owned lab receiver before any UI action.",
+  "profile_isolation": {
+    "both_clients": "Explicit private settings and database paths inside owned lab cache",
+    "server": "Owned database; configured host 127.0.0.1 port 56210",
+    "binary": "Existing separately extracted preview; not the integrated build"
+  },
+  "observed": {
+    "target": "Private receiver Stability-B",
+    "window_binding": "Successful returned unique window; accessibility observation succeeded",
+    "connection": "Not connected",
+    "focus": "File-transfer identity passphrase input",
+    "blocking_modal": "Choose a passphrase to protect your file-transfer identity key."
+  },
+  "actions_taken": [],
+  "stop_reason": "Identity authentication/security prompt blocks workspace; no bypass or identity/settings changes permitted. Keyboard Save route not reached.",
+  "limitations": [
+    "No transfer sent",
+    "No saved output verified",
+    "No integrated GUI client launched",
+    "No capture retry, application restart or personal settings change"
+  ]
+}
