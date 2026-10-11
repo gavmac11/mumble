@@ -1,0 +1,10 @@
+Windows fatal-startup validation: d8bb735ba17e89dbe723b458f36a02f4bc79918a
+MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022); Windows 10 Pro 10.0.19045 x64.
+Release/C++20; /W4 /WX /O2 /bigobj /options:strict; dynamic MSVC runtime; no source warning relaxation.
+mumble client/server, TestQtLogger and TestDatabasePath built successfully.
+TestQtLogger: 7 cases, 0 failures, 0 errors, 0 skipped, 1.929s.
+TestDatabasePath: 6 cases, 0 failures, 0 errors, 0 skipped, 2.032s.
+CTest: two suites passed, 3.27s elapsed.
+Both production fatal logger modes exit 1 with fatal text and no static cleanup marker. Invalid database directory shows a private plain-text error modal, then terminates using expected default/production handlers and preserves fallback bytes.
+No full suite/hosting rerun, Windows baseline, sanitizer, installed-client GUI authentication/Save or packaging/signing acceptance.
+Parent stderr override unset; exact source sets it for negative database children. Only the source child QTimer closes its own test dialog. Generated CTest registrations restored; personal state unchanged. Complete logs kept private on E:.

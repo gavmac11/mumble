@@ -1,0 +1,14 @@
+{
+  "source_commit": "d8bb735ba17e89dbe723b458f36a02f4bc79918a",
+  "configure_exit_code": 0,
+  "build_exit_code": 0,
+  "build_session": 60268,
+  "recorded_utc": "2026-10-11T00:29:18.192319+00:00",
+  "targets": [
+    "mumble",
+    "mumble-server",
+    "TestQtLogger",
+    "TestDatabasePath"
+  ],
+  "temporary_files": "Owned E: directory"
+}

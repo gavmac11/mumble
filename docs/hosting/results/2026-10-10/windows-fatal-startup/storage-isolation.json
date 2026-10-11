@@ -1,0 +1,21 @@
+{
+  "original_integrated_binary_hashes_verified": {
+    "mumble.exe": "948a17a51589f82790880d8b861a4b1f8d45ccc53df89c6c62deec12b4f2576c",
+    "mumble-server.exe": "668ccc410ca4f5287a79bcd1e5efd926d1f8d4eba628d4d58c293598b78d2c9d",
+    "tests/TestFileTransferEngine.exe": "9e157d54fc7c7e81f1759633b23a28ee1a12e121e6c6cc09716eeb7307852e49",
+    "tests/TestFileTransferManager.exe": "fd540289c812c70c891ca365ab8ac5110ae6d71fc5be4e928aaa06cfefb3fe1f",
+    "tests/TestPQCrypto.exe": "aa2527972180cefd731229d254a1cd6aea5578921300bedc873f1e2060a5a803",
+    "tests/TestFileTransferE2E.exe": "345059c661548da73f24fb223a32602ac9638590d51646a4839f1301fa1dc1fb",
+    "tests/TestBandwidthRecord.exe": "57d8716248ae76a683ff157059702b20496ae9f6c2bcea434e3d5e7822b6db92",
+    "tests/TestConnectionOutputQueue.exe": "d931a925f409f752ffe4fa539168b7629466cd37f339020f5aad98ba33f710c8",
+    "tests/TestQtLogger.exe": "07419a8864ea9b028dc7c73a9d06964528a550cc446ae56693519277d56c28af",
+    "tests/TestFileTransferUi.exe": "e6c90bff31cb2fedfce6455f1123a33b9c25c347d8a279ffbc5e06fcb9d0b2e3",
+    "tests/TestDatabasePath.exe": "e2346bfae7bc687c4e6d105f4fec8d46f6f95fd98621f557dec789247c5b833d"
+  },
+  "original_integrated_private_ledger_entries_verified": 60,
+  "c_drive_free_bytes_at_start": 0,
+  "failed_preservation_copy": "Stopped at partial mumble.exe copy, before checkout or build; partial copy left untouched and not counted as preserved evidence",
+  "snapshot_archive_attempt": "Rejected before execution by automatic approval review; no archival operation performed",
+  "safe_alternative": "Separate E: exact-source clone, build, compiler temporary files and private evidence; all C: source/binaries/reports/personal state retained",
+  "gui_actions": false
+}
