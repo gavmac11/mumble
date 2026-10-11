@@ -1,0 +1,25 @@
+{
+  "source_commit": "e1d12f7e1140975da419909594127da0e8fa0a70",
+  "observed_branch_documentation_head": "1ef89b0085ac28b1197f14de01b072045f7a351c",
+  "branch_head_runtime_tree_matches_source": true,
+  "branch_head_diff_scope": "docs only; exact e1d12f7 production source checked out",
+  "prior_ledger_entries_verified": {
+    "mumble-rate-credit-20261010": 30,
+    "mumble-audio-wizard-20261010": 22,
+    "mumble-rate-credit-revised-20261010": 30,
+    "mumble-rate-credit-precision-20261010": 31,
+    "mumble-integrated-pacing-audio-20261010": 144,
+    "mumble-atomic-transfer-save-20261010": 31,
+    "mumble-atomic-save-sync-20261010": 31,
+    "mumble-automatic-save-safety-20261010": 29
+  },
+  "prior_policy_source": "30fa66b21914b82ea048afdd5cfd5122cbd5d70f",
+  "prior_policy_evidence": "fa89b2b24ad3be974cac4fffba79f80806d63828",
+  "prior_policy_committed_checksum_entries_verified": 20,
+  "prior_binaries": "All 44 existing binaries and compiler commands copied and hash verified on E: before reuse; four exact 30fa client/server/UI/settings binaries checked against report; older snapshots retained",
+  "snapshot_binary_count": 44,
+  "exact_prior_policy_binary_count": 4,
+  "c_drive_copies_or_cleanup": false,
+  "personal_mumble_state_changes": false,
+  "gui_authentication_or_hardware_actions": false
+}
