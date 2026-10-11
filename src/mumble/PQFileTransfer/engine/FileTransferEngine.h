@@ -27,6 +27,8 @@
 #include <memory>
 
 class QFile;
+class QFileDevice;
+class TestFileTransferEngine;
 
 namespace PQFT {
 
@@ -125,6 +127,9 @@ signals:
 	void passwordRequired(const QByteArray &transferId);
 
 private:
+	friend class ::TestFileTransferEngine;
+	std::function< bool(QFileDevice &) > m_syncSaveFile;
+	std::function< bool(const QString &) > m_syncSavePublication;
 	// --- sending ---
 	struct SendPeer {
 		unsigned int session = 0;
@@ -241,7 +246,7 @@ private:
 	void cleanupReceive(std::shared_ptr< ReceiveJob > jobPtr, bool keepReady = true);
 	void emitInfo(const FTTransferInfo &info);
 	void emitSaveDone(std::shared_ptr< ReceiveJob > jobPtr);
-	void emitSaveFailed(ReceiveJob &job);
+	void emitSaveFailed(ReceiveJob &job, const QString &error = QString());
 	std::shared_ptr< ReceiveJob > findReceiveByPeer(unsigned int peerSession,
 													const QByteArray &transferId);
 	/// Key for receive jobs whose manifest (and thus transferId) has not
