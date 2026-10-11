@@ -74,10 +74,10 @@
     "duration_seconds": 54.87
   },
   "ci": {
-    "source_head": "8002309ac",
+    "source_head": "8002309ac0a7e6c2850b7469957c27f2d04a584c",
     "general_run": 38094906038,
     "preview_run": 38094907890,
-    "status": "dispatched_pending_results"
+    "status": "All four general platform builds and complete safety-QR decoder job passed; all preview build/test/decoder gates passed; publication skipped."
   },
   "constraints": [
     "Native save was built from production working-tree files subsequently committed at a016b9dfc; latest change only corrects QR payload encoding and adds the scanner gate",
