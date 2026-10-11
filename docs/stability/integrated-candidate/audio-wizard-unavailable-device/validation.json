@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "source_head": "8c4269054798f6e3104426f1171dd77ef0a06465",
+  "before_cpp_source": "004733f9266e765b5d32caf2f9be56031d5ac405",
+  "platform": "macOS 26.6.2 ARM64; Qt6.11.1; AppleClang21",
+  "build": "Full Release client/server and tests passed",
+  "ctest": {
+    "registered": 42,
+    "enabled": 41,
+    "passed": 41,
+    "failed": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 48.47
+  },
+  "focused_cases": {
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0
+  },
+  "native_after": {
+    "binary_sha256": "5c0225973a58ee6814e810063d4aed01cc57a5d4da05a49a10e8a9a5879c8a7d",
+    "private_cocoa_plugin_sha256": "6970e53cc4d675369eb46eb51bb3965a417ad5deecd1bdf609126eb32f7a7305",
+    "owned_database_verified": true,
+    "same_microphone_selection_survived": true,
+    "next_disabled_with_input_guidance": true,
+    "normal_quit": true,
+    "new_crash_after_signed_retry": false
+  },
+  "excluded_fixture_attempts": [
+    "First unit harness omitted wizard initialization and tried an input without MainWindow actions; corrected to the actual unavailable-input path",
+    "Silent output fixture initially failed to join its thread before derived teardown; corrected",
+    "Copied test application initially retained a stale signature and was killed before startup; ad hoc signature verified before accepted native retry"
+  ],
+  "qualification": "Pending/unavailable-device behavior only. Ad hoc dynamic developer bundle, not signed/notarized shipping qualification. Microphone capture/permission approval, audible loopback, camera/screen and Windows/Linux remain open."
+}
