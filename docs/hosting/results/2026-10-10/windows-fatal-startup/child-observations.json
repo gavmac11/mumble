@@ -1,0 +1,144 @@
+{
+  "source_commit": "d8bb735ba17e89dbe723b458f36a02f4bc79918a",
+  "scope": "Supplementary direct invocations of unchanged exact-source test child entry points with owned synthetic fixtures and CTest-equivalent runtime paths. Database negative modes use the exact test child environment and its QTimer dialog closure. No process error-mode override, debugger or fatal-handler replacement.",
+  "records": [
+    {
+      "suite": "TestDatabasePath",
+      "mode": "file",
+      "return_code": 0,
+      "windows_return_code_hex": "0x00000000",
+      "timed_out": false,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0,
+      "combined_expected_fatal_text": false,
+      "configured_database_diagnostic": false,
+      "plain_text_dialog_marker": false,
+      "raw_streams": [
+        "TestDatabasePath-file-stdout.bin",
+        "TestDatabasePath-file-stderr.bin"
+      ],
+      "private_database_before_sha256": {
+        "mumble.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83",
+        "explicit.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83"
+      },
+      "private_database_after_sha256": {
+        "mumble.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83",
+        "explicit.sqlite": "1e676fe3ad199e4dd12fec18bb934a33706f0e6ac549e52f775bb2f6a311a941"
+      },
+      "unselected_hash_unchanged": true,
+      "fallback_hash_unchanged": true
+    },
+    {
+      "suite": "TestDatabasePath",
+      "mode": "default",
+      "return_code": 0,
+      "windows_return_code_hex": "0x00000000",
+      "timed_out": false,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0,
+      "combined_expected_fatal_text": false,
+      "configured_database_diagnostic": false,
+      "plain_text_dialog_marker": false,
+      "raw_streams": [
+        "TestDatabasePath-default-stdout.bin",
+        "TestDatabasePath-default-stderr.bin"
+      ],
+      "private_database_before_sha256": {
+        "mumble.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83",
+        "explicit.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83"
+      },
+      "private_database_after_sha256": {
+        "mumble.sqlite": "1e676fe3ad199e4dd12fec18bb934a33706f0e6ac549e52f775bb2f6a311a941",
+        "explicit.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83"
+      },
+      "unselected_hash_unchanged": true,
+      "fallback_hash_unchanged": false
+    },
+    {
+      "suite": "TestDatabasePath",
+      "mode": "directory",
+      "return_code": 3221226505,
+      "windows_return_code_hex": "0xc0000409",
+      "timed_out": false,
+      "stdout_bytes": 35,
+      "stderr_bytes": 484,
+      "combined_expected_fatal_text": false,
+      "configured_database_diagnostic": true,
+      "plain_text_dialog_marker": true,
+      "raw_streams": [
+        "TestDatabasePath-directory-stdout.bin",
+        "TestDatabasePath-directory-stderr.bin"
+      ],
+      "private_database_before_sha256": {
+        "mumble.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83",
+        "explicit.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83"
+      },
+      "private_database_after_sha256": {
+        "mumble.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83",
+        "explicit.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83"
+      },
+      "unselected_hash_unchanged": true,
+      "fallback_hash_unchanged": true
+    },
+    {
+      "suite": "TestDatabasePath",
+      "mode": "directory-app-logger",
+      "return_code": 1,
+      "windows_return_code_hex": "0x00000001",
+      "timed_out": false,
+      "stdout_bytes": 610,
+      "stderr_bytes": 0,
+      "combined_expected_fatal_text": false,
+      "configured_database_diagnostic": true,
+      "plain_text_dialog_marker": true,
+      "raw_streams": [
+        "TestDatabasePath-directory-app-logger-stdout.bin",
+        "TestDatabasePath-directory-app-logger-stderr.bin"
+      ],
+      "private_database_before_sha256": {
+        "mumble.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83",
+        "explicit.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83"
+      },
+      "private_database_after_sha256": {
+        "mumble.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83",
+        "explicit.sqlite": "9858ec5842fb87998a7b70d83457a42650fb80d9ba86e2f5e3a38927cf27ce83"
+      },
+      "unselected_hash_unchanged": true,
+      "fallback_hash_unchanged": true
+    },
+    {
+      "suite": "TestQtLogger",
+      "mode": "qt",
+      "return_code": 1,
+      "windows_return_code_hex": "0x00000001",
+      "timed_out": false,
+      "stdout_bytes": 61,
+      "stderr_bytes": 0,
+      "combined_expected_fatal_text": true,
+      "configured_database_diagnostic": false,
+      "plain_text_dialog_marker": false,
+      "raw_streams": [
+        "TestQtLogger-qt-stdout.bin",
+        "TestQtLogger-qt-stderr.bin"
+      ],
+      "static_cleanup_marker_exists": false
+    },
+    {
+      "suite": "TestQtLogger",
+      "mode": "direct",
+      "return_code": 1,
+      "windows_return_code_hex": "0x00000001",
+      "timed_out": false,
+      "stdout_bytes": 61,
+      "stderr_bytes": 0,
+      "combined_expected_fatal_text": true,
+      "configured_database_diagnostic": false,
+      "plain_text_dialog_marker": false,
+      "raw_streams": [
+        "TestQtLogger-direct-stdout.bin",
+        "TestQtLogger-direct-stderr.bin"
+      ],
+      "static_cleanup_marker_exists": false
+    }
+  ]
+}

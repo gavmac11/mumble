@@ -1,0 +1,4 @@
+QFontDatabase: Cannot find font directory <isolated-build-directory>/tests/lib/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+This plugin does not support propagateSizeHints()
+Database: Unable to open configured database at <private-fixture-directory>\directory: unable to open database file Error opening database (14)
