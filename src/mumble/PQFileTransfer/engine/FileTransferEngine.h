@@ -20,6 +20,7 @@
 #include <QPair>
 #include <QSet>
 #include <QTimer>
+#include <QTemporaryDir>
 
 #include <functional>
 #include <memory>
@@ -170,13 +171,15 @@ private:
 		bool passwordMode		= false;
 		QByteArray fileKey;   // recovered (possibly after password)
 		bool waitingPassword   = false;
+		// Own a random, private receive directory; destruction removes unsaved data.
+		std::unique_ptr< QTemporaryDir > tempDirectory;
 		QString tempDir;
 		QString tempFile;
 		/// Ciphertext spool while the password is pending: the sender keeps
 		/// streaming (no readiness acknowledgement exists), so every chunk
 		/// must survive on disk until the key can be unwrapped.
 		QString spoolFile;
-		::QFile *spool = nullptr;   // open for appending while waitingPassword
+		::QFile *spool = nullptr;  // open for appending while waitingPassword
 		QByteArray receivedBits;   // bit i set = chunk i verified
 		quint64 receivedCount  = 0;
 		QByteArray spooledBits;   // bit i set = chunk i spooled while a password was pending
