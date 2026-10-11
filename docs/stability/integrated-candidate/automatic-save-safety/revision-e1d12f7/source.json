@@ -1,0 +1,28 @@
+{
+  "head": "e1d12f7e1140975da419909594127da0e8fa0a70",
+  "full_source_sha256": {
+    "src/mumble/PQFileTransfer/engine/FTSavePolicy.h": "881ca1ad7d98ecbeb679ae013a430b388adcaf427c23187ef9d4f86aecc62cfb",
+    "src/mumble/PQFileTransfer/engine/FTSavePolicy.cpp": "70fd3f2a38a005aaa47654503db1d024f49b6f3994db18347923a61d5f9dca0a",
+    "src/mumble/Settings.h": "ff5355c2a7519276646aa18fab53d3e6c1118007ee90e6633a7a3b448f5a4374",
+    "src/mumble/SettingsKeys.h": "1d19b8f35fe9c15fc47e1191792f127e2bacab9a6f1a483a1be792f581b05670",
+    "src/mumble/SettingsMacros.h": "c8c892ea4a3ad5137db107c5b890f26f9b28869e37ce03fc140df4f6d8be6ae6",
+    "src/tests/TestFileTransferUi/TestFileTransferUi.cpp": "b80facffc8a8e1ce99a57847c92650aac352140c8ec4d2c2678495a03de523ea",
+    "src/mumble/PQFileTransfer/identity/PeerTrustStore.h": "b43e6e95b41fba11dd6163e98edcc398ad9da852d94dc2efff1ab6a8fafa7f2e",
+    "src/mumble/JSONSerialization.cpp": "e26d520a3706b02316f0c78248ebe995d57750382f1e346a663b9dc2d24861cb",
+    "src/mumble/JSONSerialization.h": "14ca865e861f6f5d45535137625d6938b3655967b3d14824ec16da7c433ae154",
+    "src/mumble/Settings.cpp": "3def2b8f07f49331c5332d5e7d010dbfaba3c68d53541cff23cd6577ef7279dd",
+    "src/mumble/FileTransferConfig.cpp": "85a47ce41541d2900aa8e696ea6a68a559868d18392e92464ac0c5d86e83ef0e",
+    "src/mumble/FileTransferConfig.ui": "344020dc67f8b89a9690002f91dbff6aab418d3bc913f9b25bc1e0aa5bee3665",
+    "src/mumble/PQFileTransfer/engine/FileTransferEngine.h": "8388de4a9c8880b3db51fa8cbbdfe349131db38a3dda5dda8cfc7dcfe8093921",
+    "src/mumble/PQFileTransfer/engine/FileTransferEngine.cpp": "1cffcbd47d967919933f85f1d3d2736840a927920de0b9f58e0dd08be815f16c",
+    "src/mumble/PQFileTransfer/engine/FTManifest.cpp": "43e9fa9c6e49036dbb26fb0a514bb296c7127f9b2a7640f25e2de0524eca3ef2",
+    "src/mumble/PQFileTransfer/PQFTConstants.h": "01511cfa25b164f97100c5baf77eb4d8a472c7c127ca62481757030ebaa82c29",
+    "src/mumble/PQFileTransfer/engine/FileTransferManager.cpp": "d6504a392f3838941999e4be75ea32164b18a28075fd7c7e6cb09628391ecd82",
+    "src/mumble/PQFileTransfer/engine/FileTransferManager.h": "cb1d2393b7fa96e6a1553f184d233f35cfa50e88dec8b7b2690e7d749f9c6ea6",
+    "src/mumble/MainWindow.cpp": "7f0afd64a6aa7fa431b4c18ec1fc8f1e2fb3d9847712232c955bb7797ff2a027"
+  },
+  "mainwindow_excerpt_lines": [
+    4801,
+    4910
+  ]
+}

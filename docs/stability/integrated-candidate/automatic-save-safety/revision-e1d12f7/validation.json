@@ -1,0 +1,17 @@
+{
+  "source_head": "e1d12f7e1140975da419909594127da0e8fa0a70",
+  "mac_release_ui_settings_targets": "passed; warnings-as-errors disabled",
+  "focused": {
+    "passed": 73,
+    "failed": 0,
+    "skipped": 0
+  },
+  "ui_settings_ctest": {
+    "passed": 2,
+    "failed": 0,
+    "seconds": 0.5
+  },
+  "full_mac": "pending",
+  "opus": "pending",
+  "native_windows_linux": "pending"
+}
