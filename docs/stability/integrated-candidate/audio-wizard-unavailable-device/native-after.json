@@ -1,0 +1,11 @@
+{
+  "source": "8c4269054",
+  "platform": "macOS 26.6.2 ARM64; Qt6.11.1 dynamic developer bundle",
+  "observed": "Opened audio wizard, advanced to device page, selected MacBook Pro Microphone; client remains alive with unavailable-input guidance and Next disabled",
+  "permission_state": "CoreAudio returns null while permission is not determined; no OS approval was automated",
+  "opened_databases": [
+    "/private/tmp/mumble-stability-lab-20261010/native-mac-integrated-review/client.sqlite"
+  ],
+  "signature": "ad hoc test bundle; initial copied binary had stale signature and was rejected before launch",
+  "qualification": "Pending-permission crash prevention only; no microphone capture, audible loopback, camera/screen or signed release acceptance"
+}

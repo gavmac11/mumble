@@ -183,6 +183,7 @@ AudioWizard::AudioWizard(QWidget *p) : QWizard(p) {
 	qpTalkingOff = QPixmap::fromImage(QImage(QLatin1String("skin:talking_off.svg")).scaled(64, 64));
 
 	bInit = false;
+	updateDeviceAvailability();
 
 	connect(this, SIGNAL(currentIdChanged(int)), this, SLOT(showPage(int)));
 
@@ -214,6 +215,10 @@ void AudioWizard::on_qcbInput_activated(int) {
 		return;
 
 	AudioInputRegistrar *air = AudioInputRegistrar::qmNew->value(qcbInput->currentText());
+	if (!air) {
+		updateDeviceAvailability();
+		return;
+	}
 	QList< audioDevice > ql  = air->getDeviceChoices();
 
 	for (const audioDevice &d : ql) {
@@ -235,6 +240,10 @@ void AudioWizard::on_qcbInputDevice_activated(int) {
 	Audio::stopInput();
 
 	AudioInputRegistrar *air = AudioInputRegistrar::qmNew->value(qcbInput->currentText());
+	if (!air) {
+		updateDeviceAvailability();
+		return;
+	}
 	int idx                  = qcbInputDevice->currentIndex();
 	if (idx > -1) {
 		air->setDeviceChoice(qcbInputDevice->itemData(idx), Global::get().s);
@@ -243,7 +252,9 @@ void AudioWizard::on_qcbInputDevice_activated(int) {
 	updateEchoCheckbox(air);
 
 	Global::get().ai = AudioInputPtr(air->create());
-	Global::get().ai->start(QThread::HighestPriority);
+	if (Global::get().ai)
+		Global::get().ai->start(QThread::HighestPriority);
+	updateDeviceAvailability();
 }
 
 void AudioWizard::on_qcbOutput_activated(int) {
@@ -253,6 +264,10 @@ void AudioWizard::on_qcbOutput_activated(int) {
 		return;
 
 	AudioOutputRegistrar *aor = AudioOutputRegistrar::qmNew->value(qcbOutput->currentText());
+	if (!aor) {
+		updateDeviceAvailability();
+		return;
+	}
 	QList< audioDevice > ql   = aor->getDeviceChoices();
 
 	for (const audioDevice &d : ql) {
@@ -276,6 +291,10 @@ void AudioWizard::on_qcbOutputDevice_activated(int) {
 	Audio::stopOutput();
 
 	AudioOutputRegistrar *aor = AudioOutputRegistrar::qmNew->value(qcbOutput->currentText());
+	if (!aor) {
+		updateDeviceAvailability();
+		return;
+	}
 	int idx                   = qcbOutputDevice->currentIndex();
 	if (idx > -1) {
 		aor->setDeviceChoice(qcbOutputDevice->itemData(idx), Global::get().s);
@@ -285,7 +304,9 @@ void AudioWizard::on_qcbOutputDevice_activated(int) {
 	updateEchoCheckbox(AudioInputRegistrar::qmNew->value(qcbInput->currentText()));
 
 	Global::get().ao = AudioOutputPtr(aor->create());
-	Global::get().ao->start(QThread::HighPriority);
+	if (Global::get().ao)
+		Global::get().ao->start(QThread::HighPriority);
+	updateDeviceAvailability();
 }
 
 void AudioWizard::on_qsOutputDelay_valueChanged(int v) {
@@ -388,6 +409,7 @@ void AudioWizard::restartAudio(bool restartChord) {
 	Global::get().s.qsAudioOutput = qcbOutput->currentText();
 
 	Audio::start();
+	updateDeviceAvailability();
 
 	if (qgsScene) {
 		delete qgsScene;
@@ -458,13 +480,36 @@ void AudioWizard::accept() {
 
 bool AudioWizard::validateCurrentPage() {
 	if (currentId() == 1) {
-		if ((qcbInput->currentIndex() < 0) || (qcbOutput->currentIndex() < 0))
-			return false;
+		updateDeviceAvailability();
+		return qwpDevice->isComplete();
 	}
 	return true;
 }
 
+void AudioWizard::updateDeviceAvailability() {
+	const bool inputAvailable  = Global::get().ai && qcbInputDevice->currentIndex() >= 0 && AudioInputRegistrar::qmNew
+								 && AudioInputRegistrar::qmNew->value(qcbInput->currentText());
+	const bool outputAvailable = Global::get().ao && qcbOutputDevice->currentIndex() >= 0 && AudioOutputRegistrar::qmNew
+								 && AudioOutputRegistrar::qmNew->value(qcbOutput->currentText());
+	QString message;
+	if (!inputAvailable)
+		message = tr("Audio input is unavailable. Check microphone access and choose an available input device.");
+	if (!outputAvailable) {
+		if (!message.isEmpty())
+			message += '\n';
+		message += tr("Audio output is unavailable. Choose an available output device.");
+	}
+	if (qlDeviceStatus->text() != message)
+		qlDeviceStatus->setText(message);
+	qlDeviceStatus->setVisible(!message.isEmpty());
+	const bool complete = inputAvailable && outputAvailable;
+	if (qwpDevice->isComplete() != complete)
+		qwpDevice->setComplete(complete);
+}
+
 void AudioWizard::on_Ticker_timeout() {
+	// Permission completion may create the input after the device page opened.
+	updateDeviceAvailability();
 	AudioInputPtr ai  = Global::get().ai;
 	AudioOutputPtr ao = Global::get().ao;
 	if (!ai || !ao)
@@ -776,6 +821,8 @@ void AudioWizard::updateEchoCheckbox(AudioInputRegistrar *air) {
 }
 
 EchoCancelOptionID AudioWizard::firstUsableEchoCancellation(AudioInputRegistrar *air, const QString outputSys) {
+	if (!air)
+		return EchoCancelOptionID::DISABLED;
 	for (EchoCancelOptionID ecoid : air->echoOptions) {
 		if (air->canEcho(ecoid, outputSys)) {
 			return ecoid;
