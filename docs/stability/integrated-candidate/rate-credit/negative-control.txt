@@ -1,0 +1,14 @@
+********* Start testing of TestFileTransferEngine *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestFileTransferEngine::initTestCase()
+FAIL!  : TestFileTransferEngine::sendingRespectsConfiguredRate(default) 'violation.isEmpty()' returned FALSE. (Sent 524320 bytes in 117 ms at configured 4194304 bytes/s)
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp(251)]
+FAIL!  : TestFileTransferEngine::sendingRespectsConfiguredRate(below-one-chunk-per-tick) 'violation.isEmpty()' returned FALSE. (Sent 262160 bytes in 67 ms at configured 1048576 bytes/s)
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp(251)]
+FAIL!  : TestFileTransferEngine::sendingRespectsConfiguredRate(slow) 'violation.isEmpty()' returned FALSE. (Sent 16400 bytes in 68 ms at configured 32768 bytes/s)
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp(251)]
+FAIL!  : TestFileTransferEngine::simultaneousSendsShareRateLimit() 'violation.isEmpty()' returned FALSE. (Concurrent jobs emitted 16400 bytes in 56 ms)
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp(288)]
+PASS   : TestFileTransferEngine::cleanupTestCase()
+Totals: 2 passed, 4 failed, 0 skipped, 0 blacklisted, 951ms
+********* Finished testing of TestFileTransferEngine *********

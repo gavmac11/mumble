@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "source_head": "c80433c2c1a66a94b7b06f7fea9fa955e7495d3c",
+  "production_change": "5c6a2fd25",
+  "platform": "macOS 26.6.2 ARM64; Qt6.11.1; AppleClang21",
+  "negative_control": {
+    "unchanged_production_head": "873e4a2eb1f552b9abc3532895d0ccb7f2c578a9",
+    "rate_rows_failed": 4
+  },
+  "focused": {
+    "passed": 8,
+    "failed": 0,
+    "skipped": 0
+  },
+  "full_build": "Client/server Release and enabled test targets passed; unchanged production from 5c6a2fd25, timer test fixture corrected at c80433c2c",
+  "ctest": {
+    "registered": 41,
+    "enabled": 40,
+    "passed": 40,
+    "failed": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 49.15
+  },
+  "limitation": "Engine ciphertext pacing only. Server rate negotiation/refusals, actual recipient receipts, slow-receiver behavior and bounded downstream queues remain open. Native Windows/Linux and frozen Opus patch review pending."
+}
