@@ -1,0 +1,15 @@
+{
+  "source_commit": "c80433c2c1a66a94b7b06f7fea9fa955e7495d3c",
+  "configure_exit_code": 0,
+  "build_exit_code": 0,
+  "build_session": 72894,
+  "recorded_utc": "2026-10-11T01:34:13.460458+00:00",
+  "targets": [
+    "mumble",
+    "mumble-server",
+    "TestFileTransferEngine",
+    "TestFileTransferE2E",
+    "TestFileTransferManager"
+  ],
+  "temporary_files": "Owned E: directory"
+}
