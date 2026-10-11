@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestFileTransferEngine" timestamp="2026-10-10T19:03:57" hostname="windows-validation-host" tests="34" failures="0" errors="0" skipped="0" time="22.615">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestFileTransferEngine" time="0.002" />
+  <testcase name="privateReceiveStorage(plaintext)" classname="TestFileTransferEngine" time="0.139" />
+  <testcase name="privateReceiveStorage(password-spool)" classname="TestFileTransferEngine" time="0.638" />
+  <testcase name="predictableReceivePathCannotRedirectWrites" classname="TestFileTransferEngine" time="0.125" />
+  <testcase name="earlyChunksKeepTheirTransferIdentity" classname="TestFileTransferEngine" time="0.132" />
+  <testcase name="unrelatedChunksDoNotExtendPendingReceive" classname="TestFileTransferEngine" time="0.351" />
+  <testcase name="sendReceiveRoundTrip" classname="TestFileTransferEngine" time="0.125" />
+  <testcase name="passwordRoundTrip" classname="TestFileTransferEngine" time="1.145" />
+  <testcase name="wrongPasswordFailsClosed" classname="TestFileTransferEngine" time="1.183" />
+  <testcase name="duplicateChunkIsFatal" classname="TestFileTransferEngine" time="0.125" />
+  <testcase name="latePasswordSpoolsAllChunks" classname="TestFileTransferEngine" time="1.319" />
+  <testcase name="secondTransferWhileFirstReady" classname="TestFileTransferEngine" time="0.255" />
+  <testcase name="readyTransferDoesNotExpire" classname="TestFileTransferEngine" time="2.130" />
+  <testcase name="firstContactPinFlags" classname="TestFileTransferEngine" time="0.683" />
+  <testcase name="incomingAbortCleansUpSafely" classname="TestFileTransferEngine" time="0.010" />
+  <testcase name="passwordSpoolIsBounded" classname="TestFileTransferEngine" time="0.690" />
+  <testcase name="cancelledPromptTimerCannotRemoveReplacementHandshake(disconnect)" classname="TestFileTransferEngine" time="0.000" />
+  <testcase name="cancelledPromptTimerCannotRemoveReplacementHandshake(declined-prompt)" classname="TestFileTransferEngine" time="0.000" />
+  <testcase name="shutdownRemovesUnsavedPlaintext(ready-unsaved)" classname="TestFileTransferEngine" time="0.126" />
+  <testcase name="shutdownRemovesUnsavedPlaintext(saved-file-preserved)" classname="TestFileTransferEngine" time="0.124" />
+  <testcase name="unlimitedSendStopsOnWorkerInterruption" classname="TestFileTransferEngine" time="0.078" />
+  <testcase name="sendingRespectsConfiguredRate(default)" classname="TestFileTransferEngine" time="0.310" />
+  <testcase name="sendingRespectsConfiguredRate(below-one-chunk-per-tick)" classname="TestFileTransferEngine" time="0.563" />
+  <testcase name="sendingRespectsConfiguredRate(slow)" classname="TestFileTransferEngine" time="2.047" />
+  <testcase name="simultaneousSendsShareRateLimit" classname="TestFileTransferEngine" time="2.356" />
+  <testcase name="unlimitedSendYieldsToQueuedAbort" classname="TestFileTransferEngine" time="0.246" />
+  <testcase name="synchronousChunkAbortStaysAborted" classname="TestFileTransferEngine" time="0.125" />
+  <testcase name="abortingAnotherJobDoesNotStopPacing" classname="TestFileTransferEngine" time="1.114" />
+  <testcase name="synchronousCompletionAbortStaysAborted" classname="TestFileTransferEngine" time="0.124" />
+  <testcase name="pausedDeliveryDoesNotReleaseUnboundedCredit" classname="TestFileTransferEngine" time="1.427" />
+  <testcase name="slowSendMakesProgress(unchanged-config-refresh)" classname="TestFileTransferEngine" time="2.607" />
+  <testcase name="slowSendMakesProgress(large-chunk-at-low-rate)" classname="TestFileTransferEngine" time="1.303" />
+  <testcase name="frequentRefillsPreserveElapsedCredit" classname="TestFileTransferEngine" time="1.009" />
+  <testcase name="cleanupTestCase" classname="TestFileTransferEngine" time="0.000" />
+</testsuite>

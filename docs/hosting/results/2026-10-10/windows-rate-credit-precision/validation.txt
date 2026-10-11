@@ -1,0 +1,11 @@
+Windows rate-credit precision validation: 4f30bc5778a2efbff0b25975d6b2cc0c2580e469
+MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022); Windows 10 Pro 10.0.19045 x64.
+Release/C++20; /W4 /WX /O2 /bigobj /options:strict; dynamic MSVC runtime; no source warning relaxation.
+mumble client/server, TestFileTransferEngine, TestFileTransferE2E and TestFileTransferManager built successfully.
+TestFileTransferEngine: 34 cases, 0 failures, 0 errors, 0 skipped, 22.615s.
+TestFileTransferE2E: 5 cases, 0 failures, 0 errors, 0 skipped, 9.187s.
+TestFileTransferManager: 6 cases, 0 failures, 0 errors, 0 skipped, 0.035s.
+CTest: three suites passed, 23.40s elapsed.
+Twelve repair cases pass: three unchanged elapsed-time rate envelopes, one shared concurrent-send byte budget with interleaving and exact saved bytes, queued unlimited abort, synchronous chunk abort, cleanup of another handshaking job during active dispatch, synchronous completion abort, pairwise sliding-window bound after a 300ms pause, repeated unchanged configuration, large configured chunks at low rate, and frequent fractional refills. The two slow-progress rows require five bounded chunks and exact saved bytes; 5000ms and 2000ms deadlines remain unchanged. Rate rows retain 2ms clock quantization without free initial chunks. The paused-callback row separately allows the unchanged source burst cap (one ciphertext chunk plus 50ms of configured rate) and 2ms quantization; no assertion/deadline weakened.
+This qualifies the exact engine source and regressions. Windows negative baseline, server rate negotiation, recipient acknowledgements, downstream queue acceptance, fan-out, full matrix/hosting, sanitizer and installed GUI remain unqualified. Unix permission/symlink branches conditional; zero skips.
+Generated CTest registrations restored; source/personal state unchanged. Prior evidence/binaries preserved entirely on E:; no cleanup or C: copies. Complete logs kept private.
