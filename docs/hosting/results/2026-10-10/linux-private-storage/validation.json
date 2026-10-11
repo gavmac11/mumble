@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "source_head": "2059ef27a1d9aec63298b21fdd118ce80a405f70",
+  "platform": "Debian 12 amd64 container on Ubuntu 24.04 host; Qt6.4.2; GCC12",
+  "build_image": "sha256:9cea5f8ec6743fe6066e43228478f723db31f8ea4796c4eadbb1e99f880fe7f8",
+  "source_archive_sha256": "2f5c5d7baa9d5e221cf4d33ae3d5b9356e6f067b2dc3a4673f5869abb2147b95",
+  "build": "client/server Release and five focused tests passed; existing GCC12 restrict-warning exception retained",
+  "compiler_exception": "-Wno-error=restrict; other default strict warnings retained",
+  "ctest": {
+    "suites": 5,
+    "cases": 44,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 16.94
+  },
+  "engine": {
+    "cases": 20,
+    "failed": 0,
+    "skipped": 0,
+    "unix_owner_permissions_and_symlink_checks": "executed and passed"
+  },
+  "qualification": "automated disposable Linux build and fixtures; no Ubuntu desktop/device or installed/signing qualification",
+  "mumble_sha256": "35cdb0717fad3dc91284b16630c01c1ab538027efaec8838f24b1fd135be6841",
+  "mumble-server_sha256": "09da8e26b49a0c784fb6e03b7913be8eaf1ab47290bfea6975a96bff410f31db"
+}

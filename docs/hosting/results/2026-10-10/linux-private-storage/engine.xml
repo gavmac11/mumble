@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite name="TestFileTransferEngine" timestamp="2026&#x002D;10&#x002D;11T00:35:10" hostname="89c262529936" tests="20" failures="0" errors="0" skipped="0" time="7.982">
+  <properties>
+    <property name="QTestVersion" value="6.4.2"/>
+    <property name="QtVersion" value="6.4.2"/>
+    <property name="QtBuild" value="Qt 6.4.2 (x86_64&#x002D;little_endian&#x002D;lp64 shared (dynamic) release build; by GCC 12.2.0)"/>
+  </properties>
+  <testcase name="initTestCase" classname="TestFileTransferEngine" time="0.001"/>
+  <testcase name="privateReceiveStorage(plaintext)" classname="TestFileTransferEngine" time="0.103"/>
+  <testcase name="privateReceiveStorage(password&#x002D;spool)" classname="TestFileTransferEngine" time="0.608"/>
+  <testcase name="predictableReceivePathCannotRedirectWrites" classname="TestFileTransferEngine" time="0.103"/>
+  <testcase name="sendReceiveRoundTrip" classname="TestFileTransferEngine" time="0.105"/>
+  <testcase name="passwordRoundTrip" classname="TestFileTransferEngine" time="1.007"/>
+  <testcase name="wrongPasswordFailsClosed" classname="TestFileTransferEngine" time="1.031"/>
+  <testcase name="duplicateChunkIsFatal" classname="TestFileTransferEngine" time="0.102"/>
+  <testcase name="latePasswordSpoolsAllChunks" classname="TestFileTransferEngine" time="1.130"/>
+  <testcase name="secondTransferWhileFirstReady" classname="TestFileTransferEngine" time="0.206"/>
+  <testcase name="readyTransferDoesNotExpire" classname="TestFileTransferEngine" time="2.103"/>
+  <testcase name="firstContactPinFlags" classname="TestFileTransferEngine" time="0.609"/>
+  <testcase name="incomingAbortCleansUpSafely" classname="TestFileTransferEngine" time="0.002"/>
+  <testcase name="passwordSpoolIsBounded" classname="TestFileTransferEngine" time="0.614"/>
+  <testcase name="cancelledPromptTimerCannotRemoveReplacementHandshake(disconnect)" classname="TestFileTransferEngine" time="0.000"/>
+  <testcase name="cancelledPromptTimerCannotRemoveReplacementHandshake(declined&#x002D;prompt)" classname="TestFileTransferEngine" time="0.000"/>
+  <testcase name="shutdownRemovesUnsavedPlaintext(ready&#x002D;unsaved)" classname="TestFileTransferEngine" time="0.103"/>
+  <testcase name="shutdownRemovesUnsavedPlaintext(saved&#x002D;file&#x002D;preserved)" classname="TestFileTransferEngine" time="0.103"/>
+  <testcase name="unlimitedSendStopsOnWorkerInterruption" classname="TestFileTransferEngine" time="0.051"/>
+  <testcase name="cleanupTestCase" classname="TestFileTransferEngine" time="0.000"/>
+</testsuite>

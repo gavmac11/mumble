@@ -1,0 +1,14 @@
+********* Start testing of TestFileTransferEngine *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestFileTransferEngine::initTestCase()
+FAIL!  : TestFileTransferEngine::privateReceiveStorage(plaintext) 'QFileInfo(directory).fileName().startsWith(prefix)' returned FALSE. (Receive directory is predictable)
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp(251)]
+FAIL!  : TestFileTransferEngine::privateReceiveStorage(password-spool) 'QFileInfo(directory).fileName().startsWith(prefix)' returned FALSE. (Receive directory is predictable)
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp(251)]
+FAIL!  : TestFileTransferEngine::predictableReceivePathCannotRedirectWrites() Compared values are not the same
+   Actual   (precreated.readAll()): "YZ`\x94\xA6\x16\xB1%\xBA\xDC\x8D@W\xAAJ\xD6\xA2)\xAC\xCC\xF6g\xA2+\xA6\xA9""fw\x9D\xED\xDD\xDF""f\xF6]{\x82\f\x97Zj9\x07\xB3\xB8\xCDIr\x97\xE4\x86""aA\xEA|\xB3\xF8\xC5l\x88\xBA\x87\xC5!\x0E\xF3\xD8P\x91K\xD1\xBA\x94\xFD&}\xB6""0R\r\xCE\xF4\xDApr\xBC"...
+   Expected (sentinel)            : "existing private fixture; do not modify"
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp(304)]
+PASS   : TestFileTransferEngine::cleanupTestCase()
+Totals: 2 passed, 3 failed, 0 skipped, 0 blacklisted, 853ms
+********* Finished testing of TestFileTransferEngine *********
