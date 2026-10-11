@@ -13,6 +13,38 @@
     "python"
   ],
   "changes": "Actual second traced build/analysis job under historical matrix identity; current job preserved; shared steps and permissions use YAML aliases",
-  "hosted_exact_revision": "pending",
-  "clean_security_acceptance": false
+  "hosted_exact_revision": {
+    "source_head": "17f0807e25f8924948c0c391e96d5742c51f817a",
+    "pr_merge_commit": "82a172deb9184cfecfe7ad27545ead8230c7126e",
+    "security_workflow_run": 38104027734,
+    "analysis_jobs": [
+      {
+        "id": 114365616037,
+        "name": "CodeQL",
+        "conclusion": "success"
+      },
+      {
+        "id": 114365615939,
+        "name": "CodeQL legacy comparison (ubuntu-latest)",
+        "conclusion": "success"
+      }
+    ],
+    "analyses": [
+      1930340771,
+      1930341130
+    ],
+    "expected_categories_present": true,
+    "actual_sarif_result_rule_families_each": [
+      "cpp",
+      "py"
+    ],
+    "results_count_each": 33,
+    "combined_check": {
+      "id": 114368621166,
+      "conclusion": "success",
+      "annotations_count": 0,
+      "title": "No new alerts in code changed by this pull request"
+    }
+  },
+  "clean_security_acceptance": "Exact17f changed-code comparison gate passes; this does not claim zero existing repository alerts or qualify later source"
 }
