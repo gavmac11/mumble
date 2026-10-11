@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestVideoViewUi" timestamp="2026-10-10T21:29:58" hostname="windows-validation-host" tests="5" failures="0" errors="0" skipped="0" time="0.006">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestVideoViewUi" time="0.000" />
+  <testcase name="fullscreenTracksExternalChanges" classname="TestVideoViewUi" time="0.002">
+    <system-err>
+      QFontDatabase: Cannot find font directory &lt;isolated-build-directory&gt;/tests/lib/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+    </system-err>
+  </testcase>
+  <testcase name="fullscreenKeyboard" classname="TestVideoViewUi" time="0.000" />
+  <testcase name="respectsThemeChanges" classname="TestVideoViewUi" time="0.001">
+    <system-err>
+      This plugin does not support propagateSizeHints()
+      This plugin does not support propagateSizeHints()
+      This plugin does not support propagateSizeHints()
+    </system-err>
+  </testcase>
+  <testcase name="cleanupTestCase" classname="TestVideoViewUi" time="0.000" />
+</testsuite>

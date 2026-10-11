@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="DatabaseTest" timestamp="2026-10-10T21:29:50" hostname="windows-validation-host" tests="22" failures="0" errors="0" skipped="0" time="0.169">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="DatabaseTest" time="0.000" />
+  <testcase name="hexConversions" classname="DatabaseTest" time="0.000">
+    <system-out>
+      Hex to binary
+      Binary to hex
+      Consistency checks
+    </system-out>
+  </testcase>
+  <testcase name="connect" classname="DatabaseTest" time="0.000">
+    <system-out>
+      Current backend: "SQLite"
+    </system-out>
+  </testcase>
+  <testcase name="getBackendVersion" classname="DatabaseTest" time="0.004">
+    <system-out>
+      Current backend: "SQLite"
+      Queried version: "3.51.2"
+    </system-out>
+  </testcase>
+  <testcase name="tableExistsInDB" classname="DatabaseTest" time="0.005">
+    <system-out>
+      Current backend: "SQLite"
+    </system-out>
+  </testcase>
+  <testcase name="getExistingTables" classname="DatabaseTest" time="0.004">
+    <system-out>
+      Current backend: "SQLite"
+    </system-out>
+  </testcase>
+  <testcase name="simpleExport" classname="DatabaseTest" time="0.004">
+    <system-out>
+      Current backend: "SQLite"
+    </system-out>
+  </testcase>
+  <testcase name="simpleImport" classname="DatabaseTest" time="0.005">
+    <system-out>
+      Current backend: "SQLite"
+    </system-out>
+  </testcase>
+  <testcase name="defaults" classname="DatabaseTest" time="0.004">
+    <system-out>
+      Current backend: "SQLite"
+    </system-out>
+  </testcase>
+  <testcase name="autoIncrement" classname="DatabaseTest" time="0.005">
+    <system-out>
+      Current backend: "SQLite"
+    </system-out>
+  </testcase>
+  <testcase name="constraints" classname="DatabaseTest" time="0.006">
+    <system-out>
+      Current backend: "SQLite"
+        Current constraint:  0
+        Current constraint:  1
+    </system-out>
+  </testcase>
+  <testcase name="constraintFunctionality" classname="DatabaseTest" time="0.006">
+    <system-out>
+      Current backend: "SQLite"
+      Testing NOT NULL constraint
+      Testing UNIQUE constraint
+    </system-out>
+  </testcase>
+  <testcase name="keys" classname="DatabaseTest" time="0.013">
+    <system-out>
+      Current backend: "SQLite"
+      Primary key
+      Composite primary key
+      Foreign key
+      Composite foreign key
+    </system-out>
+  </testcase>
+  <testcase name="indices" classname="DatabaseTest" time="0.008">
+    <system-out>
+      Current backend: "SQLite"
+    </system-out>
+  </testcase>
+  <testcase name="triggers" classname="DatabaseTest" time="0.014">
+    <system-out>
+      Current backend: "SQLite"
+      Current timing: 0
+      Current event: 0
+      Current event: 1
+      Current event: 2
+      Current timing: 1
+      Current event: 0
+      Current event: 1
+      Current event: 2
+    </system-out>
+  </testcase>
+  <testcase name="dataTypes" classname="DatabaseTest" time="0.014">
+    <system-out>
+      Current backend: "SQLite"
+      Current data type: 0
+      Sized: false
+      Current data type: 1
+      Sized: false
+      Current data type: 2
+      Sized: false
+      Current data type: 3
+      Sized: false
+      Current data type: 4
+      Sized: true
+      Current data type: 5
+      Sized: true
+      Current data type: 6
+      Sized: false
+      Current data type: 7
+      Sized: false
+      Current data type: 8
+      Sized: false
+      Current data type: 9
+      Sized: false
+      Current data type: 10
+      Sized: false
+    </system-out>
+  </testcase>
+  <testcase name="keyValueTable" classname="DatabaseTest" time="0.004">
+    <system-out>
+      Current backend: "SQLite"
+    </system-out>
+  </testcase>
+  <testcase name="unicode" classname="DatabaseTest" time="0.056">
+    <system-out>
+      Current backend: "SQLite"
+      Current symbol: "Ä"
+      Current symbol: "è"
+      Current symbol: "ß"
+      Current symbol: "¼"
+      Current symbol: "💚"
+      Current symbol: "🚒"
+      Current symbol: "ձ"
+      Current symbol: "Φ"
+      Current symbol: "ヲ"
+      Current symbol: "𐌒"
+      Current symbol: "Ю"
+      Current symbol: "¥"
+      Current symbol: "ℏ"
+      Current symbol: "ℜ"
+      Current symbol: "¯_(ツ)_/¯"
+    </system-out>
+  </testcase>
+  <testcase name="fetchMinimumFreeID" classname="DatabaseTest" time="0.007">
+    <system-out>
+      Current backend: "SQLite"
+    </system-out>
+  </testcase>
+  <testcase name="dateToEpoch" classname="DatabaseTest" time="0.004">
+    <system-out>
+      Current backend: "SQLite"
+         "'2016-08-11 17:15'"
+         "'2007-01-26'"
+         "'2007-01-26'"
+    </system-out>
+  </testcase>
+  <testcase name="savepoints" classname="DatabaseTest" time="0.004">
+    <system-out>
+      Current backend: "SQLite"
+    </system-out>
+  </testcase>
+  <testcase name="cleanupTestCase" classname="DatabaseTest" time="0.000" />
+</testsuite>

@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestAudioReceiverBuffer" timestamp="2026-10-10T21:29:56" hostname="windows-validation-host" tests="10" failures="0" errors="0" skipped="0" time="0.003">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestAudioReceiverBuffer" time="0.000" />
+  <testcase name="test_preconditions" classname="TestAudioReceiverBuffer" time="0.000" />
+  <testcase name="test_addReceiver" classname="TestAudioReceiverBuffer" time="0.000" />
+  <testcase name="test_addReceiverPositional" classname="TestAudioReceiverBuffer" time="0.000" />
+  <testcase name="test_forceAddReceiver" classname="TestAudioReceiverBuffer" time="0.000" />
+  <testcase name="test_preprocessBuffer" classname="TestAudioReceiverBuffer" time="0.000" />
+  <testcase name="test_getReceiverRange" classname="TestAudioReceiverBuffer" time="0.000" />
+  <testcase name="test_encoding" classname="TestAudioReceiverBuffer" time="0.000">
+    <system-out>
+      Sample receiver list required 5 encoding steps
+    </system-out>
+    <system-err>
+      Opening a new range
+      Start: AudioReceiver{ receiver: ServerUser{ session: 2, version: "1.4.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 0, volAdj: 1 }
+      End: AudioReceiver{ receiver: ServerUser{ session: 0, version: "1.2.5", deaf: false, selfDeaf: false, ssContext: "" }, context: 0, volAdj: 1 }
+      Processing AudioReceiver{ receiver: ServerUser{ session: 2, version: "1.4.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 0, volAdj: 1 }
+      Processing AudioReceiver{ receiver: ServerUser{ session: 0, version: "1.2.5", deaf: false, selfDeaf: false, ssContext: "" }, context: 0, volAdj: 1 }
+      Opening a new range
+      Start: AudioReceiver{ receiver: ServerUser{ session: 1, version: "1.3.1", deaf: false, selfDeaf: false, ssContext: "" }, context: 3, volAdj: 1 }
+      End: AudioReceiver{ receiver: ServerUser{ session: 1, version: "1.3.1", deaf: false, selfDeaf: false, ssContext: "" }, context: 3, volAdj: 1 }
+      Processing AudioReceiver{ receiver: ServerUser{ session: 1, version: "1.3.1", deaf: false, selfDeaf: false, ssContext: "" }, context: 3, volAdj: 1 }
+      Opening a new range
+      Start: AudioReceiver{ receiver: ServerUser{ session: 8, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.4 }
+      End: AudioReceiver{ receiver: ServerUser{ session: 8, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.4 }
+      Processing AudioReceiver{ receiver: ServerUser{ session: 8, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.4 }
+      Opening a new range
+      Start: AudioReceiver{ receiver: ServerUser{ session: 10, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.2 }
+      End: AudioReceiver{ receiver: ServerUser{ session: 10, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.2 }
+      Processing AudioReceiver{ receiver: ServerUser{ session: 10, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "context1" }, context: 1, volAdj: 1.2 }
+      Opening a new range
+      Start: AudioReceiver{ receiver: ServerUser{ session: 3, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 1, volAdj: 1 }
+      End: AudioReceiver{ receiver: ServerUser{ session: 4, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 1, volAdj: 1 }
+      Processing AudioReceiver{ receiver: ServerUser{ session: 3, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 1, volAdj: 1 }
+      Processing AudioReceiver{ receiver: ServerUser{ session: 4, version: "1.5.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 1, volAdj: 1 }
+    </system-err>
+  </testcase>
+  <testcase name="test_emptyRange" classname="TestAudioReceiverBuffer" time="0.000" />
+  <testcase name="cleanupTestCase" classname="TestAudioReceiverBuffer" time="0.000" />
+</testsuite>

@@ -1,0 +1,11 @@
+{
+  "source_commit": "de8caa9e6393da3d17e3f147cb5f8064758c13cb",
+  "configure_exit_code": 0,
+  "build_exit_code": 0,
+  "build_session": 14020,
+  "recorded_utc": "2026-10-11T04:29:21.2984279Z",
+  "selection": "Default all target",
+  "parallel": 6,
+  "temp": "Owned current E: fixture directory",
+  "accepted_attempt": "Corrected cache isolation; initial misrouted run excluded"
+}

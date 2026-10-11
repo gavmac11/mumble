@@ -1,0 +1,17 @@
+********* Start testing of TestReleaseUpdate *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestReleaseUpdate::initTestCase()
+PASS   : TestReleaseUpdate::ordersVersionsNumerically()
+PASS   : TestReleaseUpdate::separatesChannels()
+PASS   : TestReleaseUpdate::ignoresDraftsLegacyTagsAndIncompletePackages()
+PASS   : TestReleaseUpdate::rejectsUntrustedLinks()
+PASS   : TestReleaseUpdate::handlesEmptyAndMalformedFeeds()
+PASS   : TestReleaseUpdate::choosesOnlySupportedPlatformPackages()
+PASS   : TestReleaseUpdate::persistsConditionalResponsesAndSeparatesFeeds()
+PASS   : TestReleaseUpdate::throttlesFailedAttemptsAcrossLaunchesButAllowsManualChecks()
+PASS   : TestReleaseUpdate::preservesGoodCacheOnInvalidResponses()
+PASS   : TestReleaseUpdate::recoversFromCorruptCache()
+PASS   : TestReleaseUpdate::honorsPersistedServerBackoffForManualChecks()
+PASS   : TestReleaseUpdate::cleanupTestCase()
+Totals: 13 passed, 0 failed, 0 skipped, 0 blacklisted, 32ms
+********* Finished testing of TestReleaseUpdate *********

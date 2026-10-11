@@ -1,0 +1,9 @@
+********* Start testing of TestCryptographicRandom *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestCryptographicRandom::initTestCase()
+PASS   : TestCryptographicRandom::fillBuffer()
+PASS   : TestCryptographicRandom::uint32()
+PASS   : TestCryptographicRandom::uniform()
+PASS   : TestCryptographicRandom::cleanupTestCase()
+Totals: 5 passed, 0 failed, 0 skipped, 0 blacklisted, 1322ms
+********* Finished testing of TestCryptographicRandom *********
