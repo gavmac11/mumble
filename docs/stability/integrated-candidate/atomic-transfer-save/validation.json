@@ -1,0 +1,18 @@
+{
+  "source_head": "3119729df9ef8fba512bbda1b8edcacd6a22271d",
+  "negative_production": "17f0807e25f8924948c0c391e96d5742c51f817a",
+  "negative_rows_failed": 1,
+  "focused": {
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0
+  },
+  "full_mac": "running",
+  "exact_opus_review": "running",
+  "native_windows_linux": "pending",
+  "limitations": [
+    "Create-only target filesystem must support hard links",
+    "Manual-save history/unsafe auto-save names/trust freshness remain open",
+    "Native GUI confirmation and disk-full/write-failure fault qualification pending"
+  ]
+}

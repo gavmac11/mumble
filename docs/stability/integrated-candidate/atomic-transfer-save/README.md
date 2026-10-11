@@ -1,0 +1,9 @@
+# Confirmed and failed transfer saves
+
+The old failed-save fallback removed `target.part` even when that file already belonged to someone else. The unchanged production 17f0807e negative control reproduces that deletion. The replacement uses a private random stage owned by the save operation, and never touches a predictable `.part` path.
+
+Manual existing-file replacement now requires an explicit plain-text Yes/No confirmation, defaulting to No, and rechecks the connection generation after the dialog. A confirmed worker request uses QSaveFile with direct-write fallback disabled, preserving the original if staging/commit fails. Unconfirmed creation copies in bounded blocks to an owned stage in the destination directory, then atomically publishes an exclusive hard link. Existing targets cannot be replaced; unsupported hard-link filesystems fail closed with the receive still Ready. The source is kept for retries and closed before receive cleanup. Automatic save-error events do not trigger an immediate retry loop.
+
+Source 3119729df passes all three focused regressions (five Qt passes including initialization/cleanup): preserve existing target and unrelated `.part`, confirmed byte-exact replacement, and failed replacement preserving contents plus byte-exact retry. Full Mac checks and exact Opus 5.5 CLI review are running. Native Windows/Linux, installed confirmation UI, filesystem/disk-full/permission fault drills and shipping qualification remain pending. The test fixture's initial QTemporaryDir entryList compile error was corrected to use QDir; no production assertion was relaxed.
+
+This does not fix unsafe automatic filenames, manual-save history changing the auto-save folder, trust identity freshness or server delivery/receipts. Non-hardlink target filesystems such as FAT/exFAT remain unsupported for create-only saves by this implementation; they are not silently overwritten.
