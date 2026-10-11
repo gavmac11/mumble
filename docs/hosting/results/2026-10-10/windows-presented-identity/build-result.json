@@ -1,0 +1,10 @@
+{
+  "source_commit": "f337b951482e121964e9162221e96611f94e068e",
+  "configure_exit_code": 0,
+  "build_exit_code": 0,
+  "build_session": 19357,
+  "recorded_utc": "2026-10-11T03:48:10.9998917Z",
+  "selection": "Default all target",
+  "parallel": 6,
+  "temp": "Owned E: fixture directory"
+}

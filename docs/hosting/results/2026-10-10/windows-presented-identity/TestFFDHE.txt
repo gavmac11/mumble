@@ -1,0 +1,17 @@
+********* Start testing of TestFFDHE *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestFFDHE::initTestCase()
+PASS   : TestFFDHE::exercise(ffdhe2048)
+PASS   : TestFFDHE::exercise(ffdhe3072)
+PASS   : TestFFDHE::exercise(ffdhe4096)
+PASS   : TestFFDHE::exercise(ffdhe6144)
+PASS   : TestFFDHE::exercise(ffdhe8192)
+PASS   : TestFFDHE::exercise(ffdhe2048_upper)
+PASS   : TestFFDHE::exercise(ffdhe2048_random)
+PASS   : TestFFDHE::exercise(noname)
+PASS   : TestFFDHE::exercise(typo)
+PASS   : TestFFDHE::exercise(trailingspace)
+PASS   : TestFFDHE::namedGroupsMethod()
+PASS   : TestFFDHE::cleanupTestCase()
+Totals: 13 passed, 0 failed, 0 skipped, 0 blacklisted, 18ms
+********* Finished testing of TestFFDHE *********
