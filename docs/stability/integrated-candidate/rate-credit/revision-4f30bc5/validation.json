@@ -1,0 +1,42 @@
+{
+  "source_head": "4f30bc5778a2efbff0b25975d6b2cc0c2580e469",
+  "platform": "macOS 26.6.2 ARM64; Qt6.11.1; AppleClang21",
+  "full_release_build": "passed client/server/all enabled tests",
+  "ctest": {
+    "passed": 40,
+    "registered": 41,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 58.14
+  },
+  "engine": {
+    "passed": 34,
+    "failed": 0,
+    "skipped": 0
+  },
+  "focused": {
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0
+  },
+  "negative_control": {
+    "production_head": "4eb2e56a23c57d7b5c3e9f01c9bda6cff613c532",
+    "failed_rows": 3,
+    "pass_base_cases": 2
+  },
+  "known_limits": [
+    "No recipient receipts, negotiated server budget or bounded downstream queues",
+    "Minimum chunk and extreme concurrency may still exceed receiver idle timeout",
+    "Rate reduction cannot resize an existing signed manifest",
+    "Fairness is per chunk, not per byte",
+    "Native Windows exact-source qualification pending"
+  ],
+  "opus_review": {
+    "model": "claude-opus-5-5",
+    "duration_ms": 131747,
+    "mode": "read-only frozen source",
+    "result": "No further must-fix defect found in the three corrections; broader known gaps retained",
+    "chunk_alignment_followup": "FTManifest.cpp:215-216 accepts any integer size within MinChunkSize..MaxChunkSize; no KiB-multiple restriction. Same decoder on pre-fix parent."
+  }
+}
