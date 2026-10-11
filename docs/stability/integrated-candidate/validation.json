@@ -146,5 +146,20 @@
     "both_actual_analyses": "passed cpp/py each;33 existing results each",
     "combined_check": "success; zero annotations; no new alerts in changed code",
     "evidence": "atomic-transfer-save/revision-09e9b92/hosted-security-c5.json"
+  },
+  "latest_identity_candidate": {
+    "runtime_source_head": "9b5b8e26684d6f2481591b11653397d390d39300",
+    "evidence": "presented-identity/revision-9b5b8e/validation.json",
+    "full_available_native_builds": "Mac/Windows/Linux all client/server/all enabled tests pass",
+    "enabled_suites_per_platform": 41,
+    "windows_qt_cases": 1159,
+    "windows_committed_hashes_verified": 99,
+    "opus_follow_up": "Actual claude-opus-5-5; no Must in this correction; 18 source hashes independently checked",
+    "limits": "All retained Should lifecycle/production manager/GUI work remains required; full shipping/media/relay/recovery/commercial acceptance open"
+  },
+  "checked_save_hosted_final": {
+    "published_head": "c5e28d6b222be750ff613cc3b7dd3797437567cc",
+    "evidence": "atomic-transfer-save/revision-09e9b92/hosted-final-c5.json",
+    "result": "All completed successfully; preview publishing skipped; qualifies c5 only"
   }
 }
