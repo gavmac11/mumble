@@ -1,0 +1,13 @@
+{
+  "source_commit": "8c4269054798f6e3104426f1171dd77ef0a06465",
+  "configure_exit_code": 0,
+  "build_exit_code": 0,
+  "build_session": 72177,
+  "recorded_utc": "2026-10-11T01:41:45.691569+00:00",
+  "targets": [
+    "mumble",
+    "mumble-server",
+    "TestAudioWizard"
+  ],
+  "temporary_files": "Owned E: directory"
+}
