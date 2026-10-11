@@ -1,0 +1,39 @@
+{
+  "source_head": "09e9b92a28cdeb3d5dd0eb4e3d51eb512e99eaaa",
+  "mac_full_release_build": "passed client/server/all enabled test targets",
+  "mac_ctest": {
+    "registered": 42,
+    "enabled": 41,
+    "passed": 41,
+    "failed": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 61.02
+  },
+  "engine": {
+    "passed": 41,
+    "failed": 0,
+    "skipped": 0
+  },
+  "focused": {
+    "passed": 9,
+    "failed": 0,
+    "skipped": 0
+  },
+  "sync_fault_cases": [
+    "new file before publication: target absent; no stage leftovers; Ready retry",
+    "replacement before publication: original bytes retained; no stage leftovers; Ready retry",
+    "new file after publication: complete written file; specific warning; no Saved; confirmed retry",
+    "replacement after publication: complete written file; specific warning; no Saved; confirmed retry"
+  ],
+  "native_windows_linux": "running",
+  "exact_opus_followup": "running",
+  "limits": [
+    "Create-only target requires hardlink support; FAT/exFAT not qualified",
+    "Windows directory-journal and physical power loss not qualified",
+    "Forced termination can leave a named plaintext destination stage; no unsafe pattern sweep",
+    "Shared writable destination folder ownership-by-name race not qualified",
+    "Manual save history, unsafe automatic names and trust key freshness remain open"
+  ]
+}
