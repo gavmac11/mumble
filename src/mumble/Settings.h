@@ -473,6 +473,8 @@ struct Settings {
 	int iFTMaxReceiveMiB = 10 * 1024;
 	/// Default directory for saving incoming files (empty = choose on save)
 	QString qsFTDownloadDir;
+	/// Last directory chosen in the manual file-save dialog; does not redirect automatic saving
+	QString qsFTManualSaveDir;
 	/// Automatically save incoming files from verified peers into qsFTDownloadDir
 	bool bFTAutoAcceptPinned = false;
 

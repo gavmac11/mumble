@@ -1,15 +1,20 @@
 // Copyright The Mumble Developers. All rights reserved.
 // BSD-style license: see LICENSE at the source root.
+#include "JSONSerialization.h"
 #include "Log.h"
 #include "PQFileTransfer/engine/FTCardRender.h"
+#include "PQFileTransfer/engine/FTSavePolicy.h"
 #include "PQFileTransfer/identity/FTIdentity.h"
 #include "PQFileTransfer/widgets/FileTransferDialogs.h"
+#include "Settings.h"
 
 #include <QApplication>
 #include <QDir>
 #include <QFile>
 #include <QLabel>
 #include <QSignalSpy>
+#include <QStringList>
+#include <QTemporaryDir>
 #include <QTest>
 #include <QTextBrowser>
 
@@ -21,6 +26,132 @@ public:
 class TestFileTransferUi : public QObject {
 	Q_OBJECT
 private slots:
+	void automaticNames_data() {
+		QTest::addColumn< QString >("name");
+		QTest::addColumn< bool >("allowed");
+		int row = 0;
+		for (const QString &name : QStringList{ QString(),
+												QStringLiteral(".zprofile"),
+												QStringLiteral(".bash_login"),
+												QStringLiteral(".hidden"),
+												QStringLiteral(".."),
+												QStringLiteral("."),
+												QStringLiteral("../escape"),
+												QStringLiteral("folder/file"),
+												QStringLiteral("folder\\file"),
+												QStringLiteral("name:stream"),
+												QStringLiteral("C:relative"),
+												QStringLiteral("NUL"),
+												QStringLiteral("nul.txt"),
+												QStringLiteral("CON.log"),
+												QStringLiteral("PRN"),
+												QStringLiteral("aux.dat"),
+												QStringLiteral("COM1.txt"),
+												QStringLiteral("com9"),
+												QStringLiteral("LPT1"),
+												QStringLiteral("lpt9.pdf"),
+												QStringLiteral("COM0"),
+												QStringLiteral("CLOCK$"),
+												QStringLiteral("CONIN$"),
+												QStringLiteral("CONOUT$.txt"),
+												QStringLiteral("COM\u00b9.txt"),
+												QStringLiteral("LPT\u00b2"),
+												QStringLiteral("COM\u00b3"),
+												QStringLiteral("NUL .txt"),
+												QStringLiteral("trailing."),
+												QStringLiteral("trailing "),
+												QStringLiteral(" leading"),
+												QStringLiteral("bad\nname"),
+												QStringLiteral("bad\tname"),
+												QStringLiteral("bad\u007fname"),
+												QStringLiteral("bad\u202ename"),
+												QStringLiteral("bad\u2028name"),
+												QStringLiteral("bad?name"),
+												QStringLiteral("bad*name"),
+												QStringLiteral("bad<name"),
+												QStringLiteral("bad>name"),
+												QStringLiteral("bad|name"),
+												QStringLiteral("bad\"name"),
+												QString(256, QLatin1Char('x')),
+												QString(128, QChar(0x00e9)),
+												QStringLiteral("bad") + QChar(0) + QStringLiteral("name"),
+												QString(QChar(0xd800)) }) {
+			const QByteArray tag = "rejected-" + QByteArray::number(row++);
+			QTest::newRow(tag.constData()) << name << false;
+		}
+		for (const QString &name :
+			 { QStringLiteral("report.pdf"), QStringLiteral("family photo.jpg"), QStringLiteral("r\u00e9sum\u00e9.txt"),
+			   QStringLiteral("\u6587\u4ef6.txt"), QStringLiteral("COM10.txt"), QStringLiteral("null.txt"),
+			   QStringLiteral("archive.tar.gz"), QString(255, QLatin1Char('x')) }) {
+			const QByteArray tag = "accepted-" + QByteArray::number(row++);
+			QTest::newRow(tag.constData()) << name << true;
+		}
+	}
+	void automaticNames() {
+		QFETCH(QString, name);
+		QFETCH(bool, allowed);
+		QCOMPARE(PQFT::isSafeAutomaticFileName(name), allowed);
+	}
+	void automaticSaveEligibility() {
+		QTemporaryDir dir;
+		QVERIFY(dir.isValid());
+		Settings settings;
+		settings.bFTAutoAcceptPinned = true;
+		settings.qsFTDownloadDir     = dir.path();
+		PQFT::FTTransferInfo info;
+		info.incoming = true;
+		info.state    = PQFT::FTTransferInfo::State::Ready;
+		info.fileName = QStringLiteral("report.pdf");
+		QCOMPARE(PQFT::automaticSaveTarget(settings, info, PQFT::TrustState::Verified),
+				 QDir(dir.path()).filePath(info.fileName));
+		for (auto trust : { PQFT::TrustState::NewPeer, PQFT::TrustState::Pinned, PQFT::TrustState::Changed })
+			QVERIFY(PQFT::automaticSaveTarget(settings, info, trust).isEmpty());
+		info.incoming = false;
+		QVERIFY(PQFT::automaticSaveTarget(settings, info, PQFT::TrustState::Verified).isEmpty());
+		info.incoming = true;
+		info.state    = PQFT::FTTransferInfo::State::Transferring;
+		QVERIFY(PQFT::automaticSaveTarget(settings, info, PQFT::TrustState::Verified).isEmpty());
+		info.state = PQFT::FTTransferInfo::State::Ready;
+		info.error = QStringLiteral("retry manually");
+		QVERIFY(PQFT::automaticSaveTarget(settings, info, PQFT::TrustState::Verified).isEmpty());
+		info.error.clear();
+		info.fileName = QStringLiteral(".zprofile");
+		QVERIFY(PQFT::automaticSaveTarget(settings, info, PQFT::TrustState::Verified).isEmpty());
+		info.fileName                = QStringLiteral("report.pdf");
+		settings.bFTAutoAcceptPinned = false;
+		QVERIFY(PQFT::automaticSaveTarget(settings, info, PQFT::TrustState::Verified).isEmpty());
+		settings.bFTAutoAcceptPinned = true;
+		settings.qsFTDownloadDir.clear();
+		QVERIFY(PQFT::automaticSaveTarget(settings, info, PQFT::TrustState::Verified).isEmpty());
+		settings.qsFTDownloadDir = QStringLiteral("relative-folder");
+		QVERIFY(PQFT::automaticSaveTarget(settings, info, PQFT::TrustState::Verified).isEmpty());
+	}
+	void manualHistoryDoesNotRedirectAutomaticSaving() {
+		QTemporaryDir automaticDir, manualDir;
+		QVERIFY(automaticDir.isValid());
+		QVERIFY(manualDir.isValid());
+		Settings settings;
+		settings.bFTAutoAcceptPinned = true;
+		settings.qsFTDownloadDir     = automaticDir.path();
+		QCOMPARE(PQFT::manualSaveDirectory(settings), automaticDir.path());
+		PQFT::rememberManualSaveDirectory(settings, QDir(manualDir.path()).filePath(QStringLiteral("chosen.txt")));
+		const nlohmann::json serialized = settings;
+		const Settings restored         = serialized.get< Settings >();
+		QCOMPARE(restored.qsFTDownloadDir, automaticDir.path());
+		QCOMPARE(PQFT::manualSaveDirectory(restored), manualDir.path());
+		PQFT::FTTransferInfo info;
+		info.incoming = true;
+		info.state    = PQFT::FTTransferInfo::State::Ready;
+		info.fileName = QStringLiteral("next.txt");
+		QCOMPARE(PQFT::automaticSaveTarget(restored, info, PQFT::TrustState::Verified),
+				 QDir(automaticDir.path()).filePath(info.fileName));
+		// Existing profiles have no manual-history key and retain their configured folder.
+		auto legacy = serialized;
+		legacy["misc"].erase("file_transfer_manual_save_dir");
+		const Settings restoredLegacy = legacy.get< Settings >();
+		QVERIFY(restoredLegacy.qsFTManualSaveDir.isEmpty());
+		QCOMPARE(PQFT::manualSaveDirectory(restoredLegacy), automaticDir.path());
+	}
 	void qrContrast_data() {
 		QTest::addColumn< bool >("dark");
 		QTest::newRow("light") << false;

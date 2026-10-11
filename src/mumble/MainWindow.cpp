@@ -52,6 +52,7 @@
 #include "ScreenShareWindow.h"
 #ifdef USE_FILE_SHARING
 #	include "PQFileTransfer/engine/FTCardRender.h"
+#	include "PQFileTransfer/engine/FTSavePolicy.h"
 #	include "PQFileTransfer/engine/FileTransferManager.h"
 #	include "PQFileTransfer/identity/FTIdentity.h"
 #	include "PQFileTransfer/widgets/FileTransferDialogs.h"
@@ -4832,11 +4833,11 @@ void MainWindow::onFileTransferUpdated(const PQFT::FTTransferInfo &info) {
 
 	// Auto-save files from verified contacts when enabled
 	if (info.incoming && info.state == PQFT::FTTransferInfo::State::Ready && info.error.isEmpty()
-		&& Global::get().s.bFTAutoAcceptPinned && !Global::get().s.qsFTDownloadDir.isEmpty()) {
+		&& Global::get().s.bFTAutoAcceptPinned) {
 		QByteArray pinnedFp;
-		if (manager->trustStateFor(info.peerSession, pinnedFp)
-			== PQFT::TrustState::Verified) {
-			const QString target = QDir(Global::get().s.qsFTDownloadDir).filePath(info.fileName);
+		const QString target =
+			PQFT::automaticSaveTarget(Global::get().s, info, manager->trustStateFor(info.peerSession, pinnedFp));
+		if (!target.isEmpty()) {
 			manager->saveTransferAs(info.transferId, target);
 		}
 	}
@@ -4871,10 +4872,7 @@ void MainWindow::onFileCardClicked(const QByteArray &transferId) {
 
 	switch (info.state) {
 		case PQFT::FTTransferInfo::State::Ready: {
-			QString baseDir = Global::get().s.qsFTDownloadDir;
-			if (baseDir.isEmpty()) {
-				baseDir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-			}
+			const QString baseDir   = PQFT::manualSaveDirectory(Global::get().s);
 			const QString suggested = baseDir + "/" + info.fileName;
 			QString target          = QFileDialog::getSaveFileName(this, tr("Save file"), suggested, QString(), nullptr,
 																   QFileDialog::DontConfirmOverwrite);
@@ -4893,7 +4891,7 @@ void MainWindow::onFileCardClicked(const QByteArray &transferId) {
 				}
 				if (generation != manager->connectionGeneration())
 					break;
-				Global::get().s.qsFTDownloadDir = QFileInfo(target).absolutePath();
+				PQFT::rememberManualSaveDirectory(Global::get().s, target);
 				manager->saveTransferAs(transferId, target, replaceConfirmed);
 			}
 			break;

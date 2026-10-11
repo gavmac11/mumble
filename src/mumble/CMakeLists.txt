@@ -1264,6 +1264,8 @@ if(file-sharing)
 		"PQFileTransfer/engine/FTManifest.cpp"
 		"PQFileTransfer/engine/FTCardRender.h"
 		"PQFileTransfer/engine/FTCardRender.cpp"
+		"PQFileTransfer/engine/FTSavePolicy.h"
+		"PQFileTransfer/engine/FTSavePolicy.cpp"
 		"PQFileTransfer/widgets/FileTransferDialogs.h"
 		"PQFileTransfer/widgets/FileTransferDialogs.cpp"
 	)
