@@ -29,8 +29,7 @@
     "No recipient receipts, negotiated server budget or bounded downstream queues",
     "Minimum chunk and extreme concurrency may still exceed receiver idle timeout",
     "Rate reduction cannot resize an existing signed manifest",
-    "Fairness is per chunk, not per byte",
-    "Native Windows exact-source qualification pending"
+    "Fairness is per chunk, not per byte"
   ],
   "opus_review": {
     "model": "claude-opus-5-5",
@@ -38,5 +37,21 @@
     "mode": "read-only frozen source",
     "result": "No further must-fix defect found in the three corrections; broader known gaps retained",
     "chunk_alignment_followup": "FTManifest.cpp:215-216 accepts any integer size within MinChunkSize..MaxChunkSize; no KiB-multiple restriction. Same decoder on pre-fix parent."
+  },
+  "native_windows": {
+    "source_head": "4f30bc5778a2efbff0b25975d6b2cc0c2580e469",
+    "producer_commit": "5a79dcd270d8aa87b4e96e3609cb467f249223b4",
+    "strict_release_build": "client/server passed",
+    "cases": {
+      "engine": 34,
+      "e2e": 5,
+      "manager": 6,
+      "passed": 45,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "committed_sha256_verified": 16,
+    "limits": "Automated source only; no installed-client/physical-media/signature/server delivery qualification"
   }
 }
