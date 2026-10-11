@@ -1,0 +1,932 @@
+{
+  "recorded_utc": "2026-10-11T02:54:17.943585+00:00",
+  "source_commit": "e1d12f7e1140975da419909594127da0e8fa0a70",
+  "source_branch": "codex/automatic-save-safety",
+  "source_branch_url": "https://github.com/gavmac11/mumble/tree/codex/automatic-save-safety",
+  "source_tree_clean_before_evidence": true,
+  "source_blob_sha256": {
+    "src/mumble/CMakeLists.txt": "2cc8c7a5dd56c2b93846931d1741dd8701fd0c948ccbf458523181d77cec202f",
+    "src/mumble/MainWindow.cpp": "7f0afd64a6aa7fa431b4c18ec1fc8f1e2fb3d9847712232c955bb7797ff2a027",
+    "src/mumble/Settings.h": "ff5355c2a7519276646aa18fab53d3e6c1118007ee90e6633a7a3b448f5a4374",
+    "src/mumble/SettingsKeys.h": "1d19b8f35fe9c15fc47e1191792f127e2bacab9a6f1a483a1be792f581b05670",
+    "src/mumble/SettingsMacros.h": "c8c892ea4a3ad5137db107c5b890f26f9b28869e37ce03fc140df4f6d8be6ae6",
+    "src/mumble/JSONSerialization.h": "14ca865e861f6f5d45535137625d6938b3655967b3d14824ec16da7c433ae154",
+    "src/mumble/JSONSerialization.cpp": "e26d520a3706b02316f0c78248ebe995d57750382f1e346a663b9dc2d24861cb",
+    "src/mumble/PQFileTransfer/engine/FTSavePolicy.cpp": "70fd3f2a38a005aaa47654503db1d024f49b6f3994db18347923a61d5f9dca0a",
+    "src/mumble/PQFileTransfer/engine/FTSavePolicy.h": "881ca1ad7d98ecbeb679ae013a430b388adcaf427c23187ef9d4f86aecc62cfb",
+    "src/mumble/PQFileTransfer/PQFTConstants.h": "01511cfa25b164f97100c5baf77eb4d8a472c7c127ca62481757030ebaa82c29",
+    "src/tests/TestFileTransferUi/TestFileTransferUi.cpp": "b80facffc8a8e1ce99a57847c92650aac352140c8ec4d2c2678495a03de523ea",
+    "src/tests/TestFileTransferUi/CMakeLists.txt": "d14eca6085d14429c5ef8c7f105185fc350536ccca265792b675b9a7b1c49973",
+    "src/tests/TestSettingsJSONSerialization/CMakeLists.txt": "3924940754c16b71d104b1f7947fc14aabebbb0e09936873b53c57b45a61019b",
+    "src/tests/TestSettingsJSONSerialization/generate_test_case.py": "caa11b58438f39f4be95945f6c6fc047de0ccbc6aa201061e24fbeaa1b01c961"
+  },
+  "os": {
+    "name": "Windows 10 Pro",
+    "version": "10.0.19045",
+    "architecture": "x64"
+  },
+  "compiler": {
+    "name": "MSVC",
+    "version": "19.51.36257.0",
+    "installation": "VS 2026 Build Tools"
+  },
+  "qt": {
+    "version": "6.10.0",
+    "linkage": "static",
+    "dependency_build_compiler": "MSVC 2022"
+  },
+  "dependencies": "vcpkg 2026-02 b1fe4a4257 / x64-windows-static-md; OpenSSL 3.6.1; FFmpeg 8.1 shared",
+  "configuration": "Release, Ninja unity build, C++20, dynamic MSVC runtime, symbols off, LTO off, strict warnings-as-errors enabled; tests/server on, packaging off",
+  "build": {
+    "targets": [
+      "mumble",
+      "mumble-server",
+      "TestFileTransferUi",
+      "TestSettingsJSONSerialization"
+    ],
+    "configure_exit_code": 0,
+    "build_exit_code": 0,
+    "source_compiler_policy": [
+      {
+        "target": "TestFileTransferUi",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestSettingsJSONSerialization",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_client_object_lib",
+        "checked_translation_units": 10,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble-server",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_server_object_lib",
+        "checked_translation_units": 3,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "shared",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      }
+    ],
+    "dependency_warning_policy": "Repository defaults retained for third-party and generated protobuf sources; -external:W0 retained for external headers. No source warning relaxation on client/logger/database or tested file-transfer translation units.",
+    "client_executable_sha256": "57ec602ad22298e04c089d94a5c7e49681359dc5f8041bb950495a08fb2ba18b",
+    "server_executable_sha256": "e8fb07a9e50948eee3d2b87b96e22b65c1284bf9f4f93ddd876e960542fa22e0",
+    "dependency_build_warning": "Existing liboqs unsupported-MSVC barrier and vendor flag override warnings retained in complete logs; repository warning policy unchanged."
+  },
+  "tests": [
+    {
+      "suite": "TestFileTransferUi",
+      "cases": 78,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.022,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-0)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-1)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-2)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-3)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-4)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-5)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-6)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-7)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-8)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-9)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-10)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-11)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-12)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-13)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-14)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-15)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-16)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-17)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-18)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-19)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-20)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-21)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-22)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-23)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-24)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-25)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-26)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-27)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-28)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-29)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-30)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-31)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-32)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-33)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-34)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-35)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-36)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-37)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-38)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-39)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-40)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-41)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-42)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-43)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-44)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-45)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-46)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-47)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-48)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-49)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-50)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-51)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-52)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-53)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-54)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(rejected-55)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(accepted-56)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(accepted-57)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(accepted-58)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(accepted-59)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(accepted-60)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(accepted-61)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(accepted-62)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticNames(accepted-63)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "automaticSaveEligibility",
+          "classname": "TestFileTransferUi",
+          "time": "0.004",
+          "result": "passed"
+        },
+        {
+          "name": "manualHistoryDoesNotRedirectAutomaticSaving",
+          "classname": "TestFileTransferUi",
+          "time": "0.001",
+          "result": "passed"
+        },
+        {
+          "name": "olderAutomaticFolderRequiresReview(missing)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "olderAutomaticFolderRequiresReview(old)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "olderAutomaticFolderRequiresReview(unknown-future)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "olderAutomaticFolderRequiresReview(string)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "olderAutomaticFolderRequiresReview(boolean)",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "qrContrast(light)",
+          "classname": "TestFileTransferUi",
+          "time": "0.005",
+          "result": "passed"
+        },
+        {
+          "name": "qrContrast(dark)",
+          "classname": "TestFileTransferUi",
+          "time": "0.004",
+          "result": "passed"
+        },
+        {
+          "name": "fileActionByKeyboard",
+          "classname": "TestFileTransferUi",
+          "time": "0.002",
+          "result": "passed"
+        },
+        {
+          "name": "invalidActionUrls",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "unrelatedDataIsNotAFileAction",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "3318218e6294036093236202f622689f4064bd241886c6b49e0060b2f478aaaa",
+      "txt_report": "TestFileTransferUi.txt",
+      "junit_report": "TestFileTransferUi.xml"
+    },
+    {
+      "suite": "TestSettingsJSONSerialization",
+      "cases": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.007,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestSettingsJSONSerialization",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "noDefaultValuesMatched",
+          "classname": "TestSettingsJSONSerialization",
+          "time": "0.003",
+          "result": "passed"
+        },
+        {
+          "name": "testJSONSerialization",
+          "classname": "TestSettingsJSONSerialization",
+          "time": "0.001",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestSettingsJSONSerialization",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "b94e7f45bb02c23a738878e6a87c6bf9869b6f50d5edcdfaee702f9ef06c9eed",
+      "txt_report": "TestSettingsJSONSerialization.txt",
+      "junit_report": "TestSettingsJSONSerialization.xml"
+    }
+  ],
+  "ctest": {
+    "suites": 2,
+    "failures": 0,
+    "wall_seconds": 1.37,
+    "case_seconds": {
+      "TestFileTransferUi": 0.8652,
+      "TestSettingsJSONSerialization": 0.970624
+    },
+    "exit_code": 0,
+    "parallel": 2,
+    "qt_platform": "offscreen",
+    "output_capture": "Only QtTest text/JUnit -o flags temporarily appended to generated CTest registrations, restored byte-for-byte after the run. Repository implementation unchanged.",
+    "parent_qt_force_stderr_logging": false,
+    "selection": "Complete TestFileTransferUi and generated TestSettingsJSONSerialization; other suites not run on exact source"
+  },
+  "publication": {
+    "attributes": "* -text whitespace=cr-at-eol (scoped to this directory)",
+    "changes": [
+      "Anonymized XML hostnames",
+      "Complete configure/build/CTest/LastTest logs retained with private dependency/install/source/build/cache paths replaced by placeholders",
+      "Replaced private CTest build/source paths with isolated-directory placeholders",
+      "Sanitized private paths in retained runtime warnings, without changing messages, cases or outcomes."
+    ],
+    "test_results_changed": false,
+    "hash_policy": "Published file hashes describe exact stored report bytes. Private complete logs have a separate local ledger."
+  },
+  "runtime_warnings": {
+    "suites_with_warnings": [
+      "TestFileTransferUi"
+    ],
+    "handling": "Runtime warning text retained; private build paths replaced with <isolated-build-directory>. No test failure or warning was hidden."
+  },
+  "draft_pull_request": "https://github.com/gavmac11/mumble/pull/50",
+  "qt_test_totals": {
+    "cases": 82,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "scope": [
+    "Strict native full Release client/server builds",
+    "Complete offscreen TestFileTransferUi and generated TestSettingsJSONSerialization suites",
+    "64 automatic-name rows: 56 rejected, 8 accepted",
+    "Automatic-save eligibility helper positive configured absolute private folder/incoming/Ready/no error/Verified/enabled case and all negative alternatives",
+    "Separate manual history and automatic folder, JSON round-trip and missing-key legacy behavior",
+    "Five missing/old/future/string/boolean policy-marker migration rows; exact folder-review warning matched by existing QtTest ignoreMessage assertion",
+    "Existing seven UI contrast/keyboard/URL cases unchanged"
+  ],
+  "policy_assertions": {
+    "automatic_name_rows": 64,
+    "rejected_rows": [
+      "automaticNames(rejected-0)",
+      "automaticNames(rejected-1)",
+      "automaticNames(rejected-2)",
+      "automaticNames(rejected-3)",
+      "automaticNames(rejected-4)",
+      "automaticNames(rejected-5)",
+      "automaticNames(rejected-6)",
+      "automaticNames(rejected-7)",
+      "automaticNames(rejected-8)",
+      "automaticNames(rejected-9)",
+      "automaticNames(rejected-10)",
+      "automaticNames(rejected-11)",
+      "automaticNames(rejected-12)",
+      "automaticNames(rejected-13)",
+      "automaticNames(rejected-14)",
+      "automaticNames(rejected-15)",
+      "automaticNames(rejected-16)",
+      "automaticNames(rejected-17)",
+      "automaticNames(rejected-18)",
+      "automaticNames(rejected-19)",
+      "automaticNames(rejected-20)",
+      "automaticNames(rejected-21)",
+      "automaticNames(rejected-22)",
+      "automaticNames(rejected-23)",
+      "automaticNames(rejected-24)",
+      "automaticNames(rejected-25)",
+      "automaticNames(rejected-26)",
+      "automaticNames(rejected-27)",
+      "automaticNames(rejected-28)",
+      "automaticNames(rejected-29)",
+      "automaticNames(rejected-30)",
+      "automaticNames(rejected-31)",
+      "automaticNames(rejected-32)",
+      "automaticNames(rejected-33)",
+      "automaticNames(rejected-34)",
+      "automaticNames(rejected-35)",
+      "automaticNames(rejected-36)",
+      "automaticNames(rejected-37)",
+      "automaticNames(rejected-38)",
+      "automaticNames(rejected-39)",
+      "automaticNames(rejected-40)",
+      "automaticNames(rejected-41)",
+      "automaticNames(rejected-42)",
+      "automaticNames(rejected-43)",
+      "automaticNames(rejected-44)",
+      "automaticNames(rejected-45)",
+      "automaticNames(rejected-46)",
+      "automaticNames(rejected-47)",
+      "automaticNames(rejected-48)",
+      "automaticNames(rejected-49)",
+      "automaticNames(rejected-50)",
+      "automaticNames(rejected-51)",
+      "automaticNames(rejected-52)",
+      "automaticNames(rejected-53)",
+      "automaticNames(rejected-54)",
+      "automaticNames(rejected-55)"
+    ],
+    "accepted_rows": [
+      "automaticNames(accepted-56)",
+      "automaticNames(accepted-57)",
+      "automaticNames(accepted-58)",
+      "automaticNames(accepted-59)",
+      "automaticNames(accepted-60)",
+      "automaticNames(accepted-61)",
+      "automaticNames(accepted-62)",
+      "automaticNames(accepted-63)"
+    ],
+    "maximum_utf8_filename_bytes": 255,
+    "rejected_categories": [
+      "Empty/dotfiles/dot-dot",
+      "Separators and Windows ADS/drive colon",
+      "Windows reserved device stems with extension/case/space variants, superscript COM/LPT digits",
+      "Leading/trailing whitespace, trailing period",
+      "Control/format/line-separator/surrogate characters including NUL",
+      "Windows forbidden punctuation",
+      "UTF-8 byte length above 255, including multibyte names"
+    ],
+    "accepted_examples": [
+      "report.pdf",
+      "family photo.jpg",
+      "r\u00e9sum\u00e9.txt",
+      "\u6587\u4ef6.txt",
+      "COM10.txt",
+      "null.txt",
+      "archive.tar.gz",
+      "255 ASCII x characters"
+    ],
+    "automatic_save_eligibility": "Requires enabled automatic saving, absolute configured directory, incoming Ready without error, Verified trust and allowed name; other trust values, outbound/non-Ready/error/bad-name/disabled/empty/relative cases rejected",
+    "manual_history": "qsFTManualSaveDir persists independently; manual selection preserves qsFTDownloadDir and next automatic target; missing legacy key defaults empty and manual fallback retains configured automatic directory",
+    "helper_scope": "Pure string/settings helpers called by compiled MainWindow; no GUI/auth/trust-cache/target-filesystem runtime qualification"
+  },
+  "generated_settings_test": {
+    "source_sha256": "763f5cae0a9da53d0c0db35b3fc4cc32e0ebf5842b433ade26df09249799804b",
+    "new_manual_history_field_present": true,
+    "scope": "Complete generated serialization suite; precise cases retained"
+  },
+  "filesystem": {
+    "filesystem": "NTFS",
+    "allocation_unit_size": 4096,
+    "health_status": "Healthy",
+    "fixture_scope": "Owned local temporary directories on E:; pure policy/settings tests do not qualify target filesystem saving"
+  },
+  "temp_acl": {
+    "effective_access_rules_match_previous_normal_temp_fixture": true,
+    "inherited_drive_grants_blocked": true,
+    "rule_count": 7,
+    "scope": "Access rules copied only to new private E: temp; owner/group and personal/system ACLs unchanged",
+    "unix_permissions_and_symlink_checks": "Compile-time conditional; Windows regular pre-created fixture enabled"
+  },
+  "preservation_record": {
+    "source_commit": "e1d12f7e1140975da419909594127da0e8fa0a70",
+    "observed_branch_documentation_head": "1ef89b0085ac28b1197f14de01b072045f7a351c",
+    "branch_head_runtime_tree_matches_source": true,
+    "branch_head_diff_scope": "docs only; exact e1d12f7 production source checked out",
+    "prior_ledger_entries_verified": {
+      "mumble-rate-credit-20261010": 30,
+      "mumble-audio-wizard-20261010": 22,
+      "mumble-rate-credit-revised-20261010": 30,
+      "mumble-rate-credit-precision-20261010": 31,
+      "mumble-integrated-pacing-audio-20261010": 144,
+      "mumble-atomic-transfer-save-20261010": 31,
+      "mumble-atomic-save-sync-20261010": 31,
+      "mumble-automatic-save-safety-20261010": 29
+    },
+    "prior_policy_source": "30fa66b21914b82ea048afdd5cfd5122cbd5d70f",
+    "prior_policy_evidence": "fa89b2b24ad3be974cac4fffba79f80806d63828",
+    "prior_policy_committed_checksum_entries_verified": 20,
+    "prior_binaries": "All 44 existing binaries and compiler commands copied and hash verified on E: before reuse; four exact 30fa client/server/UI/settings binaries checked against report; older snapshots retained",
+    "snapshot_binary_count": 44,
+    "exact_prior_policy_binary_count": 4,
+    "c_drive_copies_or_cleanup": false,
+    "personal_mumble_state_changes": false,
+    "gui_authentication_or_hardware_actions": false
+  },
+  "preservation": "Eight earlier private ledgers and 20 committed source-specific 30fa policy checksums verified unchanged. All 44 preceding binaries and compiler commands preserved on E: before reuse; four exact 30fa client/server/UI/settings binaries checked against recorded hashes. Older snapshots retained. New work uses E: and scoped normal-user-temp rules only. No C: copy/cleanup, personal changes, app restart or GUI/auth automation. Complete originals retained privately; sanitized complete logs published.",
+  "assertions_or_deadlines_weakened": false,
+  "migration_policy_assertions": {
+    "marker": "misc.file_transfer_auto_save_policy_version",
+    "serialized_version": 1,
+    "tested_rows": [
+      "olderAutomaticFolderRequiresReview(missing)",
+      "olderAutomaticFolderRequiresReview(old)",
+      "olderAutomaticFolderRequiresReview(unknown-future)",
+      "olderAutomaticFolderRequiresReview(string)",
+      "olderAutomaticFolderRequiresReview(boolean)"
+    ],
+    "invalid_marker_values": [
+      "absent",
+      0,
+      2,
+      "1",
+      true
+    ],
+    "each_row_requires": [
+      "Loaded enabled profile becomes auto-save disabled",
+      "Configured folder path retained",
+      "Verified Ready safe incoming file has no automatic target while disabled",
+      "Serialized migrated profile includes integer marker 1 and reload stays disabled",
+      "Explicit re-enable simulated in Settings, serialize/reload remains enabled and target is configured folder plus next.txt"
+    ],
+    "expected_warning": "Automatic file saving was disabled for an older profile. Review the download directory and enable it again in File Transfer settings.",
+    "warning_verification": "Each unchanged source row uses QTest::ignoreMessage(QtWarningMsg, exact guidance); QtTest requires that warning to occur",
+    "runtime_scope": "Pure Settings JSON/helper fixtures; no actual config dialog, user folder contents or target save filesystem qualification"
+  },
+  "source_edits": false,
+  "initial_failures_excluded_from_acceptance": [],
+  "excluded_preparation_attempts": [],
+  "not_run": [
+    "Original Windows automatic-save negative controls",
+    "Fresh independent QR decode; existing offscreen UI checks exercised",
+    "Interactive manual save/authentication dialogs, physical GUI/media, installed-client/signature/shipping qualification",
+    "Actual target filesystem automatic saving/hard-links/sync, symlink/shared-folder/crash durability",
+    "Auth/trust caching, identity refresh, trust freshness/TOCTOU repair",
+    "File content/executable filtering or content-safety guarantee",
+    "Engine/E2E/manager and other/full regression suites on this scoped source",
+    "Server rate negotiation, receipts, downstream queues and fan-out",
+    "Mac/Linux, CodeQL/Opus execution, sanitizer/endurance or Windows 11"
+  ],
+  "cmake_options": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_UNITY_BUILD": "ON",
+    "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+    "bundled-cli11": "OFF",
+    "bundled-spdlog": "OFF",
+    "client": "ON",
+    "database-mysql-tests": "OFF",
+    "database-postgresql-tests": "OFF",
+    "database-sqlite-tests": "ON",
+    "file-sharing": "ON",
+    "ice": "OFF",
+    "lto": "OFF",
+    "overlay": "OFF",
+    "packaging": "OFF",
+    "plugins": "OFF",
+    "server": "ON",
+    "static": "ON",
+    "symbols": "OFF",
+    "test-lto": "OFF",
+    "tests": "ON",
+    "translations": "OFF",
+    "warnings-as-errors": "ON"
+  },
+  "private_build_log_sha256": {
+    "configure.log": "d86a8f42ee5dba278fc9726ba8f460072fe2a6c7dc20f1a78d6ffd40cdbdf261",
+    "build.log": "ea0d0537de1bb6d71eaf59bb48e0f802bc794c45e75a65d420acb4de76ef37de",
+    "compile_commands.json": "3d1474294b87887aaca8d2b3bccca42c6e21b15c890104147c86da2facd3cd4e"
+  }
+}

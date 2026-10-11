@@ -1,0 +1,33 @@
+Start testing: Oct 10 19:54 Pacific Daylight Time
+----------------------------------------------------------
+19/42 Testing: TestSettingsJSONSerialization
+19/42 Test: TestSettingsJSONSerialization
+Command: "<isolated-build-directory>/tests/TestSettingsJSONSerialization.exe" "-o" "<validation-cache>/evidence/TestSettingsJSONSerialization.txt,txt" "-o" "<validation-cache>/evidence/TestSettingsJSONSerialization.xml,junitxml"
+Directory: <isolated-build-directory>
+"TestSettingsJSONSerialization" start time: Oct 10 19:54 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.97 sec
+----------------------------------------------------------
+Test Passed.
+"TestSettingsJSONSerialization" end time: Oct 10 19:54 Pacific Daylight Time
+"TestSettingsJSONSerialization" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/42 Testing: TestFileTransferUi
+11/42 Test: TestFileTransferUi
+Command: "<isolated-build-directory>/tests/TestFileTransferUi.exe" "-platform" "offscreen" "-o" "<validation-cache>/evidence/TestFileTransferUi.txt,txt" "-o" "<validation-cache>/evidence/TestFileTransferUi.xml,junitxml"
+Directory: <isolated-build-directory>
+"TestFileTransferUi" start time: Oct 10 19:54 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.87 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferUi" end time: Oct 10 19:54 Pacific Daylight Time
+"TestFileTransferUi" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 10 19:54 Pacific Daylight Time
