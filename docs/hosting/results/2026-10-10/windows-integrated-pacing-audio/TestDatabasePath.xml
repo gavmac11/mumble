@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestDatabasePath" timestamp="2026-10-10T19:11:10" hostname="windows-validation-host" tests="6" failures="0" errors="0" skipped="0" time="1.829">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestDatabasePath" time="0.000" />
+  <testcase name="explicitFileAndDefault(explicit-existing-file)" classname="TestDatabasePath" time="0.434" />
+  <testcase name="explicitFileAndDefault(unconfigured-default)" classname="TestDatabasePath" time="0.448" />
+  <testcase name="configuredDirectoryCannotFallBack(default-qt-handler)" classname="TestDatabasePath" time="0.562" />
+  <testcase name="configuredDirectoryCannotFallBack(production-app-handler)" classname="TestDatabasePath" time="0.377" />
+  <testcase name="cleanupTestCase" classname="TestDatabasePath" time="0.000" />
+</testsuite>
