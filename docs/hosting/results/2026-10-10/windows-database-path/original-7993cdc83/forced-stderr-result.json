@@ -1,0 +1,8 @@
+{
+  "source_commit": "7993cdc830c7139b85cc4cb72efb12edfb3c0738",
+  "component_exit_code": 0,
+  "QT_FORCE_STDERR_LOGGING": "1",
+  "diagnostic_only": true,
+  "assertions_changed": false,
+  "production_error_handling_changed": false
+}

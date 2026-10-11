@@ -94,7 +94,12 @@ Database::Database(const QString &dbname) {
 		QFile configuredLocation(Global::get().s.qsDatabaseLocation);
 		if (configuredLocation.exists()) {
 			db.setDatabaseName(Global::get().s.qsDatabaseLocation);
-			db.open();
+			if (!db.open()) {
+				const QSqlError error(db.lastError());
+				qFatal("Database: Unable to open configured database at %s: %s (%s)",
+					   qPrintable(Global::get().s.qsDatabaseLocation), qPrintable(error.text()),
+					   qPrintable(error.nativeErrorCode()));
+			}
 		} else {
 			QMessageBox messageBox(QMessageBox::Critical, QLatin1String("Mumble"),
 								   tr("The database file '%1' set in the configuration file does not "

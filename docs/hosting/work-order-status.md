@@ -93,4 +93,8 @@ The initial revised-head Mac configure attempt referenced a nonexistent renamed 
 
 2026-10-10 packaged Mac repair follow-up: exact `440c2fc01` preview passes native favorite insertion, actual Bonjour removal and normal debug-plugin quit without an experimental override. All preview build/test jobs pass; publication skipped. Missing accessibility rows remain open. An excluded first harness run exposed silent database fallback on a configured directory; the corrected run verifies its owned SQLite handle, and a fail-closed regression is next.
 
+## Explicit database path isolation
+
+The excluded packaged Mac harness launch exposed a client fallback to the normal database after an explicit directory path failed to open. The [database-path fix](../stability/database-path/README.md) stops with the SQL error before searching defaults. The disposable original-control regression fails; all five corrected cases pass, including valid explicit/default paths and unchanged fallback/unselected database hashes. A full rebuild passes 40 enabled local suites in 46.98 seconds (41 registered; OverlayTest disabled). Multi-platform confirmation and combined-candidate acceptance remain open.
+
 Native Windows source `8002309ac` passes strict Release client/server builds and all 17 UI/logger/file E2E cases. Both actual production QR images decode to 172 exact bytes; 16 producer checksums match committed bytes. Native Windows GUI/11 and signed packages remain open.

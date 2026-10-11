@@ -1,0 +1,518 @@
+{
+  "recorded_utc": "2026-10-10T23:49:40.456540+00:00",
+  "source_commit": "7993cdc830c7139b85cc4cb72efb12edfb3c0738",
+  "source_branch": "codex/explicit-database-path",
+  "pull_request": "https://github.com/gavmac11/mumble/pull/39",
+  "production_commit": "7993cdc830c7139b85cc4cb72efb12edfb3c0738",
+  "source_tree_clean_before_evidence": true,
+  "source_blob_sha256": {
+    "src/mumble/Database.cpp": "b9db2983728427d8f70a3e4691efc74c7487b8a6ba6665acfa7f2bcc4af684c0",
+    "src/mumble/Global.cpp": "7b54f0e197fbf26b1627d26ea6e7c8e3f5754bb2385ce166bc6dfb8e43963163",
+    "src/tests/TestDatabasePath/TestDatabasePath.cpp": "1717fd30497d11f53300f6baeaafdbc5bd7f850ff77fb0adfdec32d3fce5b65c",
+    "src/tests/TestDatabasePath/CMakeLists.txt": "2cf463aa27b7036fbe362ab6cf8a5eda758300589c594447d6a9ff7ffcdd6488",
+    "src/tests/TestQtLogger/TestQtLogger.cpp": "c84796c66c92c5fb93eb9121602066dae87d94825f09094f975d4d266c3085af",
+    "src/tests/TestFileTransferUi/TestFileTransferUi.cpp": "1401ccd2bffd9c4fa5fb1303184ede4f5f41771fa9184ea38c0acc368d38ee27"
+  },
+  "os": {
+    "name": "Windows 10 Pro",
+    "version": "10.0.19045",
+    "architecture": "x64"
+  },
+  "compiler": {
+    "name": "MSVC",
+    "version": "19.51.36257.0",
+    "installation": "VS 2026 Build Tools"
+  },
+  "qt": {
+    "version": "6.10.0",
+    "linkage": "static",
+    "dependency_build_compiler": "MSVC 2022"
+  },
+  "dependencies": "vcpkg 2026-02 b1fe4a4257 / x64-windows-static-md; OpenSSL 3.6.1; FFmpeg 8.1 shared",
+  "configuration": "Release, Ninja unity build, C++20, dynamic MSVC runtime, symbols off, LTO off, strict warnings-as-errors enabled; tests/server on, packaging off",
+  "build": {
+    "targets": [
+      "mumble",
+      "TestDatabasePath",
+      "TestQtLogger",
+      "TestFileTransferUi"
+    ],
+    "configure_exit_code": 0,
+    "build_exit_code": 0,
+    "source_compiler_policy": [
+      {
+        "target": "TestDatabasePath",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestQtLogger",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestFileTransferUi",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_client_object_lib",
+        "checked_translation_units": 10,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "shared",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      }
+    ],
+    "dependency_warning_policy": "Repository defaults retained for third-party and generated protobuf sources; -external:W0 retained for external headers. No source warning relaxation on client/logger, queue, server or tested file-transfer translation units.",
+    "client_executable_sha256": "2f554ad4b2c36deb36424f1ee30f7042f76636bf60e2281f6b6be387064ed420"
+  },
+  "tests": [
+    {
+      "suite": "TestDatabasePath",
+      "cases": 5,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.868,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestDatabasePath",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "explicitFileAndDefault(explicit-existing-file)",
+          "classname": "TestDatabasePath",
+          "time": "0.648",
+          "result": "passed"
+        },
+        {
+          "name": "explicitFileAndDefault(unconfigured-default)",
+          "classname": "TestDatabasePath",
+          "time": "0.651",
+          "result": "passed"
+        },
+        {
+          "name": "configuredDirectoryCannotFallBack",
+          "classname": "TestDatabasePath",
+          "time": "0.565",
+          "result": "failed",
+          "failure_message": "'child.readAllStandardError().contains(\"Database: Unable to open configured database\")' returned FALSE. ()"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestDatabasePath",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "0eed9c2a7657b83f8c2553ec145aacadfb4994b7726d02a59bb00e2bad2e59ff",
+      "txt_report": "TestDatabasePath.txt",
+      "junit_report": "TestDatabasePath.xml"
+    },
+    {
+      "suite": "TestQtLogger",
+      "cases": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.138,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestQtLogger",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "lateQtLog(prior-handler)",
+          "classname": "TestQtLogger",
+          "time": "0.383",
+          "result": "passed"
+        },
+        {
+          "name": "lateQtLog(repeated-init)",
+          "classname": "TestQtLogger",
+          "time": "0.383",
+          "result": "passed"
+        },
+        {
+          "name": "lateQtLog(later-handler-owner)",
+          "classname": "TestQtLogger",
+          "time": "0.370",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestQtLogger",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "07419a8864ea9b028dc7c73a9d06964528a550cc446ae56693519277d56c28af",
+      "txt_report": "TestQtLogger.txt",
+      "junit_report": "TestQtLogger.xml"
+    },
+    {
+      "suite": "TestFileTransferUi",
+      "cases": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.016,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "qrContrast(light)",
+          "classname": "TestFileTransferUi",
+          "time": "0.007",
+          "result": "passed"
+        },
+        {
+          "name": "qrContrast(dark)",
+          "classname": "TestFileTransferUi",
+          "time": "0.005",
+          "result": "passed"
+        },
+        {
+          "name": "fileActionByKeyboard",
+          "classname": "TestFileTransferUi",
+          "time": "0.001",
+          "result": "passed"
+        },
+        {
+          "name": "invalidActionUrls",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "unrelatedDataIsNotAFileAction",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "8716aabd1bd9b50d30c4ac179ebb875530ef83dbe32f1c8254a0d09cc6e54c7a",
+      "txt_report": "TestFileTransferUi.txt",
+      "junit_report": "TestFileTransferUi.xml"
+    }
+  ],
+  "ctest": {
+    "suites": 3,
+    "failures": 1,
+    "wall_seconds": 3.65,
+    "case_seconds": {
+      "TestDatabasePath": 2.71832,
+      "TestFileTransferUi": 0.89264,
+      "TestQtLogger": 1.51067
+    },
+    "exit_code": 8,
+    "parallel": 2,
+    "qt_platform": "offscreen",
+    "output_capture": "Only QtTest text/JUnit -o flags temporarily appended to generated CTest registrations, restored byte-for-byte after the run. Repository implementation unchanged."
+  },
+  "scope": [
+    "Native Release client build",
+    "Private explicit-existing-file and unconfigured-default child paths select expected databases; unselected hashes unchanged",
+    "Directory case passes CrashExit/nonzero checks but fails missing stderr message; direct private children verify unchanged fallback and diagnostic stderr routing",
+    "Logger prior-handler/repeated-init/later-owner subprocess checks",
+    "Offscreen file UI contrast, keyboard action and invalid/unrelated URLs"
+  ],
+  "not_run": [
+    "Original Windows baseline reproduction",
+    "Fresh independent QR decode on this database-only source",
+    "Windows sanitizer/full suite/endurance",
+    "Native desktop GUI/interactive exit or focus/capture retry",
+    "Mac-specific Cocoa repair",
+    "Packaging/signing or Windows 11 acceptance"
+  ],
+  "preservation": "Prior private report/log hashes verified unchanged. Prior recorded compiler commands and executables preserved before explicitly requested build reuse. Original checkouts/settings/running applications retained. Test fixture uses its own server; tracked changes limited to the new evidence directory. Complete build/configure/compiler command logs and binaries remain private.",
+  "publication": {
+    "attributes": "* -text whitespace=cr-at-eol (scoped to this directory)",
+    "changes": [
+      "Anonymized XML hostnames",
+      "Replaced private CTest build path with <isolated-build-directory>",
+      "Sanitized private paths in retained runtime warnings, without changing messages, cases or outcomes."
+    ],
+    "test_results_changed": false,
+    "hash_policy": "Published file hashes describe exact stored report bytes. Private complete logs have a separate local ledger."
+  },
+  "windows_acceptance_passed": false,
+  "failure": {
+    "suite": "TestDatabasePath",
+    "case": "configuredDirectoryCannotFallBack",
+    "stage": "Fatal diagnostic substring absent from child stderr",
+    "passed_before_failure": [
+      "CrashExit assertion",
+      "Nonzero exit assertion"
+    ],
+    "not_reached_in_unit_test": "Final private fallback-hash comparison",
+    "production_or_assertions_changed": false
+  },
+  "supplementary_children": {
+    "source_commit": "7993cdc830c7139b85cc4cb72efb12edfb3c0738",
+    "scope": "Supplementary direct invocations of the unchanged TestDatabasePath --database-child entry point using new privately seeded fixtures. No error-mode overrides, debugger, fatal-handler replacement or warning relaxation. stdout/stderr preserved byte-for-byte locally.",
+    "records": [
+      {
+        "mode": "file",
+        "return_code": 0,
+        "windows_return_code_hex": "0x00000000",
+        "timed_out": false,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0,
+        "fatal_diagnostic_in_stderr": false,
+        "private_database_before_sha256": {
+          "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+          "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+        },
+        "private_database_after_sha256": {
+          "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+          "explicit.sqlite": "518b38f8644a149718cde1790fe9393827df888462b7b89caeacadc82aacbecb"
+        },
+        "fallback_hash_unchanged": true,
+        "unselected_hash_unchanged": true
+      },
+      {
+        "mode": "default",
+        "return_code": 0,
+        "windows_return_code_hex": "0x00000000",
+        "timed_out": false,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0,
+        "fatal_diagnostic_in_stderr": false,
+        "private_database_before_sha256": {
+          "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+          "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+        },
+        "private_database_after_sha256": {
+          "mumble.sqlite": "518b38f8644a149718cde1790fe9393827df888462b7b89caeacadc82aacbecb",
+          "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+        },
+        "fallback_hash_unchanged": false,
+        "unselected_hash_unchanged": true
+      },
+      {
+        "mode": "directory",
+        "return_code": 3221226505,
+        "windows_return_code_hex": "0xc0000409",
+        "timed_out": false,
+        "stdout_bytes": 0,
+        "stderr_bytes": 0,
+        "fatal_diagnostic_in_stderr": false,
+        "private_database_before_sha256": {
+          "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+          "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+        },
+        "private_database_after_sha256": {
+          "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+          "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+        },
+        "fallback_hash_unchanged": true,
+        "unselected_hash_unchanged": true
+      }
+    ]
+  },
+  "diagnostic_forced_stderr": {
+    "environment": "QT_FORCE_STDERR_LOGGING=1 in owned diagnostic shell only",
+    "qualification": false,
+    "component_cases": 5,
+    "component_failures": 0,
+    "children": {
+      "source_commit": "7993cdc830c7139b85cc4cb72efb12edfb3c0738",
+      "QT_FORCE_STDERR_LOGGING": "1",
+      "diagnostic_only": true,
+      "scope": "Supplementary direct invocations of the unchanged TestDatabasePath --database-child entry point using new privately seeded fixtures. No error-mode overrides, debugger, fatal-handler replacement or warning relaxation. stdout/stderr preserved byte-for-byte locally.",
+      "records": [
+        {
+          "mode": "file",
+          "return_code": 0,
+          "windows_return_code_hex": "0x00000000",
+          "timed_out": false,
+          "stdout_bytes": 0,
+          "stderr_bytes": 27,
+          "fatal_diagnostic_in_stderr": false,
+          "private_database_before_sha256": {
+            "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+            "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+          },
+          "private_database_after_sha256": {
+            "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+            "explicit.sqlite": "518b38f8644a149718cde1790fe9393827df888462b7b89caeacadc82aacbecb"
+          },
+          "fallback_hash_unchanged": true,
+          "unselected_hash_unchanged": true
+        },
+        {
+          "mode": "default",
+          "return_code": 0,
+          "windows_return_code_hex": "0x00000000",
+          "timed_out": false,
+          "stdout_bytes": 0,
+          "stderr_bytes": 27,
+          "fatal_diagnostic_in_stderr": false,
+          "private_database_before_sha256": {
+            "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+            "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+          },
+          "private_database_after_sha256": {
+            "mumble.sqlite": "518b38f8644a149718cde1790fe9393827df888462b7b89caeacadc82aacbecb",
+            "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+          },
+          "fallback_hash_unchanged": false,
+          "unselected_hash_unchanged": true
+        },
+        {
+          "mode": "directory",
+          "return_code": 3221226505,
+          "windows_return_code_hex": "0xc0000409",
+          "timed_out": false,
+          "stdout_bytes": 0,
+          "stderr_bytes": 193,
+          "fatal_diagnostic_in_stderr": true,
+          "private_database_before_sha256": {
+            "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+            "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+          },
+          "private_database_after_sha256": {
+            "mumble.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb",
+            "explicit.sqlite": "56bdfa03a2a0a6dd37be8818f4d504c80fec6300b9ef6e9eaec52ebe633375fb"
+          },
+          "fallback_hash_unchanged": true,
+          "unselected_hash_unchanged": true
+        }
+      ]
+    },
+    "fatal_status_unchanged": true,
+    "fatal_message_present": true,
+    "private_fallback_unchanged": true,
+    "original_failure_retained": true,
+    "new_source_qualification": "Waiting for separately supplied exact test-only child-environment fix."
+  },
+  "qt_logging_source": {
+    "url": "https://raw.githubusercontent.com/qt/qtbase/5a8637e4516bc48a0b3f4b5ec3b18618b92e7222/src/corelib/global/qlogging.cpp",
+    "functions": [
+      "shouldLogToStderr",
+      "win_message_handler",
+      "qt_maybe_message_fatal"
+    ],
+    "interpretation": "Source routes Windows messages to OutputDebugString when stderr logging is not requested and no console is detected; forcing stderr changes the sink while fatal processing still calls qAbort. The diagnostic matches this behavior; the original debugger-output sink was not directly captured."
+  },
+  "link_policy": {
+    "test": "TestDatabasePath",
+    "flags": [
+      "LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:console"
+    ]
+  },
+  "database_test_isolation": {
+    "settings": "Global receives an explicit private-settings path inside QTemporaryDir",
+    "fallback": "Owned pre-created mumble.sqlite containing a synthetic sentinel",
+    "test_mode": "QStandardPaths::setTestModeEnabled(true)",
+    "personal_database_used": false,
+    "negative_case": "No error-dialog suppression, exit-status masking, warning relaxation or implementation edit."
+  },
+  "runtime_warnings": {
+    "suites_with_warnings": [
+      "TestFileTransferUi"
+    ],
+    "handling": "Runtime warning text retained; private build paths replaced with <isolated-build-directory>. No test failure or warning was hidden."
+  },
+  "cmake_options": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_UNITY_BUILD": "ON",
+    "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+    "bundled-cli11": "OFF",
+    "bundled-spdlog": "OFF",
+    "client": "ON",
+    "database-mysql-tests": "OFF",
+    "database-postgresql-tests": "OFF",
+    "database-sqlite-tests": "ON",
+    "file-sharing": "ON",
+    "ice": "OFF",
+    "lto": "OFF",
+    "overlay": "OFF",
+    "packaging": "OFF",
+    "plugins": "OFF",
+    "server": "ON",
+    "static": "ON",
+    "symbols": "OFF",
+    "test-lto": "OFF",
+    "tests": "ON",
+    "translations": "OFF",
+    "warnings-as-errors": "ON"
+  }
+}

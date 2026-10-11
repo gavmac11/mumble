@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "platform": "macOS 26.6.2 ARM64 / Qt 6.11.1 shared / AppleClang 21",
+  "parent_head": "6646ec582",
+  "trigger": "Explicit database_location points to an existing directory; SQLite open fails",
+  "control": {
+    "result": "4 QtTest cases passed; configured-directory case failed because child exited normally after fallback",
+    "scope": "Only disposable databases; explicit config base and seeded owned fallback"
+  },
+  "fixed": {
+    "result": "5 QtTest cases passed, zero failures/skips",
+    "behavior": "Configured database open failure terminates with its SQL error before default search; valid explicit and unconfigured default still open intended database",
+    "fallback_hash_unchanged": true
+  },
+  "full_ctest": {
+    "enabled": 40,
+    "registered": 41,
+    "passed": 40,
+    "failed": 0,
+    "execution_skipped": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 46.98
+  },
+  "constraints": [
+    "Tests run the actual Database constructor in child processes; no live personal database in controls",
+    "Missing configured files still require the existing create/reset/quit choice",
+    "Signing, supported-version GUI/media, multi-platform native execution and frozen combined release are not qualified by this local run"
+  ],
+  "windows_capture_followup": {
+    "original_source": "7993cdc830c7139b85cc4cb72efb12edfb3c0738",
+    "native_build": "PASS strict Release; Windows diagnostic capture assertion failed",
+    "cause": "Qt default Windows handler uses OutputDebugString for a child without a console",
+    "test_only_change": "Set QT_FORCE_STDERR_LOGGING=1 in negative child QProcessEnvironment before initialization",
+    "production_changed": false,
+    "assertions_weakened": false,
+    "rebuilt_mac_qt_test_cases_passed": 5,
+    "windows_confirmation": "PASS at exact 08a0fb691: strict Release client build and all 17 database/logger/UI QtTest cases",
+    "superseded_general_run": 38096010719,
+    "superseded_preview_run": 38096012672
+  },
+  "native_windows": {
+    "source_head": "08a0fb6913832a0820f9047cc8bc145b4a8afe62",
+    "producer_fixed": "88b762917d505392982444db7fc1488d1a8c753d",
+    "producer_control": "9366f1ef0966d8635d5b25be19264c91e9f9c63a",
+    "cases_passed": 17,
+    "failures": 0,
+    "skips": 0,
+    "fatal_exit_hex": "0xC0000409",
+    "fatal_message_captured": true,
+    "private_fallback_hash_unchanged": true,
+    "checksums_verified": {
+      "control": 22,
+      "fixed": 15
+    },
+    "limits": "Native automated/offscreen; interactive Windows Download and GUI still unverified"
+  }
+}
