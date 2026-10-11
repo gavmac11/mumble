@@ -1,0 +1,56 @@
+{
+  "source_head": "9b5b8e26684d6f2481591b11653397d390d39300",
+  "mac_full_build": "Complete Release client/server/all targets pass; shared Homebrew Qt6.11.1, AppleClang21, Mac26.6.2 ARM64, warnings-as-errors OFF",
+  "mac_ctest": {
+    "registered": 42,
+    "enabled": 41,
+    "passed": 41,
+    "failed": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "execution_skipped": 0,
+    "seconds": 61.54
+  },
+  "related_qt_cases": {
+    "TestFileTransferUi": {
+      "passed": 78,
+      "failed": 0,
+      "skipped": 0
+    },
+    "TestFileTransferManager": {
+      "passed": 36,
+      "failed": 0,
+      "skipped": 0
+    },
+    "TestFTIdentity": {
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0
+    },
+    "TestFileTransferEngine": {
+      "passed": 43,
+      "failed": 0,
+      "skipped": 0
+    },
+    "TestFileTransferE2E": {
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "opus": {
+    "model": "claude-opus-5-5",
+    "duration_ms": 136683,
+    "read_only": true,
+    "snapshot_hashes_independently_verified": 18,
+    "must_fix": "none found in this correction",
+    "should_fix": "See exact retained review; all listed remaining required work is unqualified"
+  },
+  "negative": "Actual real-crypto sender-cache removal leaked one chunk before correction; exact same assertion now passes, no assertion relaxed. Sender API fixtures updated to explicitly pass their selected expected keys; intentional first use remains explicit empty.",
+  "pending": [
+    "Native Windows and Linux qualification of this exact revision",
+    "Remaining review Should work and production manager/GUI end-to-end tests",
+    "Installed GUI/device/supported OS/signing/relay/final-hosting/commercial gates"
+  ]
+}

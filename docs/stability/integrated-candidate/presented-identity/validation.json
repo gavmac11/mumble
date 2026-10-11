@@ -52,5 +52,22 @@
     "client_sha256": "2bd5a228a50bbe5ac759f4818ffe7f713e886f0d61eb68fde0bf757bc200b5a8",
     "server_sha256": "09da8e26b49a0c784fb6e03b7913be8eaf1ab47290bfea6975a96bff410f31db",
     "e1_binaries_and_source_preserved": true
+  },
+  "windows": {
+    "source_head": "f337b951482e121964e9162221e96611f94e068e",
+    "producer_commit": "e960c10f92628d11c19dc0317f8dfd0abef538b6",
+    "strict_full_client_server_tests": "passed",
+    "enabled_suites": 41,
+    "qt_cases": 1147,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "committed_hashes_verified": 99
+  },
+  "latest_correction": {
+    "source_head": "9b5b8e26684d6f2481591b11653397d390d39300",
+    "evidence": "revision-9b5b8e",
+    "native_windows_linux": "pending",
+    "opus_must_fix": "none; Should work still open"
   }
 }

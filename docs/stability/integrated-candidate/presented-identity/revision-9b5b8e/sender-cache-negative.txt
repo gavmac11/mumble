@@ -1,0 +1,10 @@
+********* Start testing of TestFileTransferEngine *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestFileTransferEngine::initTestCase()
+FAIL!  : TestFileTransferEngine::selectedPinSurvivesCacheRemoval() Compared values are not the same
+   Actual   (chunks): 1
+   Expected (0)     : 0
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp(891)]
+PASS   : TestFileTransferEngine::cleanupTestCase()
+Totals: 2 passed, 1 failed, 0 skipped, 0 blacklisted, 112ms
+********* Finished testing of TestFileTransferEngine *********

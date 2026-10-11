@@ -1,0 +1,9 @@
+# Sender identity snapshot correction
+
+Source `9b5b8e26684d6f2481591b11653397d390d39300` removes sender reads from the mutable receiver pin cache. The required recipient map carries the expected key selected before queueing. The GUI and manager share revalidation of the displayed name, key, verification, user object, server, connection generation and channel. Storage errors fail recipient capture; an absent pin after a successful read is explicit first use.
+
+The real-crypto negative sent one chunk to a replacement key before correction. The corrected fixture sends no chunks and never reaches Ready; no assertion was relaxed. Existing direct-engine fixtures now supply their selected keys explicitly, and deliberate first use still uses an empty expected key. Shared production snapshot validation has 36 passing manager cases. Receiver acceptance cases count signer attempts and now distinguish resume(true) from resume(false).
+
+The full available Mac Release client/server/all targets and all 41 enabled suites pass (42 registered, OverlayTest disabled, 61.54 s). This shared Homebrew build has warnings-as-errors OFF. Actual read-only Opus 5.5 follow-up (136683 ms) finds both previous Must-fix items addressed and no new Must; all 18 snapshot hashes were independently checked against the source commit.
+
+The exact review retains required Should work: first-use sender pinning must preserve captured name/context and verification lifecycle; receive name/key lookups need one atomic snapshot, inbound messages need connection tags, stale prompts need scoped cancellation, diagnostics/terminal states/manual save need rechecks, and re-verification/storage-error/disabled cleanup/name semantics need qualification. Native Windows/Linux checks for this revision are pending. No production-manager/GUI crypto, installed-client, media, supported-OS/signing or final-hosting qualification is claimed.
