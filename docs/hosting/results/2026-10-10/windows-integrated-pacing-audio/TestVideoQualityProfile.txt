@@ -1,0 +1,13 @@
+********* Start testing of TestVideoQualityProfile *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestVideoQualityProfile::initTestCase()
+PASS   : TestVideoQualityProfile::derivesEncoderAndWireRatesFromTheSameBudget()
+PASS   : TestVideoQualityProfile::definesSourceAppropriateDefaults()
+PASS   : TestVideoQualityProfile::preservesSupportedEvenSizes()
+PASS   : TestVideoQualityProfile::roundsOddDimensionsDown()
+PASS   : TestVideoQualityProfile::constrainsScreenContentTo1080p()
+PASS   : TestVideoQualityProfile::constrainsWebcamContentTo720p()
+PASS   : TestVideoQualityProfile::rejectsInvalidAndTinyFrames()
+PASS   : TestVideoQualityProfile::cleanupTestCase()
+Totals: 9 passed, 0 failed, 0 skipped, 0 blacklisted, 263ms
+********* Finished testing of TestVideoQualityProfile *********

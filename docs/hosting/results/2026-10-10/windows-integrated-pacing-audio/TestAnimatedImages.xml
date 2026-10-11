@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestAnimatedImages" timestamp="2026-10-10T19:11:17" hostname="windows-validation-host" tests="10" failures="0" errors="0" skipped="0" time="0.013">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestAnimatedImages" time="0.004" />
+  <testcase name="acceptsRawGifMimeData" classname="TestAnimatedImages" time="0.001">
+    <system-err>
+      QFontDatabase: Cannot find font directory &lt;isolated-build-directory&gt;/tests/lib/fonts.
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+    </system-err>
+  </testcase>
+  <testcase name="pastesRawGifMimeDataWithStaticFallback" classname="TestAnimatedImages" time="0.001" />
+  <testcase name="rawGifHasStaticFallback" classname="TestAnimatedImages" time="0.000" />
+  <testcase name="releasesAnimationOnClear" classname="TestAnimatedImages" time="0.000" />
+  <testcase name="retainsAnimationUntilLastReferenceIsRemoved" classname="TestAnimatedImages" time="0.000" />
+  <testcase name="releasesAnimationOnMaximumBlockEviction" classname="TestAnimatedImages" time="0.000" />
+  <testcase name="scalesStaticImageWithChatWindow" classname="TestAnimatedImages" time="0.002" />
+  <testcase name="scalesAnimatedGifWithoutStoppingAnimation" classname="TestAnimatedImages" time="0.000" />
+  <testcase name="cleanupTestCase" classname="TestAnimatedImages" time="0.000" />
+</testsuite>

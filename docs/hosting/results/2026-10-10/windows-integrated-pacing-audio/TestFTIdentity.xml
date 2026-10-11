@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestFTIdentity" timestamp="2026-10-10T19:11:23" hostname="windows-validation-host" tests="12" failures="0" errors="0" skipped="0" time="4.558">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestFTIdentity" time="0.008" />
+  <testcase name="safetyNumberFormat" classname="TestFTIdentity" time="0.000" />
+  <testcase name="safetyNumberSymmetry" classname="TestFTIdentity" time="0.006" />
+  <testcase name="safetyNumberDistinct" classname="TestFTIdentity" time="0.000" />
+  <testcase name="qrPayload" classname="TestFTIdentity" time="0.000" />
+  <testcase name="identityLifecycle" classname="TestFTIdentity" time="0.562" />
+  <testcase name="identityWrongPassphrase" classname="TestFTIdentity" time="1.709" />
+  <testcase name="identityChangePassphrase" classname="TestFTIdentity" time="2.259" />
+  <testcase name="trustStoreTransitions" classname="TestFTIdentity" time="0.004" />
+  <testcase name="trustStoreChangedBlocks" classname="TestFTIdentity" time="0.002" />
+  <testcase name="trustStoreRemovePin" classname="TestFTIdentity" time="0.003" />
+  <testcase name="cleanupTestCase" classname="TestFTIdentity" time="0.000" />
+</testsuite>

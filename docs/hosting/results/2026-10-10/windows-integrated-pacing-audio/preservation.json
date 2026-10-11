@@ -1,0 +1,16 @@
+{
+  "source_commit": "17f0807e25f8924948c0c391e96d5742c51f817a",
+  "prior_ledger_entries_verified": {
+    "mumble-rate-credit-20261010": 30,
+    "mumble-audio-wizard-20261010": 22,
+    "mumble-rate-credit-revised-20261010": 30,
+    "mumble-rate-credit-precision-20261010": 31
+  },
+  "precision_source": "4f30bc5778a2efbff0b25975d6b2cc0c2580e469",
+  "precision_evidence": "5a79dcd270d8aa87b4e96e3609cb467f249223b4",
+  "prior_binaries": "All eight existing client/server/test binaries and exact compiler commands copied and hash verified on E: before requested full-build reuse; prior snapshots retained",
+  "snapshot_binary_count": 8,
+  "c_drive_copies_or_cleanup": false,
+  "personal_mumble_state_changes": false,
+  "gui_authentication_or_hardware_actions": false
+}

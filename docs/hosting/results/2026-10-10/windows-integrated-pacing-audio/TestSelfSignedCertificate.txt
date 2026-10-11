@@ -1,0 +1,8 @@
+********* Start testing of TestSelfSignedCertificate *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestSelfSignedCertificate::initTestCase()
+PASS   : TestSelfSignedCertificate::exerciseClientCert()
+PASS   : TestSelfSignedCertificate::exerciseServerCert()
+PASS   : TestSelfSignedCertificate::cleanupTestCase()
+Totals: 4 passed, 0 failed, 0 skipped, 0 blacklisted, 174ms
+********* Finished testing of TestSelfSignedCertificate *********

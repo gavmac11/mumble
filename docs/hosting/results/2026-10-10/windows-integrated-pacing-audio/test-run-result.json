@@ -1,0 +1,7 @@
+{
+  "ctest_exit_code": 0,
+  "qt_platform": "offscreen",
+  "parallel": 2,
+  "parent_qt_force_stderr_logging": false,
+  "selection": "All registered tests; CTest honors only source-existing disabled properties"
+}
