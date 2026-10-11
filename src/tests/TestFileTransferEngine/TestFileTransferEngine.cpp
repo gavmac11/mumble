@@ -64,6 +64,7 @@ private slots:
 	void earlyChunksKeepTheirTransferIdentity();
 	void unrelatedChunksDoNotExtendPendingReceive();
 	void sendReceiveRoundTrip();
+	void incomingIdentitySurvivesPeerRename();
 	void passwordRoundTrip();
 	void wrongPasswordFailsClosed();
 	void duplicateChunkIsFatal();
@@ -865,6 +866,38 @@ void TestFileTransferEngine::unrelatedChunksDoNotExtendPendingReceive() {
 	QTest::qWait(350);
 	QVERIFY2(sawState(updates, {}, PQFT::FTTransferInfo::State::Failed),
 			 "Stray chunks kept an unfinished handshake alive");
+}
+
+void TestFileTransferEngine::incomingIdentitySurvivesPeerRename() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	QString liveName = QStringLiteral("Original sender");
+	pair.bob.setPeerNameLookup([&](unsigned int) { return liveName; });
+	pair.onChunkDelivered = [&](const QByteArray &, quint64, quint64, const QByteArray &) {
+		liveName = QStringLiteral("Renamed sender");
+	};
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	const QString source = writeTestFile(32768);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready), 10000);
+	PQFT::FTTransferInfo ready;
+	for (const auto &args : received) {
+		const auto info = args.first().value< PQFT::FTTransferInfo >();
+		if (info.state == PQFT::FTTransferInfo::State::Ready)
+			ready = info;
+	}
+	QCOMPARE(liveName, QStringLiteral("Renamed sender"));
+	QCOMPARE(ready.peerName, QStringLiteral("Original sender"));
+	QCOMPARE(ready.peerFingerprint, m_aliceFp);
+	const QString target = m_tempDir.filePath("identity-captured.bin");
+	pair.bob.saveTransferAs(ready.transferId, target);
+	const auto saved = received.last().first().value< PQFT::FTTransferInfo >();
+	QCOMPARE(saved.state, PQFT::FTTransferInfo::State::Saved);
+	QCOMPARE(saved.peerName, ready.peerName);
+	QCOMPARE(saved.peerFingerprint, ready.peerFingerprint);
+	QFile input(source), output(target);
+	QVERIFY(input.open(QIODevice::ReadOnly));
+	QVERIFY(output.open(QIODevice::ReadOnly));
+	QCOMPARE(output.readAll(), input.readAll());
 }
 
 void TestFileTransferEngine::sendReceiveRoundTrip() {

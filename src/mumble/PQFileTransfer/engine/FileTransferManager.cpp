@@ -56,10 +56,30 @@ void FileTransferManager::setupEngineTransports() {
 		return cache->value(peerSession);
 	});
 
+	engine->setPeerNameLookup([this](unsigned int peerSession) {
+		QMutexLocker lock(&m_pinCacheMutex);
+		return m_peerNameCache.value(peerSession);
+	});
+
 	connect(
 		engine, &PQFT::FileTransferEngine::transferUpdated, this,
 		[this](const PQFT::FTTransferInfo &info) {
-			forwardEngineEvent([this, info]() { emit transferUpdated(info); });
+			forwardEngineEvent([this, info]() {
+				if (m_trustStore && info.incoming && info.state == PQFT::FTTransferInfo::State::Ready) {
+					QByteArray pinned;
+					const auto state = trustStateForTransfer(info, pinned);
+					if (state == PQFT::TrustState::NewPeer || state == PQFT::TrustState::Changed) {
+						abortTransfer(info.transferId);
+						auto failed  = info;
+						failed.state = PQFT::FTTransferInfo::State::Failed;
+						failed.error = tr("The sender's saved identity changed. Verify the sender and try again.");
+						emit transferUpdated(failed);
+						emit peerBlocked(info.peerSession, info.peerName);
+						return;
+					}
+				}
+				emit transferUpdated(info);
+			});
 		},
 		Qt::DirectConnection);
 	connect(
@@ -67,27 +87,50 @@ void FileTransferManager::setupEngineTransports() {
 		[this](unsigned int peerSession, const QByteArray &peerFingerprint, const QString &safetyNumberStr,
 			   const QByteArray &, bool pinOnObservation) {
 			forwardEngineEvent([this, peerSession, peerFingerprint, safetyNumberStr, pinOnObservation]() {
-				if (pinOnObservation) {
-					// Sender side: the handshake (M4, signatures + MACs) has
-					// already authenticated the presented key — pin on first
-					// observation (the documented TOFU deviation). The user
-					// can still verify later from the dialog.
-					if (const ClientUser *user = ClientUser::get(peerSession)) {
-						if (m_trustStore && !serverDigest().isEmpty()) {
-							PQFT::PinnedPeer existing;
-							if (!m_trustStore->lookup(existing, serverDigest(), user->qsName)) {
-								m_trustStore->checkAndPin(serverDigest(), user->qsName, peerFingerprint,
-														  safetyNumberStr);
-								refreshPinCache();
-							}
-						}
+				ClientUser *user        = ClientUser::get(peerSession);
+				const QByteArray digest = serverDigest();
+				auto resume             = [this, peerSession](bool accepted) {
+					QMetaObject::invokeMethod(
+						m_engine,
+						[this, peerSession, accepted]() { m_engine->resolveFirstContact(peerSession, accepted); },
+						Qt::QueuedConnection);
+				};
+				if (m_trustStore) {
+					const ClientUser *self = ClientUser::get(Global::get().uiSession);
+					if (!user || !user->bFileTransferCapable || !Global::get().s.bFTEnabled || digest.isEmpty() || !self
+						|| !self->cChannel || user->cChannel != self->cChannel) {
+						resume(false);
+						return;
 					}
-				} else {
-					// Receiver side: a plain M1 is an unauthenticated claim.
-					// Keep it in memory only — the pin is written when (and
-					// only when) the user accepts the safety-number dialog.
-					m_pendingFirstContact.insert(peerSession, qMakePair(peerFingerprint, safetyNumberStr));
+					const auto state = m_trustStore->check(digest, user->qsName, peerFingerprint, safetyNumberStr);
+					if (state == PQFT::TrustState::Changed) {
+						m_pendingFirstContact.remove(peerSession);
+						resume(false);
+						refreshPinCache();
+						emit peerBlocked(peerSession, user->qsName);
+						return;
+					}
+					if (!pinOnObservation && state != PQFT::TrustState::NewPeer) {
+						// A join may race the worker cache refresh. A matching stored key is already pinned;
+						// resume with the fresh cache, retaining its existing verification state.
+						refreshPinCache();
+						resume(true);
+						return;
+					}
+					if (pinOnObservation) {
+						// Sender-side M4 has authenticated the key; receiver-side M1 remains memory-only.
+						if (m_trustStore->checkAndPin(digest, user->qsName, peerFingerprint, safetyNumberStr)
+							== PQFT::TrustState::Changed) {
+							resume(false);
+							emit peerBlocked(peerSession, user->qsName);
+							return;
+						}
+						refreshPinCache();
+					}
 				}
+				m_pendingFirstContact.insert(
+					peerSession, PendingFirstContact{ peerFingerprint, safetyNumberStr, QPointer< ClientUser >(user),
+													  user ? user->qsName : QString(), digest, ++m_nextPromptToken });
 				emit firstContact(peerSession, peerFingerprint, safetyNumberStr);
 			});
 		},
@@ -143,6 +186,8 @@ void FileTransferManager::updateConnectionTransport() {
 }
 
 QByteArray FileTransferManager::serverDigest() const {
+	if (m_serverDigestProvider)
+		return m_serverDigestProvider();
 	auto sh = Global::get().sh;
 	return sh ? sh->qbaDigest : QByteArray();
 }
@@ -251,59 +296,46 @@ void FileTransferManager::providePassword(const QByteArray &transferId, const QB
 		m_engine, [this, transferId, pw]() { m_engine->providePassword(transferId, pw); }, Qt::QueuedConnection);
 }
 
-void FileTransferManager::resolveFirstContact(unsigned int peerSession, bool verified) {
-	// GUI thread: the dialog finished. On acceptance make sure the pin the
-	// engine's retry will look up actually exists (the dialog flow calls
-	// pinPeer first; fall back to the in-memory presented fingerprint); on
-	// decline nothing was ever persisted.
-	if (verified) {
-		QMutexLocker lock(&m_pinCacheMutex);
-		const bool alreadyPinned = m_pinCache.contains(peerSession);
-		lock.unlock();
-		if (!alreadyPinned && !pinPeer(peerSession, true)) {
-			verified = false; // nothing to verify against — treat as declined
-		}
-	}
+bool FileTransferManager::resolveFirstContact(unsigned int peerSession, const QByteArray &shownFingerprint,
+											  quint64 promptToken, bool verified) {
+	const auto pending = m_pendingFirstContact.constFind(peerSession);
+	// An older dialog cannot accept or decline a newer request, even when the key is unchanged.
+	if (pending == m_pendingFirstContact.constEnd() || pending->fingerprint != shownFingerprint
+		|| pending->promptToken != promptToken)
+		return false;
+	const bool accepted = verified && pinPeer(peerSession, shownFingerprint, true);
 	m_pendingFirstContact.remove(peerSession);
-	const bool v = verified;
 	QMetaObject::invokeMethod(
-		m_engine, [this, peerSession, v]() { m_engine->resolveFirstContact(peerSession, v); }, Qt::QueuedConnection);
+		m_engine, [this, peerSession, accepted]() { m_engine->resolveFirstContact(peerSession, accepted); },
+		Qt::QueuedConnection);
+	return accepted;
 }
 
-bool FileTransferManager::pinPeer(unsigned int peerSession, bool verified) {
-	const ClientUser *user = ClientUser::get(peerSession);
-	if (!user || !m_trustStore) {
+quint64 FileTransferManager::firstContactToken(unsigned int peerSession) const {
+	return m_pendingFirstContact.value(peerSession).promptToken;
+}
+
+bool FileTransferManager::pinPeer(unsigned int peerSession, const QByteArray &shownFingerprint, bool verified) {
+	const auto it = m_pendingFirstContact.constFind(peerSession);
+	if (!m_trustStore || it == m_pendingFirstContact.constEnd() || shownFingerprint.size() != PQFT::HashSize)
 		return false;
-	}
-	// Which fingerprint? For a receiver-side first contact the pin cache and
-	// trust store are intentionally empty (nothing is persisted before the
-	// dialog) — the manager kept the presented key in memory instead. The
-	// cache covers everyone else (pinned peers, sender-side TOFU).
-	QByteArray fp;
-	{
-		QMutexLocker lock(&m_pinCacheMutex);
-		fp = m_pinCache.value(peerSession);
-	}
-	if (fp.isEmpty()) {
-		PQFT::PinnedPeer peer;
-		if (m_trustStore->lookup(peer, serverDigest(), user->qsName)) {
-			fp = peer.fingerprint;
-		}
-	}
-	if (fp.isEmpty()) {
-		fp = m_pendingFirstContact.value(peerSession).first;
-	}
-	if (fp.isEmpty()) {
+	const PendingFirstContact pending = it.value();
+	ClientUser *user                  = ClientUser::get(peerSession);
+	const ClientUser *self            = ClientUser::get(Global::get().uiSession);
+	const QByteArray digest           = serverDigest();
+	if (!user || !pending.user || user != pending.user.data() || user->qsName != pending.username || digest.isEmpty()
+		|| digest != pending.serverDigest || shownFingerprint != pending.fingerprint || !self || !self->cChannel
+		|| user->cChannel != self->cChannel || !user->bFileTransferCapable || !Global::get().s.bFTEnabled)
 		return false;
-	}
-	QString safety = m_pendingFirstContact.value(peerSession).second;
-	if (safety.isEmpty()) {
-		safety = safetyNumberFor(peerSession);
-	}
-	m_trustStore->checkAndPin(serverDigest(), user->qsName, fp, safety);
-	if (verified) {
-		m_trustStore->markVerified(serverDigest(), user->qsName);
-	}
+	const auto state = m_trustStore->checkAndPin(digest, pending.username, shownFingerprint, pending.safetyNumber);
+	if (state != PQFT::TrustState::Pinned && state != PQFT::TrustState::Verified)
+		return false;
+	if (verified && !m_trustStore->markVerified(digest, pending.username, shownFingerprint))
+		return false;
+	PQFT::PinnedPeer stored;
+	if (!m_trustStore->lookup(stored, digest, pending.username) || stored.fingerprint != shownFingerprint
+		|| (verified && !stored.verified))
+		return false;
 	refreshPinCache();
 	return true;
 }
@@ -319,6 +351,22 @@ PQFT::TrustState FileTransferManager::trustStateFor(unsigned int peerSession, QB
 		return PQFT::TrustState::NewPeer;
 	}
 	pinnedFingerprint = peer.fingerprint;
+	return peer.verified ? PQFT::TrustState::Verified : PQFT::TrustState::Pinned;
+}
+
+PQFT::TrustState FileTransferManager::trustStateForTransfer(const PQFT::FTTransferInfo &info,
+															QByteArray &pinnedFingerprint) {
+	pinnedFingerprint.clear();
+	const QByteArray digest = serverDigest();
+	if (!info.incoming || info.peerName.isEmpty() || info.peerFingerprint.size() != PQFT::HashSize || !m_trustStore
+		|| digest.isEmpty())
+		return PQFT::TrustState::NewPeer;
+	PQFT::PinnedPeer peer;
+	if (!m_trustStore->lookup(peer, digest, info.peerName))
+		return PQFT::TrustState::NewPeer;
+	pinnedFingerprint = peer.fingerprint;
+	if (peer.fingerprint != info.peerFingerprint)
+		return PQFT::TrustState::Changed;
 	return peer.verified ? PQFT::TrustState::Verified : PQFT::TrustState::Pinned;
 }
 
@@ -351,28 +399,37 @@ void FileTransferManager::disconnectCleanup() {
 	m_pendingFirstContact.clear();
 	QMutexLocker lock(&m_pinCacheMutex);
 	m_pinCache.clear();
+	m_peerNameCache.clear();
 }
 
 void FileTransferManager::refreshPinCache() {
 	if (!m_trustStore || !m_identity) {
+		QMutexLocker lock(&m_pinCacheMutex);
+		m_pinCache.clear();
+		m_peerNameCache.clear();
 		return;
 	}
 	// Re-apply limits whenever the world changes; cheap and idempotent
 	applyEngineConfig();
 	const QByteArray digest = serverDigest();
 	if (digest.isEmpty()) {
+		QMutexLocker lock(&m_pinCacheMutex);
+		m_pinCache.clear();
+		m_peerNameCache.clear();
 		return;
 	}
 
 	QHash< unsigned int, QByteArray > fresh;
+	QHash< unsigned int, QString > names;
 	// Only channel peers with the file-transfer capability can ever talk to
 	// us; cache every user we have a pin for.
 	const ClientUser *self = ClientUser::get(Global::get().uiSession);
 	if (self && self->cChannel) {
 		for (const User *u : self->cChannel->qlUsers) {
 			const auto *user = static_cast< const ClientUser * >(u);
-			if (!user || user->uiSession == Global::get().uiSession)
+			if (!user || !user->bFileTransferCapable || user->uiSession == Global::get().uiSession)
 				continue;
+			names.insert(user->uiSession, user->qsName);
 			PQFT::PinnedPeer peer;
 			if (m_trustStore->lookup(peer, digest, user->qsName)) {
 				fresh.insert(user->uiSession, peer.fingerprint);
@@ -382,6 +439,7 @@ void FileTransferManager::refreshPinCache() {
 
 	QMutexLocker lock(&m_pinCacheMutex);
 	m_pinCache = std::move(fresh);
+	m_peerNameCache = std::move(names);
 }
 
 void FileTransferManager::applyEngineConfig() {

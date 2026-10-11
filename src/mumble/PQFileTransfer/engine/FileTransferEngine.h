@@ -50,6 +50,9 @@ struct FTTransferInfo {
 
 	QByteArray transferId;
 	unsigned int peerSession = 0;   // remote peer (sender when receiving)
+	// Incoming identity: name captured at handshake start, key authenticated by the session/manifest.
+	QString peerName;
+	QByteArray peerFingerprint;
 	bool incoming			  = false;
 	QString fileName;
 	QString mimeType;
@@ -90,6 +93,7 @@ public:
 
 	void setTransport(TransportControl control, TransportChunk chunk);
 	void setPinLookup(PinLookup lookup);
+	void setPeerNameLookup(std::function< QString(unsigned int) > lookup);
 	void setIdentity(QByteArray identityPublicKey, IdentitySign sign);
 	/// Call in the engine's owning thread; the manager queues configuration updates.
 	void setConfig(const Config &config);
@@ -168,6 +172,7 @@ private:
 
 	// --- receiving ---
 	struct ReceiveJob {
+		QString peerName;
 		QByteArray transferId;
 		unsigned int peerSession = 0;
 		FTManifest manifest;
@@ -259,6 +264,7 @@ private:
 	TransportControl m_transportControl;
 	TransportChunk m_transportChunk;
 	PinLookup m_pinLookup;
+	std::function< QString(unsigned int) > m_peerNameLookup;
 	std::unique_ptr< QTimer > m_sendPaceTimer;
 	QElapsedTimer m_sendPaceClock;
 	qint64 m_sendCreditMilliBytes = 0;

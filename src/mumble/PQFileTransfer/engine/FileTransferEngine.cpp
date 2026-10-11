@@ -134,6 +134,10 @@ void FileTransferEngine::setPinLookup(PinLookup lookup) {
 	m_pinLookup = std::move(lookup);
 }
 
+void FileTransferEngine::setPeerNameLookup(std::function< QString(unsigned int) > lookup) {
+	m_peerNameLookup = std::move(lookup);
+}
+
 void FileTransferEngine::setIdentity(QByteArray identityPublicKey, IdentitySign sign) {
 	m_identityPk = std::move(identityPublicKey);
 	m_sign		 = std::move(sign);
@@ -506,6 +510,7 @@ void FileTransferEngine::startResponder(unsigned int actorSession, const QByteAr
 
 	auto job			= std::make_shared< ReceiveJob >();
 	job->peerSession  = actorSession;
+	job->peerName       = m_peerNameLookup ? m_peerNameLookup(actorSession) : QString();
 	job->idleTimer	= std::make_unique< QTimer >(this);
 	job->idleTimer->setSingleShot(true);
 	// Target THIS job, not "the first job of that peer": several transfers
@@ -1419,6 +1424,8 @@ void FileTransferEngine::updateReceiveState(ReceiveJob &job, FTTransferInfo::Sta
 	FTTransferInfo info;
 	info.transferId   = job.transferId.isEmpty() ? job.manifest.transferId : job.transferId;
 	info.peerSession  = job.peerSession;
+	info.peerName        = job.peerName;
+	info.peerFingerprint = job.session_ ? job.session_->peerFingerprint() : QByteArray();
 	info.incoming	  = true;
 	info.fileName	  = job.fileName;
 	info.mimeType	  = job.mimeType;
@@ -1440,6 +1447,8 @@ void FileTransferEngine::emitSaveDone(std::shared_ptr< ReceiveJob > jobPtr) {
 	FTTransferInfo info;
 	info.transferId  = job.transferId;
 	info.peerSession = job.peerSession;
+	info.peerName        = job.peerName;
+	info.peerFingerprint = job.session_ ? job.session_->peerFingerprint() : QByteArray();
 	info.incoming	= true;
 	info.fileName	= job.fileName;
 	info.fileSize	= job.fileSize;
@@ -1452,6 +1461,8 @@ void FileTransferEngine::emitSaveFailed(ReceiveJob &job, const QString &error) {
 	FTTransferInfo info;
 	info.transferId  = job.transferId;
 	info.peerSession = job.peerSession;
+	info.peerName        = job.peerName;
+	info.peerFingerprint = job.session_ ? job.session_->peerFingerprint() : QByteArray();
 	info.incoming	= true;
 	info.fileName	= job.fileName;
 	info.fileSize	= job.fileSize;

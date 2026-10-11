@@ -372,10 +372,10 @@ void TestFileTransferE2E::endToEndTransfer() {
 	const QByteArray bobFp   = bob.identity()->fingerprint();
 	alice.trust()->checkAndPin(alice.serverDigest(), "bob", bobFp,
 							   PQFT::safetyNumber(aliceFp, bobFp));
-	alice.trust()->markVerified(alice.serverDigest(), "bob");
+	QVERIFY(alice.trust()->markVerified(alice.serverDigest(), "bob", bobFp));
 	bob.trust()->checkAndPin(bob.serverDigest(), "alice", aliceFp,
 							 PQFT::safetyNumber(aliceFp, bobFp));
-	bob.trust()->markVerified(bob.serverDigest(), "alice");
+	QVERIFY(bob.trust()->markVerified(bob.serverDigest(), "alice", aliceFp));
 
 	alice.installEngine();
 	bob.installEngine();
@@ -437,10 +437,10 @@ void TestFileTransferE2E::endToEndPasswordTransfer() {
 	const QByteArray bobFp   = bob.identity()->fingerprint();
 	alice.trust()->checkAndPin(alice.serverDigest(), "dave", bobFp,
 							   PQFT::safetyNumber(aliceFp, bobFp));
-	alice.trust()->markVerified(alice.serverDigest(), "dave");
+	QVERIFY(alice.trust()->markVerified(alice.serverDigest(), "dave", bobFp));
 	bob.trust()->checkAndPin(bob.serverDigest(), "carol", aliceFp,
 							 PQFT::safetyNumber(aliceFp, bobFp));
-	bob.trust()->markVerified(bob.serverDigest(), "carol");
+	QVERIFY(bob.trust()->markVerified(bob.serverDigest(), "carol", aliceFp));
 
 	alice.installEngine();
 	bob.installEngine();
@@ -522,10 +522,10 @@ void TestFileTransferE2E::capabilityGating() {
 	const QByteArray bobFp   = bob.identity()->fingerprint();
 	alice.trust()->checkAndPin(alice.serverDigest(), "frank", bobFp,
 							   PQFT::safetyNumber(aliceFp, bobFp));
-	alice.trust()->markVerified(alice.serverDigest(), "frank");
+	QVERIFY(alice.trust()->markVerified(alice.serverDigest(), "frank", bobFp));
 	bob.trust()->checkAndPin(bob.serverDigest(), "erin", aliceFp,
 							 PQFT::safetyNumber(aliceFp, bobFp));
-	bob.trust()->markVerified(bob.serverDigest(), "erin");
+	QVERIFY(bob.trust()->markVerified(bob.serverDigest(), "erin", aliceFp));
 
 	alice.installEngine();
 	bob.installEngine();

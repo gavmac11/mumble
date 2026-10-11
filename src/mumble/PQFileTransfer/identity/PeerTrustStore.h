@@ -52,7 +52,7 @@ public:
 						   const QByteArray &peerFingerprint, const QString &safetyNumber);
 
 	/// Mark the pinned fingerprint as verified out-of-band.
-	bool markVerified(const QByteArray &serverDigest, const QString &username);
+	bool markVerified(const QByteArray &serverDigest, const QString &username, const QByteArray &expectedFingerprint);
 
 	/// Drop the pin entirely (used by the explicit re-verification flow).
 	bool removePin(const QByteArray &serverDigest, const QString &username);

@@ -4836,7 +4836,7 @@ void MainWindow::onFileTransferUpdated(const PQFT::FTTransferInfo &info) {
 		&& Global::get().s.bFTAutoAcceptPinned) {
 		QByteArray pinnedFp;
 		const QString target =
-			PQFT::automaticSaveTarget(Global::get().s, info, manager->trustStateFor(info.peerSession, pinnedFp));
+			PQFT::automaticSaveTarget(Global::get().s, info, manager->trustStateForTransfer(info, pinnedFp));
 		if (!target.isEmpty()) {
 			manager->saveTransferAs(info.transferId, target);
 		}
@@ -4845,9 +4845,9 @@ void MainWindow::onFileTransferUpdated(const PQFT::FTTransferInfo &info) {
 	// Create the log entry when the transfer becomes visible
 	if (isNew && !info.fileName.isEmpty()) {
 		const ClientUser *sender = ClientUser::get(info.peerSession);
-		const QString senderName =
-			sender ? Log::formatClientUser(const_cast< ClientUser * >(sender), Log::Source)
-				   : tr("Unknown user");
+		const QString senderName = sender && (!info.incoming || sender->qsName == info.peerName)
+									   ? Log::formatClientUser(const_cast< ClientUser * >(sender), Log::Source)
+									   : (info.peerName.isEmpty() ? tr("Unknown user") : info.peerName.toHtmlEscaped());
 		QString intro;
 		if (info.incoming) {
 			intro = tr("%1 sent a file:").arg(senderName);
@@ -4933,6 +4933,7 @@ void MainWindow::onFileFirstContact(unsigned int peerSession, const QByteArray &
 	}
 	const QString name       = user->qsName;
 	const quint64 generation = manager->connectionGeneration();
+	const quint64 promptToken = manager->firstContactToken(peerSession);
 
 	QByteArray qrPayload;
 	if (manager->identity() && manager->identity()->isUnlocked()) {
@@ -4947,10 +4948,11 @@ void MainWindow::onFileFirstContact(unsigned int peerSession, const QByteArray &
 		return;
 	}
 
-	if (verified) {
-		manager->pinPeer(peerSession, true);
+	if (!manager->resolveFirstContact(peerSession, peerFingerprint, promptToken, verified) && verified) {
+		Global::get().l->log(
+			Log::Warning,
+			tr("The peer or connection changed while verifying. Their identity was not marked verified. Try again."));
 	}
-	manager->resolveFirstContact(peerSession, verified);
 }
 
 void MainWindow::onFilePeerBlocked(unsigned int peerSession, const QString &peerName) {

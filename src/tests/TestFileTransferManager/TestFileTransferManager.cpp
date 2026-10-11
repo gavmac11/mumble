@@ -3,7 +3,10 @@
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
+#include "Channel.h"
+#include "ClientUser.h"
 #include "PQFileTransfer/crypto/SigMLDSA65.h"
+#include "PQFileTransfer/engine/FTSavePolicy.h"
 #include "PQFileTransfer/engine/FileTransferManager.h"
 #include "PQFileTransfer/engine/FileTransferSession.h"
 #include "Global.h"
@@ -12,6 +15,7 @@
 #include <QPointer>
 #include <QSemaphore>
 #include <QSignalSpy>
+#include <QSqlDatabase>
 #include <QTemporaryDir>
 #include <QTest>
 #include <QThread>
@@ -23,6 +27,7 @@ class TestFileTransferManager : public QObject {
 	Q_OBJECT
 private slots:
 	void init() {
+		m_serverDigest = QByteArray(20, 's');
 		m_directory = std::make_unique< QTemporaryDir >();
 		QVERIFY(m_directory->isValid());
 		m_global                = std::make_unique< Global >(m_directory->filePath("settings.json"));
@@ -34,9 +39,249 @@ private slots:
 	}
 
 	void cleanup() {
+		if (m_peer) {
+			QWriteLocker lock(&ClientUser::c_qrwlUsers);
+			ClientUser::c_qmUsers.remove(m_peer->uiSession);
+			ClientUser::c_qmUsers.remove(m_self->uiSession);
+		}
+		m_peer.reset();
+		m_replacement.reset();
+		m_self.reset();
+		m_channel.reset();
+		if (m_trustDb.isValid()) {
+			m_trustDb.close();
+			m_trustDb = QSqlDatabase();
+			QSqlDatabase::removeDatabase(QStringLiteral("presented-key-private-fixture"));
+		}
 		m_global.reset();
 		Global::g_global_struct = nullptr;
 		m_directory.reset();
+	}
+
+	void changedPresentedKeyDoesNotVerifyCachedPin() {
+		FileTransferManager manager;
+		QVERIFY(setupTrustFixture(manager));
+		const QByteArray oldFp   = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_oldM1));
+		const QByteArray shownFp = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_newM1));
+		QCOMPARE(manager.m_trustStore->checkAndPin(m_serverDigest, m_peer->qsName, oldFp, QStringLiteral("old safety")),
+				 PQFT::TrustState::Pinned);
+		manager.m_pinCache.insert(42, oldFp);
+		manager.m_pendingFirstContact.insert(
+			42, FileTransferManager::PendingFirstContact{ shownFp, QStringLiteral("shown safety"),
+														  QPointer< ClientUser >(m_peer.get()), m_peer->qsName,
+														  m_serverDigest });
+		const bool accepted = manager.pinPeer(42, shownFp, true);
+		PQFT::PinnedPeer stored;
+		QVERIFY(manager.m_trustStore->lookup(stored, m_serverDigest, m_peer->qsName));
+		QCOMPARE(stored.fingerprint, oldFp);
+		QVERIFY2(!stored.verified, "Accepting a changed presented key verified the previously cached key instead");
+		QVERIFY(!accepted);
+	}
+
+	void joinedPeerChangedKeyIsBlockedBeforeDialog() {
+		FileTransferManager manager;
+		QVERIFY(setupTrustFixture(manager));
+		const QByteArray oldFp = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_oldM1));
+		QCOMPARE(manager.m_trustStore->checkAndPin(m_serverDigest, m_peer->qsName, oldFp, QStringLiteral("old safety")),
+				 PQFT::TrustState::Pinned);
+		// Reproduce a peer joining after the session cache was built: the database already knows them.
+		QVERIFY(manager.m_pinCache.isEmpty());
+		QSignalSpy contact(&manager, &FileTransferManager::firstContact);
+		QSignalSpy blocked(&manager, &FileTransferManager::peerBlocked);
+		deliverControl(manager, m_newM1);
+		QVERIFY(QMetaObject::invokeMethod(manager.m_engine, []() {}, Qt::BlockingQueuedConnection));
+		QCoreApplication::sendPostedEvents(&manager, QEvent::MetaCall);
+		QCOMPARE(contact.size(), 0);
+		QCOMPARE(blocked.size(), 1);
+		PQFT::PinnedPeer stored;
+		QVERIFY(manager.m_trustStore->lookup(stored, m_serverDigest, m_peer->qsName));
+		QCOMPARE(stored.fingerprint, oldFp);
+		QVERIFY(!stored.verified);
+	}
+
+	void displayedKeyIsPinnedAndVerified() {
+		FileTransferManager manager;
+		QVERIFY(setupTrustFixture(manager));
+		deliverControl(manager, m_newM1);
+		QVERIFY(QMetaObject::invokeMethod(manager.m_engine, []() {}, Qt::BlockingQueuedConnection));
+		QCoreApplication::sendPostedEvents(&manager, QEvent::MetaCall);
+		const QByteArray shown = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_newM1));
+		QVERIFY(manager.resolveFirstContact(42, shown, manager.firstContactToken(42), true));
+		PQFT::PinnedPeer stored;
+		QVERIFY(manager.m_trustStore->lookup(stored, m_serverDigest, m_peer->qsName));
+		QCOMPARE(stored.fingerprint, shown);
+		QVERIFY(stored.verified);
+		QCOMPARE(manager.m_pinCache.value(42), shown);
+	}
+
+	void joinedMatchingPeerKeepsVerificationWithoutDialog() {
+		FileTransferManager manager;
+		QVERIFY(setupTrustFixture(manager));
+		const QByteArray fp = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_oldM1));
+		QCOMPARE(manager.m_trustStore->checkAndPin(m_serverDigest, m_peer->qsName, fp, QStringLiteral("known safety")),
+				 PQFT::TrustState::Pinned);
+		QVERIFY(manager.m_trustStore->markVerified(m_serverDigest, m_peer->qsName, fp));
+		QSignalSpy contact(&manager, &FileTransferManager::firstContact);
+		QSignalSpy blocked(&manager, &FileTransferManager::peerBlocked);
+		deliverControl(manager, m_oldM1);
+		QVERIFY(QMetaObject::invokeMethod(manager.m_engine, []() {}, Qt::BlockingQueuedConnection));
+		QCoreApplication::sendPostedEvents(&manager, QEvent::MetaCall);
+		QCOMPARE(contact.size(), 0);
+		QCOMPARE(blocked.size(), 0);
+		QCOMPARE(manager.m_pinCache.value(42), fp);
+		PQFT::PinnedPeer stored;
+		QVERIFY(manager.m_trustStore->lookup(stored, m_serverDigest, m_peer->qsName));
+		QCOMPARE(stored.fingerprint, fp);
+		QVERIFY(stored.verified);
+	}
+
+	void renamedPeerDoesNotBorrowAnotherKeysVerification() {
+		FileTransferManager manager;
+		QVERIFY(setupTrustFixture(manager));
+		const QString originalName = m_peer->qsName;
+		const QByteArray actualFp  = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_oldM1));
+		const QByteArray otherFp   = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_newM1));
+		QCOMPARE(manager.m_trustStore->checkAndPin(m_serverDigest, originalName, actualFp, "original"),
+				 PQFT::TrustState::Pinned);
+		const QString otherName = QStringLiteral("Historically verified peer");
+		QCOMPARE(manager.m_trustStore->checkAndPin(m_serverDigest, otherName, otherFp, "other"),
+				 PQFT::TrustState::Pinned);
+		QVERIFY(manager.m_trustStore->markVerified(m_serverDigest, otherName, otherFp));
+		m_peer->qsName                  = otherName;
+		m_global->s.bFTAutoAcceptPinned = true;
+		m_global->s.qsFTDownloadDir     = m_directory->path();
+		PQFT::FTTransferInfo info;
+		info.peerSession = 42;
+		info.incoming    = true;
+		info.state       = PQFT::FTTransferInfo::State::Ready;
+		info.fileName    = QStringLiteral("safe.txt");
+		QByteArray storedFp;
+		info.peerName        = originalName;
+		info.peerFingerprint = actualFp;
+		const auto trust     = manager.trustStateForTransfer(info, storedFp);
+		QCOMPARE(trust, PQFT::TrustState::Pinned);
+		QCOMPARE(storedFp, actualFp);
+		QVERIFY2(PQFT::automaticSaveTarget(m_global->s, info, trust).isEmpty(),
+				 "A renamed sender borrowed a different key's verification for automatic saving");
+	}
+
+	void incomingReadyUsesCapturedIdentity_data() {
+		QTest::addColumn< QString >("change");
+		for (const char *change :
+			 { "rename", "disconnect", "changed-key", "removed-pin", "missing-name", "missing-key" })
+			QTest::newRow(change) << QString::fromLatin1(change);
+	}
+	void incomingReadyUsesCapturedIdentity() {
+		QFETCH(QString, change);
+		FileTransferManager manager;
+		QVERIFY(setupTrustFixture(manager));
+		PQFT::FTTransferInfo info;
+		info.peerName        = m_peer->qsName;
+		info.peerFingerprint = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_oldM1));
+		info.peerSession     = 42;
+		info.incoming        = true;
+		info.transferId      = QByteArray(PQFT::TransferIdSize, 't');
+		info.state           = PQFT::FTTransferInfo::State::Ready;
+		info.fileName        = QStringLiteral("safe.txt");
+		QCOMPARE(manager.m_trustStore->checkAndPin(m_serverDigest, info.peerName, info.peerFingerprint, "original"),
+				 PQFT::TrustState::Pinned);
+		QVERIFY(manager.m_trustStore->markVerified(m_serverDigest, info.peerName, info.peerFingerprint));
+		if (change == QLatin1String("rename"))
+			m_peer->qsName = QStringLiteral("New live name");
+		else if (change == QLatin1String("disconnect")) {
+			QWriteLocker lock(&ClientUser::c_qrwlUsers);
+			ClientUser::c_qmUsers.remove(42);
+		} else if (change == QLatin1String("missing-name"))
+			info.peerName.clear();
+		else if (change == QLatin1String("missing-key"))
+			info.peerFingerprint.clear();
+		else {
+			QVERIFY(manager.m_trustStore->removePin(m_serverDigest, info.peerName));
+			if (change == QLatin1String("changed-key")) {
+				const auto other = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_newM1));
+				QCOMPARE(manager.m_trustStore->checkAndPin(m_serverDigest, info.peerName, other, "replacement"),
+						 PQFT::TrustState::Pinned);
+			}
+		}
+		QSignalSpy updates(&manager, &FileTransferManager::transferUpdated);
+		QSignalSpy blocked(&manager, &FileTransferManager::peerBlocked);
+		QVERIFY(QMetaObject::invokeMethod(
+			manager.m_engine, [&manager, info]() { emit manager.m_engine->transferUpdated(info); },
+			Qt::BlockingQueuedConnection));
+		QCoreApplication::sendPostedEvents(&manager, QEvent::MetaCall);
+		QCOMPARE(updates.size(), 1);
+		const auto forwarded     = updates.first().first().value< PQFT::FTTransferInfo >();
+		const bool expectedReady = change == QLatin1String("rename") || change == QLatin1String("disconnect");
+		QCOMPARE(forwarded.state,
+				 expectedReady ? PQFT::FTTransferInfo::State::Ready : PQFT::FTTransferInfo::State::Failed);
+		QCOMPARE(blocked.size(), expectedReady ? 0 : 1);
+		QCOMPARE(forwarded.peerName, info.peerName);
+		QCOMPARE(forwarded.peerFingerprint, info.peerFingerprint);
+	}
+
+	void changedDialogContextDoesNotPin_data() {
+		QTest::addColumn< QString >("change");
+		for (const char *change : { "rename", "connection", "session-reuse", "channel", "capability", "disabled" })
+			QTest::newRow(change) << QString::fromLatin1(change);
+	}
+	void changedDialogContextDoesNotPin() {
+		QFETCH(QString, change);
+		FileTransferManager manager;
+		QVERIFY(setupTrustFixture(manager));
+		deliverControl(manager, m_newM1);
+		QVERIFY(QMetaObject::invokeMethod(manager.m_engine, []() {}, Qt::BlockingQueuedConnection));
+		QCoreApplication::sendPostedEvents(&manager, QEvent::MetaCall);
+		const QByteArray shown = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_newM1));
+		if (change == QLatin1String("rename"))
+			m_peer->qsName = QStringLiteral("Different peer name");
+		else if (change == QLatin1String("connection"))
+			m_serverDigest.fill('x');
+		else if (change == QLatin1String("session-reuse")) {
+			m_replacement            = std::make_unique< ClientUser >();
+			m_replacement->uiSession = 42;
+			m_replacement->qsName    = m_peer->qsName;
+			m_replacement->cChannel  = m_channel.get();
+			QWriteLocker lock(&ClientUser::c_qrwlUsers);
+			ClientUser::c_qmUsers.insert(42, m_replacement.get());
+		} else if (change == QLatin1String("channel")) {
+			m_channel->removeUser(m_peer.get());
+			m_peer->cChannel = nullptr;
+		} else if (change == QLatin1String("capability"))
+			m_peer->bFileTransferCapable = false;
+		else
+			m_global->s.bFTEnabled = false;
+		QVERIFY(!manager.resolveFirstContact(42, shown, manager.firstContactToken(42), true));
+		QVERIFY(manager.m_trustStore->list().isEmpty());
+	}
+
+	void staleDialogCannotDeclineNewPrompt_data() {
+		QTest::addColumn< bool >("sameKey");
+		QTest::newRow("different-key") << false;
+		QTest::newRow("same-key") << true;
+	}
+	void staleDialogCannotDeclineNewPrompt() {
+		QFETCH(bool, sameKey);
+		FileTransferManager manager;
+		QVERIFY(setupTrustFixture(manager));
+		deliverControl(manager, m_oldM1);
+		QVERIFY(QMetaObject::invokeMethod(manager.m_engine, []() {}, Qt::BlockingQueuedConnection));
+		QCoreApplication::sendPostedEvents(&manager, QEvent::MetaCall);
+		const QByteArray oldShown = manager.m_pendingFirstContact.value(42).fingerprint;
+		const quint64 oldToken    = manager.firstContactToken(42);
+		// Retire the old parked handshake, as expiry does, while its GUI dialog is still open.
+		QVERIFY(QMetaObject::invokeMethod(
+			manager.m_engine, [&manager]() { manager.m_engine->resolveFirstContact(42, false); },
+			Qt::BlockingQueuedConnection));
+		deliverControl(manager, sameKey ? m_oldM1 : m_newM1);
+		QVERIFY(QMetaObject::invokeMethod(manager.m_engine, []() {}, Qt::BlockingQueuedConnection));
+		QCoreApplication::sendPostedEvents(&manager, QEvent::MetaCall);
+		const QByteArray newShown = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(sameKey ? m_oldM1 : m_newM1));
+		QCOMPARE(manager.m_pendingFirstContact.value(42).fingerprint, newShown);
+		QVERIFY(!manager.resolveFirstContact(42, oldShown, oldToken, false));
+		QCOMPARE(manager.m_pendingFirstContact.value(42).fingerprint, newShown);
+		QVERIFY(!manager.resolveFirstContact(42, newShown, manager.firstContactToken(42), false));
+		QVERIFY(manager.m_pendingFirstContact.isEmpty());
+		QVERIFY(manager.m_trustStore->list().isEmpty());
 	}
 
 	void currentWorkerTrustPromptReachesGui() {
@@ -52,7 +297,7 @@ private slots:
 		QCoreApplication::sendPostedEvents(&manager, QEvent::MetaCall);
 		QCOMPARE(contact.size(), 1);
 		QVERIFY(onGuiThread);
-		QCOMPARE(manager.m_pendingFirstContact.value(42).first,
+		QCOMPARE(manager.m_pendingFirstContact.value(42).fingerprint,
 				 PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_oldM1)));
 	}
 
@@ -96,7 +341,7 @@ private slots:
 		QCOMPARE(contact.size(), 1);
 		const QByteArray newFingerprint = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_newM1));
 		QCOMPARE(contact.at(0).at(1).toByteArray(), newFingerprint);
-		QCOMPARE(manager.m_pendingFirstContact.value(42).first, newFingerprint);
+		QCOMPARE(manager.m_pendingFirstContact.value(42).fingerprint, newFingerprint);
 	}
 
 	void shutdownJoinsBusyWorkerBeforeDestroyingEngine() {
@@ -126,6 +371,42 @@ private slots:
 	}
 
 private:
+	bool setupTrustFixture(FileTransferManager &manager) {
+		m_trustDb =
+			QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), QStringLiteral("presented-key-private-fixture"));
+		m_trustDb.setDatabaseName(QStringLiteral(":memory:"));
+		if (!m_trustDb.open() || !PQFT::FileTransferIdentity::ensureSchema(m_trustDb))
+			return false;
+		manager.m_trustStore           = std::make_unique< PQFT::PeerTrustStore >(m_trustDb);
+		manager.m_identity             = std::make_unique< PQFT::FileTransferIdentity >(m_trustDb);
+		manager.m_serverDigestProvider = [this]() { return m_serverDigest; };
+		m_self                         = std::make_unique< ClientUser >();
+		m_peer                         = std::make_unique< ClientUser >();
+		m_self->uiSession              = 41;
+		m_peer->uiSession              = 42;
+		m_peer->bFileTransferCapable   = true;
+		m_peer->qsName                 = QStringLiteral("Private fixture peer");
+		m_channel                      = std::make_unique< Channel >(1234, QStringLiteral("Private fixture channel"));
+		m_channel->addUser(m_self.get());
+		m_channel->addUser(m_peer.get());
+		{
+			QWriteLocker lock(&ClientUser::c_qrwlUsers);
+			ClientUser::c_qmUsers.insert(41, m_self.get());
+			ClientUser::c_qmUsers.insert(42, m_peer.get());
+		}
+		m_global->uiSession = 41;
+		// These manager tests stop at the trust decision, without a usable local signing identity.
+		// Refuse M2 explicitly rather than invoking an unset signing callback when acceptance is queued.
+		if (!QMetaObject::invokeMethod(
+				manager.m_engine,
+				[&manager]() {
+					manager.m_engine->setIdentity(
+						{}, [](QByteArray &, const QByteArray &, const QByteArray &) { return false; });
+				},
+				Qt::BlockingQueuedConnection))
+			return false;
+		return true;
+	}
 	static QByteArray firstContactFrame() {
 		PQFT::SigMLDSA65 signature;
 		PQFT::SessionIdentity identity;
@@ -148,6 +429,11 @@ private:
 	QByteArray m_newM1;
 	std::unique_ptr< QTemporaryDir > m_directory;
 	std::unique_ptr< Global > m_global;
+	QSqlDatabase m_trustDb;
+	QByteArray m_serverDigest = QByteArray(20, 's');
+	std::unique_ptr< ClientUser > m_self, m_peer;
+	std::unique_ptr< ClientUser > m_replacement;
+	std::unique_ptr< Channel > m_channel;
 };
 
 QTEST_MAIN(TestFileTransferManager)
