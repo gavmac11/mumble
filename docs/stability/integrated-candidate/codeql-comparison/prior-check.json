@@ -1,0 +1,13 @@
+{
+  "id": 114361685954,
+  "conclusion": "neutral",
+  "head_sha": "873e4a2eb1f552b9abc3532895d0ccb7f2c578a9",
+  "details_url": "https://github.com/gavmac11/mumble/runs/114361685954",
+  "output": {
+    "title": "1 configuration not found",
+    "summary": "**Warning**: Code scanning cannot determine the alerts introduced by this pull request, because 1 configuration present on `refs/heads/master` was not found:\n\n### Actions workflow (`code-ql.yml`)\n\n* :question:&nbsp;&nbsp;`.github/workflows/code-ql.yml:CodeQL-Build/os:ubuntu-latest`\n\n\n[View all branch alerts](/gavmac11/mumble/security/code-scanning?query=pr%3A40+tool%3ACodeQL+is%3Aopen).",
+    "text": null,
+    "annotations_count": 0,
+    "annotations_url": "https://api.github.com/repos/gavmac11/mumble/check-runs/114361685954/annotations"
+  }
+}
