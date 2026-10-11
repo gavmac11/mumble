@@ -1,0 +1,33 @@
+{
+  "source_head": "f337b951482e121964e9162221e96611f94e068e",
+  "mac_build": "Release full client/server/all targets passed; shared Homebrew Qt6.11.1, Apple Clang21, macOS26.6.2 ARM64, warnings-as-errors OFF",
+  "mac_ctest": {
+    "registered": 42,
+    "enabled": 41,
+    "passed": 41,
+    "failed": 0,
+    "execution_skipped": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 63.98
+  },
+  "related_qt_cases": {
+    "ui": 78,
+    "manager": 25,
+    "identity": 14,
+    "engine": 42,
+    "e2e": 5,
+    "total": 164,
+    "failed": 0,
+    "skipped": 0
+  },
+  "negative_cases": "Two old presented-key faults on e1 plus isolated seam/fixtures; rename borrowing verification reproduced on pre-snapshot trust implementation plus new fixture. Not an unmodified shipping binary.",
+  "pending": [
+    "Actual Opus5.5 review",
+    "Native Windows complete strict build/tests",
+    "Linux full build/tests",
+    "Installed GUI/device/supported OS/shipping/final-hosting gates"
+  ],
+  "limits": "Manager fixtures refuse signing and test trust decisions; real Engine/E2E separate. Source tests do not qualify GUI/device/recovery/commercial readiness."
+}
