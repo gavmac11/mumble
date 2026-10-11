@@ -743,6 +743,8 @@ else()
 		)
 
 		if(static AND TARGET Qt6::QCocoaIntegrationPlugin)
+			include("${CMAKE_SOURCE_DIR}/cmake/qt-macos-accessibility.cmake")
+			mumble_repair_qt_macos_accessibility()
 			include_qt_plugin(mumble_client_object_lib PRIVATE QCocoaIntegrationPlugin)
 			target_link_libraries(mumble_client_object_lib PUBLIC Qt6::QCocoaIntegrationPlugin)
 		endif()

@@ -4,8 +4,8 @@
   "platform": "macOS 26.6.2 ARM64",
   "client_binary_sha256": "b94236a0b0df001eb79076d6c80f583c05fe63cbfb3616956f6e47037c7d709f",
   "configuration": "Disposable private config/database/certificate/downloads, initially muted/deafened, update checks disabled",
-  "qualification": "Local developer binary with experimental Qt 6.11.1 Cocoa patch passes limited GUI checks; original packaged Qt 6.10.0 preview reproduces crash; signing/notarization, complete transfer and media acceptance unrun",
-  "ui_status": "unmodified_developer_and_packaged_preview_crash; experimental_qt_patch_connection_and_identity_decline_retry_pass",
+  "qualification": "Revised private developer runtime survives LAN disappearance, identity unlock, received-ready fixture and plugin unload; shipping static preview, saved delivery and media pending",
+  "ui_status": "revised_private_runtime_limited_native_pass",
   "native_device_tests": "unrun",
   "controller_action": "Private server entry, verified test TLS fingerprint, connected channel/user tree, initial identity setup cancelled, generated 46-byte test file chosen, retry setup reopened and cancelled",
   "user_action": "User confirmed Mac unlocked; UI controller launched owned disposable bundle and edited server fields",
@@ -216,7 +216,50 @@
     "observed": "Same accessibilitySelectedChildren SIGSEGV after Add Server OK and AX read"
   },
   "cleanup": {
-    "client": "Quit key sent; process absent, own settings clean-quit marker true, plugin unloads logged",
+    "client": "Initial clean-marker inference superseded by post-quit SIGSEGV; revised runtime audit records actual unload and no new crash report",
     "server": "Only owned loopback server stopped by interrupt"
+  },
+  "post_quit_audit": {
+    "report": "Mumble-2026-10-10-152957.ips",
+    "captured_local": "2026-10-10 15:29:52",
+    "failure": "SIGSEGV in spdlog from qtMessageHandler during QFactoryLoader/QLibraryPrivate static plugin unload",
+    "clean_marker_is_insufficient": true
+  },
+  "lan_removal_audit": {
+    "report": "Mumble-2026-10-10-154540.ips",
+    "captured_local": "2026-10-10 15:45:34",
+    "failure": "SIGSEGV in QAccessibleTable::modelChange during ConnectDialog::onUpdateLanList with initial repaired Cocoa plugin",
+    "qualification": "initial repair insufficient"
+  },
+  "revised_runtime_audit": {
+    "reports_before_quit": [
+      "Mumble-2026-10-10-152736.ips",
+      "Mumble-2026-10-10-154540.ips",
+      "Mumble-2026-10-10-152315.ips",
+      "Mumble-2026-10-10-151829.ips",
+      "Mumble-2026-10-10-152957.ips",
+      "Mumble-2026-10-10-152004.ips"
+    ],
+    "client_binary_sha256": "3aa4ff7eb530435bebadbd3af395e3c7c48961ae5fbf9e0a45f14c5be449bc40",
+    "cocoa_plugin_sha256": "6970e53cc4d675369eb46eb51bb3965a417ad5deecd1bdf609126eb32f7a7305",
+    "new_crash_reports_after_quit": [],
+    "lan_removal": "Owned Bonjour server stopped/restarted with advertisement disabled; LAN branch disappears while Favorites remains; native client survives AX inspection",
+    "identities": "Both existing CLI-created disposable identities unlocked in native client",
+    "delivery": "Generated 46-byte fixture reaches recipient Ready / Click to save after both identical safety numbers verified; initial verification delay times out and retry succeeds",
+    "save": "Unverified: native coordinate control returns windowNotFoundAtPosition; no downloaded file/hash claim",
+    "qr": "Native safety QR renders as solid black image; digits match known fixture fingerprints independently",
+    "quit": {
+      "a": {
+        "normal_quit_marker": true,
+        "cocoa_unload_logged": true,
+        "plugin_load_verified": true
+      },
+      "b": {
+        "normal_quit_marker": true,
+        "cocoa_unload_logged": true,
+        "plugin_load_verified": true
+      }
+    },
+    "process_audit": []
   }
 }

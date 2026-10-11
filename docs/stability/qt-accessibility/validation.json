@@ -1,0 +1,116 @@
+{
+  "schema": 1,
+  "platform": "macOS 26.6.2 ARM64",
+  "mumble_source_revision": "0e0671cf5d58cffe905c83e162dd287686a666f2",
+  "qt_source_tag": "v6.11.1",
+  "qt_source_file_sha256": "1788c9ee8d272df77233811427a357ee6b23fddf07bf034a5a3be3f58497633c",
+  "patch_sha256": "af4eeeaa1ba01726c845457ea9bd6970b929b35fa3133b216012e16aa0a010d7",
+  "private_control_plugin_sha256": "64bf72da1aa6373b7fc0ddc4db8932e0a222439b64e800409c78106dbe7fcf47",
+  "control_observation": "Owned Qt-only fixture crashes at accessibilitySelectedChildren after first insert/select and Cua AX read; log confirms private unpatched plugin loaded",
+  "ctest": {
+    "registered": 39,
+    "executed": 38,
+    "failed": 0,
+    "skipped_during_execution": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "duration_seconds": 42.25,
+    "scope": "Current local build using experimental plugin path; not rebuilt shipping static dependency bundle"
+  },
+  "constraints": [
+    "Static Qt6.10.0 repaired preview survives tested native favorite insertion, actual Bonjour removal and quit; full accessibility semantics still open",
+    "No full native file transfer delivery",
+    "No microphone/camera capture acceptance",
+    "No macOS 15/27 native desktop coverage",
+    "No signing/notarization or integrated candidate acceptance"
+  ],
+  "shipping_build_candidate": {
+    "qt_version": "6.10.0",
+    "source_commit": "5a8637e4516bc48a0b3f4b5ec3b18618b92e7222",
+    "source_archive_sha256": "69c4fe6b0f8b21e555c46ff0541d4f47e0a25bb01bfd81aeb2b10d447b01cb19",
+    "original_accessibility_sha256": "825577252232647c6dc01b57c808c1c6518036ec0eab1315038070aba28f295a",
+    "fixed_accessibility_sha256": "8591bb3f34d20aa23a681352336b9e9fb8b379e07a56198d1faaff12e0ec2311",
+    "native_check": "Vendor static archive construction passes against matching private Qt 6.11.1 source/SDK; Qt 6.10.0 static shipping SDK execution pending hosted CI",
+    "qualification": "Implementation candidate; static shipping preview native flow pending"
+  },
+  "native_static_cocoa_contract": {
+    "qt_source_sdk_version": "6.11.1",
+    "library": "Static repaired Cocoa archive linked into standalone fixture against matching shared Core/Gui/Widgets SDK",
+    "static_archive_sha256": "9d589813ce42ecf230528b2542d08adf3e62ed4f781b5568b014bd176a1bf406",
+    "fixture_binary_sha256": "a36928d87c26d7c33b48665dbc0713e4b1de4458cb0853ac53be2eb55065de74",
+    "observed": "Two insert/select/AX reads survive; first read has incomplete row exposure, subsequent full tree shows fixture; no complete AX semantics qualification",
+    "qualification": "Revised vendor target compile/link/native import proof against matching shared Qt6.11.1, not shipping all-static Qt6.10.0"
+  },
+  "ci": {
+    "source_head": "440c2fc01c9c36e2db7bfd312f1d17b68698465a",
+    "general_run": 38094014363,
+    "preview_run": 38094127750,
+    "status": "General CI: all four platform jobs passed. Preview: all five build/test jobs passed; publication skipped.",
+    "previous_attempt": {
+      "general_run": 38093727237,
+      "preview_run": 38093728926,
+      "head": "b9ba0c55e",
+      "failure": "Mac configuration referenced a renamed patch that did not exist; corrected in 440c2fc01",
+      "general_cancelled_to_avoid_duplicate_work": true
+    }
+  },
+  "initial_private_fixed_plugin_sha256": "d6278b36941ceeb3c13834afad81904a806338e8fe79fcf2c4c400891849dda0",
+  "initial_fixed_observation": "Four insertion/selection/AX sequences survive; private plugin load verified; native Mumble Add Server survives, TLS fingerprint verified and connection shown, file identity decline/retry shown",
+  "initial_patch_qualification": "Insufficient: real LAN row disappearance causes QAccessibleTable::modelChange SIGSEGV; post-quit logging also crashes",
+  "revised_native_audit": {
+    "reports_before_quit": [
+      "Mumble-2026-10-10-152736.ips",
+      "Mumble-2026-10-10-154540.ips",
+      "Mumble-2026-10-10-152315.ips",
+      "Mumble-2026-10-10-151829.ips",
+      "Mumble-2026-10-10-152957.ips",
+      "Mumble-2026-10-10-152004.ips"
+    ],
+    "client_binary_sha256": "3aa4ff7eb530435bebadbd3af395e3c7c48961ae5fbf9e0a45f14c5be449bc40",
+    "cocoa_plugin_sha256": "6970e53cc4d675369eb46eb51bb3965a417ad5deecd1bdf609126eb32f7a7305",
+    "new_crash_reports_after_quit": [],
+    "lan_removal": "Owned Bonjour server stopped/restarted with advertisement disabled; LAN branch disappears while Favorites remains; native client survives AX inspection",
+    "identities": "Both existing CLI-created disposable identities unlocked in native client",
+    "delivery": "Generated 46-byte fixture reaches recipient Ready / Click to save after both identical safety numbers verified; initial verification delay times out and retry succeeds",
+    "save": "Unverified: native coordinate control returns windowNotFoundAtPosition; no downloaded file/hash claim",
+    "qr": "Native safety QR renders as solid black image; digits match known fixture fingerprints independently",
+    "quit": {
+      "a": {
+        "normal_quit_marker": true,
+        "cocoa_unload_logged": true,
+        "plugin_load_verified": true
+      },
+      "b": {
+        "normal_quit_marker": true,
+        "cocoa_unload_logged": true,
+        "plugin_load_verified": true
+      }
+    },
+    "process_audit": [],
+    "source_scope": "Working-tree production files subsequently committed at b9ba0c55e; developer binary built before the commit metadata changed"
+  },
+  "revised_implementation_head": "b9ba0c55e",
+  "native_packaged_arm64": {
+    "source_head": "440c2fc01c9c36e2db7bfd312f1d17b68698465a",
+    "package_run": 38094127750,
+    "artifact_id": 11685811495,
+    "zip_sha256": "23fc94c62c3508fc4ffe1b9f237408e1c881663837ab97cbc9c7ceca5b11a31d",
+    "binary_sha256": "dcd27cdaab69794b39897cc8508027d85848612a836eb505c3cb5f53143346a6",
+    "plugin_override": false,
+    "database_isolation": "Corrected profile points to an existing owned SQLite file; open handles verified before UI actions.",
+    "tests": {
+      "insert_favorite_then_accessibility_read": "PASS",
+      "actual_bonjour_discovery_then_unregister_then_accessibility_read": "PASS",
+      "normal_quit_with_QT_DEBUG_PLUGINS": "PASS"
+    },
+    "normal_quit_settings_marker": true,
+    "owned_processes_remaining": 0,
+    "latest_mumble_report": "Mumble-2026-10-10-154540.ips",
+    "limits": [
+      "Unsigned wrapper changes bundle identity/name and launcher only; no shipping signatures tested",
+      "Accessibility tree omits a visible favorite row after discovery removal; full accessibility semantics remain open",
+      "First harness launch pointed to directory and opened default database; excluded from native qualification; no pre-error user database snapshot exists"
+    ]
+  }
+}

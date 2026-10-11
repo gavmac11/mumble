@@ -17,6 +17,8 @@ namespace log {
 	constexpr const char *MainLoggerName = "Main";
 
 	void init(spdlog::level::level_enum logLevel = spdlog::level::trace);
+	// Call before Qt/application teardown while the logging registry is still alive.
+	void restoreQtMessageHandler();
 	void addSink(std::shared_ptr< spdlog::sinks::sink > sink);
 
 	template< typename... Args > static void inline trace(spdlog::format_string_t< Args... > fmt, Args &&... args) {

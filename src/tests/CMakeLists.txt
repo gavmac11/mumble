@@ -75,6 +75,7 @@ if(server)
 endif()
 
 # Shared tests
+add_subdirectory("TestQtLogger")
 add_subdirectory("TestBandwidthRecord")
 add_subdirectory("TestConnectionOutputQueue")
 add_subdirectory("TestCaseInsensitiveQString")

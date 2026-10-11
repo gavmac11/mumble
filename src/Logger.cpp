@@ -25,6 +25,8 @@ using DebuggerSink = spdlog::sinks::msvc_sink_st;
 using namespace mumble;
 
 static std::shared_ptr< MasterSink > masterSink;
+static QtMessageHandler previousQtMessageHandler = nullptr;
+static bool qtMessageHandlerInstalled            = false;
 
 static void qtMessageHandler(const QtMsgType type, const QMessageLogContext &, const QString &msg) {
 	switch (type) {
@@ -74,5 +76,21 @@ void log::init(spdlog::level::level_enum logLevel) {
 
 	set_default_logger(std::move(logger));
 
-	qInstallMessageHandler(qtMessageHandler);
+	const auto previous = qInstallMessageHandler(qtMessageHandler);
+	if (!qtMessageHandlerInstalled) {
+		previousQtMessageHandler  = previous;
+		qtMessageHandlerInstalled = true;
+	}
+}
+
+void log::restoreQtMessageHandler() {
+	if (!qtMessageHandlerInstalled)
+		return;
+
+	const auto current = qInstallMessageHandler(previousQtMessageHandler);
+	if (current != qtMessageHandler) {
+		// A later installer owns the handler; leave it in place.
+		qInstallMessageHandler(current);
+	}
+	qtMessageHandlerInstalled = false;
 }
