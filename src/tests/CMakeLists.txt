@@ -43,6 +43,7 @@ function(mumble_client_test_runtime test_name)
 endfunction()
 
 if(client)
+	add_subdirectory("TestAudioWizard")
 	add_subdirectory("TestDatabasePath")
 	add_subdirectory("TestReleaseUpdate")
 	add_subdirectory("TestAnimatedImages")
