@@ -1,0 +1,11 @@
+Windows private-storage validation: 2059ef27a1d9aec63298b21fdd118ce80a405f70
+MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022); Windows 10 Pro 10.0.19045 x64.
+Release/C++20; /W4 /WX /O2 /bigobj /options:strict; dynamic MSVC runtime; no source warning relaxation.
+mumble client/server, TestFileTransferEngine, TestFileTransferE2E and TestFileTransferManager built successfully.
+TestFileTransferEngine: 20 cases, 0 failures, 0 errors, 0 skipped, 9.076s.
+TestFileTransferE2E: 5 cases, 0 failures, 0 errors, 0 skipped, 9.239s.
+TestFileTransferManager: 6 cases, 0 failures, 0 errors, 0 skipped, 0.024s.
+CTest: three suites passed, 10.98s elapsed.
+New plaintext/password-spool storage cases require random staging and cleanup. Windows regular legacy content fixture and victim bytes remain unchanged; legacy file survives abort. Normal per-user temp ACLs verified on owned E: fixture root.
+Unix permission/symlink branches are conditional; no QtTest cases skipped. No original Windows baseline, full suite/hosting rerun, sanitizer or installed-client GUI/Save acceptance.
+Generated CTest registrations restored; implementation/personal state unchanged. Fatal-startup qualification remains separately attributable. Complete logs kept private on E:.
