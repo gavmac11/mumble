@@ -15,12 +15,13 @@
 #include "PQFileTransfer/engine/FTManifest.h"
 
 #include <QByteArray>
+#include <QElapsedTimer>
 #include <QHash>
 #include <QObject>
 #include <QPair>
 #include <QSet>
-#include <QTimer>
 #include <QTemporaryDir>
+#include <QTimer>
 
 #include <functional>
 #include <memory>
@@ -74,7 +75,8 @@ public:
 
 	struct Config {
 		quint32 chunkSize  = 256 * 1024;
-		quint32 sendRateBytesPerSecond = 4 * 1024 * 1024;   // 0 = unlimited
+		// Shared ciphertext-byte budget across all sends; 0 = unlimited.
+		quint32 sendRateBytesPerSecond = 4 * 1024 * 1024;
 		quint64 maxReceiveSize = 10ull * 1024 * 1024 * 1024;
 		int handshakeTimeoutMSecs	  = 10000;
 		int receiveIdleTimeoutMSecs   = 60000;
@@ -152,7 +154,6 @@ private:
 		quint64 lastProgressBytes  = 0;
 		QByteArray transferDigest;
 		bool manifestSent		= false;
-		std::unique_ptr< QTimer > paceTimer;
 		std::unique_ptr< QTimer > handshakeTimer;
 		FTTransferInfo::State lastState = FTTransferInfo::State::Handshaking;
 	};
@@ -215,7 +216,8 @@ private:
 	void handleIncomingM1(unsigned int actorSession, const QByteArray &payload);
 	void maybeStartHandshakePhase2(SendJob &job);
 	void buildAndSendManifests(SendJob &job);
-	void sendNextChunks(SendJob &job, qint64 budgetBytes);
+	void paceSends();
+	void sendNextChunk(SendJob &job);
 	void finishSend(SendJob &job, bool success, const QString &error);
 	void updateSendState(SendJob &job, FTTransferInfo::State state, const QString &error = QString());
 	void updateReceiveState(ReceiveJob &job, FTTransferInfo::State state, const QString &error = QString());
@@ -248,6 +250,10 @@ private:
 	TransportControl m_transportControl;
 	TransportChunk m_transportChunk;
 	PinLookup m_pinLookup;
+	std::unique_ptr< QTimer > m_sendPaceTimer;
+	QElapsedTimer m_sendPaceClock;
+	qint64 m_sendCreditMilliBytes = 0;
+	QList< QByteArray > m_sendPaceOrder;
 
 	QHash< QByteArray, std::shared_ptr< SendJob > > m_sendJobs;
 	QHash< QByteArray, std::shared_ptr< ReceiveJob > > m_receiveJobs;

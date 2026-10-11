@@ -59,7 +59,10 @@ QByteArray spoolRecord(quint64 index, const QByteArray &ciphertext) {
 const QByteArray canonicalEmptyMap = QByteArray::fromHex("a0");
 } // namespace
 
-FileTransferEngine::FileTransferEngine(QObject *parent) : QObject(parent) { }
+FileTransferEngine::FileTransferEngine(QObject *parent) : QObject(parent) {
+	m_sendPaceTimer = std::make_unique< QTimer >(this);
+	connect(m_sendPaceTimer.get(), &QTimer::timeout, this, &FileTransferEngine::paceSends);
+}
 
 FileTransferEngine::~FileTransferEngine() {
 	// Take owning copies first: cleanup*() removes the jobs from the maps,
@@ -90,6 +93,9 @@ void FileTransferEngine::setIdentity(QByteArray identityPublicKey, IdentitySign 
 
 void FileTransferEngine::setConfig(const Config &config) {
 	m_config = config;
+	m_sendCreditMilliBytes = 0;
+	if (m_sendPaceTimer->isActive())
+		m_sendPaceClock.start();
 }
 
 QByteArray FileTransferEngine::preManifestKey(unsigned int peerSession) {
@@ -894,31 +900,73 @@ void FileTransferEngine::buildAndSendManifests(SendJob &job) {
 	job.manifestSent = true;
 	updateSendState(job, FTTransferInfo::State::Transferring);
 
-	job.paceTimer = std::make_unique< QTimer >(this);
-	connect(job.paceTimer.get(), &QTimer::timeout, this, [this, tid = job.transferId]() {
-		auto it = m_sendJobs.find(tid);
-		if (it == m_sendJobs.end()) {
-			return;
-		}
-		SendJob &j = *it->get();
-		const qint64 budget =
-			m_config.sendRateBytesPerSecond > 0
-				? qMax< qint64 >(m_config.sendRateBytesPerSecond / 20,
-								 static_cast< qint64 >(j.effectiveChunkSize))
-				: std::numeric_limits< qint64 >::max();
-		sendNextChunks(j, budget);
-	});
-	job.paceTimer->start(50);
+	if (job.lastState != FTTransferInfo::State::Transferring)
+		return;
+	m_sendPaceOrder.append(job.transferId);
+	if (!m_sendPaceTimer->isActive()) {
+		m_sendCreditMilliBytes = 0;
+		m_sendPaceClock.start();
+		m_sendPaceTimer->start(50);
+	}
 }
 
-void FileTransferEngine::sendNextChunks(SendJob &job, qint64 budgetBytes) {
+void FileTransferEngine::paceSends() {
+	const qint64 elapsedMSecs = qBound< qint64 >(qint64(0), m_sendPaceClock.restart(), qint64(1000));
+	const qint64 rate         = m_config.sendRateBytesPerSecond;
+	if (rate > 0) {
+		// Accumulate enough credit for one whole chunk, even at low rates.
+		// Late timer delivery permits at most a chunk plus one normal tick's burst.
+		qint64 capacity = 0;
+		for (const QByteArray &id : m_sendPaceOrder) {
+			const auto job = m_sendJobs.value(id);
+			if (job)
+				capacity = qMax(capacity, qint64(job->effectiveChunkSize) + TagSize);
+		}
+		capacity += rate / 20;
+		m_sendCreditMilliBytes = qMin(capacity * 1000, m_sendCreditMilliBytes + rate * elapsedMSecs);
+	}
+
+	// Yield to cancellation and incoming controls, including at unlimited rate.
+	// This bounds one engine dispatch, not the downstream GUI/socket queues.
+	qint64 dispatchedBytes = 0;
+	int dispatchedChunks   = 0;
+	while (!m_sendPaceOrder.isEmpty() && dispatchedChunks < 32 && dispatchedBytes < 4 * 1024 * 1024) {
+		if (shutdownRequested())
+			return;
+		const QByteArray id = m_sendPaceOrder.first();
+		const auto job      = m_sendJobs.value(id); // Keep it alive across synchronous test callbacks.
+		if (!job || job->lastState != FTTransferInfo::State::Transferring) {
+			m_sendPaceOrder.removeFirst();
+			continue;
+		}
+		const qint64 bytes =
+			static_cast< qint64 >(qMin< quint64 >(job->effectiveChunkSize, job->fileSize - job->bytesDone)) + TagSize;
+		if (rate > 0) {
+			if (m_sendCreditMilliBytes < bytes * 1000)
+				break;
+			m_sendCreditMilliBytes -= bytes * 1000;
+		}
+		m_sendPaceOrder.removeFirst();
+		sendNextChunk(*job);
+		++dispatchedChunks;
+		dispatchedBytes += bytes;
+		if (m_sendJobs.value(id) == job && job->lastState == FTTransferInfo::State::Transferring)
+			m_sendPaceOrder.append(id);
+	}
+	if (m_sendPaceOrder.isEmpty()) {
+		m_sendPaceTimer->stop();
+		m_sendCreditMilliBytes = 0;
+	}
+}
+
+void FileTransferEngine::sendNextChunk(SendJob &job) {
 	if (job.lastState == FTTransferInfo::State::Aborted
 		|| job.lastState == FTTransferInfo::State::Failed) {
 		return;
 	}
 	const quint32 chunkSize = job.effectiveChunkSize;
 
-	while (budgetBytes > 0 && job.nextChunkIndex < job.chunkCount) {
+	if (job.nextChunkIndex < job.chunkCount) {
 		if (shutdownRequested())
 			return;
 		const qint64 offset = static_cast< qint64 >(job.nextChunkIndex) * chunkSize;
@@ -938,19 +986,21 @@ void FileTransferEngine::sendNextChunks(SendJob &job, qint64 budgetBytes) {
 			finishSend(job, false, tr("Encryption error"));
 			return;
 		}
-		if (m_transportChunk) {
-			m_transportChunk(job.transferId, job.nextChunkIndex, job.chunkCount, ciphertext);
-		}
-
-		budgetBytes -= chunk.size();
+		const quint64 index = job.nextChunkIndex;
 		job.bytesDone += static_cast< quint64 >(chunk.size());
 		++job.nextChunkIndex;
+		if (m_transportChunk)
+			m_transportChunk(job.transferId, index, job.chunkCount, ciphertext);
+		if (job.lastState != FTTransferInfo::State::Transferring)
+			return;
 	}
 
 	if (job.bytesDone - job.lastProgressBytes >= 1024 * 1024
 		|| job.nextChunkIndex >= job.chunkCount) {
 		job.lastProgressBytes = job.bytesDone;
 		updateSendState(job, FTTransferInfo::State::Transferring);
+		if (job.lastState != FTTransferInfo::State::Transferring)
+			return;
 	}
 
 	if (job.nextChunkIndex >= job.chunkCount) {
@@ -981,7 +1031,11 @@ void FileTransferEngine::cleanupSend(SendJob &job, bool keepCard) {
 	}
 	zeroize(job.fileKey);
 	zeroize(job.password);
-	job.paceTimer.reset();
+	m_sendPaceOrder.removeAll(job.transferId);
+	if (m_sendPaceOrder.isEmpty()) {
+		m_sendPaceTimer->stop();
+		m_sendCreditMilliBytes = 0;
+	}
 	job.handshakeTimer.reset();
 	for (SendPeer &peer : job.peers) {
 		delete peer.session_;

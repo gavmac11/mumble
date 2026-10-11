@@ -110,7 +110,7 @@
       <item row="1" column="1">
        <widget class="QSpinBox" name="qsbFTSendPace">
         <property name="toolTip">
-         <string>Maximum sending rate; 0 means unlimited</string>
+         <string>Maximum combined sending rate; 0 means unlimited</string>
         </property>
         <property name="specialValueText">
          <string>Unlimited</string>

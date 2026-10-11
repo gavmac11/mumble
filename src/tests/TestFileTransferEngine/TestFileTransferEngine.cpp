@@ -19,11 +19,12 @@
 #include "PQFileTransfer/identity/FTIdentity.h"
 
 #include <QDir>
+#include <QElapsedTimer>
 #include <QEventLoop>
 #include <QFile>
 #include <QPointer>
-#include <QSignalSpy>
 #include <QScopeGuard>
+#include <QSignalSpy>
 #include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QThread>
@@ -77,6 +78,11 @@ private slots:
 	void shutdownRemovesUnsavedPlaintext_data();
 	void shutdownRemovesUnsavedPlaintext();
 	void unlimitedSendStopsOnWorkerInterruption();
+	void sendingRespectsConfiguredRate_data();
+	void sendingRespectsConfiguredRate();
+	void simultaneousSendsShareRateLimit();
+	void unlimitedSendYieldsToQueuedAbort();
+	void synchronousChunkAbortStaysAborted();
 
 private:
 	QString writeTestFile(qsizetype size);
@@ -209,6 +215,132 @@ struct EnginePair {
 	}
 };
 } // namespace
+
+void TestFileTransferEngine::sendingRespectsConfiguredRate_data() {
+	QTest::addColumn< quint32 >("rate");
+	QTest::addColumn< quint32 >("chunkSize");
+	QTest::addColumn< int >("fileSize");
+	QTest::newRow("default") << quint32(4 * 1024 * 1024) << quint32(256 * 1024) << 1024 * 1024;
+	QTest::newRow("below-one-chunk-per-tick") << quint32(1024 * 1024) << quint32(256 * 1024) << 512 * 1024;
+	QTest::newRow("slow") << quint32(32 * 1024) << quint32(16 * 1024) << 64 * 1024;
+}
+
+void TestFileTransferEngine::sendingRespectsConfiguredRate() {
+	QFETCH(quint32, rate);
+	QFETCH(quint32, chunkSize);
+	QFETCH(int, fileSize);
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = rate;
+	config.chunkSize              = chunkSize;
+	pair.alice.setConfig(config);
+	QElapsedTimer elapsed;
+	quint64 sentBytes = 0;
+	QString violation;
+	pair.onChunkDelivered = [&](const QByteArray &, quint64, quint64, const QByteArray &data) {
+		sentBytes += static_cast< quint64 >(data.size());
+		// Allow only clock quantization, never a free chunk or per-tick overshoot.
+		const quint64 allowed = static_cast< quint64 >(rate) * static_cast< quint64 >(elapsed.elapsed() + 2) / 1000;
+		if (sentBytes > allowed && violation.isEmpty())
+			violation = QString("Sent %1 bytes in %2 ms at configured %3 bytes/s")
+							.arg(sentBytes)
+							.arg(elapsed.elapsed())
+							.arg(rate);
+	};
+	QSignalSpy updates(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	const QString source = writeTestFile(fileSize);
+	elapsed.start();
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(updates, {}, PQFT::FTTransferInfo::State::Ready), 15000);
+	QVERIFY2(violation.isEmpty(), qPrintable(violation));
+}
+
+void TestFileTransferEngine::simultaneousSendsShareRateLimit() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = 64 * 1024;
+	config.chunkSize              = 16 * 1024;
+	pair.alice.setConfig(config);
+	QElapsedTimer elapsed;
+	quint64 sentBytes = 0;
+	QString violation;
+	QSet< QByteArray > delivered;
+	pair.onChunkDelivered = [&](const QByteArray &id, quint64, quint64, const QByteArray &data) {
+		delivered.insert(id);
+		sentBytes += static_cast< quint64 >(data.size());
+		const quint64 allowed = quint64(config.sendRateBytesPerSecond) * quint64(elapsed.elapsed() + 2) / 1000;
+		if (sentBytes > allowed && violation.isEmpty())
+			violation = QString("Concurrent jobs emitted %1 bytes in %2 ms").arg(sentBytes).arg(elapsed.elapsed());
+	};
+	QSignalSpy sent(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	const QString source       = writeTestFile(64 * 1024);
+	const QString secondSource = writeTestFile(80 * 1024);
+	elapsed.start();
+	QVERIFY(pair.alice.startSend(secondSource, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	auto finished = [&]() {
+		QSet< QByteArray > ids;
+		for (const auto &args : sent) {
+			const auto info = args.first().value< PQFT::FTTransferInfo >();
+			if (info.state == PQFT::FTTransferInfo::State::Saved)
+				ids.insert(info.transferId);
+		}
+		return ids.size() == 2;
+	};
+	QTRY_VERIFY_WITH_TIMEOUT(finished(), 15000);
+	QCOMPARE(delivered.size(), 2);
+	QVERIFY2(violation.isEmpty(), qPrintable(violation));
+	QSet< QByteArray > ready;
+	for (const auto &args : received) {
+		const auto info = args.first().value< PQFT::FTTransferInfo >();
+		if (info.state == PQFT::FTTransferInfo::State::Ready)
+			ready.insert(info.transferId);
+	}
+	QCOMPARE(ready.size(), 2);
+	for (const QByteArray &id : ready) {
+		const QString target = m_tempDir.filePath(QString::fromLatin1(id.toHex()) + ".bin");
+		pair.bob.saveTransferAs(id, target);
+		QFile output(target);
+		QVERIFY(output.open(QIODevice::ReadOnly));
+		QFile input(output.size() == 64 * 1024 ? source : secondSource);
+		QVERIFY(input.open(QIODevice::ReadOnly));
+		QCOMPARE(output.readAll(), input.readAll());
+	}
+}
+
+void TestFileTransferEngine::unlimitedSendYieldsToQueuedAbort() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = 0;
+	config.chunkSize              = 16 * 1024;
+	pair.alice.setConfig(config);
+	int chunks            = 0;
+	pair.onChunkDelivered = [&](const QByteArray &id, quint64, quint64, const QByteArray &) {
+		if (++chunks == 1)
+			QTimer::singleShot(0, &pair.alice, [&, id]() { pair.alice.abortTransfer(id); });
+	};
+	QSignalSpy updates(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
+	QVERIFY(pair.alice.startSend(writeTestFile(64 * 16 * 1024), "application/octet-stream", false, {}, { BobSession })
+			> 0);
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(updates, {}, PQFT::FTTransferInfo::State::Aborted), 10000);
+	QVERIFY(chunks > 0 && chunks < 64);
+	QVERIFY(!sawState(updates, {}, PQFT::FTTransferInfo::State::Saved));
+}
+
+void TestFileTransferEngine::synchronousChunkAbortStaysAborted() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = 0;
+	pair.alice.setConfig(config);
+	pair.onChunkDelivered = [&](const QByteArray &id, quint64, quint64, const QByteArray &) {
+		pair.alice.abortTransfer(id);
+	};
+	QSignalSpy updates(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
+	QVERIFY(pair.alice.startSend(writeTestFile(64 * 1024), "application/octet-stream", false, {}, { BobSession }) > 0);
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(updates, {}, PQFT::FTTransferInfo::State::Aborted), 10000);
+	QVERIFY(!sawState(updates, {}, PQFT::FTTransferInfo::State::Saved));
+}
 
 namespace {
 QString stagingDirectory(const QByteArray &transfer) {
