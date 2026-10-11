@@ -1,0 +1,709 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="41"
+	failures="0"
+	disabled="1"
+	skipped="0"
+	hostname="5e457c4a1439"
+	time="44"
+	timestamp="2026-10-11T00:52:33"
+	>
+	<testcase name="TestDatabasePath" classname="TestDatabasePath" time="1.78466" status="run">
+		<system-out>QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestDatabasePath *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestDatabasePath::initTestCase()
+PASS   : TestDatabasePath::explicitFileAndDefault(explicit-existing-file)
+PASS   : TestDatabasePath::explicitFileAndDefault(unconfigured-default)
+PASS   : TestDatabasePath::configuredDirectoryCannotFallBack(default-qt-handler)
+PASS   : TestDatabasePath::configuredDirectoryCannotFallBack(production-app-handler)
+PASS   : TestDatabasePath::cleanupTestCase()
+Totals: 6 passed, 0 failed, 0 skipped, 0 blacklisted, 1706ms
+********* Finished testing of TestDatabasePath *********
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+</system-out>
+	</testcase>
+	<testcase name="TestReleaseUpdate" classname="TestReleaseUpdate" time="0.0532698" status="run">
+		<system-out>********* Start testing of TestReleaseUpdate *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestReleaseUpdate::initTestCase()
+PASS   : TestReleaseUpdate::ordersVersionsNumerically()
+PASS   : TestReleaseUpdate::separatesChannels()
+PASS   : TestReleaseUpdate::ignoresDraftsLegacyTagsAndIncompletePackages()
+PASS   : TestReleaseUpdate::rejectsUntrustedLinks()
+PASS   : TestReleaseUpdate::handlesEmptyAndMalformedFeeds()
+PASS   : TestReleaseUpdate::choosesOnlySupportedPlatformPackages()
+PASS   : TestReleaseUpdate::persistsConditionalResponsesAndSeparatesFeeds()
+PASS   : TestReleaseUpdate::throttlesFailedAttemptsAcrossLaunchesButAllowsManualChecks()
+PASS   : TestReleaseUpdate::preservesGoodCacheOnInvalidResponses()
+PASS   : TestReleaseUpdate::recoversFromCorruptCache()
+PASS   : TestReleaseUpdate::honorsPersistedServerBackoffForManualChecks()
+PASS   : TestReleaseUpdate::cleanupTestCase()
+Totals: 13 passed, 0 failed, 0 ...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestAnimatedImages" classname="TestAnimatedImages" time="0.0843702" status="run">
+		<system-out>QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestAnimatedImages *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestAnimatedImages::initTestCase()
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+PASS   : TestAnimatedImages::acceptsRawGifMimeData()
+PASS   : TestAnimatedImages::pastesRawGifMimeDataWithStaticFallback()
+PASS   : TestAnimatedImages::rawGifHasStaticFallback()
+PASS   : TestAnimatedImages::releasesAnimationOnClear()
+PASS   : TestAnimatedImages::retainsAnimationUntilLastReferenceIsRemoved()
+PASS   : TestAnimatedImages::releasesAnimationOnMaximumBlockEviction()
+PASS   : TestAnimatedImages::scalesStaticImageWithChatWindow()
+PASS   : TestAnimatedImages::scalesAnimatedGifWithoutStoppingAnimation()
+PASS   : TestAn...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestChatWebM" classname="TestChatWebM" time="12.3766" status="run">
+		<system-out>QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestChatWebM *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestChatWebM::initTestCase()
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+PASS   : TestChatWebM::acceptsWebmFileDrop()
+PASS   : TestChatWebM::refusesOversizedWebm()
+PASS   : TestChatWebM::videoToImgRejectsGarbage()
+PASS   : TestChatWebM::videoToImgBudgetTooLarge()
+[matroska,webm @ 0x627e9df156c0] File ended prematurely at pos. 8 (0x8)
+[matroska,webm @ 0x627e9df156c0] EBML header parsing failed
+PASS   : TestChatWebM::placeholderForUndecodableWebm()
+[matroska,webm @ 0x627e9df19780] File ended prematurely at pos. 8 (0x8)
+[matroska,webm @ 0x627e9df19780] EBML header parsing failed
+PASS   : TestChatWebM::validation...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestVideoFramePacketizer" classname="TestVideoFramePacketizer" time="0.00581248" status="run">
+		<system-out>********* Start testing of TestVideoFramePacketizer *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestVideoFramePacketizer::initTestCase()
+PASS   : TestVideoFramePacketizer::rejectsInvalidFrames()
+PASS   : TestVideoFramePacketizer::preservesFrameMetadataAcrossFragments()
+PASS   : TestVideoFramePacketizer::cleanupTestCase()
+Totals: 4 passed, 0 failed, 0 skipped, 0 blacklisted, 1ms
+********* Finished testing of TestVideoFramePacketizer *********
+</system-out>
+	</testcase>
+	<testcase name="TestVideoPacketPacer" classname="TestVideoPacketPacer" time="0.127706" status="run">
+		<system-out>********* Start testing of TestVideoPacketPacer *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestVideoPacketPacer::initTestCase()
+PASS   : TestVideoPacketPacer::preservesPacketsAndAccountsForWireBytes()
+PASS   : TestVideoPacketPacer::eventLoopStallDoesNotFlushTheWholeFrame()
+PASS   : TestVideoPacketPacer::idleTimeDoesNotBankBurstCredit()
+PASS   : TestVideoPacketPacer::overloadBoundsMemoryAndWaitsForAnIndependentFrame()
+PASS   : TestVideoPacketPacer::invalidFrameDoesNotDestroyAcceptedBacklog()
+PASS   : TestVideoPacketPacer::largeKeyframeFinishesBeyondTheSoftAgeAndByteBudgets()
+PASS   : TestVideoPacketPacer::expiredPartialFrameIsAbandonedUntilNextKeyframe()
+PASS   : TestVideoPacketPacer::replacementKeyframeDoesNotBypassTheNextDeadline()
+PASS   : TestVideoPacketPacer::exposesDropsAndRequestsRecoveryOnceTheQueueDrains()
+PASS   : TestVideoPacketPacer::timerIsAsynchronousAndDestructionCancelsPendingPackets()
+PASS...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestVideoQualityProfile" classname="TestVideoQualityProfile" time="0.00419964" status="run">
+		<system-out>********* Start testing of TestVideoQualityProfile *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestVideoQualityProfile::initTestCase()
+PASS   : TestVideoQualityProfile::derivesEncoderAndWireRatesFromTheSameBudget()
+PASS   : TestVideoQualityProfile::definesSourceAppropriateDefaults()
+PASS   : TestVideoQualityProfile::preservesSupportedEvenSizes()
+PASS   : TestVideoQualityProfile::roundsOddDimensionsDown()
+PASS   : TestVideoQualityProfile::constrainsScreenContentTo1080p()
+PASS   : TestVideoQualityProfile::constrainsWebcamContentTo720p()
+PASS   : TestVideoQualityProfile::rejectsInvalidAndTinyFrames()
+PASS   : TestVideoQualityProfile::cleanupTestCase()
+Totals: 9 passed, 0 failed, 0 skipped, 0 blacklisted, 0ms
+********* Finished testing of TestVideoQualityProfile *********
+</system-out>
+	</testcase>
+	<testcase name="TestVideoViewUi" classname="TestVideoViewUi" time="0.0207624" status="run">
+		<system-out>QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestVideoViewUi *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestVideoViewUi::initTestCase()
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+PASS   : TestVideoViewUi::fullscreenTracksExternalChanges()
+PASS   : TestVideoViewUi::fullscreenKeyboard()
+QWARN  : TestVideoViewUi::respectsThemeChanges() This plugin does not support propagateSizeHints()
+QWARN  : TestVideoViewUi::respectsThemeChanges() This plugin does not support propagateSizeHints()
+QWARN  : TestVideoViewUi::respectsThemeChanges() This plugin does not support propagateSizeHints()
+PASS   : TestVideoViewUi::respectsThemeChanges()
+PASS   : TestVideoViewUi::cleanupTestCase()
+Totals: 5 passed, 0 failed, 0 skipped, 0...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestXMLTools" classname="TestXMLTools" time="0.00427297" status="run">
+		<system-out>********* Start testing of TestXMLTools *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestXMLTools::initTestCase()
+PASS   : TestXMLTools::testParseExtractBody()
+PASS   : TestXMLTools::testParseConvertStyleBold()
+PASS   : TestXMLTools::testParseConvertStyleUnderline()
+PASS   : TestXMLTools::testParseConvertStyleItalic()
+PASS   : TestXMLTools::testParseKeepTags()
+PASS   : TestXMLTools::testParseDropEmptyFirstParagraphs()
+PASS   : TestXMLTools::testUndupNoopB()
+PASS   : TestXMLTools::testUndupNoopU()
+PASS   : TestXMLTools::testUndupNoopI()
+PASS   : TestXMLTools::testUndupNoopA()
+PASS   : TestXMLTools::testUndupSimpleB()
+PASS   : TestXMLTools::testUndupSimpleU()
+PASS   : TestXMLTools::testUndupSimpleI()
+PASS   : TestXMLTools::testUndupSimpleA()
+PASS   : TestXMLTools::testUndupMixedBU()
+PASS   : TestXMLTools::testUndupMixedBUIA()
+PASS   : TestXMLTools::testUndupWithSpace()
+PASS   : TestXMLTools::testUndupAnchor()...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestFileTransferUi" classname="TestFileTransferUi" time="0.086145" status="run">
+		<system-out>QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestFileTransferUi *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFileTransferUi::initTestCase()
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+PASS   : TestFileTransferUi::qrContrast(light)
+PASS   : TestFileTransferUi::qrContrast(dark)
+PASS   : TestFileTransferUi::fileActionByKeyboard()
+PASS   : TestFileTransferUi::invalidActionUrls()
+PASS   : TestFileTransferUi::unrelatedDataIsNotAFileAction()
+PASS   : TestFileTransferUi::cleanupTestCase()
+Totals: 7 passed, 0 failed, 0 skipped, 0 blacklisted, 16ms
+********* Finished testing of TestFileTransferUi *********
+</system-out>
+	</testcase>
+	<testcase name="TestFileTransferManager" classname="TestFileTransferManager" time="0.0803161" status="run">
+		<system-out>QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestFileTransferManager *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFileTransferManager::initTestCase()
+PASS   : TestFileTransferManager::currentWorkerTrustPromptReachesGui()
+PASS   : TestFileTransferManager::disconnectRejectsQueuedTrustEvents()
+PASS   : TestFileTransferManager::reconnectAcceptsCurrentPromptForReusedSession()
+PASS   : TestFileTransferManager::shutdownJoinsBusyWorkerBeforeDestroyingEngine()
+PASS   : TestFileTransferManager::cleanupTestCase()
+Totals: 6 passed, 0 failed, 0 skipped, 0 blacklisted, 6ms
+********* Finished testing of TestFileTransferManager *********
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+</system-out>
+	</testcase>
+	<testcase name="TestFileTransferTransport" classname="TestFileTransferTransport" time="0.00511579" status="run">
+		<system-out>********* Start testing of TestFileTransferTransport *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFileTransferTransport::initTestCase()
+PASS   : TestFileTransferTransport::controlIsQueuedAndCopiesPayload()
+PASS   : TestFileTransferTransport::chunkValues(present-zero)
+PASS   : TestFileTransferTransport::chunkValues(wide-values)
+PASS   : TestFileTransferTransport::destroyedReceiverCancelsPendingCalls()
+PASS   : TestFileTransferTransport::replacementDoesNotReceiveOldConnectionData()
+PASS   : TestFileTransferTransport::executesOnReceiverThread()
+PASS   : TestFileTransferTransport::connectionSnapshotDoesNotFollowReplacement()
+PASS   : TestFileTransferTransport::queuedCallsDoNotRetainConnection()
+PASS   : TestFileTransferTransport::disconnectedTransportRejectsQueue()
+PASS   : TestFileTransferTransport::cleanupTestCase()
+Totals: 11 passed, 0 failed, 0 skipped, 0 blacklisted, 1ms
+********* Finished testing of T...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestPQCrypto" classname="TestPQCrypto" time="0.538879" status="run">
+		<system-out>********* Start testing of TestPQCrypto *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestPQCrypto::initTestCase()
+PASS   : TestPQCrypto::sha384Vector()
+PASS   : TestPQCrypto::hmacSha384Vector()
+PASS   : TestPQCrypto::constantTimeCompare()
+PASS   : TestPQCrypto::hkdfVectors()
+PASS   : TestPQCrypto::x25519Rfc7748()
+PASS   : TestPQCrypto::x25519RoundTrip()
+PASS   : TestPQCrypto::x25519SmallOrderRejected()
+PASS   : TestPQCrypto::aesGcmNistVector()
+PASS   : TestPQCrypto::aesGcmTamperFails()
+PASS   : TestPQCrypto::aesGcmEmptyPlaintext()
+PASS   : TestPQCrypto::mlkemRoundTrip()
+PASS   : TestPQCrypto::mlkemBadCiphertext()
+PASS   : TestPQCrypto::mldsaSignVerify()
+PASS   : TestPQCrypto::mldsaTamperFails()
+PASS   : TestPQCrypto::mldsaContextSeparated()
+PASS   : TestPQCrypto::argon2Vector()
+PASS   : TestPQCrypto::argon2Bounds()
+PASS   : TestPQCrypto::cborEncodeVector()
+PASS   : TestPQCrypto::cborRejectsNonCanonical()
+PA...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestFTIdentity" classname="TestFTIdentity" time="4.28631" status="run">
+		<system-out>********* Start testing of TestFTIdentity *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFTIdentity::initTestCase()
+PASS   : TestFTIdentity::safetyNumberFormat()
+PASS   : TestFTIdentity::safetyNumberSymmetry()
+PASS   : TestFTIdentity::safetyNumberDistinct()
+PASS   : TestFTIdentity::qrPayload()
+PASS   : TestFTIdentity::identityLifecycle()
+PASS   : TestFTIdentity::identityWrongPassphrase()
+PASS   : TestFTIdentity::identityChangePassphrase()
+PASS   : TestFTIdentity::trustStoreTransitions()
+PASS   : TestFTIdentity::trustStoreChangedBlocks()
+PASS   : TestFTIdentity::trustStoreRemovePin()
+PASS   : TestFTIdentity::cleanupTestCase()
+Totals: 12 passed, 0 failed, 0 skipped, 0 blacklisted, 4280ms
+********* Finished testing of TestFTIdentity *********
+</system-out>
+	</testcase>
+	<testcase name="TestFileTransferSession" classname="TestFileTransferSession" time="0.0141298" status="run">
+		<system-out>********* Start testing of TestFileTransferSession *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFileTransferSession::initTestCase()
+PASS   : TestFileTransferSession::happyPathDerivesSameKeys()
+PASS   : TestFileTransferSession::wrongPinFails()
+PASS   : TestFileTransferSession::tamperedHandshakeFails()
+PASS   : TestFileTransferSession::replayedFrameFails()
+PASS   : TestFileTransferSession::controlChannelSequencing()
+PASS   : TestFileTransferSession::sessionKekBoundToTransfer()
+PASS   : TestFileTransferSession::controlTamperFails()
+PASS   : TestFileTransferSession::manifestRoundTrip()
+PASS   : TestFileTransferSession::manifestTamperFails()
+PASS   : TestFileTransferSession::chunkRoundTrip()
+PASS   : TestFileTransferSession::fileKeyDoubleWrap()
+PASS   : TestFileTransferSession::cleanupTestCase()
+Totals: 13 passed, 0 failed, 0 skipped, 0 blacklisted, 8ms
+********* Finished testing of TestFileTransferSession *...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestFileTransferEngine" classname="TestFileTransferEngine" time="8.73083" status="run">
+		<system-out>********* Start testing of TestFileTransferEngine *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFileTransferEngine::initTestCase()
+PASS   : TestFileTransferEngine::privateReceiveStorage(plaintext)
+PASS   : TestFileTransferEngine::privateReceiveStorage(password-spool)
+PASS   : TestFileTransferEngine::predictableReceivePathCannotRedirectWrites()
+PASS   : TestFileTransferEngine::earlyChunksKeepTheirTransferIdentity()
+PASS   : TestFileTransferEngine::unrelatedChunksDoNotExtendPendingReceive()
+PASS   : TestFileTransferEngine::sendReceiveRoundTrip()
+PASS   : TestFileTransferEngine::passwordRoundTrip()
+PASS   : TestFileTransferEngine::wrongPasswordFailsClosed()
+PASS   : TestFileTransferEngine::duplicateChunkIsFatal()
+PASS   : TestFileTransferEngine::latePasswordSpoolsAllChunks()
+PASS   : TestFileTransferEngine::secondTransferWhileFirstReady()
+PASS   : TestFileTransferEngine::readyTransferDoesNotExpire()
+PASS   ...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestFileTransferE2E" classname="TestFileTransferE2E" time="7.60138" status="run">
+		<system-out>********* Start testing of TestFileTransferE2E *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+&lt;X&gt;2026-10-11 00:53:02.056 SSL: OpenSSL version is 'OpenSSL 3.0.22 25 Aug 2026'
+&lt;W&gt;2026-10-11 00:53:02.057 Initializing settings from /tmp/TestFileTransferE2E-tLcChu/server/murmur.ini (basepath /tmp/TestFileTransferE2E-tLcChu/server)
+&lt;W&gt;2026-10-11 00:53:02.057 MetaParams: TLS cipher preference is "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:AES256-SHA:AES128-SHA"
+&lt;W&gt;2026-10-11 00:53:03.195 Performed initial PBKDF2 benchmark. Will use 32000 iterations as default
+&lt;W&gt;2026-10-11 00:53:03.209 Murmur 1.7.0 running on Linux: Debian GNU/Linux 12 (bookworm) [x64]: Booting servers
+&lt;W&gt;2026-10-11 00:53:03...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestSettingsJSONSerialization" classname="TestSettingsJSONSerialization" time="0.0757572" status="run">
+		<system-out>QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-'
+********* Start testing of TestSettingsJSONSerialization *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestSettingsJSONSerialization::initTestCase()
+PASS   : TestSettingsJSONSerialization::noDefaultValuesMatched()
+PASS   : TestSettingsJSONSerialization::testJSONSerialization()
+PASS   : TestSettingsJSONSerialization::cleanupTestCase()
+Totals: 4 passed, 0 failed, 0 skipped, 0 blacklisted, 3ms
+********* Finished testing of TestSettingsJSONSerialization *********
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+Fontconfig error: No writable cache directories
+</system-out>
+	</testcase>
+	<testcase name="OverlayTest" classname="OverlayTest" time="0" status="disabled">
+		<system-out>Disabled</system-out>
+	</testcase>
+	<testcase name="TestCrypt" classname="TestCrypt" time="0.016161" status="run">
+		<system-out>********* Start testing of TestCrypt *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestCrypt::initTestCase()
+PASS   : TestCrypt::testvectors()
+PASS   : TestCrypt::authcrypt()
+PASS   : TestCrypt::xexstarAttack()
+PASS   : TestCrypt::ivrecovery()
+PASS   : TestCrypt::reverserecovery()
+PASS   : TestCrypt::tamper()
+PASS   : TestCrypt::cleanupTestCase()
+Totals: 8 passed, 0 failed, 0 skipped, 0 blacklisted, 8ms
+********* Finished testing of TestCrypt *********
+</system-out>
+	</testcase>
+	<testcase name="TestAudioReceiverBuffer" classname="TestAudioReceiverBuffer" time="0.00641812" status="run">
+		<system-out>********* Start testing of TestAudioReceiverBuffer *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestAudioReceiverBuffer::initTestCase()
+PASS   : TestAudioReceiverBuffer::test_preconditions()
+PASS   : TestAudioReceiverBuffer::test_addReceiver()
+PASS   : TestAudioReceiverBuffer::test_addReceiverPositional()
+PASS   : TestAudioReceiverBuffer::test_forceAddReceiver()
+PASS   : TestAudioReceiverBuffer::test_preprocessBuffer()
+PASS   : TestAudioReceiverBuffer::test_getReceiverRange()
+QWARN  : TestAudioReceiverBuffer::test_encoding() Opening a new range
+QWARN  : TestAudioReceiverBuffer::test_encoding() Start: AudioReceiver{ receiver: ServerUser{ session: 2, version: "1.4.0", deaf: false, selfDeaf: false, ssContext: "" }, context: 0, volAdj: 1 }
+QWARN  : TestAudioReceiverBuffer::test_encoding() End: AudioReceiver{ receiver: ServerUser{ session: 0, version: "1.2.5", deaf: false, selfDeaf: false, ssContext: "" }, conte...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestQtLogger" classname="TestQtLogger" time="0.0198256" status="run">
+		<system-out>********* Start testing of TestQtLogger *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestQtLogger::initTestCase()
+PASS   : TestQtLogger::lateQtLog(prior-handler)
+PASS   : TestQtLogger::lateQtLog(repeated-init)
+PASS   : TestQtLogger::lateQtLog(later-handler-owner)
+PASS   : TestQtLogger::fatalLogDoesNotRunStaticCleanup(qt-fatal-message)
+PASS   : TestQtLogger::fatalLogDoesNotRunStaticCleanup(direct-fatal-call)
+PASS   : TestQtLogger::cleanupTestCase()
+Totals: 7 passed, 0 failed, 0 skipped, 0 blacklisted, 16ms
+********* Finished testing of TestQtLogger *********
+</system-out>
+	</testcase>
+	<testcase name="TestBandwidthRecord" classname="TestBandwidthRecord" time="0.00433711" status="run">
+		<system-out>********* Start testing of TestBandwidthRecord *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestBandwidthRecord::initTestCase()
+PASS   : TestBandwidthRecord::fileChunksRetireTheirEntireByteCharge()
+PASS   : TestBandwidthRecord::rejectsExcessAtTheWindowsMultiplicationBoundary()
+PASS   : TestBandwidthRecord::longIdleSlotStillEnforcesTheConfiguredRate()
+PASS   : TestBandwidthRecord::maximumWidthChargesDoNotOverflowTheRollingSum()
+PASS   : TestBandwidthRecord::displayedBandwidthClampsInsteadOfWrapping()
+PASS   : TestBandwidthRecord::voiceSizedChargesKeepTheirExistingBehavior()
+PASS   : TestBandwidthRecord::refusedChargeDoesNotAdvanceOrOverwriteAcceptedState()
+PASS   : TestBandwidthRecord::invalidChargesCannotReduceOrBypassTheBudget()
+PASS   : TestBandwidthRecord::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 1ms
+********* Finished testing of TestBandwidthRecord *********
+</system-out>
+	</testcase>
+	<testcase name="TestConnectionOutputQueue" classname="TestConnectionOutputQueue" time="0.0167654" status="run">
+		<system-out>********* Start testing of TestConnectionOutputQueue *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestConnectionOutputQueue::initTestCase()
+PASS   : TestConnectionOutputQueue::admitsExactBoundary()
+PASS   : TestConnectionOutputQueue::admitsLargestProtocolFrame()
+PASS   : TestConnectionOutputQueue::disconnectedSocketDoesNotWrite()
+PASS   : TestConnectionOutputQueue::refusesFurtherWritesBeforeDeferredClose()
+PASS   : TestConnectionOutputQueue::unboundedDefault()
+PASS   : TestConnectionOutputQueue::emptyWriteDoesNotDisconnect()
+PASS   : TestConnectionOutputQueue::largeQueueDoesNotOverflow()
+PASS   : TestConnectionOutputQueue::destroyingConnectionCancelsDeferredClose()
+PASS   : TestConnectionOutputQueue::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 9ms
+********* Finished testing of TestConnectionOutputQueue *********
+</system-out>
+	</testcase>
+	<testcase name="TestCaseInsensitiveQString" classname="TestCaseInsensitiveQString" time="0.00457893" status="run">
+		<system-out>********* Start testing of TestCaseInsensitiveQString *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestCaseInsensitiveQString::initTestCase()
+PASS   : TestCaseInsensitiveQString::equality()
+PASS   : TestCaseInsensitiveQString::inequality()
+PASS   : TestCaseInsensitiveQString::less_than()
+PASS   : TestCaseInsensitiveQString::less_equal()
+PASS   : TestCaseInsensitiveQString::greater_than()
+PASS   : TestCaseInsensitiveQString::greater_equal()
+PASS   : TestCaseInsensitiveQString::hash()
+PASS   : TestCaseInsensitiveQString::use_in_qhash()
+PASS   : TestCaseInsensitiveQString::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 0ms
+********* Finished testing of TestCaseInsensitiveQString *********
+</system-out>
+	</testcase>
+	<testcase name="TestCryptographicHash" classname="TestCryptographicHash" time="0.00860733" status="run">
+		<system-out>********* Start testing of TestCryptographicHash *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestCryptographicHash::initTestCase()
+PASS   : TestCryptographicHash::sha1(1)
+PASS   : TestCryptographicHash::sha1(2)
+PASS   : TestCryptographicHash::sha1(3)
+PASS   : TestCryptographicHash::sha1(4)
+PASS   : TestCryptographicHash::sha256(1)
+PASS   : TestCryptographicHash::sha256(2)
+PASS   : TestCryptographicHash::sha256(3)
+PASS   : TestCryptographicHash::sha256(4)
+PASS   : TestCryptographicHash::staticHashVsObject()
+PASS   : TestCryptographicHash::multipleResultCalls()
+PASS   : TestCryptographicHash::addDataAfterResult()
+PASS   : TestCryptographicHash::cleanupTestCase()
+Totals: 13 passed, 0 failed, 0 skipped, 0 blacklisted, 2ms
+********* Finished testing of TestCryptographicHash *********
+</system-out>
+	</testcase>
+	<testcase name="TestCryptographicRandom" classname="TestCryptographicRandom" time="2.28809" status="run">
+		<system-out>********* Start testing of TestCryptographicRandom *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestCryptographicRandom::initTestCase()
+PASS   : TestCryptographicRandom::fillBuffer()
+PASS   : TestCryptographicRandom::uint32()
+PASS   : TestCryptographicRandom::uniform()
+PASS   : TestCryptographicRandom::cleanupTestCase()
+Totals: 5 passed, 0 failed, 0 skipped, 0 blacklisted, 2281ms
+********* Finished testing of TestCryptographicRandom *********
+</system-out>
+	</testcase>
+	<testcase name="TestDatabase" classname="TestDatabase" time="1.65107" status="run">
+		<system-out>********* Start testing of DatabaseTest *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : DatabaseTest::initTestCase()
+QINFO  : DatabaseTest::hexConversions() Hex to binary
+QINFO  : DatabaseTest::hexConversions() Binary to hex
+QINFO  : DatabaseTest::hexConversions() Consistency checks
+PASS   : DatabaseTest::hexConversions()
+QINFO  : DatabaseTest::connect() Current backend: "SQLite"
+PASS   : DatabaseTest::connect()
+QINFO  : DatabaseTest::getBackendVersion() Current backend: "SQLite"
+QINFO  : DatabaseTest::getBackendVersion() Queried version: "3.40.1"
+PASS   : DatabaseTest::getBackendVersion()
+QINFO  : DatabaseTest::tableExistsInDB() Current backend: "SQLite"
+PASS   : DatabaseTest::tableExistsInDB()
+QINFO  : DatabaseTest::getExistingTables() Current backend: "SQLite"
+PASS   : DatabaseTest::getExistingTables()
+QINFO  : DatabaseTest::simpleExport() Current backend: "SQLite"
+PASS   : DatabaseTest::simpleExport()
+QINF...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestServerDatabase" classname="TestServerDatabase" time="1.52066" status="run">
+		<system-out>********* Start testing of ServerDatabaseTest *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : ServerDatabaseTest::initTestCase()
+QINFO  : ServerDatabaseTest::serverTable_server_management() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::serverTable_server_management()
+QINFO  : ServerDatabaseTest::logTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::logTable_general()
+QINFO  : ServerDatabaseTest::configTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::configTable_general()
+QINFO  : ServerDatabaseTest::channelTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::channelTable_general()
+QINFO  : ServerDatabaseTest::channelPropertyTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::channelPropertyTable_general()
+QINFO  : ServerDatabaseTest::userTable_general() Current backend: "SQLite"
+PASS   : ServerDatabaseTest::userTable_genera...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestFFDHE" classname="TestFFDHE" time="0.00974397" status="run">
+		<system-out>********* Start testing of TestFFDHE *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestFFDHE::initTestCase()
+PASS   : TestFFDHE::exercise(ffdhe2048)
+PASS   : TestFFDHE::exercise(ffdhe3072)
+PASS   : TestFFDHE::exercise(ffdhe4096)
+PASS   : TestFFDHE::exercise(ffdhe6144)
+PASS   : TestFFDHE::exercise(ffdhe8192)
+PASS   : TestFFDHE::exercise(ffdhe2048_upper)
+PASS   : TestFFDHE::exercise(ffdhe2048_random)
+PASS   : TestFFDHE::exercise(noname)
+PASS   : TestFFDHE::exercise(typo)
+PASS   : TestFFDHE::exercise(trailingspace)
+PASS   : TestFFDHE::namedGroupsMethod()
+PASS   : TestFFDHE::cleanupTestCase()
+Totals: 13 passed, 0 failed, 0 skipped, 0 blacklisted, 3ms
+********* Finished testing of TestFFDHE *********
+</system-out>
+	</testcase>
+	<testcase name="TestIPCUtils" classname="TestIPCUtils" time="0.00540316" status="run">
+		<system-out>********* Start testing of TestIPCUtils *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestIPCUtils::initTestCase()
+PASS   : TestIPCUtils::usesXdgRuntimeDirectoryWhenSet()
+PASS   : TestIPCUtils::cleanupTestCase()
+Totals: 3 passed, 0 failed, 0 skipped, 0 blacklisted, 1ms
+********* Finished testing of TestIPCUtils *********
+</system-out>
+	</testcase>
+	<testcase name="TestPacketDataStream" classname="TestPacketDataStream" time="0.00726631" status="run">
+		<system-out>********* Start testing of TestPacketDataStream *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestPacketDataStream::initTestCase()
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestP...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestPasswordGenerator" classname="TestPasswordGenerator" time="0.0127859" status="run">
+		<system-out>********* Start testing of TestPasswordGenerator *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestPasswordGenerator::initTestCase()
+PASS   : TestPasswordGenerator::random()
+PASS   : TestPasswordGenerator::cleanupTestCase()
+Totals: 3 passed, 0 failed, 0 skipped, 0 blacklisted, 6ms
+********* Finished testing of TestPasswordGenerator *********
+</system-out>
+	</testcase>
+	<testcase name="TestMumbleProtocol" classname="TestMumbleProtocol" time="0.00516927" status="run">
+		<system-out>********* Start testing of TestMumbleProtocol *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestMumbleProtocol::initTestCase()
+QWARN  : TestMumbleProtocol::test_ping_client_to_server() Using protocol version 1.7.0
+QWARN  : TestMumbleProtocol::test_ping_client_to_server() Using protocol version 1.7.0
+PASS   : TestMumbleProtocol::test_ping_client_to_server()
+QWARN  : TestMumbleProtocol::test_ping_server_to_client() Using protocol version 1.7.0
+QWARN  : TestMumbleProtocol::test_ping_server_to_client() Using protocol version 1.7.0
+PASS   : TestMumbleProtocol::test_ping_server_to_client()
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Using protocol version 1.3.0
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Partial re-encoding
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Removing positional data
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Using protocol versi...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestSelfSignedCertificate" classname="TestSelfSignedCertificate" time="0.828179" status="run">
+		<system-out>********* Start testing of TestSelfSignedCertificate *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestSelfSignedCertificate::initTestCase()
+PASS   : TestSelfSignedCertificate::exerciseClientCert()
+PASS   : TestSelfSignedCertificate::exerciseServerCert()
+PASS   : TestSelfSignedCertificate::cleanupTestCase()
+Totals: 4 passed, 0 failed, 0 skipped, 0 blacklisted, 821ms
+********* Finished testing of TestSelfSignedCertificate *********
+</system-out>
+	</testcase>
+	<testcase name="TestServerAddress" classname="TestServerAddress" time="0.00485829" status="run">
+		<system-out>********* Start testing of TestServerAddress *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestServerAddress::initTestCase()
+PASS   : TestServerAddress::defaultCtor()
+PASS   : TestServerAddress::isValid()
+PASS   : TestServerAddress::ctor()
+PASS   : TestServerAddress::equals()
+PASS   : TestServerAddress::lessThan()
+PASS   : TestServerAddress::qhash()
+PASS   : TestServerAddress::match()
+PASS   : TestServerAddress::ipv6ToString()
+PASS   : TestServerAddress::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 0ms
+********* Finished testing of TestServerAddress *********
+</system-out>
+	</testcase>
+	<testcase name="TestSSLLocks" classname="TestSSLLocks" time="2.01336" status="run">
+		<system-out>********* Start testing of TestSSLLocks *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestSSLLocks::initTestCase()
+PASS   : TestSSLLocks::stress()
+PASS   : TestSSLLocks::cleanupTestCase()
+Totals: 3 passed, 0 failed, 0 skipped, 0 blacklisted, 2005ms
+********* Finished testing of TestSSLLocks *********
+</system-out>
+	</testcase>
+	<testcase name="TestStdAbs" classname="TestStdAbs" time="0.00430557" status="run">
+		<system-out>********* Start testing of TestStdAbs *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestStdAbs::initTestCase()
+PASS   : TestStdAbs::floatWorks()
+PASS   : TestStdAbs::cleanupTestCase()
+Totals: 3 passed, 0 failed, 0 skipped, 0 blacklisted, 0ms
+********* Finished testing of TestStdAbs *********
+</system-out>
+	</testcase>
+	<testcase name="TestTimer" classname="TestTimer" time="0.155088" status="run">
+		<system-out>********* Start testing of TestTimer *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestTimer::initTestCase()
+QWARN  : TestTimer::resolution() Total elapsed time: 150000 microseconds
+QWARN  : TestTimer::resolution() Number of elapsed changes: 148309
+QWARN  : TestTimer::resolution() Resolution: 1.01 microseconds
+PASS   : TestTimer::resolution()
+PASS   : TestTimer::order()
+PASS   : TestTimer::cleanupTestCase()
+Totals: 4 passed, 0 failed, 0 skipped, 0 blacklisted, 150ms
+********* Finished testing of TestTimer *********
+</system-out>
+	</testcase>
+	<testcase name="TestUnresolvedServerAddress" classname="TestUnresolvedServerAddress" time="0.00468051" status="run">
+		<system-out>********* Start testing of TestUnresolvedServerAddress *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestUnresolvedServerAddress::initTestCase()
+PASS   : TestUnresolvedServerAddress::defaultCtor()
+PASS   : TestUnresolvedServerAddress::isValid()
+PASS   : TestUnresolvedServerAddress::ctor()
+PASS   : TestUnresolvedServerAddress::caseInsensitive()
+PASS   : TestUnresolvedServerAddress::equals()
+QWARN  : TestUnresolvedServerAddress::lessThan() 0 -&gt; :0
+QWARN  : TestUnresolvedServerAddress::lessThan() 1 -&gt; :1
+QWARN  : TestUnresolvedServerAddress::lessThan() 2 -&gt; :999
+QWARN  : TestUnresolvedServerAddress::lessThan() 3 -&gt; aaaaa:0
+QWARN  : TestUnresolvedServerAddress::lessThan() 4 -&gt; baaaa:0
+QWARN  : TestUnresolvedServerAddress::lessThan() 5 -&gt; baaaa:1
+QWARN  : TestUnresolvedServerAddress::lessThan() 6 -&gt; maaaa:0
+QWARN  : TestUnresolvedServerAddress::lessThan() 7 -&gt; maaaa:100
+QWARN  : TestUnresolvedServerAddress::lessT...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="TestVersion" classname="TestVersion" time="0.00403923" status="run">
+		<system-out>********* Start testing of TestVersion *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 12.2.0), debian 12
+PASS   : TestVersion::initTestCase()
+PASS   : TestVersion::legacy_encode()
+PASS   : TestVersion::legacy_decode()
+PASS   : TestVersion::legacy_consistency()
+PASS   : TestVersion::general_getMajor()
+PASS   : TestVersion::general_getMinor()
+PASS   : TestVersion::general_getPatch()
+PASS   : TestVersion::v2_encode()
+PASS   : TestVersion::v2_decode()
+PASS   : TestVersion::v2_limits()
+PASS   : TestVersion::config_decoding()
+PASS   : TestVersion::cleanupTestCase()
+Totals: 12 passed, 0 failed, 0 skipped, 0 blacklisted, 0ms
+********* Finished testing of TestVersion *********
+</system-out>
+	</testcase>
+</testsuite>
