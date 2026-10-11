@@ -41,7 +41,20 @@
     "strict_release_builds": "passed client/server on both component sources",
     "committed_sha256_verified": 28
   },
-  "exact_combined_linux": "running; source archive SHA verified; old owned source preserved",
+  "exact_combined_linux": {
+    "source_head": "17f0807e25f8924948c0c391e96d5742c51f817a",
+    "full_release_build": "complete client/server/all enabled test targets passed",
+    "ctest": {
+      "passed": 41,
+      "registered": 42,
+      "disabled": [
+        "OverlayTest"
+      ],
+      "seconds": 56.14
+    },
+    "compiler_exception": "Existing -Wno-error=restrict; remaining strict flags retained",
+    "source_archive_sha256": "1fa03982360b138303282653d7eea66e77bf76d9dae971e693d6e6282c87f6b2"
+  },
   "exact_combined_windows": "running full enabled test set",
   "exact_hosted_matrix_security": "running; both actual C++/Python comparison configurations now present; no clean security result claimed",
   "remaining": [
