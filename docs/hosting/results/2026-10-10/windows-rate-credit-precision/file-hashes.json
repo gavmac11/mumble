@@ -1,0 +1,81 @@
+{
+  "source_commit": "4f30bc5778a2efbff0b25975d6b2cc0c2580e469",
+  "algorithm": "SHA256",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+      "size_bytes": 29
+    },
+    {
+      "path": "build-result.json",
+      "sha256": "050e1992eddaa63411cae710823f42b17088549b9a17d51479119e02a0b087e6",
+      "size_bytes": 398
+    },
+    {
+      "path": "ctest.txt",
+      "sha256": "c2ac4f55652d1011c615f96eb9e3ce41c40c01be5b7f20e8729faa7d777b2277",
+      "size_bytes": 519
+    },
+    {
+      "path": "ctest.xml",
+      "sha256": "9bcd92db20c30706fdc4d6e0abcf5323c6e974165c3443d70f95030ef1c28699",
+      "size_bytes": 692
+    },
+    {
+      "path": "fixture-acl.json",
+      "sha256": "5b17f5817ff3bb984820e89a6f4e43b98997c1ad032f71cc7caa05e648577cd2",
+      "size_bytes": 364
+    },
+    {
+      "path": "preservation.json",
+      "sha256": "1191570a13fcf3a25f18576c682771abfff52c99dd3870c89d22cd56ee15608f",
+      "size_bytes": 838
+    },
+    {
+      "path": "test-run-result.json",
+      "sha256": "59e028d52799bbc3441427c1259ce8171c41dda75f380d7cccafb72867ddd4e7",
+      "size_bytes": 123
+    },
+    {
+      "path": "TestFileTransferE2E.txt",
+      "sha256": "5ebc2fc4bde425cf6ca17ee89b2b0796e09b8d0b9fdfc5b445bcd806c0858f6a",
+      "size_bytes": 558
+    },
+    {
+      "path": "TestFileTransferE2E.xml",
+      "sha256": "89ccfd1751a656a40c2815b87b9742f2ae1343e5ad5ca806106211dded3230a4",
+      "size_bytes": 897
+    },
+    {
+      "path": "TestFileTransferEngine.txt",
+      "sha256": "2f2c3bccfdee8bc1426cdad4fb315d93dc3df2a9e2f66726e55b7ddcc88a78bd",
+      "size_bytes": 2735
+    },
+    {
+      "path": "TestFileTransferEngine.xml",
+      "sha256": "fb556e465ddde9e5f3df2c48f82b9c4dfa8c952b86798ca93d8f6dcd881d614a",
+      "size_bytes": 4108
+    },
+    {
+      "path": "TestFileTransferManager.txt",
+      "sha256": "7eb1eee9bd9e1da4561c14f92958056b8646d8a87e566c97bc1435e67a0e01a8",
+      "size_bytes": 724
+    },
+    {
+      "path": "TestFileTransferManager.xml",
+      "sha256": "7dbc1f89a0b2edc1120be9cdc57ed02ebfa8e39907dc71420489c707e2eeb32b",
+      "size_bytes": 1096
+    },
+    {
+      "path": "validation.json",
+      "sha256": "8be2ba56d6cdc8890e814bde7033fcb6d3f6b43465373cb284660c715dcab837",
+      "size_bytes": 24889
+    },
+    {
+      "path": "validation.txt",
+      "sha256": "951a71972f9079d24b97a09156d7d7f0fe486f57f5b202dbd641420798a3fc63",
+      "size_bytes": 1974
+    }
+  ]
+}

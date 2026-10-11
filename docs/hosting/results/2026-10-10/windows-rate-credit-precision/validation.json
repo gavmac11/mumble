@@ -1,0 +1,633 @@
+{
+  "recorded_utc": "2026-10-11T02:04:33.523927+00:00",
+  "source_commit": "4f30bc5778a2efbff0b25975d6b2cc0c2580e469",
+  "source_branch": "codex/file-transfer-rate-credit",
+  "source_branch_url": "https://github.com/gavmac11/mumble/tree/codex/file-transfer-rate-credit",
+  "source_tree_clean_before_evidence": true,
+  "source_blob_sha256": {
+    "src/mumble/PQFileTransfer/engine/FileTransferEngine.cpp": "4852d342ddd71fb458134eedb1dd79cc6cf7bc9ad54711b3c89f482013be19dd",
+    "src/mumble/PQFileTransfer/engine/FileTransferEngine.h": "22f343296ce2d51ebf11d43e0556b965333eab5fff3eba89eb709ce651b97504",
+    "src/Logger.h": "20d23cc82961a1ffb490f980caf9959cf1bfaafbc3fb7ec58feb7eaeacc7331a",
+    "src/mumble/Database.cpp": "d86d22dc7f7779c9ab6eb2eab488a2c50d42465b7231374325a15008f20e1313",
+    "src/mumble/FileTransferConfig.ui": "344020dc67f8b89a9690002f91dbff6aab418d3bc913f9b25bc1e0aa5bee3665",
+    "src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp": "4225e1168f21275d0f9ec235e063a422cea57972332079be9c6142a3f7f1f364",
+    "src/tests/TestFileTransferE2E/TestFileTransferE2E.cpp": "d33a62b58db97424e37d055018f83c4c4acf49f3606d03f1806d5d1c5f11f13e",
+    "src/tests/TestFileTransferManager/TestFileTransferManager.cpp": "3a92e2d6dc60668ac4793ab81ae102f45882244da5361118bdd3e77b0ba01714",
+    "src/tests/TestFileTransferEngine/CMakeLists.txt": "7cb62ea8a14eb5354463eab89671a180f7a4f294a4dd5f3d5a8cd2ecd77b7b01",
+    "src/tests/TestFileTransferE2E/CMakeLists.txt": "93bc5700f614db6602f195e23cee591eaab836e51df0a4d865a56753d8fde8c4",
+    "src/tests/TestFileTransferManager/CMakeLists.txt": "22563a86fb32ae89a8f3dcaed4c22c5ba8895602eb988972c4955f41a7f615cc"
+  },
+  "os": {
+    "name": "Windows 10 Pro",
+    "version": "10.0.19045",
+    "architecture": "x64"
+  },
+  "compiler": {
+    "name": "MSVC",
+    "version": "19.51.36257.0",
+    "installation": "VS 2026 Build Tools"
+  },
+  "qt": {
+    "version": "6.10.0",
+    "linkage": "static",
+    "dependency_build_compiler": "MSVC 2022"
+  },
+  "dependencies": "vcpkg 2026-02 b1fe4a4257 / x64-windows-static-md; OpenSSL 3.6.1; FFmpeg 8.1 shared",
+  "configuration": "Release, Ninja unity build, C++20, dynamic MSVC runtime, symbols off, LTO off, strict warnings-as-errors enabled; tests/server on, packaging off",
+  "build": {
+    "targets": [
+      "mumble",
+      "mumble-server",
+      "TestFileTransferEngine",
+      "TestFileTransferE2E",
+      "TestFileTransferManager"
+    ],
+    "configure_exit_code": 0,
+    "build_exit_code": 0,
+    "source_compiler_policy": [
+      {
+        "target": "TestFileTransferEngine",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestFileTransferE2E",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestFileTransferManager",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_client_object_lib",
+        "checked_translation_units": 10,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble-server",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_server_object_lib",
+        "checked_translation_units": 3,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "shared",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      }
+    ],
+    "dependency_warning_policy": "Repository defaults retained for third-party and generated protobuf sources; -external:W0 retained for external headers. No source warning relaxation on client/logger/database or tested file-transfer translation units.",
+    "client_executable_sha256": "0f23afc973c0a54579cf36f8c9bcb7d982fbfac50e6173426b1f04e6b3d836a1",
+    "server_executable_sha256": "7f5f6699720aad3675ca57638c7d723c9f5ee2172137216e9f4340356626ae27",
+    "dependency_build_warning": "Existing liboqs unsupported-MSVC optimization-barrier warning retained in private full build log, with repository dependency warning policy unchanged."
+  },
+  "tests": [
+    {
+      "suite": "TestFileTransferEngine",
+      "cases": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 22.615,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferEngine",
+          "time": "0.002",
+          "result": "passed"
+        },
+        {
+          "name": "privateReceiveStorage(plaintext)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.139",
+          "result": "passed"
+        },
+        {
+          "name": "privateReceiveStorage(password-spool)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.638",
+          "result": "passed"
+        },
+        {
+          "name": "predictableReceivePathCannotRedirectWrites",
+          "classname": "TestFileTransferEngine",
+          "time": "0.125",
+          "result": "passed"
+        },
+        {
+          "name": "earlyChunksKeepTheirTransferIdentity",
+          "classname": "TestFileTransferEngine",
+          "time": "0.132",
+          "result": "passed"
+        },
+        {
+          "name": "unrelatedChunksDoNotExtendPendingReceive",
+          "classname": "TestFileTransferEngine",
+          "time": "0.351",
+          "result": "passed"
+        },
+        {
+          "name": "sendReceiveRoundTrip",
+          "classname": "TestFileTransferEngine",
+          "time": "0.125",
+          "result": "passed"
+        },
+        {
+          "name": "passwordRoundTrip",
+          "classname": "TestFileTransferEngine",
+          "time": "1.145",
+          "result": "passed"
+        },
+        {
+          "name": "wrongPasswordFailsClosed",
+          "classname": "TestFileTransferEngine",
+          "time": "1.183",
+          "result": "passed"
+        },
+        {
+          "name": "duplicateChunkIsFatal",
+          "classname": "TestFileTransferEngine",
+          "time": "0.125",
+          "result": "passed"
+        },
+        {
+          "name": "latePasswordSpoolsAllChunks",
+          "classname": "TestFileTransferEngine",
+          "time": "1.319",
+          "result": "passed"
+        },
+        {
+          "name": "secondTransferWhileFirstReady",
+          "classname": "TestFileTransferEngine",
+          "time": "0.255",
+          "result": "passed"
+        },
+        {
+          "name": "readyTransferDoesNotExpire",
+          "classname": "TestFileTransferEngine",
+          "time": "2.130",
+          "result": "passed"
+        },
+        {
+          "name": "firstContactPinFlags",
+          "classname": "TestFileTransferEngine",
+          "time": "0.683",
+          "result": "passed"
+        },
+        {
+          "name": "incomingAbortCleansUpSafely",
+          "classname": "TestFileTransferEngine",
+          "time": "0.010",
+          "result": "passed"
+        },
+        {
+          "name": "passwordSpoolIsBounded",
+          "classname": "TestFileTransferEngine",
+          "time": "0.690",
+          "result": "passed"
+        },
+        {
+          "name": "cancelledPromptTimerCannotRemoveReplacementHandshake(disconnect)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "cancelledPromptTimerCannotRemoveReplacementHandshake(declined-prompt)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "shutdownRemovesUnsavedPlaintext(ready-unsaved)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.126",
+          "result": "passed"
+        },
+        {
+          "name": "shutdownRemovesUnsavedPlaintext(saved-file-preserved)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.124",
+          "result": "passed"
+        },
+        {
+          "name": "unlimitedSendStopsOnWorkerInterruption",
+          "classname": "TestFileTransferEngine",
+          "time": "0.078",
+          "result": "passed"
+        },
+        {
+          "name": "sendingRespectsConfiguredRate(default)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.310",
+          "result": "passed"
+        },
+        {
+          "name": "sendingRespectsConfiguredRate(below-one-chunk-per-tick)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.563",
+          "result": "passed"
+        },
+        {
+          "name": "sendingRespectsConfiguredRate(slow)",
+          "classname": "TestFileTransferEngine",
+          "time": "2.047",
+          "result": "passed"
+        },
+        {
+          "name": "simultaneousSendsShareRateLimit",
+          "classname": "TestFileTransferEngine",
+          "time": "2.356",
+          "result": "passed"
+        },
+        {
+          "name": "unlimitedSendYieldsToQueuedAbort",
+          "classname": "TestFileTransferEngine",
+          "time": "0.246",
+          "result": "passed"
+        },
+        {
+          "name": "synchronousChunkAbortStaysAborted",
+          "classname": "TestFileTransferEngine",
+          "time": "0.125",
+          "result": "passed"
+        },
+        {
+          "name": "abortingAnotherJobDoesNotStopPacing",
+          "classname": "TestFileTransferEngine",
+          "time": "1.114",
+          "result": "passed"
+        },
+        {
+          "name": "synchronousCompletionAbortStaysAborted",
+          "classname": "TestFileTransferEngine",
+          "time": "0.124",
+          "result": "passed"
+        },
+        {
+          "name": "pausedDeliveryDoesNotReleaseUnboundedCredit",
+          "classname": "TestFileTransferEngine",
+          "time": "1.427",
+          "result": "passed"
+        },
+        {
+          "name": "slowSendMakesProgress(unchanged-config-refresh)",
+          "classname": "TestFileTransferEngine",
+          "time": "2.607",
+          "result": "passed"
+        },
+        {
+          "name": "slowSendMakesProgress(large-chunk-at-low-rate)",
+          "classname": "TestFileTransferEngine",
+          "time": "1.303",
+          "result": "passed"
+        },
+        {
+          "name": "frequentRefillsPreserveElapsedCredit",
+          "classname": "TestFileTransferEngine",
+          "time": "1.009",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferEngine",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "552092c9e555945dedc6465bb384e3494361b6c13fd0c46b18b2c06c8a4f21d9",
+      "txt_report": "TestFileTransferEngine.txt",
+      "junit_report": "TestFileTransferEngine.xml"
+    },
+    {
+      "suite": "TestFileTransferE2E",
+      "cases": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 9.187,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferE2E",
+          "time": "2.118",
+          "result": "passed"
+        },
+        {
+          "name": "endToEndTransfer",
+          "classname": "TestFileTransferE2E",
+          "time": "2.311",
+          "result": "passed"
+        },
+        {
+          "name": "endToEndPasswordTransfer",
+          "classname": "TestFileTransferE2E",
+          "time": "2.934",
+          "result": "passed"
+        },
+        {
+          "name": "capabilityGating",
+          "classname": "TestFileTransferE2E",
+          "time": "1.709",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferE2E",
+          "time": "0.111",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "b677269f40a4c94740386fc2a97ed91938da9b9175119e6f3b644f3a7bf92101",
+      "txt_report": "TestFileTransferE2E.txt",
+      "junit_report": "TestFileTransferE2E.xml"
+    },
+    {
+      "suite": "TestFileTransferManager",
+      "cases": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.035,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferManager",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "currentWorkerTrustPromptReachesGui",
+          "classname": "TestFileTransferManager",
+          "time": "0.007",
+          "result": "passed"
+        },
+        {
+          "name": "disconnectRejectsQueuedTrustEvents",
+          "classname": "TestFileTransferManager",
+          "time": "0.003",
+          "result": "passed"
+        },
+        {
+          "name": "reconnectAcceptsCurrentPromptForReusedSession",
+          "classname": "TestFileTransferManager",
+          "time": "0.003",
+          "result": "passed"
+        },
+        {
+          "name": "shutdownJoinsBusyWorkerBeforeDestroyingEngine",
+          "classname": "TestFileTransferManager",
+          "time": "0.019",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferManager",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "d6bf1f61bc194b07a765dec296ecb8482b3534d53f86dcf1e9b20aca87bba261",
+      "txt_report": "TestFileTransferManager.txt",
+      "junit_report": "TestFileTransferManager.xml"
+    }
+  ],
+  "ctest": {
+    "suites": 3,
+    "failures": 0,
+    "wall_seconds": 23.4,
+    "case_seconds": {
+      "TestFileTransferManager": 0.945753,
+      "TestFileTransferEngine": 23.3775,
+      "TestFileTransferE2E": 10.0238
+    },
+    "exit_code": 0,
+    "parallel": 2,
+    "qt_platform": "offscreen",
+    "output_capture": "Only QtTest text/JUnit -o flags temporarily appended to generated CTest registrations, restored byte-for-byte after the run. Repository implementation unchanged.",
+    "parent_qt_force_stderr_logging": false,
+    "e2e_fixture": "Owned temporary server and two TLS/protobuf client connections; exact source clears QT_QPA_PLATFORM only in child server environment."
+  },
+  "publication": {
+    "attributes": "* -text whitespace=cr-at-eol (scoped to this directory)",
+    "changes": [
+      "Anonymized XML hostnames",
+      "Replaced private CTest build/source paths with isolated-directory placeholders",
+      "Sanitized private paths in retained runtime warnings, without changing messages, cases or outcomes."
+    ],
+    "test_results_changed": false,
+    "hash_policy": "Published file hashes describe exact stored report bytes. Private complete logs have a separate local ledger."
+  },
+  "runtime_warnings": {
+    "suites_with_warnings": [],
+    "handling": "Runtime warning text retained; private build paths replaced with <isolated-build-directory>. No test failure or warning was hidden."
+  },
+  "windows_acceptance_passed": true,
+  "scope": [
+    "Strict native Release client/server and TestFileTransferEngine/E2E/manager builds",
+    "Elapsed-time ciphertext-byte rate envelopes: default 4 MiB/s with 256 KiB chunks, 1 MiB/s below one chunk per tick, and 32 KiB/s with 16 KiB chunks",
+    "Two concurrent sends share one 64 KiB/s elapsed-time ciphertext budget, first two deliveries interleave between jobs, both complete and saved bytes match their respective source files",
+    "Unlimited sends yield to a queued abort before all chunks dispatch and do not emit Saved",
+    "Synchronous chunk-callback abort remains Aborted and never Saved",
+    "Aborting another handshaking job inside a synchronous data callback does not stall the active job; active receive reaches Ready within unchanged 3000ms deadline",
+    "Synchronous completion callback abort remains Aborted and never Saved",
+    "16 MiB/s send with 16 KiB chunks and 4 MiB file: first delivery callback pauses for 300ms, all subsequent pairwise delivery windows obey the source burst-plus-elapsed envelope",
+    "Unchanged configuration refreshed every 80ms at 32 KiB/s with 16 KiB chunks and 700ms idle timeout: 80 KiB transfer reaches Ready, emits exactly five chunks <=16 KiB plus tag, and exact saved bytes match",
+    "1 MiB configured chunk at 64 KiB/s and 700ms idle timeout: 80 KiB transfer reaches Ready, emits exactly five effective chunks <=16 KiB plus tag, and exact saved bytes match",
+    "Direct pacer timeout refills requested far more often than once per millisecond preserve elapsed credit; 64 KiB transfer reaches Ready within the unchanged 2000ms loop",
+    "Existing pending-handshake timer test selects active timers in exact source; timeout/routing/storage/cleanup/shutdown regressions remain enabled",
+    "Owned local TLS/protobuf plain/password end-to-end relay and manager stale-event/worker shutdown regressions"
+  ],
+  "not_run": [
+    "Original unchanged-engine Windows rate negative controls",
+    "Server rate negotiation, recipient acknowledgements and downstream queue acceptance",
+    "Server broadcast/fan-out and multi-recipient acceptance",
+    "Unix permission/symlink branches are compile-time conditional; Windows regular pre-created fixture exercised",
+    "Other integrated suites, full Windows matrix/hosting, fresh QR/fatal/database qualification",
+    "Windows sanitizer/endurance or installed-client GUI/Save/authentication",
+    "Packaging/signing or Windows 11 acceptance"
+  ],
+  "new_engine_cases": [
+    "sendingRespectsConfiguredRate(default)",
+    "sendingRespectsConfiguredRate(below-one-chunk-per-tick)",
+    "sendingRespectsConfiguredRate(slow)",
+    "simultaneousSendsShareRateLimit",
+    "unlimitedSendYieldsToQueuedAbort",
+    "synchronousChunkAbortStaysAborted",
+    "abortingAnotherJobDoesNotStopPacing",
+    "synchronousCompletionAbortStaysAborted",
+    "pausedDeliveryDoesNotReleaseUnboundedCredit",
+    "slowSendMakesProgress(unchanged-config-refresh)",
+    "slowSendMakesProgress(large-chunk-at-low-rate)",
+    "frequentRefillsPreserveElapsedCredit"
+  ],
+  "rate_assertions": {
+    "measured_bytes": "Ciphertext payload bytes supplied to transport callback, including authentication tags; no transport/TLS packet overhead claim",
+    "elapsed_time_envelope": "Each of the three configured-rate and concurrent-send callbacks requires cumulative bytes <= configured bytes/s * (elapsed milliseconds + 2) / 1000",
+    "allowed_clock_quantization_ms": 2,
+    "free_initial_chunk_or_per_tick_overshoot_allowed": false,
+    "assertions_or_deadlines_weakened": false,
+    "paused_callback_window": {
+      "configured_rate_bytes_per_second": 16777216,
+      "chunk_size_bytes": 16384,
+      "source_file_size_bytes": 4194304,
+      "first_callback_pause_ms": 300,
+      "pairwise_window_bound": "bytes between recorded deliveries <= chunkSize + TagSize + rate/20 + rate*(window_elapsed_ms+2)/1000",
+      "assertions_or_deadlines_weakened": false
+    },
+    "precision_progress_assertions": {
+      "unchanged_config_refresh_ms": 80,
+      "receive_idle_timeout_ms": 700,
+      "slow_transfer_file_bytes": 81920,
+      "expected_delivery_chunks": 5,
+      "maximum_ciphertext_chunk_bytes": "16*1024 + TagSize",
+      "slow_transfer_ready_or_failed_deadline_ms": 5000,
+      "requires_ready_and_exact_saved_bytes": true,
+      "frequent_refill_loop_ms": 2000,
+      "frequent_refill_configured_rate_bytes_per_second": 65536,
+      "frequent_refill_source_file_bytes": 65536,
+      "refill_invocation": "Selected active 50ms pacer timeout invoked directly repeatedly, far more often than once per millisecond",
+      "assertions_or_deadlines_weakened": false
+    },
+    "source_timer_selection": "Pending-handshake control selects active child timers because the shared pacer adds an inactive timer."
+  },
+  "windows_platform_scope": {
+    "unix_only_assertions": "Compile-time conditional; zero QtTest skipped cases",
+    "windows_legacy_fixture": "Regular owned pre-created file preserved; Unix symlink assertions not executed",
+    "temp_acl": {
+      "effective_access_rules_match_previous_normal_temp_fixture": true,
+      "inherited_drive_grants_blocked": true,
+      "rule_count": 7,
+      "scope": "Access rules copied only to new private E: temp; owner/group and personal/system ACLs unchanged",
+      "unix_permissions_and_symlink_checks": "Compile-time conditional; Windows regular pre-created fixture enabled"
+    }
+  },
+  "preservation_record": {
+    "source_commit": "4f30bc5778a2efbff0b25975d6b2cc0c2580e469",
+    "prior_ledger_entries_verified": {
+      "mumble-rate-credit-20261010": 30,
+      "mumble-audio-wizard-20261010": 22,
+      "mumble-rate-credit-revised-20261010": 30
+    },
+    "revised_rate_source": "4eb2e56a23c57d7b5c3e9f01c9bda6cff613c532",
+    "revised_rate_evidence": "0afcc2d09b4764fceb3c2a1690d49e3ca747182d",
+    "earlier_rate_evidence": "2ca049ddebdc60a97f523242f52ecbc3c8fc3bba",
+    "audio_wizard_evidence": "ba69e866305bc6eb686d7a58de9a4fd10a403a1b",
+    "prior_binaries": "Prior rate/audio snapshots retained; revised rate five binaries plus exact compiler commands copied and hash verified on E: before requested build reuse",
+    "c_drive_copies_or_cleanup": false,
+    "personal_mumble_state_changes": false,
+    "gui_authentication_or_hardware_actions": false
+  },
+  "preservation": "Earlier rate, revised rate, and audio-wizard private ledgers verified unchanged. Revised rate five binaries plus compiler commands preserved byte-for-byte on E: before requested build reuse; older rate/audio snapshots retained. C: source/build/reports/personal state untouched. New test/build/evidence uses E:, with established scoped normal-user-temp access rules copied only onto the new private fixture root. No native GUI/authentication/hardware action, app restart, cleanup or C: copy. Complete logs/commands/binaries remain private.",
+  "private_build_log_sha256": {
+    "configure.log": "76ddf172bd79441c09fedd93ed24d4568c535b5a59c94ef96981ac686e99dbb5",
+    "build.log": "49938f9277a8e9a1e2ac45a173d6b1a99d097f6fd23361f1ab9b23243ac38ad3",
+    "compile_commands.json": "cb2fcf4cf498ef9c454d0777dbac4877e972e2be631d0927851b9450e8ea86bf"
+  },
+  "cmake_options": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_UNITY_BUILD": "ON",
+    "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+    "bundled-cli11": "OFF",
+    "bundled-spdlog": "OFF",
+    "client": "ON",
+    "database-mysql-tests": "OFF",
+    "database-postgresql-tests": "OFF",
+    "database-sqlite-tests": "ON",
+    "file-sharing": "ON",
+    "ice": "OFF",
+    "lto": "OFF",
+    "overlay": "OFF",
+    "packaging": "OFF",
+    "plugins": "OFF",
+    "server": "ON",
+    "static": "ON",
+    "symbols": "OFF",
+    "test-lto": "OFF",
+    "tests": "ON",
+    "translations": "OFF",
+    "warnings-as-errors": "ON"
+  }
+}
