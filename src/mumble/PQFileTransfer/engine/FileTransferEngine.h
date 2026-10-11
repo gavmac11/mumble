@@ -20,6 +20,7 @@
 #include <QPair>
 #include <QSet>
 #include <QTimer>
+#include <QTemporaryDir>
 
 #include <functional>
 #include <memory>
@@ -170,19 +171,26 @@ private:
 		bool passwordMode		= false;
 		QByteArray fileKey;   // recovered (possibly after password)
 		bool waitingPassword   = false;
+		// Own a random, private receive directory; destruction removes unsaved data.
+		std::unique_ptr< QTemporaryDir > tempDirectory;
 		QString tempDir;
 		QString tempFile;
 		/// Ciphertext spool while the password is pending: the sender keeps
 		/// streaming (no readiness acknowledgement exists), so every chunk
 		/// must survive on disk until the key can be unwrapped.
 		QString spoolFile;
-		::QFile *spool = nullptr;   // open for appending while waitingPassword
+		::QFile *spool = nullptr;  // open for appending while waitingPassword
 		QByteArray receivedBits;   // bit i set = chunk i verified
 		quint64 receivedCount  = 0;
 		QByteArray spooledBits;   // bit i set = chunk i spooled while a password was pending
 		quint64 spoolBytes	= 0;   // bytes written to the spool so far
 		QVector< QByteArray > leafHashes;   // chunk digests (merkleRoot builds the leaves)
-		QVector< QByteArray > earlyChunks;   // "u64be index" || ciphertext blobs
+		struct EarlyChunk {
+			QByteArray transferId;
+			quint64 index;
+			QByteArray ciphertext;
+		};
+		QVector< EarlyChunk > earlyChunks;
 		std::unique_ptr< QTimer > idleTimer;
 		FTTransferInfo::State lastState = FTTransferInfo::State::Handshaking;
 		std::unique_ptr< FileTransferSession > session_;   // responder side

@@ -18,7 +18,6 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QStandardPaths>
 #include <QThread>
 
 namespace PQFT {
@@ -46,8 +45,7 @@ bool earlyChunkSplit(const QByteArray &blob, quint64 &index, QByteArray &ciphert
 }
 
 // Spool record: "u32be payload length" || "u64be index" || ciphertext. The
-// length prefix makes the on-disk stream parseable (the in-memory early-chunk
-// blob has none).
+// length prefix makes the on-disk stream parseable.
 QByteArray spoolRecord(quint64 index, const QByteArray &ciphertext) {
 	const quint32 payloadLength = static_cast< quint32 >(8 + ciphertext.size());
 	QByteArray record(4, Qt::Uninitialized);
@@ -256,13 +254,21 @@ void FileTransferEngine::processControlForReceive(std::shared_ptr< ReceiveJob > 
 		m_receiveJobs.insert(job.transferId, jobPtr);
 		m_receiveJobs.remove(preManifestKey(job.peerSession));
 
-		job.tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/mumble-ft/"
-					  + QString::fromLatin1(manifest.transferId.toHex());
-		QDir().mkpath(job.tempDir);
+		// QTemporaryDir creates an unpredictable owner-only directory atomically,
+		// so other local users cannot pre-create a path or redirect plaintext writes.
+		job.tempDirectory = std::make_unique< QTemporaryDir >(
+			QDir::temp().filePath("mumble-ft-" + QString::fromLatin1(manifest.transferId.toHex()) + "-XXXXXX"));
+		if (!job.tempDirectory->isValid()) {
+			updateReceiveState(job, FTTransferInfo::State::Failed, tr("storage error"));
+			cleanupReceive(jobPtr);
+			return;
+		}
+		job.tempDir  = job.tempDirectory->path();
 		job.tempFile = job.tempDir + "/content.bin";
 		{
 			QFile temp(job.tempFile);
 			if (!temp.open(QIODevice::ReadWrite | QIODevice::Truncate)
+				|| !temp.setPermissions(QFile::ReadOwner | QFile::WriteOwner)
 				|| !temp.resize(static_cast< qint64 >(manifest.fileSize))) {
 				updateReceiveState(job, FTTransferInfo::State::Failed, tr("storage error"));
 				cleanupReceive(jobPtr);
@@ -270,7 +276,7 @@ void FileTransferEngine::processControlForReceive(std::shared_ptr< ReceiveJob > 
 			}
 		}
 		job.receivedBits = QByteArray(static_cast< qsizetype >((manifest.chunkCount + 7) / 8), '\0');
-		job.spooledBits	= QByteArray(static_cast< qsizetype >((manifest.chunkCount + 7) / 8), '\0');
+		job.spooledBits  = QByteArray(static_cast< qsizetype >((manifest.chunkCount + 7) / 8), '\0');
 		job.leafHashes.resize(static_cast< int >(manifest.chunkCount));
 		job.idleTimer->start(m_config.receiveIdleTimeoutMSecs);
 
@@ -305,23 +311,22 @@ void FileTransferEngine::processControlForReceive(std::shared_ptr< ReceiveJob > 
 }
 
 void FileTransferEngine::drainEarlyChunks(std::shared_ptr< ReceiveJob > jobPtr) {
-	const QVector< QByteArray > early = std::move(jobPtr->earlyChunks);
+	const QVector< ReceiveJob::EarlyChunk > early = std::move(jobPtr->earlyChunks);
 	jobPtr->earlyChunks.clear();
-	for (const QByteArray &blob : early) {
+	for (const auto &chunk : early) {
 		if (shutdownRequested())
 			return;
-		quint64 index = 0;
-		QByteArray ciphertext;
-		if (earlyChunkSplit(blob, index, ciphertext)) {
-			feedReceiveChunk(jobPtr, index, ciphertext);
+		if (chunk.transferId == jobPtr->manifest.transferId) {
+			feedReceiveChunk(jobPtr, chunk.index, chunk.ciphertext);
 		}
 	}
 }
 
 bool FileTransferEngine::openSpool(ReceiveJob &job) {
 	job.spoolFile = job.tempDir + "/chunks.spool";
-	job.spool	 = new QFile(job.spoolFile);
-	if (!job.spool->open(QIODevice::WriteOnly | QIODevice::Append)) {
+	job.spool     = new QFile(job.spoolFile);
+	if (!job.spool->open(QIODevice::WriteOnly | QIODevice::Append)
+		|| !job.spool->setPermissions(QFile::ReadOwner | QFile::WriteOwner)) {
 		delete job.spool;
 		job.spool = nullptr;
 		return false;
@@ -471,20 +476,22 @@ void FileTransferEngine::startResponder(unsigned int actorSession, const QByteAr
 	// Handshake refused; drop silently (the initiator will time out)
 }
 
-void FileTransferEngine::onDataMessage(unsigned int actorSession, const QByteArray &transferId,
-									   quint64 chunkIndex, quint64 chunkCountHint,
-									   const QByteArray &data) {
+void FileTransferEngine::onDataMessage(unsigned int actorSession, const QByteArray &transferId, quint64 chunkIndex,
+									   quint64 chunkCountHint, const QByteArray &data) {
 	Q_UNUSED(chunkCountHint);
 
+	if (transferId.size() != TransferIdSize || data.size() < TagSize || data.size() > MaxChunkSize + TagSize)
+		return;
 	std::shared_ptr< ReceiveJob > job = findReceiveByPeer(actorSession, transferId);
 	if (!job) {
 		return;
 	}
-	job->idleTimer->start(m_config.receiveIdleTimeoutMSecs);
-
 	if (!job->haveManifest) {
+		// The sender may be relaying another transfer to the channel. Keep its
+		// ID until the authenticated manifest can identify our own chunks, and
+		// never extend a handshake timeout for unauthenticated early data.
 		if (job->earlyChunks.size() < EarlyChunkBufferMax) {
-			job->earlyChunks.append(blobForEarlyChunk(chunkIndex, data));
+			job->earlyChunks.append({ transferId, chunkIndex, data });
 		}
 		return;
 	}
@@ -546,6 +553,7 @@ void FileTransferEngine::feedReceiveChunk(std::shared_ptr< ReceiveJob > jobPtr, 
 			cleanupReceive(jobPtr);
 			return;
 		}
+		job.idleTimer->start(m_config.receiveIdleTimeoutMSecs);
 		job.spoolBytes += static_cast< quint64 >(record.size());
 		job.spooledBits[byteIndex] =
 			static_cast< char >(job.spooledBits.at(byteIndex) | bitMask);
@@ -601,6 +609,7 @@ void FileTransferEngine::feedReceiveChunk(std::shared_ptr< ReceiveJob > jobPtr, 
 		}
 	}
 
+	job.idleTimer->start(m_config.receiveIdleTimeoutMSecs);
 	job.leafHashes[static_cast< int >(index)] = merkleChunkHash(plaintext);
 	job.receivedBits[byteIndex] = static_cast< char >(job.receivedBits.at(byteIndex) | bitMask);
 	++job.receivedCount;
@@ -988,12 +997,11 @@ void FileTransferEngine::cleanupReceive(std::shared_ptr< ReceiveJob > jobPtr, bo
 	// parameter took its own owning copy at the call, so erasing the entry
 	// here cannot destroy the job (or the shared_ptr the caller passed, which
 	// may literally live inside the map node) while we still work on it.
-	const QByteArray transferId	= job.transferId;
+	const QByteArray transferId    = job.transferId;
 	const unsigned int peerSession = job.peerSession;
 	// Ready output may survive while the engine is alive. Shutdown also
 	// removes unsaved plaintext; files explicitly saved elsewhere are untouched.
-	const bool keepTemp            = (keepReady && job.lastState == FTTransferInfo::State::Ready);
-	const QString tempDir		   = job.tempDir;
+	const bool keepTemp = (keepReady && job.lastState == FTTransferInfo::State::Ready);
 
 	if (!transferId.isEmpty()) {
 		m_receiveJobs.remove(transferId);
@@ -1009,8 +1017,8 @@ void FileTransferEngine::cleanupReceive(std::shared_ptr< ReceiveJob > jobPtr, bo
 		delete job.spool;
 		job.spool = nullptr;
 	}
-	if (!keepTemp && !tempDir.isEmpty()) {
-		QDir(tempDir).removeRecursively();
+	if (!keepTemp) {
+		job.tempDirectory.reset();
 	}
 	zeroize(job.fileKey);
 	job.idleTimer.reset();
@@ -1227,7 +1235,6 @@ void FileTransferEngine::emitSaveDone(std::shared_ptr< ReceiveJob > jobPtr) {
 	info.fileSize	= job.fileSize;
 	info.state		 = FTTransferInfo::State::Saved;
 	emitInfo(info);
-	QDir(job.tempDir).removeRecursively();
 	cleanupReceive(jobPtr);
 }
 

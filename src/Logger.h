@@ -8,6 +8,7 @@
 
 #include <spdlog/spdlog.h>
 
+#include <cstdlib>
 #include <memory>
 
 class QTextEdit;
@@ -41,9 +42,13 @@ namespace log {
 		spdlog::error(fmt, std::forward< Args >(args)...);
 	}
 
-	template< typename... Args > static void inline fatal(spdlog::format_string_t< Args... > fmt, Args &&... args) {
+	template< typename... Args > static void inline fatal(spdlog::format_string_t< Args... > fmt, Args &&...args) {
 		spdlog::critical(fmt, std::forward< Args >(args)...);
-		std::exit(1);
+		if (auto logger = spdlog::default_logger())
+			logger->flush();
+		// Fatal calls do not unwind main's handler-restoration guard. Static
+		// teardown can therefore log through a destroyed registry; skip it.
+		std::_Exit(1);
 	}
 } // namespace log
 } // namespace mumble

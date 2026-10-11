@@ -14,6 +14,7 @@
 #include "PQFileTransfer/crypto/CryptoUtils.h"
 #include "PQFileTransfer/crypto/SigMLDSA65.h"
 #include "PQFileTransfer/engine/FileTransferEngine.h"
+#include "PQFileTransfer/engine/FTMessages.h"
 #include "PQFileTransfer/engine/FileTransferSession.h"
 #include "PQFileTransfer/identity/FTIdentity.h"
 
@@ -22,6 +23,7 @@
 #include <QFile>
 #include <QPointer>
 #include <QSignalSpy>
+#include <QScopeGuard>
 #include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QThread>
@@ -55,6 +57,11 @@ private slots:
 	void initTestCase();
 	void cleanupTestCase();
 
+	void privateReceiveStorage_data();
+	void privateReceiveStorage();
+	void predictableReceivePathCannotRedirectWrites();
+	void earlyChunksKeepTheirTransferIdentity();
+	void unrelatedChunksDoNotExtendPendingReceive();
 	void sendReceiveRoundTrip();
 	void passwordRoundTrip();
 	void wrongPasswordFailsClosed();
@@ -203,6 +210,176 @@ struct EnginePair {
 };
 } // namespace
 
+namespace {
+QString stagingDirectory(const QByteArray &transfer) {
+	const QDir root(QStandardPaths::writableLocation(QStandardPaths::TempLocation));
+	const QString prefix      = "mumble-ft-" + QString::fromLatin1(transfer.toHex()) + "-";
+	const QStringList matches = root.entryList({ prefix + "*" }, QDir::Dirs | QDir::NoDotAndDotDot);
+	if (matches.size() == 1)
+		return root.filePath(matches.first());
+	// Also observe the unfixed layout when running the negative control.
+	return root.filePath("mumble-ft/" + QString::fromLatin1(transfer.toHex()));
+}
+} // namespace
+
+void TestFileTransferEngine::privateReceiveStorage_data() {
+	QTest::addColumn< bool >("passwordMode");
+	QTest::newRow("plaintext") << false;
+	QTest::newRow("password-spool") << true;
+}
+
+void TestFileTransferEngine::privateReceiveStorage() {
+	QFETCH(bool, passwordMode);
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = 0;
+	pair.alice.setConfig(config);
+	QSignalSpy updates(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	QSignalSpy sent(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
+	const QString source = writeTestFile(80 * 1024);
+	QVERIFY(!source.isEmpty());
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", passwordMode,
+								 QByteArray("private fixture password"), { BobSession })
+			> 0);
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(sent, {}, PQFT::FTTransferInfo::State::Saved), 10000);
+	QByteArray transfer;
+	for (const auto &args : updates) {
+		const auto info = args.at(0).value< PQFT::FTTransferInfo >();
+		if (info.state
+			== (passwordMode ? PQFT::FTTransferInfo::State::WaitingPassword : PQFT::FTTransferInfo::State::Ready))
+			transfer = info.transferId;
+	}
+	QVERIFY(!transfer.isEmpty());
+	const QString directory = stagingDirectory(transfer);
+	QVERIFY(QFile::exists(directory + "/content.bin"));
+	const QString prefix = "mumble-ft-" + QString::fromLatin1(transfer.toHex()) + "-";
+	QVERIFY2(QFileInfo(directory).fileName().startsWith(prefix), "Receive directory is predictable");
+	QVERIFY(QFileInfo(directory).fileName().size() > prefix.size());
+#ifdef Q_OS_UNIX
+	const auto shared =
+		QFile::ReadGroup | QFile::WriteGroup | QFile::ExeGroup | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther;
+	QVERIFY(!(QFileInfo(directory).permissions() & shared));
+	QVERIFY(!(QFileInfo(directory + "/content.bin").permissions() & shared));
+	if (passwordMode) {
+		QVERIFY(QFile::exists(directory + "/chunks.spool"));
+		QVERIFY(!(QFileInfo(directory + "/chunks.spool").permissions() & shared));
+	}
+#endif
+	pair.bob.abortTransfer(transfer);
+	QVERIFY(!QDir(directory).exists());
+}
+
+void TestFileTransferEngine::predictableReceivePathCannotRedirectWrites() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = 0;
+	pair.alice.setConfig(config);
+	QList< QByteArray > controls;
+	pair.alice.setTransport([&](unsigned int, const QByteArray &frame) { controls.append(frame); },
+							[&](const QByteArray &id, quint64 index, quint64 total, const QByteArray &data) {
+								pair.bob.onDataMessage(AliceSession, id, index, total, data);
+							});
+	QSignalSpy sent(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	const QString source = writeTestFile(1024);
+	QVERIFY(!source.isEmpty());
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(!sent.isEmpty());
+	const QByteArray transfer = sent.first().first().value< PQFT::FTTransferInfo >().transferId;
+	const QString legacy      = QDir::temp().filePath("mumble-ft/" + QString::fromLatin1(transfer.toHex()));
+	QVERIFY(!QFileInfo::exists(legacy));
+	QVERIFY(QDir().mkpath(legacy));
+	const auto cleanup = qScopeGuard([&]() { QDir(legacy).removeRecursively(); });
+	const QByteArray sentinel("existing private fixture; do not modify");
+	const QString victimPath = m_tempDir.filePath("precreation-victim.bin");
+	QFile victim(victimPath);
+	QVERIFY(victim.open(QIODevice::WriteOnly));
+	QCOMPARE(victim.write(sentinel), static_cast< qint64 >(sentinel.size()));
+	victim.close();
+#ifdef Q_OS_UNIX
+	QVERIFY(QFile::link(victimPath, legacy + "/content.bin"));
+#else
+	QVERIFY(QFile::copy(victimPath, legacy + "/content.bin"));
+#endif
+	while (!controls.isEmpty())
+		pair.bob.onControlMessage(AliceSession, controls.takeFirst());
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, transfer, PQFT::FTTransferInfo::State::Ready), 10000);
+	QFile precreated(legacy + "/content.bin");
+	QVERIFY(precreated.open(QIODevice::ReadOnly));
+	QCOMPARE(precreated.readAll(), sentinel);
+	QVERIFY(victim.open(QIODevice::ReadOnly));
+	QCOMPARE(victim.readAll(), sentinel);
+	pair.bob.abortTransfer(transfer);
+	QVERIFY(QFileInfo::exists(legacy + "/content.bin"));
+}
+
+void TestFileTransferEngine::earlyChunksKeepTheirTransferIdentity() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = 0;
+	config.chunkSize              = 16 * 1024;
+	pair.alice.setConfig(config);
+	QList< QByteArray > controls;
+	pair.alice.setTransport([&](unsigned int, const QByteArray &frame) { controls.append(frame); },
+							[&](const QByteArray &id, quint64 index, quint64 total, const QByteArray &data) {
+								pair.bob.onDataMessage(AliceSession, id, index, total, data);
+							});
+	QSignalSpy sent(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	const QString source = writeTestFile(32 * 1024);
+	QVERIFY(!source.isEmpty());
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	const QByteArray transfer = sent.first().first().value< PQFT::FTTransferInfo >().transferId;
+	// Complete M1/M3 while deliberately withholding the manifest.
+	while (!controls.isEmpty()) {
+		quint8 type = 0;
+		QVERIFY(PQFT::FTFrame::decodeHeader(controls.first(), type));
+		if (type == PQFT::FTFrame::TypeManifest)
+			break;
+		pair.bob.onControlMessage(AliceSession, controls.takeFirst());
+	}
+	QVERIFY(!controls.isEmpty());
+	const QByteArray unrelated = PQFT::randomBytes(PQFT::TransferIdSize);
+	QVERIFY(unrelated != transfer);
+	pair.bob.onDataMessage(AliceSession, unrelated, 0, 1, QByteArray(100, 'x'));
+	// Legitimate early chunks must still survive until their own manifest arrives.
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(sent, transfer, PQFT::FTTransferInfo::State::Saved), 3000);
+	while (!controls.isEmpty())
+		pair.bob.onControlMessage(AliceSession, controls.takeFirst());
+	QVERIFY(sawState(received, transfer, PQFT::FTTransferInfo::State::Ready));
+	QVERIFY(!sawState(received, transfer, PQFT::FTTransferInfo::State::Failed));
+	const QString target = m_tempDir.filePath("early-chunks-received.bin");
+	pair.bob.saveTransferAs(transfer, target);
+	QFile original(source), output(target);
+	QVERIFY(original.open(QIODevice::ReadOnly));
+	QVERIFY(output.open(QIODevice::ReadOnly));
+	QCOMPARE(output.readAll(), original.readAll());
+}
+
+void TestFileTransferEngine::unrelatedChunksDoNotExtendPendingReceive() {
+	PQFT::FileTransferEngine engine;
+	engine.setIdentity(m_bob.publicKey, [&](QByteArray &signature, const QByteArray &message, const QByteArray &context) {
+		PQFT::SigMLDSA65 sign;
+		return sign.sign(signature, m_bob.secretKey, message, context);
+	});
+	engine.setPinLookup([&](unsigned int) { return m_aliceFp; });
+	engine.setTransport([](unsigned int, const QByteArray &) {}, {});
+	PQFT::FileTransferEngine::Config config;
+	config.receiveIdleTimeoutMSecs = 100;
+	engine.setConfig(config);
+	QSignalSpy updates(&engine, &PQFT::FileTransferEngine::transferUpdated);
+	PQFT::FileTransferSession sender(PQFT::FileTransferSession::Role::Initiator, { m_alice.publicKey, {} }, m_bobFp);
+	engine.onControlMessage(AliceSession, sender.buildM1());
+	QTimer flood;
+	connect(&flood, &QTimer::timeout, &engine, [&]() {
+		engine.onDataMessage(AliceSession, PQFT::randomBytes(PQFT::TransferIdSize), 0, 1, QByteArray(100, 'x'));
+	});
+	flood.start(10);
+	QTest::qWait(350);
+	QVERIFY2(sawState(updates, {}, PQFT::FTTransferInfo::State::Failed),
+			 "Stray chunks kept an unfinished handshake alive");
+}
+
 void TestFileTransferEngine::sendReceiveRoundTrip() {
 	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
 	PQFT::FileTransferEngine::Config fast;
@@ -328,8 +505,7 @@ void TestFileTransferEngine::shutdownRemovesUnsavedPlaintext() {
 			}
 		}
 		QVERIFY(!transfer.isEmpty());
-		receiveDirectory = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/mumble-ft/"
-						   + QString::fromLatin1(transfer.toHex());
+		receiveDirectory = stagingDirectory(transfer);
 		QVERIFY(QFile::exists(receiveDirectory + "/content.bin"));
 		if (saveFirst) {
 			pair.bob.saveTransferAs(transfer, target);
@@ -456,7 +632,7 @@ void TestFileTransferEngine::wrongPasswordFailsClosed() {
 
 	// No temp directory survived for that transfer
 	const QString dir =
-		QDir::temp().absoluteFilePath("mumble-ft/" + QString::fromLatin1(passwordTransfer.toHex()));
+		stagingDirectory(passwordTransfer);
 	QVERIFY(!QFile::exists(dir + "/content.bin"));
 }
 
@@ -513,7 +689,7 @@ void TestFileTransferEngine::duplicateChunkIsFatal() {
 	}
 	QVERIFY(!failedTransfer.isEmpty());
 	const QString dir =
-		QDir::temp().absoluteFilePath("mumble-ft/" + QString::fromLatin1(failedTransfer.toHex()));
+		stagingDirectory(failedTransfer);
 	QVERIFY(!QFile::exists(dir + "/content.bin"));
 }
 
@@ -630,7 +806,7 @@ void TestFileTransferEngine::secondTransferWhileFirstReady() {
 	// The first transfer was untouched by the second one's handshake.
 	QVERIFY(!sawState(bobUpdates, firstTransfer, PQFT::FTTransferInfo::State::Failed));
 	const QString firstDir =
-		QDir::temp().absoluteFilePath("mumble-ft/" + QString::fromLatin1(firstTransfer.toHex()));
+		stagingDirectory(firstTransfer);
 	QVERIFY(QFile::exists(firstDir + "/content.bin"));
 
 	// ...and both saved copies match their sources.
@@ -685,7 +861,7 @@ void TestFileTransferEngine::readyTransferDoesNotExpire() {
 	QTest::qWait(2000);
 	QVERIFY(!sawState(bobUpdates, readyTransfer, PQFT::FTTransferInfo::State::Failed));
 	const QString dir =
-		QDir::temp().absoluteFilePath("mumble-ft/" + QString::fromLatin1(readyTransfer.toHex()));
+		stagingDirectory(readyTransfer);
 	QVERIFY(QFile::exists(dir + "/content.bin"));
 
 	const QString target = m_tempDir.filePath("received-no-expiry.bin");
@@ -806,7 +982,7 @@ void TestFileTransferEngine::incomingAbortCleansUpSafely() {
 
 	// Partial output is gone.
 	const QString dir =
-		QDir::temp().absoluteFilePath("mumble-ft/" + QString::fromLatin1(transferId.toHex()));
+		stagingDirectory(transferId);
 	QTRY_VERIFY_WITH_TIMEOUT(!QFile::exists(dir + "/content.bin"), 10000);
 }
 
@@ -878,7 +1054,7 @@ void TestFileTransferEngine::passwordSpoolIsBounded() {
 	QVERIFY(failedWithGenericError);
 
 	const QString dir =
-		QDir::temp().absoluteFilePath("mumble-ft/" + QString::fromLatin1(passwordTransfer.toHex()));
+		stagingDirectory(passwordTransfer);
 	QTRY_VERIFY_WITH_TIMEOUT(!QFile::exists(dir + "/content.bin")
 								 && !QFile::exists(dir + "/chunks.spool"),
 							 10000);
