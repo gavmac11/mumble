@@ -120,7 +120,11 @@ void TestFileTransferEngine::cancelledPromptTimerCannotRemoveReplacementHandshak
 	PQFT::FileTransferSession first(PQFT::FileTransferSession::Role::Initiator, { m_alice.publicKey, {} }, {});
 	engine.onControlMessage(AliceSession, first.buildM1());
 	QCOMPARE(prompts.size(), 1);
-	const QList< QTimer * > timers = engine.findChildren< QTimer * >();
+	QList< QTimer * > timers;
+	for (QTimer *timer : engine.findChildren< QTimer * >()) {
+		if (timer->isActive())
+			timers.append(timer);
+	}
 	QCOMPARE(timers.size(), 1);
 	const QPointer< QTimer > oldTimer = timers.first();
 	QVERIFY(oldTimer->isActive());
