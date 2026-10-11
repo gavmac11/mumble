@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="Win32-ninja" tests="2" failures="0" disabled="0" skipped="0" hostname="windows-validation-host" time="3" timestamp="2026-10-10T17:29:07">
+  <testcase name="TestDatabasePath" classname="TestDatabasePath" time="2.91249" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestQtLogger" classname="TestQtLogger" time="2.74431" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+</testsuite>

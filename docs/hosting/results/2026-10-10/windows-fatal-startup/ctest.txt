@@ -1,0 +1,10 @@
+Internal ctest changing into directory: <isolated-build-directory>
+Test project <isolated-build-directory>
+    Start  1: TestDatabasePath
+    Start 22: TestQtLogger
+1/2 Test  #1: TestDatabasePath .................   Passed    2.91 sec
+2/2 Test #22: TestQtLogger .....................   Passed    2.74 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   3.27 sec
