@@ -36,6 +36,7 @@ QString automaticSaveTarget(const Settings &settings, const FTTransferInfo &info
 	if (!settings.bFTAutoAcceptPinned || settings.qsFTDownloadDir.isEmpty()
 		|| !QDir::isAbsolutePath(settings.qsFTDownloadDir) || !info.incoming
 		|| info.state != FTTransferInfo::State::Ready || !info.error.isEmpty() || trust != TrustState::Verified
+		|| info.peerFingerprint.size() != HashSize || info.peerName.isEmpty()
 		|| !isSafeAutomaticFileName(info.fileName))
 		return {};
 	return QDir(settings.qsFTDownloadDir).filePath(info.fileName);

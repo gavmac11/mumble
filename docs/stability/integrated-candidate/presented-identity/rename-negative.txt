@@ -1,0 +1,8 @@
+********* Start testing of TestFileTransferManager *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestFileTransferManager::initTestCase()
+FAIL!  : TestFileTransferManager::renamedPeerDoesNotBorrowAnotherKeysVerification() 'PQFT::automaticSaveTarget(m_global->s, info, trust).isEmpty()' returned FALSE. (A renamed sender borrowed a different key's verification for automatic saving)
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferManager/TestFileTransferManager.cpp(158)]
+PASS   : TestFileTransferManager::cleanupTestCase()
+Totals: 2 passed, 1 failed, 0 skipped, 0 blacklisted, 19ms
+********* Finished testing of TestFileTransferManager *********

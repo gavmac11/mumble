@@ -1,0 +1,16 @@
+********* Start testing of TestVersion *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestVersion::initTestCase()
+PASS   : TestVersion::legacy_encode()
+PASS   : TestVersion::legacy_decode()
+PASS   : TestVersion::legacy_consistency()
+PASS   : TestVersion::general_getMajor()
+PASS   : TestVersion::general_getMinor()
+PASS   : TestVersion::general_getPatch()
+PASS   : TestVersion::v2_encode()
+PASS   : TestVersion::v2_decode()
+PASS   : TestVersion::v2_limits()
+PASS   : TestVersion::config_decoding()
+PASS   : TestVersion::cleanupTestCase()
+Totals: 12 passed, 0 failed, 0 skipped, 0 blacklisted, 3ms
+********* Finished testing of TestVersion *********

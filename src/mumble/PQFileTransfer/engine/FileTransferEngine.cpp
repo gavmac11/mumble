@@ -134,6 +134,10 @@ void FileTransferEngine::setPinLookup(PinLookup lookup) {
 	m_pinLookup = std::move(lookup);
 }
 
+void FileTransferEngine::setPeerNameLookup(std::function< QString(unsigned int) > lookup) {
+	m_peerNameLookup = std::move(lookup);
+}
+
 void FileTransferEngine::setIdentity(QByteArray identityPublicKey, IdentitySign sign) {
 	m_identityPk = std::move(identityPublicKey);
 	m_sign		 = std::move(sign);
@@ -506,6 +510,7 @@ void FileTransferEngine::startResponder(unsigned int actorSession, const QByteAr
 
 	auto job			= std::make_shared< ReceiveJob >();
 	job->peerSession  = actorSession;
+	job->peerName       = m_peerNameLookup ? m_peerNameLookup(actorSession) : QString();
 	job->idleTimer	= std::make_unique< QTimer >(this);
 	job->idleTimer->setSingleShot(true);
 	// Target THIS job, not "the first job of that peer": several transfers
@@ -713,7 +718,7 @@ bool FileTransferEngine::tryCompleteReceive(std::shared_ptr< ReceiveJob > jobPtr
 // Sending
 
 quint64 FileTransferEngine::startSend(const QString &filePath, const QString &mimeType, bool passwordMode,
-									  QByteArray password, const QSet< unsigned int > &recipients) {
+									  QByteArray password, const QHash< unsigned int, QByteArray > &recipients) {
 	QFileInfo fileInfo(filePath);
 	if (shutdownRequested() || !fileInfo.exists() || !fileInfo.isFile() || !fileInfo.isReadable()
 		|| fileInfo.size() <= 0) {
@@ -775,13 +780,19 @@ quint64 FileTransferEngine::startSend(const QString &filePath, const QString &mi
 
 	// Per-recipient sessions (peers must be pinned already)
 	bool anyPeer = false;
-	for (unsigned int session : recipients) {
+	for (auto recipient = recipients.cbegin(); recipient != recipients.cend(); ++recipient) {
 		if (shutdownRequested()) {
 			cleanupSend(*job, true);
 			zeroize(password);
 			return 0;
 		}
-		const QByteArray pinned = m_pinLookup ? m_pinLookup(session) : QByteArray();
+		const unsigned int session = recipient.key();
+		const QByteArray pinned    = recipient.value();
+		if (!pinned.isEmpty() && pinned.size() != HashSize) {
+			cleanupSend(*job, true);
+			zeroize(password);
+			return 0;
+		}
 		SendPeer peer;
 		peer.session  = session;
 		peer.pinnedFingerprint = pinned;
@@ -1419,6 +1430,8 @@ void FileTransferEngine::updateReceiveState(ReceiveJob &job, FTTransferInfo::Sta
 	FTTransferInfo info;
 	info.transferId   = job.transferId.isEmpty() ? job.manifest.transferId : job.transferId;
 	info.peerSession  = job.peerSession;
+	info.peerName        = job.peerName;
+	info.peerFingerprint = job.session_ ? job.session_->peerFingerprint() : QByteArray();
 	info.incoming	  = true;
 	info.fileName	  = job.fileName;
 	info.mimeType	  = job.mimeType;
@@ -1440,6 +1453,8 @@ void FileTransferEngine::emitSaveDone(std::shared_ptr< ReceiveJob > jobPtr) {
 	FTTransferInfo info;
 	info.transferId  = job.transferId;
 	info.peerSession = job.peerSession;
+	info.peerName        = job.peerName;
+	info.peerFingerprint = job.session_ ? job.session_->peerFingerprint() : QByteArray();
 	info.incoming	= true;
 	info.fileName	= job.fileName;
 	info.fileSize	= job.fileSize;
@@ -1452,6 +1467,8 @@ void FileTransferEngine::emitSaveFailed(ReceiveJob &job, const QString &error) {
 	FTTransferInfo info;
 	info.transferId  = job.transferId;
 	info.peerSession = job.peerSession;
+	info.peerName        = job.peerName;
+	info.peerFingerprint = job.session_ ? job.session_->peerFingerprint() : QByteArray();
 	info.incoming	= true;
 	info.fileName	= job.fileName;
 	info.fileSize	= job.fileSize;

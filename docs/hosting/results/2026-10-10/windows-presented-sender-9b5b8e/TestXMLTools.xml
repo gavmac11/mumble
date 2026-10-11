@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestXMLTools" timestamp="2026-10-10T21:02:00" hostname="windows-validation-host" tests="25" failures="0" errors="0" skipped="0" time="0.004">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestXMLTools" time="0.000" />
+  <testcase name="testParseExtractBody" classname="TestXMLTools" time="0.000" />
+  <testcase name="testParseConvertStyleBold" classname="TestXMLTools" time="0.000" />
+  <testcase name="testParseConvertStyleUnderline" classname="TestXMLTools" time="0.000" />
+  <testcase name="testParseConvertStyleItalic" classname="TestXMLTools" time="0.000" />
+  <testcase name="testParseKeepTags" classname="TestXMLTools" time="0.000" />
+  <testcase name="testParseDropEmptyFirstParagraphs" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupNoopB" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupNoopU" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupNoopI" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupNoopA" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupSimpleB" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupSimpleU" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupSimpleI" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupSimpleA" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupMixedBU" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupMixedBUIA" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupWithSpace" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupAnchor" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupLinkSameHref" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupLinkDifferingHref" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupNoRootUndupTag" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupUndupTagsRemoval" classname="TestXMLTools" time="0.000" />
+  <testcase name="testUndupStandard" classname="TestXMLTools" time="0.000" />
+  <testcase name="cleanupTestCase" classname="TestXMLTools" time="0.000" />
+</testsuite>

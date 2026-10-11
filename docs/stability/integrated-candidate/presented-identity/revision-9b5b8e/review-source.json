@@ -1,0 +1,23 @@
+{
+  "source_head": "9b5b8e26684d6f2481591b11653397d390d39300",
+  "files": {
+    "src/mumble/MainWindow.cpp": "a24a77e0dad89a746c893949f4cc9ea673972546bc2110afbb5d1ccbc6168151",
+    "src/mumble/Messages.cpp": "191b170e2970e5f1b4b5fba1ccaf26e6e0e14162bc278825bf31e23794119650",
+    "src/mumble/PQFileTransfer/engine/FTManifest.cpp": "43e9fa9c6e49036dbb26fb0a514bb296c7127f9b2a7640f25e2de0524eca3ef2",
+    "src/mumble/PQFileTransfer/engine/FTSavePolicy.cpp": "cb8c14ba5a773297016ed891bfe846e5321b08ef4b372bc8a397d3bb5250c86c",
+    "src/mumble/PQFileTransfer/engine/FileTransferEngine.cpp": "a34c701989c3fea3f282b2fb16a77ad7fe4688c3c0cc3ba07cf9d3e499f666e7",
+    "src/mumble/PQFileTransfer/engine/FileTransferEngine.h": "0078a57858abd31704bcf96e8a9c3724880505ce29caf87f947677cf92329b61",
+    "src/mumble/PQFileTransfer/engine/FileTransferManager.cpp": "459df6631b7951e594651329dd76514c6553e88d7bda4d08a54c8765783d0203",
+    "src/mumble/PQFileTransfer/engine/FileTransferManager.h": "d829345a7491270610f206e62f9f5932250b538e943c2d725e666bb150951e23",
+    "src/mumble/PQFileTransfer/engine/FileTransferSession.cpp": "7b1b2b1e11a625347527ca6ef4b0b8541701ac593d46827e6a6f52a311c6bda0",
+    "src/mumble/PQFileTransfer/engine/FileTransferSession.h": "46e9dd86bc46b2471b8ce9add631c93bbce473908c166b33437653f883c6cc17",
+    "src/mumble/PQFileTransfer/identity/FTIdentity.cpp": "2c690310153c54c4da46063e15bb4f600af390f6a2322d9c2479c1d7116cc02f",
+    "src/mumble/PQFileTransfer/identity/PeerTrustStore.cpp": "dec5138fc280babef0aec7048095342dd8d191ae44f5324b081f386a9d1c6194",
+    "src/mumble/PQFileTransfer/identity/PeerTrustStore.h": "a0f19971cb628e5a1dd3ce96e76f0a336d702c40fc2c434fc3378ee9f394fe58",
+    "src/tests/TestFTIdentity/TestFTIdentity.cpp": "a59f8cba72523321767eeca3cad7f09b8c5fe2ac261df30ca73661f89a40745f",
+    "src/tests/TestFileTransferE2E/TestFileTransferE2E.cpp": "a5021c8a4a85f33b9a8aee2458b39b3a0f7c040cd546b2c4f1d426727fb4c32c",
+    "src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp": "285e468cb3b15e8ab85a39139bfe4da98bdf392be8fd240a43ebf9c74fc5d068",
+    "src/tests/TestFileTransferManager/TestFileTransferManager.cpp": "d13bdd189cacada6f57962abb63e9607928e2365fc9cfcf116a16a9485b20d2a",
+    "src/tests/TestFileTransferUi/TestFileTransferUi.cpp": "989b7296c869d588e1d158e935d9e8ec196615e5241bda106c9b45247ea6a9e4"
+  }
+}

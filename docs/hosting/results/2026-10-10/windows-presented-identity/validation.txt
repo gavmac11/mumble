@@ -1,0 +1,49 @@
+Windows presented-identity validation: f337b951482e121964e9162221e96611f94e068e
+MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022); Windows 10 Pro 10.0.19045 x64.
+Strict Release/C++20; /W4 /WX /O2 /bigobj /options:strict; dynamic MSVC runtime; no source warning relaxation. Full native client/server and all test targets built.
+CTest: 42 registered, 41 enabled passed, 1 source-disabled (OverlayTest); no newly disabled tests; 35.39s.
+QtTest enabled-suite totals: 1147 cases, 1147 passed, 0 failures, 0 errors, 0 skipped.
+TestAudioWizard: 4 cases, 0 failures, 0 errors, 0 skipped, 0.028s.
+TestDatabasePath: 6 cases, 0 failures, 0 errors, 0 skipped, 1.870s.
+TestReleaseUpdate: 13 cases, 0 failures, 0 errors, 0 skipped, 0.034s.
+TestAnimatedImages: 10 cases, 0 failures, 0 errors, 0 skipped, 0.012s.
+TestChatWebM: 6 cases, 0 failures, 0 errors, 0 skipped, 0.019s.
+TestVideoFramePacketizer: 4 cases, 0 failures, 0 errors, 0 skipped, 0.246s.
+TestVideoPacketPacer: 12 cases, 0 failures, 0 errors, 0 skipped, 0.127s.
+TestVideoQualityProfile: 9 cases, 0 failures, 0 errors, 0 skipped, 0.275s.
+TestVideoViewUi: 5 cases, 0 failures, 0 errors, 0 skipped, 0.006s.
+TestXMLTools: 25 cases, 0 failures, 0 errors, 0 skipped, 0.004s.
+TestFileTransferUi: 78 cases, 0 failures, 0 errors, 0 skipped, 0.022s.
+TestFileTransferManager: 25 cases, 0 failures, 0 errors, 0 skipped, 0.086s.
+TestFileTransferTransport: 11 cases, 0 failures, 0 errors, 0 skipped, 0.005s.
+TestPQCrypto: 30 cases, 0 failures, 0 errors, 0 skipped, 0.567s.
+TestFTIdentity: 14 cases, 0 failures, 0 errors, 0 skipped, 4.392s.
+TestFileTransferSession: 13 cases, 0 failures, 0 errors, 0 skipped, 0.028s.
+TestFileTransferEngine: 42 cases, 0 failures, 0 errors, 0 skipped, 23.802s.
+TestFileTransferE2E: 5 cases, 0 failures, 0 errors, 0 skipped, 9.083s.
+TestSettingsJSONSerialization: 4 cases, 0 failures, 0 errors, 0 skipped, 0.007s.
+TestCrypt: 8 cases, 0 failures, 0 errors, 0 skipped, 0.013s.
+TestAudioReceiverBuffer: 10 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+TestQtLogger: 7 cases, 0 failures, 0 errors, 0 skipped, 1.780s.
+TestBandwidthRecord: 10 cases, 0 failures, 0 errors, 0 skipped, 0.249s.
+TestConnectionOutputQueue: 10 cases, 0 failures, 0 errors, 0 skipped, 0.126s.
+TestCaseInsensitiveQString: 10 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+TestCryptographicHash: 13 cases, 0 failures, 0 errors, 0 skipped, 0.006s.
+TestCryptographicRandom: 5 cases, 0 failures, 0 errors, 0 skipped, 1.321s.
+TestDatabase: 22 cases, 0 failures, 0 errors, 0 skipped, 0.171s.
+TestServerDatabase: 18 cases, 0 failures, 0 errors, 0 skipped, 0.339s.
+TestFFDHE: 13 cases, 0 failures, 0 errors, 0 skipped, 0.018s.
+TestIPCUtils: 3 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+TestPacketDataStream: 646 cases, 0 failures, 0 errors, 0 skipped, 0.009s.
+TestPasswordGenerator: 3 cases, 0 failures, 0 errors, 0 skipped, 0.007s.
+TestMumbleProtocol: 8 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+TestSelfSignedCertificate: 4 cases, 0 failures, 0 errors, 0 skipped, 0.239s.
+TestServerAddress: 10 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+TestSSLLocks: 3 cases, 0 failures, 0 errors, 0 skipped, 2.058s.
+TestStdAbs: 3 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+TestTimer: 4 cases, 0 failures, 0 errors, 0 skipped, 0.153s.
+TestUnresolvedServerAddress: 9 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+TestVersion: 12 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+Presented-identity manager/store/real-engine/UI required cases passed; full enabled regression assertions/deadlines unchanged; generated CTest registrations restored byte-for-byte. Source/personal state unchanged. Earlier evidence and binaries preserved on E:; no C: copy/cleanup or GUI/auth automation.
+Overlay requires human inspection. Online and external database variants remain preexisting OFF. Windows source excludes WebM decoder/playback rows (six ChatWebM drop/budget/init/cleanup cases run); Unix permission/symlink branches compile-time conditional. Physical media, installed-client/signatures, server negotiation/receipts/queues/fan-out, CodeQL comparison execution, sanitizers/endurance and Windows 11 remain unqualified.
+Known review Must-fix gaps relayed during this run: sender worker cache mutation can lose a previously expected key; send dialog fails to recheck displayed name/key. These results are revision-specific build/test evidence, not final trust qualification. Corrected source needs separate qualification.

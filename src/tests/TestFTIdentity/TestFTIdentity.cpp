@@ -37,6 +37,8 @@ private slots:
 	void trustStoreTransitions();
 	void trustStoreChangedBlocks();
 	void trustStoreRemovePin();
+	void verificationMatchesExpectedKey();
+	void replacedPinDoesNotAcceptOldVerification();
 
 private:
 	QSqlDatabase m_db;
@@ -191,7 +193,7 @@ void TestFTIdentity::trustStoreTransitions() {
 	QCOMPARE(store.check(serverDigest, "bob", fp, safety), PQFT::TrustState::NewPeer);
 
 	// Verification upgrades the state
-	QVERIFY(store.markVerified(serverDigest, username));
+	QVERIFY(store.markVerified(serverDigest, username, fp));
 	QCOMPARE(store.check(serverDigest, username, fp, safety), PQFT::TrustState::Verified);
 
 	PQFT::PinnedPeer peer;
@@ -219,6 +221,37 @@ void TestFTIdentity::trustStoreChangedBlocks() {
 	PQFT::PinnedPeer peer;
 	QVERIFY(store.lookup(peer, serverDigest, username));
 	QCOMPARE(peer.fingerprint, fp);
+}
+
+void TestFTIdentity::verificationMatchesExpectedKey() {
+	PQFT::PeerTrustStore store(m_db);
+	const QByteArray digest = PQFT::randomBytes(20), shown = PQFT::randomBytes(PQFT::HashSize),
+					 other = PQFT::randomBytes(PQFT::HashSize);
+	const QString name     = QStringLiteral("Expected-key fixture");
+	QVERIFY(!store.markVerified(digest, name, shown));
+	QCOMPARE(store.checkAndPin(digest, name, shown, QStringLiteral("shown safety")), PQFT::TrustState::Pinned);
+	QVERIFY(!store.markVerified(digest, name, other));
+	PQFT::PinnedPeer stored;
+	QVERIFY(store.lookup(stored, digest, name));
+	QCOMPARE(stored.fingerprint, shown);
+	QVERIFY(!stored.verified);
+	QVERIFY(store.markVerified(digest, name, shown));
+	QCOMPARE(store.check(digest, name, shown, QString()), PQFT::TrustState::Verified);
+}
+
+void TestFTIdentity::replacedPinDoesNotAcceptOldVerification() {
+	PQFT::PeerTrustStore store(m_db);
+	const QByteArray digest = PQFT::randomBytes(20), old = PQFT::randomBytes(PQFT::HashSize),
+					 replacement = PQFT::randomBytes(PQFT::HashSize);
+	const QString name           = QStringLiteral("Replacement-key fixture");
+	QCOMPARE(store.checkAndPin(digest, name, old, QString()), PQFT::TrustState::Pinned);
+	QVERIFY(store.removePin(digest, name));
+	QCOMPARE(store.checkAndPin(digest, name, replacement, QString()), PQFT::TrustState::Pinned);
+	QVERIFY(!store.markVerified(digest, name, old));
+	PQFT::PinnedPeer stored;
+	QVERIFY(store.lookup(stored, digest, name));
+	QCOMPARE(stored.fingerprint, replacement);
+	QVERIFY(!stored.verified);
 }
 
 void TestFTIdentity::trustStoreRemovePin() {

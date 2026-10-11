@@ -109,6 +109,8 @@ private slots:
 		settings.bFTAutoAcceptPinned = true;
 		settings.qsFTDownloadDir     = dir.path();
 		PQFT::FTTransferInfo info;
+		info.peerName        = QStringLiteral("Verified fixture");
+		info.peerFingerprint = QByteArray(PQFT::HashSize, 'v');
 		info.incoming = true;
 		info.state    = PQFT::FTTransferInfo::State::Ready;
 		info.fileName = QStringLiteral("report.pdf");
@@ -116,6 +118,13 @@ private slots:
 				 QDir(dir.path()).filePath(info.fileName));
 		for (auto trust : { PQFT::TrustState::NewPeer, PQFT::TrustState::Pinned, PQFT::TrustState::Changed })
 			QVERIFY(PQFT::automaticSaveTarget(settings, info, trust).isEmpty());
+		const auto fingerprint = info.peerFingerprint;
+		info.peerFingerprint.clear();
+		QVERIFY(PQFT::automaticSaveTarget(settings, info, PQFT::TrustState::Verified).isEmpty());
+		info.peerFingerprint = fingerprint;
+		info.peerName.clear();
+		QVERIFY(PQFT::automaticSaveTarget(settings, info, PQFT::TrustState::Verified).isEmpty());
+		info.peerName = QStringLiteral("Verified fixture");
 		info.incoming = false;
 		QVERIFY(PQFT::automaticSaveTarget(settings, info, PQFT::TrustState::Verified).isEmpty());
 		info.incoming = true;
@@ -150,6 +159,8 @@ private slots:
 		QCOMPARE(restored.qsFTDownloadDir, automaticDir.path());
 		QCOMPARE(PQFT::manualSaveDirectory(restored), manualDir.path());
 		PQFT::FTTransferInfo info;
+		info.peerName        = QStringLiteral("Verified fixture");
+		info.peerFingerprint = QByteArray(PQFT::HashSize, 'v');
 		info.incoming = true;
 		info.state    = PQFT::FTTransferInfo::State::Ready;
 		info.fileName = QStringLiteral("next.txt");
@@ -188,6 +199,8 @@ private slots:
 		QVERIFY(!restored.bFTAutoAcceptPinned);
 		QCOMPARE(restored.qsFTDownloadDir, dir.path());
 		PQFT::FTTransferInfo info;
+		info.peerName        = QStringLiteral("Verified fixture");
+		info.peerFingerprint = QByteArray(PQFT::HashSize, 'v');
 		info.incoming = true;
 		info.state    = PQFT::FTTransferInfo::State::Ready;
 		info.fileName = QStringLiteral("next.txt");

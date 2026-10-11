@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestVideoQualityProfile" timestamp="2026-10-10T20:48:45" hostname="windows-validation-host" tests="9" failures="0" errors="0" skipped="0" time="0.275">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestVideoQualityProfile" time="0.000" />
+  <testcase name="derivesEncoderAndWireRatesFromTheSameBudget" classname="TestVideoQualityProfile" time="0.000" />
+  <testcase name="definesSourceAppropriateDefaults" classname="TestVideoQualityProfile" time="0.000" />
+  <testcase name="preservesSupportedEvenSizes" classname="TestVideoQualityProfile" time="0.000" />
+  <testcase name="roundsOddDimensionsDown" classname="TestVideoQualityProfile" time="0.000" />
+  <testcase name="constrainsScreenContentTo1080p" classname="TestVideoQualityProfile" time="0.000" />
+  <testcase name="constrainsWebcamContentTo720p" classname="TestVideoQualityProfile" time="0.000" />
+  <testcase name="rejectsInvalidAndTinyFrames" classname="TestVideoQualityProfile" time="0.000" />
+  <testcase name="cleanupTestCase" classname="TestVideoQualityProfile" time="0.000" />
+</testsuite>

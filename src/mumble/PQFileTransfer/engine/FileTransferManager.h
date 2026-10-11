@@ -21,6 +21,7 @@
 #include <QHash>
 #include <QMutex>
 #include <QObject>
+#include <QPointer>
 #include <QString>
 
 #include <functional>
@@ -28,6 +29,7 @@
 #include <optional>
 
 class QThread;
+class ClientUser;
 
 using PQFT::FileTransferIdentity;
 using PQFT::PeerTrustStore;
@@ -55,10 +57,23 @@ public:
 	/// creating or unlocking the identity.
 	void pushIdentityToEngine();
 
+	struct SendRecipient {
+		unsigned int session = 0;
+		QString name;
+		QByteArray fingerprint;
+		PQFT::TrustState trust = PQFT::TrustState::NewPeer;
+		QPointer< ClientUser > user;
+		QByteArray serverDigest;
+		quint64 generation     = 0;
+		unsigned int channelId = 0;
+	};
+	std::optional< SendRecipient > sendRecipient(unsigned int session) const;
+	bool sendRecipientStillCurrent(const SendRecipient &recipient) const;
+
 	/// Queue a file for sending to `recipients` (sessions with pinned
 	/// identities). Returns false when prerequisites are missing.
 	bool startSend(const QString &filePath, const QString &mimeType, bool passwordMode, const QByteArray &password,
-				   const QList< unsigned int > &recipients);
+				   const QList< SendRecipient > &recipients);
 
 	void abortTransfer(const QByteArray &transferId);
 	void saveTransferAs(const QByteArray &transferId, const QString &targetPath, bool replaceConfirmed = false);
@@ -66,16 +81,23 @@ public:
 
 	/// Called by the safety-number dialog: pin the (possibly new) fingerprint
 	/// and continue (verified) or drop (declined) the pending handshake.
-	void resolveFirstContact(unsigned int peerSession, bool verified);
+	bool resolveFirstContact(unsigned int peerSession, const QByteArray &shownFingerprint, quint64 promptToken,
+							 bool verified);
+
+	/// Token identifying the currently displayed first-contact request. GUI thread only.
+	quint64 firstContactToken(unsigned int peerSession) const;
 
 	/// Pin a peer's fingerprint (first use), optionally marking it verified.
 	/// Returns false when the peer cannot be resolved. GUI thread only.
-	bool pinPeer(unsigned int peerSession, bool verified);
+	bool pinPeer(unsigned int peerSession, const QByteArray &shownFingerprint, bool verified);
 
 	/// TOFU state of a channel member for the pre-send dialog (live DB read).
 	PQFT::TrustState trustStateFor(unsigned int peerSession, QByteArray &pinnedFingerprint);
 	/// Safety number of a peer against our identity (for verification UI).
 	QString safetyNumberFor(unsigned int peerSession);
+
+	/// Trust for an incoming file, checked against its captured name and authenticated key.
+	PQFT::TrustState trustStateForTransfer(const PQFT::FTTransferInfo &info, QByteArray &pinnedFingerprint);
 
 	/// Drop every in-flight transfer (disconnects, server changes).
 	void disconnectCleanup();
@@ -107,6 +129,8 @@ private:
 	void updateConnectionTransport();
 	void forwardEngineEvent(std::function< void() > event);
 	QByteArray serverDigest() const;
+	// Private dependency seam for isolated trust-store fixtures without a network or personal database.
+	std::function< QByteArray() > m_serverDigestProvider;
 
 	quint64 m_connectionGeneration = 0; // GUI thread
 	quint64 m_engineGeneration     = 0; // worker thread
@@ -120,12 +144,22 @@ private:
 	/// Session -> pinned fingerprint cache, guarded for the worker's lookups.
 	QMutex m_pinCacheMutex;
 	QHash< unsigned int, QByteArray > m_pinCache;
+	QHash< unsigned int, QString > m_peerNameCache;
 
 	/// Receiver-side first contacts awaiting the user's decision:
 	/// session -> (presented fingerprint, safety number). In memory only — a
 	/// declined peer must leave NO pin behind, so nothing goes to the trust
 	/// store until the safety-number dialog is accepted. GUI thread only.
-	QHash< unsigned int, QPair< QByteArray, QString > > m_pendingFirstContact;
+	struct PendingFirstContact {
+		QByteArray fingerprint;
+		QString safetyNumber;
+		QPointer< ClientUser > user;
+		QString username;
+		QByteArray serverDigest;
+		quint64 promptToken = 0;
+	};
+	QHash< unsigned int, PendingFirstContact > m_pendingFirstContact;
+	quint64 m_nextPromptToken = 0;
 };
 
 #endif // MUMBLE_MUMBLE_PQFILETRANSFER_ENGINE_FILETRANSFERMANAGER_H_

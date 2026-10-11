@@ -39,6 +39,9 @@
 #include "crypto/CryptState.h"
 #include "crypto/CryptStateOCB2.h"
 #include "Global.h"
+#ifdef USE_FILE_SHARING
+#	include "PQFileTransfer/engine/FileTransferManager.h"
+#endif
 
 #include <QTextDocumentFragment>
 
@@ -351,6 +354,7 @@ void MainWindow::msgUserState(const MumbleProto::UserState &msg) {
 	ACTOR_INIT;
 	ClientUser *pSelf = ClientUser::get(Global::get().uiSession);
 	ClientUser *pDst  = ClientUser::get(msg.session());
+	const bool trustContextChanged = !pDst || msg.has_name() || msg.has_channel_id() || msg.has_file_transfer_capable();
 	Channel *channel  = nullptr;
 
 	if (msg.has_channel_id()) {
@@ -859,6 +863,12 @@ void MainWindow::msgUserState(const MumbleProto::UserState &msg) {
 		pmModel->setCommentHash(pDst, blob(msg.comment_hash()));
 	if (msg.has_comment())
 		pmModel->setComment(pDst, u8(msg.comment()));
+#ifdef USE_FILE_SHARING
+	if (trustContextChanged && Global::get().fileTransferManager)
+		Global::get().fileTransferManager->refreshPinCache();
+#else
+	Q_UNUSED(trustContextChanged);
+#endif
 }
 
 /// This message is being received when a user was removed. This might be because the user disconnected or because
@@ -919,6 +929,10 @@ void MainWindow::msgUserRemove(const MumbleProto::UserRemove &msg) {
 		Global::get().mw->onRemoteScreenShareStopped(pDst->uiSession);
 		pmModel->removeUser(pDst);
 	}
+#ifdef USE_FILE_SHARING
+	if (Global::get().fileTransferManager)
+		Global::get().fileTransferManager->refreshPinCache();
+#endif
 }
 
 /// This message is being received when the server informs the local client about channel properties (either during

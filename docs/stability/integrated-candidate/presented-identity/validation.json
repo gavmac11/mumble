@@ -1,0 +1,73 @@
+{
+  "source_head": "f337b951482e121964e9162221e96611f94e068e",
+  "mac_build": "Release full client/server/all targets passed; shared Homebrew Qt6.11.1, Apple Clang21, macOS26.6.2 ARM64, warnings-as-errors OFF",
+  "mac_ctest": {
+    "registered": 42,
+    "enabled": 41,
+    "passed": 41,
+    "failed": 0,
+    "execution_skipped": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 63.98
+  },
+  "related_qt_cases": {
+    "ui": 78,
+    "manager": 25,
+    "identity": 14,
+    "engine": 42,
+    "e2e": 5,
+    "total": 164,
+    "failed": 0,
+    "skipped": 0
+  },
+  "negative_cases": "Two old presented-key faults on e1 plus isolated seam/fixtures; rename borrowing verification reproduced on pre-snapshot trust implementation plus new fixture. Not an unmodified shipping binary.",
+  "pending": [
+    "Sender Must-fix corrections and independent follow-up review",
+    "Native Windows complete strict build/tests",
+    "Installed GUI/device/supported OS/shipping/final-hosting gates"
+  ],
+  "limits": "Manager fixtures refuse signing and test trust decisions; real Engine/E2E separate. Source tests do not qualify GUI/device/recovery/commercial readiness.",
+  "opus": {
+    "model": "claude-opus-5-5",
+    "duration_ms": 314503,
+    "read_only": true,
+    "snapshot_hashes_verified_against_git": 18,
+    "must_fix": [
+      "Sender must capture the expected pin before queueing work",
+      "Send dialog must recheck displayed recipient name/key"
+    ],
+    "should_fix": "See exact review; no final trust qualification claimed"
+  },
+  "linux": {
+    "all_enabled_suites_passed": 41,
+    "registered": 42,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 58.34,
+    "build": "Full client/server/all targets; strict with existing -Wno-error=restrict; Debian12 container on Ubuntu24.04 host; Qt6.4.2/GCC12",
+    "source_archive_sha256": "3139b1eedb795693014a8296998f04156930175b7d96eb9db5bfc6c80fb3d8a6",
+    "client_sha256": "2bd5a228a50bbe5ac759f4818ffe7f713e886f0d61eb68fde0bf757bc200b5a8",
+    "server_sha256": "09da8e26b49a0c784fb6e03b7913be8eaf1ab47290bfea6975a96bff410f31db",
+    "e1_binaries_and_source_preserved": true
+  },
+  "windows": {
+    "source_head": "f337b951482e121964e9162221e96611f94e068e",
+    "producer_commit": "e960c10f92628d11c19dc0317f8dfd0abef538b6",
+    "strict_full_client_server_tests": "passed",
+    "enabled_suites": 41,
+    "qt_cases": 1147,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "committed_hashes_verified": 99
+  },
+  "latest_correction": {
+    "source_head": "9b5b8e26684d6f2481591b11653397d390d39300",
+    "evidence": "revision-9b5b8e",
+    "native_windows_linux": "Full builds/all 41 enabled suites passed; Windows1,159 cases,99 committed hashes verified",
+    "opus_must_fix": "none; Should work still open"
+  }
+}
