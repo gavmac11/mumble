@@ -131,5 +131,20 @@
     "combined_comparison": "passed; zero annotations; no new alerts in changed code",
     "existing_results_per_analysis": 33,
     "evidence": "codeql-comparison/validation.json"
+  },
+  "latest_automatic_save_candidate": {
+    "source_head": "e1d12f7e1140975da419909594127da0e8fa0a70",
+    "evidence": "automatic-save-safety/revision-e1d12f7/validation.json",
+    "mac_linux_enabled_ctest_passed": 41,
+    "windows_ui_settings_cases_passed": 82,
+    "qualification": "Native automated checks only; hosted new revision/installed GUI/trust/filesystem/media/shipping gates remain open"
+  },
+  "checked_save_security": {
+    "head": "c5e28d6b222be750ff613cc3b7dd3797437567cc",
+    "merge_revision": "8169584a6812ec28a2325d42ce3c91634f8cbcc6",
+    "run": 38105830599,
+    "both_actual_analyses": "passed cpp/py each;33 existing results each",
+    "combined_check": "success; zero annotations; no new alerts in changed code",
+    "evidence": "atomic-transfer-save/revision-09e9b92/hosted-security-c5.json"
   }
 }
