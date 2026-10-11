@@ -6,7 +6,7 @@
     "database_and_capture": "08a0fb6913832a0820f9047cc8bc145b4a8afe62",
     "transfer_shutdown": "d07569f8a28e0656defc81a36019805202139ced",
     "historical_recovery": "0cc42dd4915e8155c7ac163915de66e214178d66",
-    "meter": "native/source accounting candidate; see server-bandwidth-meter-validation.md",
+    "meter": "8705a77c1b09634feafd0b9c396a2e5ba04b1b99",
     "output_queue": "ae03575fb63b08b734ee5ff264e349f946d0fd19",
     "mac_runtime": "440c2fc01c9c36e2db7bfd312f1d17b68698465a",
     "binary_qr_and_file_actions": "8002309ac0a7e6c2850b7469957c27f2d04a584c"
@@ -37,5 +37,27 @@
     "libprivate_pacer.dylib": "9b9876799412d294ff679745829eccc30c7e66c5469fbef92666557ad0441ca2"
   },
   "review": "PR29 transport source is an ancestor and still requires human review; no merge approval is implied",
-  "qualification": "Local integrated build and automated checks only; hosted candidate, signed/native supported platforms and commercial acceptance remain pending"
+  "qualification": "Local integrated build and automated checks only; hosted candidate, signed/native supported platforms and commercial acceptance remain pending",
+  "windows_native": {
+    "tested_source_head": "901014211cf1c8742fc50e1fc814c1c8e4878d6f",
+    "strict_release_client_server_build": "passed",
+    "cases": 95,
+    "failed": 0,
+    "skipped": 0,
+    "suites": 9,
+    "qr_themes": 2,
+    "complete_qr_bytes": 172,
+    "evidence": "../../hosting/results/2026-10-10/windows-integrated-candidate/validation.json",
+    "gui_save": "unqualified; owned receiver disconnected behind identity passphrase prompt; no authentication automated"
+  },
+  "security_scan": {
+    "run": "38097022629",
+    "workflow": "passed",
+    "check": "failed",
+    "annotations": [
+      "historical recovery TLS minimum",
+      "legacy protocol certificate ban SHA1 identifier"
+    ],
+    "source_head": "901014211cf1c8742fc50e1fc814c1c8e4878d6f"
+  }
 }

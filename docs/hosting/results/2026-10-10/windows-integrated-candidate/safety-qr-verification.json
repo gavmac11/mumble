@@ -1,0 +1,24 @@
+{
+  "source_revision": "901014211cf1c8742fc50e1fc814c1c8e4878d6f",
+  "passed": true,
+  "groups": {
+    "local": [
+      {
+        "theme": "light",
+        "expected_bytes": 172,
+        "decoded_bytes": 172,
+        "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "exact_match": true
+      },
+      {
+        "theme": "dark",
+        "expected_bytes": 172,
+        "decoded_bytes": 172,
+        "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+        "exact_match": true
+      }
+    ]
+  }
+}
