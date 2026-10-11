@@ -1,0 +1,15 @@
+{
+  "source_commit": "4eb2e56a23c57d7b5c3e9f01c9bda6cff613c532",
+  "earlier_rate_source": "c80433c2c1a66a94b7b06f7fea9fa955e7495d3c",
+  "earlier_rate_evidence": "2ca049ddebdc60a97f523242f52ecbc3c8fc3bba",
+  "audio_wizard_source": "8c4269054798f6e3104426f1171dd77ef0a06465",
+  "audio_wizard_evidence": "ba69e866305bc6eb686d7a58de9a4fd10a403a1b",
+  "prior_ledger_entries_verified": {
+    "mumble-audio-wizard-20261010": 22,
+    "mumble-rate-credit-20261010": 30
+  },
+  "prior_binaries": "Earlier rate five binaries and audio three binaries checksum verified; audio/compiler snapshots copied on E: before requested reuse",
+  "c_drive_copies_or_cleanup": false,
+  "personal_mumble_state_changes": false,
+  "gui_authentication_or_hardware_actions": false
+}

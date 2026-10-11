@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="Win32-ninja" tests="3" failures="0" disabled="0" skipped="0" hostname="windows-validation-host" time="18" timestamp="2026-10-10T18:53:07">
+  <testcase name="TestFileTransferManager" classname="TestFileTransferManager" time="0.867135" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestFileTransferEngine" classname="TestFileTransferEngine" time="18.5882" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestFileTransferE2E" classname="TestFileTransferE2E" time="9.96469" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+</testsuite>
