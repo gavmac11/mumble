@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "tested_source_head": "740649f89e76eb89d93401f28085b3a103c29b4a",
+  "master_base": "7fc94bf23cfb7e773282fdd67f30982e5bd25b33",
+  "integrated_sources": {
+    "database_and_capture": "08a0fb6913832a0820f9047cc8bc145b4a8afe62",
+    "transfer_shutdown": "d07569f8a28e0656defc81a36019805202139ced",
+    "historical_recovery": "0cc42dd4915e8155c7ac163915de66e214178d66",
+    "meter": "native/source accounting candidate; see server-bandwidth-meter-validation.md",
+    "output_queue": "ae03575fb63b08b734ee5ff264e349f946d0fd19",
+    "mac_runtime": "440c2fc01c9c36e2db7bfd312f1d17b68698465a",
+    "binary_qr_and_file_actions": "8002309ac0a7e6c2850b7469957c27f2d04a584c"
+  },
+  "local_platform": "macOS 26.6.2 ARM64; shared Homebrew Qt 6.11.1; AppleClang21",
+  "ctest": {
+    "registered": 41,
+    "enabled": 40,
+    "passed": 40,
+    "failed": 0,
+    "execution_skipped": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 46.39
+  },
+  "hosting_python": {
+    "tests": 59,
+    "passed": 59,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 1.05,
+    "bridges": "Both compiled freshly from this candidate into an owned private directory; crypto/pacer environment configured",
+    "earlier_unconfigured_run": "59 discovered, five bridge-dependent cases skipped; excluded from full acceptance"
+  },
+  "private_bridge_sha256": {
+    "libprivate_ocb.dylib": "f2d653ba006365de4840a7bb9d119f07a9f3d184f69b9dea4b4e99bb66213907",
+    "libprivate_pacer.dylib": "9b9876799412d294ff679745829eccc30c7e66c5469fbef92666557ad0441ca2"
+  },
+  "review": "PR29 transport source is an ancestor and still requires human review; no merge approval is implied",
+  "qualification": "Local integrated build and automated checks only; hosted candidate, signed/native supported platforms and commercial acceptance remain pending"
+}
