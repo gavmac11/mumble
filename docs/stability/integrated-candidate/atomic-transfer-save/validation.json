@@ -7,7 +7,24 @@
     "failed": 0,
     "skipped": 0
   },
-  "full_mac": "running",
+  "full_mac": {
+    "strict_release_build": "passed client/server/all enabled test targets",
+    "ctest": {
+      "registered": 42,
+      "enabled": 41,
+      "passed": 41,
+      "failed": 0,
+      "disabled": [
+        "OverlayTest"
+      ],
+      "seconds": 61.96
+    },
+    "engine": {
+      "passed": 37,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
   "exact_opus_review": "running",
   "native_windows_linux": "pending",
   "limitations": [
