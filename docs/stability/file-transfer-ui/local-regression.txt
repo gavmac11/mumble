@@ -1,0 +1,88 @@
+Test project [controlled-worktree]/build/stability
+      Start  1: TestReleaseUpdate
+ 1/40 Test  #1: TestReleaseUpdate ................   Passed    0.05 sec
+      Start  2: TestAnimatedImages
+ 2/40 Test  #2: TestAnimatedImages ...............   Passed    1.46 sec
+      Start  3: TestChatWebM
+ 3/40 Test  #3: TestChatWebM .....................   Passed   17.77 sec
+      Start  4: TestVideoFramePacketizer
+ 4/40 Test  #4: TestVideoFramePacketizer .........   Passed    0.35 sec
+      Start  5: TestVideoPacketPacer
+ 5/40 Test  #5: TestVideoPacketPacer .............   Passed    0.15 sec
+      Start  6: TestVideoQualityProfile
+ 6/40 Test  #6: TestVideoQualityProfile ..........   Passed    0.02 sec
+      Start  7: TestVideoViewUi
+ 7/40 Test  #7: TestVideoViewUi ..................   Passed    0.23 sec
+      Start  8: TestXMLTools
+ 8/40 Test  #8: TestXMLTools .....................   Passed    0.31 sec
+      Start  9: TestFileTransferUi
+ 9/40 Test  #9: TestFileTransferUi ...............   Passed    0.88 sec
+      Start 10: TestFileTransferManager
+10/40 Test #10: TestFileTransferManager ..........   Passed    0.93 sec
+      Start 11: TestFileTransferTransport
+11/40 Test #11: TestFileTransferTransport ........   Passed    0.02 sec
+      Start 12: TestPQCrypto
+12/40 Test #12: TestPQCrypto .....................   Passed    0.96 sec
+      Start 13: TestFTIdentity
+13/40 Test #13: TestFTIdentity ...................   Passed    4.00 sec
+      Start 14: TestFileTransferSession
+14/40 Test #14: TestFileTransferSession ..........   Passed    0.36 sec
+      Start 15: TestFileTransferEngine
+15/40 Test #15: TestFileTransferEngine ...........   Passed    6.71 sec
+      Start 16: TestFileTransferE2E
+16/40 Test #16: TestFileTransferE2E ..............   Passed    7.76 sec
+      Start 17: TestSettingsJSONSerialization
+17/40 Test #17: TestSettingsJSONSerialization ....   Passed    1.08 sec
+      Start 18: OverlayTest
+18/40 Test #18: OverlayTest ......................***Not Run (Disabled)   0.00 sec
+      Start 19: TestCrypt
+19/40 Test #19: TestCrypt ........................   Passed    0.37 sec
+      Start 20: TestAudioReceiverBuffer
+20/40 Test #20: TestAudioReceiverBuffer ..........   Passed    0.44 sec
+      Start 21: TestQtLogger
+21/40 Test #21: TestQtLogger .....................   Passed    0.58 sec
+      Start 22: TestBandwidthRecord
+22/40 Test #22: TestBandwidthRecord ..............   Passed    0.30 sec
+      Start 23: TestConnectionOutputQueue
+23/40 Test #23: TestConnectionOutputQueue ........   Passed    0.51 sec
+      Start 24: TestCaseInsensitiveQString
+24/40 Test #24: TestCaseInsensitiveQString .......   Passed    0.34 sec
+      Start 25: TestCryptographicHash
+25/40 Test #25: TestCryptographicHash ............   Passed    0.33 sec
+      Start 26: TestCryptographicRandom
+26/40 Test #26: TestCryptographicRandom ..........   Passed    1.23 sec
+      Start 27: TestDatabase
+27/40 Test #27: TestDatabase .....................   Passed    0.51 sec
+      Start 28: TestServerDatabase
+28/40 Test #28: TestServerDatabase ...............   Passed    0.52 sec
+      Start 29: TestFFDHE
+29/40 Test #29: TestFFDHE ........................   Passed    0.54 sec
+      Start 30: TestIPCUtils
+30/40 Test #30: TestIPCUtils .....................   Passed    0.02 sec
+      Start 31: TestPacketDataStream
+31/40 Test #31: TestPacketDataStream .............   Passed    0.35 sec
+      Start 32: TestPasswordGenerator
+32/40 Test #32: TestPasswordGenerator ............   Passed    0.32 sec
+      Start 33: TestMumbleProtocol
+33/40 Test #33: TestMumbleProtocol ...............   Passed    0.32 sec
+      Start 34: TestSelfSignedCertificate
+34/40 Test #34: TestSelfSignedCertificate ........   Passed    0.66 sec
+      Start 35: TestServerAddress
+35/40 Test #35: TestServerAddress ................   Passed    0.34 sec
+      Start 36: TestSSLLocks
+36/40 Test #36: TestSSLLocks .....................   Passed    2.34 sec
+      Start 37: TestStdAbs
+37/40 Test #37: TestStdAbs .......................   Passed    0.44 sec
+      Start 38: TestTimer
+38/40 Test #38: TestTimer ........................   Passed    0.55 sec
+      Start 39: TestUnresolvedServerAddress
+39/40 Test #39: TestUnresolvedServerAddress ......   Passed    0.42 sec
+      Start 40: TestVersion
+40/40 Test #40: TestVersion ......................   Passed    0.39 sec
+
+100% tests passed out of 39
+
+Total Test time (real) =  54.87 sec
+
+The following tests did not run:
+	 18 - OverlayTest (Disabled)

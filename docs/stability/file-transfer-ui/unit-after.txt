@@ -1,0 +1,12 @@
+********* Start testing of TestFileTransferUi *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestFileTransferUi::initTestCase()
+QWARN  : TestFileTransferUi::qrContrast(light) qt.qpa.fonts: Populating font family aliases took 107 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+PASS   : TestFileTransferUi::qrContrast(light)
+PASS   : TestFileTransferUi::qrContrast(dark)
+PASS   : TestFileTransferUi::fileActionByKeyboard()
+PASS   : TestFileTransferUi::invalidActionUrls()
+PASS   : TestFileTransferUi::unrelatedDataIsNotAFileAction()
+PASS   : TestFileTransferUi::cleanupTestCase()
+Totals: 7 passed, 0 failed, 0 skipped, 0 blacklisted, 350ms
+********* Finished testing of TestFileTransferUi *********

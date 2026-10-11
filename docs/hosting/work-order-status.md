@@ -87,4 +87,10 @@ Output queue CI `38089837376` is now complete: Windows, Ubuntu and both Mac arch
 
 The initial revised-head Mac configure attempt referenced a nonexistent renamed patch path. That integration mistake was corrected in `440c2fc01`; the preceding failed/cancelled attempts do not qualify shipping builds.
 
+## File verification and keyboard save
+
+[PR 38](https://github.com/gavmac11/mumble/pull/38) repairs the black safety QR, preserves its full binary payload and exposes the existing file-card action through a keyboard link. An independent decoder rejects the intermediate 22/172-byte result and accepts all 172 exact bytes in both themes. After two disposable Mac clients restart, their verified-peer labels persist and a generated 46-byte transfer saves through the native dialog with matching source/output hashes. All 39 enabled local suites pass after a full rebuild (54.87 seconds; 40 registered, OverlayTest disabled). [Evidence](../stability/file-transfer-ui/README.md) limits this to the private developer runtime. CI/preview `38094906038` / `38094907890` are pending, including new scanner gates for every client artifact. Shipping, physical devices/media, complete pair coverage, endurance and commercial qualification remain open.
+
 2026-10-10 packaged Mac repair follow-up: exact `440c2fc01` preview passes native favorite insertion, actual Bonjour removal and normal debug-plugin quit without an experimental override. All preview build/test jobs pass; publication skipped. Missing accessibility rows remain open. An excluded first harness run exposed silent database fallback on a configured directory; the corrected run verifies its owned SQLite handle, and a fail-closed regression is next.
+
+Native Windows source `8002309ac` passes strict Release client/server builds and all 17 UI/logger/file E2E cases. Both actual production QR images decode to 172 exact bytes; 16 producer checksums match committed bytes. Native Windows GUI/11 and signed packages remain open.

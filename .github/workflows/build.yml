@@ -167,3 +167,30 @@ jobs:
       with:
           path: '${{ env.MUMBLE_ENVIRONMENT_DIR }}'
           key: ${{ env.MUMBLE_ENVIRONMENT_VERSION }}
+
+  safety-qr:
+    name: Decode complete safety QR data
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: 'tests-*'
+          path: qr-fixtures
+      - run: >-
+          python -m pip install --only-binary=:all: -r scripts/hosting/safety-qr-test-requirements.txt
+      - name: Verify full binary payload from every client runtime
+        run: >-
+          python scripts/hosting/verify_safety_qr.py --fixtures qr-fixtures
+          --artifact tests-ubuntu-24.04-x86_64 --artifact tests-windows-2025-vs2026-x86_64
+          --artifact tests-macos-15-arm64 --artifact tests-macos-15-intel-x86_64
+          --revision "${{ github.sha }}" --report safety-qr-roundtrip.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: safety-qr-roundtrip-ci
+          path: safety-qr-roundtrip.json

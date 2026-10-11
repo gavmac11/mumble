@@ -1,0 +1,432 @@
+{
+  "recorded_utc": "2026-10-10T23:38:44.372926+00:00",
+  "source_commit": "8002309ac0a7e6c2850b7469957c27f2d04a584c",
+  "source_branch": "codex/file-transfer-accessible-actions",
+  "pull_request": "https://github.com/gavmac11/mumble/pull/38",
+  "production_commit": "8002309ac0a7e6c2850b7469957c27f2d04a584c",
+  "source_tree_clean_before_evidence": true,
+  "source_blob_sha256": {
+    "src/mumble/PQFileTransfer/widgets/FileTransferDialogs.cpp": "e59016458760c2c2535ad1541cd1bdeb46b03f8e4e1d6278b0f32966ff216e77",
+    "src/mumble/PQFileTransfer/engine/FTCardRender.cpp": "522be991b0a86c918b9b80a3979673d92879562999ef35b316d8f37f67cd808f",
+    "src/mumble/PQFileTransfer/engine/FTCardRender.h": "e81d0f7d5e418f9251037dd91c5e7284ce0c1864e239fb698411461b4af6ddbe",
+    "src/mumble/Log.cpp": "a0b70eb300d60d8dcf90bc0063c5ad3f9a77e54e410bae495180eaba57cbcc80",
+    "src/mumble/MainWindow.cpp": "9b8147678299761c9f5f39b4e4cb14fb1053b834e8ce10e64d8fb4f38e3d7c49",
+    "src/tests/TestFileTransferUi/TestFileTransferUi.cpp": "1401ccd2bffd9c4fa5fb1303184ede4f5f41771fa9184ea38c0acc368d38ee27",
+    "src/tests/TestFileTransferUi/CMakeLists.txt": "d14eca6085d14429c5ef8c7f105185fc350536ccca265792b675b9a7b1c49973",
+    "scripts/hosting/verify_safety_qr.py": "09b5402e372abc452930ef19fb8c1f0c780f2708d1da7f4f935302fe602592e9",
+    "scripts/hosting/safety-qr-test-requirements.txt": "bcd0663f6924781c808141614b95fac1cd478a8f94bdf32cdbdbb54c1b0c048b",
+    "src/tests/TestQtLogger/TestQtLogger.cpp": "c84796c66c92c5fb93eb9121602066dae87d94825f09094f975d4d266c3085af",
+    "src/tests/TestFileTransferE2E/TestFileTransferE2E.cpp": "d33a62b58db97424e37d055018f83c4c4acf49f3606d03f1806d5d1c5f11f13e"
+  },
+  "os": {
+    "name": "Windows 10 Pro",
+    "version": "10.0.19045",
+    "architecture": "x64"
+  },
+  "compiler": {
+    "name": "MSVC",
+    "version": "19.51.36257.0",
+    "installation": "VS 2026 Build Tools"
+  },
+  "qt": {
+    "version": "6.10.0",
+    "linkage": "static",
+    "dependency_build_compiler": "MSVC 2022"
+  },
+  "dependencies": "vcpkg 2026-02 b1fe4a4257 / x64-windows-static-md; OpenSSL 3.6.1; FFmpeg 8.1 shared",
+  "configuration": "Release, Ninja unity build, C++20, dynamic MSVC runtime, symbols off, LTO off, strict warnings-as-errors enabled; tests/server on, packaging off",
+  "build": {
+    "targets": [
+      "mumble",
+      "mumble-server",
+      "TestFileTransferUi",
+      "TestQtLogger",
+      "TestFileTransferE2E"
+    ],
+    "configure_exit_code": 0,
+    "build_exit_code": 0,
+    "source_compiler_policy": [
+      {
+        "target": "TestFileTransferUi",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestQtLogger",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "TestFileTransferE2E",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_client_object_lib",
+        "checked_translation_units": 10,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "mumble_server_object_lib",
+        "checked_translation_units": 3,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      },
+      {
+        "target": "shared",
+        "checked_translation_units": 1,
+        "verified_flags": [
+          "/W4",
+          "/WX",
+          "/O2",
+          "/bigobj",
+          "/options:strict",
+          "-std:c++20",
+          "-MD"
+        ],
+        "source_warning_suppression": false
+      }
+    ],
+    "dependency_warning_policy": "Repository defaults retained for third-party and generated protobuf sources; -external:W0 retained for external headers. No source warning relaxation on client/logger, queue, server or tested file-transfer translation units.",
+    "server_executable_sha256": "3f91ca8a7715dd6c60f46d8c02c117c3c93cc201d974213b450a47385653e7e3",
+    "client_executable_sha256": "269bcdba42d721422fef0a1541841813cd57319a149dd0bad8d7ff1eb2b28716"
+  },
+  "tests": [
+    {
+      "suite": "TestFileTransferUi",
+      "cases": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.019,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "qrContrast(light)",
+          "classname": "TestFileTransferUi",
+          "time": "0.008",
+          "result": "passed"
+        },
+        {
+          "name": "qrContrast(dark)",
+          "classname": "TestFileTransferUi",
+          "time": "0.005",
+          "result": "passed"
+        },
+        {
+          "name": "fileActionByKeyboard",
+          "classname": "TestFileTransferUi",
+          "time": "0.002",
+          "result": "passed"
+        },
+        {
+          "name": "invalidActionUrls",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "unrelatedDataIsNotAFileAction",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferUi",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "d895152d9d8697929f0db018d908f92311efee7afcc43e2d33b898de6c70a7d5",
+      "txt_report": "TestFileTransferUi.txt",
+      "junit_report": "TestFileTransferUi.xml"
+    },
+    {
+      "suite": "TestQtLogger",
+      "cases": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.185,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestQtLogger",
+          "time": "0.000",
+          "result": "passed"
+        },
+        {
+          "name": "lateQtLog(prior-handler)",
+          "classname": "TestQtLogger",
+          "time": "0.393",
+          "result": "passed"
+        },
+        {
+          "name": "lateQtLog(repeated-init)",
+          "classname": "TestQtLogger",
+          "time": "0.399",
+          "result": "passed"
+        },
+        {
+          "name": "lateQtLog(later-handler-owner)",
+          "classname": "TestQtLogger",
+          "time": "0.390",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestQtLogger",
+          "time": "0.000",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "07419a8864ea9b028dc7c73a9d06964528a550cc446ae56693519277d56c28af",
+      "txt_report": "TestQtLogger.txt",
+      "junit_report": "TestQtLogger.xml"
+    },
+    {
+      "suite": "TestFileTransferE2E",
+      "cases": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 9.146,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferE2E",
+          "time": "2.162",
+          "result": "passed"
+        },
+        {
+          "name": "endToEndTransfer",
+          "classname": "TestFileTransferE2E",
+          "time": "2.188",
+          "result": "passed"
+        },
+        {
+          "name": "endToEndPasswordTransfer",
+          "classname": "TestFileTransferE2E",
+          "time": "2.921",
+          "result": "passed"
+        },
+        {
+          "name": "capabilityGating",
+          "classname": "TestFileTransferE2E",
+          "time": "1.727",
+          "result": "passed"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferE2E",
+          "time": "0.145",
+          "result": "passed"
+        }
+      ],
+      "executable_sha256": "6ea63a84831cc7376cd2afce1e9d6edc65a3f30e31e331916bfb980224c654fc",
+      "txt_report": "TestFileTransferE2E.txt",
+      "junit_report": "TestFileTransferE2E.xml"
+    }
+  ],
+  "ctest": {
+    "suites": 3,
+    "failures": 0,
+    "wall_seconds": 10.02,
+    "case_seconds": {
+      "TestFileTransferUi": 0.923641,
+      "TestFileTransferE2E": 9.9849,
+      "TestQtLogger": 1.56332
+    },
+    "exit_code": 0,
+    "parallel": 2,
+    "qt_platform": "offscreen",
+    "output_capture": "Only QtTest text/JUnit -o flags temporarily appended to generated CTest registrations, restored byte-for-byte after the run. Repository implementation unchanged.",
+    "e2e_fixture": "Owned local server and two TLS/protobuf client connections; Windows child server environment clears QT_QPA_PLATFORM using the existing source fixture."
+  },
+  "scope": [
+    "Native Release client/server build",
+    "Offscreen TestFileTransferUi: seven QtTest cases including light/dark QR and keyboard/URL action checks",
+    "Pinned independent QR decoder gate: both 172-byte binary payloads match exactly, including embedded zero and high bytes",
+    "Late logger regression subprocess modes",
+    "Owned local TLS/protobuf encrypted plain/password file E2E"
+  ],
+  "not_run": [
+    "Native desktop file-card Download or focus/capture retry",
+    "Windows GUI/interactive exit qualification",
+    "Mac Cocoa vendor repair qualification",
+    "Windows sanitizer",
+    "Full Windows suite/endurance",
+    "Packaging/signing or Windows 11 qualification"
+  ],
+  "preservation": "Prior private report/log hashes verified unchanged. Prior recorded compiler commands and executables preserved before explicitly requested build reuse. Original checkouts/settings/running applications retained. Test fixture uses its own server; tracked changes limited to the new evidence directory. Complete build/configure/compiler command logs and binaries remain private.",
+  "publication": {
+    "attributes": "* -text whitespace=cr-at-eol (scoped to this directory)",
+    "changes": [
+      "Anonymized XML hostnames",
+      "Replaced private CTest build path with <isolated-build-directory>",
+      "Replaced the private font-directory path in the offscreen UI warning with <isolated-build-directory>/tests/lib/fonts; warning preserved."
+    ],
+    "test_results_changed": false,
+    "hash_policy": "Published file hashes describe exact stored report bytes. Private complete logs have a separate local ledger."
+  },
+  "qr_verification": {
+    "result": {
+      "source_revision": "8002309ac0a7e6c2850b7469957c27f2d04a584c",
+      "passed": true,
+      "groups": {
+        "local": [
+          {
+            "theme": "light",
+            "expected_bytes": 172,
+            "decoded_bytes": 172,
+            "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+            "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+            "exact_match": true
+          },
+          {
+            "theme": "dark",
+            "expected_bytes": 172,
+            "decoded_bytes": 172,
+            "expected_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+            "decoded_sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+            "exact_match": true
+          }
+        ]
+      }
+    },
+    "toolchain": {
+      "python_version": "3.10.4",
+      "Pillow": "12.3.0",
+      "zxing-cpp": "3.1.1",
+      "private_test_venv": true
+    },
+    "fixture_manifest": {
+      "source_commit": "8002309ac0a7e6c2850b7469957c27f2d04a584c",
+      "generated_by": "TestFileTransferUi via CMake test ENVIRONMENT",
+      "files": [
+        {
+          "name": "dark.bin",
+          "size_bytes": 172,
+          "sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+          "embedded_zero_bytes": true,
+          "high_bytes": true
+        },
+        {
+          "name": "dark.png",
+          "size_bytes": 2289,
+          "sha256": "91013684dd05794f842136f671efe5e2ab54711f0fad5b7cb60e8fa510ad89ec",
+          "width": 220,
+          "height": 220
+        },
+        {
+          "name": "light.bin",
+          "size_bytes": 172,
+          "sha256": "2087f600b6aea51d50b0799e7fed4ca3a788409f343634d14583342060d5d4ee",
+          "embedded_zero_bytes": true,
+          "high_bytes": true
+        },
+        {
+          "name": "light.png",
+          "size_bytes": 2289,
+          "sha256": "91013684dd05794f842136f671efe5e2ab54711f0fad5b7cb60e8fa510ad89ec",
+          "width": 220,
+          "height": 220
+        }
+      ]
+    },
+    "fixture_export": "CMake test ENVIRONMENT: MUMBLE_QR_FIXTURE_EXPORT=<isolated-build-directory>/test-results/safety-qr",
+    "test_command_offscreen": true,
+    "fixture_png_and_bin": "Actual light/dark PNG and binary files preserved privately; publication includes hashes and decoder result."
+  },
+  "runtime_warnings": [
+    "Offscreen UI test emitted QFontDatabase missing tests/lib/fonts directory warning; all cases passed. Native desktop font deployment is not qualified."
+  ],
+  "cmake_options": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_UNITY_BUILD": "ON",
+    "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+    "bundled-cli11": "OFF",
+    "bundled-spdlog": "OFF",
+    "client": "ON",
+    "database-mysql-tests": "OFF",
+    "database-postgresql-tests": "OFF",
+    "database-sqlite-tests": "ON",
+    "file-sharing": "ON",
+    "ice": "OFF",
+    "lto": "OFF",
+    "overlay": "OFF",
+    "packaging": "OFF",
+    "plugins": "OFF",
+    "server": "ON",
+    "static": "ON",
+    "symbols": "OFF",
+    "test-lto": "OFF",
+    "tests": "ON",
+    "translations": "OFF",
+    "warnings-as-errors": "ON"
+  }
+}

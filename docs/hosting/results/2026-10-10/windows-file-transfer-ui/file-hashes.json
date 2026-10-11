@@ -1,0 +1,81 @@
+{
+  "source_commit": "8002309ac0a7e6c2850b7469957c27f2d04a584c",
+  "algorithm": "SHA256",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+      "size_bytes": 29
+    },
+    {
+      "path": "ctest.txt",
+      "sha256": "7d009737a5de85490ae1eeaa61bd8431cf48c10b1e99850a553749b829389630",
+      "size_bytes": 504
+    },
+    {
+      "path": "ctest.xml",
+      "sha256": "ae3f8c8ef8b5bbda979742dff3e0f0466a3e63e439988f879bc6493d72c78c4b",
+      "size_bytes": 660
+    },
+    {
+      "path": "qr-fixtures.json",
+      "sha256": "b1dedf630b1662ae760fbdc00c0bf9c4482079a1573d11e91d106a2f3ba731a4",
+      "size_bytes": 980
+    },
+    {
+      "path": "qr-toolchain.json",
+      "sha256": "7423612a49299a74b6f12e0bc7357d2325495d50db97f112f9dfc8cc003606ef",
+      "size_bytes": 114
+    },
+    {
+      "path": "safety-qr-verification.json",
+      "sha256": "4d655ec18e92c9ea0c07a2deec8fa6d25df6e0cbf64c94f96deaffcf6f87f1c8",
+      "size_bytes": 790
+    },
+    {
+      "path": "test-run-result.json",
+      "sha256": "5a946574350b9bb77100eeaf2399afca8a5d4622f96ca3e28daed5da6a1c9350",
+      "size_bytes": 79
+    },
+    {
+      "path": "TestFileTransferE2E.txt",
+      "sha256": "c6844b708194ef882a38fa13b6b1da3593b05d5a2065928d575b349305cda476",
+      "size_bytes": 558
+    },
+    {
+      "path": "TestFileTransferE2E.xml",
+      "sha256": "069c44090ae28d5623034cdb44ab9b09dcd4423aefb0d161f1a717ef9b7d58f1",
+      "size_bytes": 897
+    },
+    {
+      "path": "TestFileTransferUi.txt",
+      "sha256": "0273a96b4a4f4a9e9185b24c4ac3dcad7448cc4b99a9127b33c5296f43ca02e8",
+      "size_bytes": 913
+    },
+    {
+      "path": "TestFileTransferUi.xml",
+      "sha256": "4028567456f8e5996d13e4a4d1ef2de20b797f27901173e385c89b04a5d179d6",
+      "size_bytes": 1344
+    },
+    {
+      "path": "TestQtLogger.txt",
+      "sha256": "ac2aaed3cff93a39a7de5973df58d1f1e0848f8cd76ed38cb3e929ecc28e6623",
+      "size_bytes": 525
+    },
+    {
+      "path": "TestQtLogger.xml",
+      "sha256": "697239c58b4b649d60df96f46ecc0c6fc8e7cbd369e9064e44e0342a07ecc6d0",
+      "size_bytes": 877
+    },
+    {
+      "path": "validation.json",
+      "sha256": "09ac33b66eee30586eb93cbfdea8cabe37d2ec70a09fe57a0bb461f803fab396",
+      "size_bytes": 15059
+    },
+    {
+      "path": "validation.txt",
+      "sha256": "4df72a64768bf078c1ae82ce979c398dff736e5d09e3f5ddedfbb65dfa4241c0",
+      "size_bytes": 1303
+    }
+  ]
+}
