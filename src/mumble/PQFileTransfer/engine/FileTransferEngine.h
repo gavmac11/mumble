@@ -185,7 +185,12 @@ private:
 		QByteArray spooledBits;   // bit i set = chunk i spooled while a password was pending
 		quint64 spoolBytes	= 0;   // bytes written to the spool so far
 		QVector< QByteArray > leafHashes;   // chunk digests (merkleRoot builds the leaves)
-		QVector< QByteArray > earlyChunks;   // "u64be index" || ciphertext blobs
+		struct EarlyChunk {
+			QByteArray transferId;
+			quint64 index;
+			QByteArray ciphertext;
+		};
+		QVector< EarlyChunk > earlyChunks;
 		std::unique_ptr< QTimer > idleTimer;
 		FTTransferInfo::State lastState = FTTransferInfo::State::Handshaking;
 		std::unique_ptr< FileTransferSession > session_;   // responder side

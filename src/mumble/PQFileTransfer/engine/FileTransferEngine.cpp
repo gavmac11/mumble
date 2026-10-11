@@ -45,8 +45,7 @@ bool earlyChunkSplit(const QByteArray &blob, quint64 &index, QByteArray &ciphert
 }
 
 // Spool record: "u32be payload length" || "u64be index" || ciphertext. The
-// length prefix makes the on-disk stream parseable (the in-memory early-chunk
-// blob has none).
+// length prefix makes the on-disk stream parseable.
 QByteArray spoolRecord(quint64 index, const QByteArray &ciphertext) {
 	const quint32 payloadLength = static_cast< quint32 >(8 + ciphertext.size());
 	QByteArray record(4, Qt::Uninitialized);
@@ -312,15 +311,13 @@ void FileTransferEngine::processControlForReceive(std::shared_ptr< ReceiveJob > 
 }
 
 void FileTransferEngine::drainEarlyChunks(std::shared_ptr< ReceiveJob > jobPtr) {
-	const QVector< QByteArray > early = std::move(jobPtr->earlyChunks);
+	const QVector< ReceiveJob::EarlyChunk > early = std::move(jobPtr->earlyChunks);
 	jobPtr->earlyChunks.clear();
-	for (const QByteArray &blob : early) {
+	for (const auto &chunk : early) {
 		if (shutdownRequested())
 			return;
-		quint64 index = 0;
-		QByteArray ciphertext;
-		if (earlyChunkSplit(blob, index, ciphertext)) {
-			feedReceiveChunk(jobPtr, index, ciphertext);
+		if (chunk.transferId == jobPtr->manifest.transferId) {
+			feedReceiveChunk(jobPtr, chunk.index, chunk.ciphertext);
 		}
 	}
 }
@@ -479,20 +476,22 @@ void FileTransferEngine::startResponder(unsigned int actorSession, const QByteAr
 	// Handshake refused; drop silently (the initiator will time out)
 }
 
-void FileTransferEngine::onDataMessage(unsigned int actorSession, const QByteArray &transferId,
-									   quint64 chunkIndex, quint64 chunkCountHint,
-									   const QByteArray &data) {
+void FileTransferEngine::onDataMessage(unsigned int actorSession, const QByteArray &transferId, quint64 chunkIndex,
+									   quint64 chunkCountHint, const QByteArray &data) {
 	Q_UNUSED(chunkCountHint);
 
+	if (transferId.size() != TransferIdSize || data.size() < TagSize || data.size() > MaxChunkSize + TagSize)
+		return;
 	std::shared_ptr< ReceiveJob > job = findReceiveByPeer(actorSession, transferId);
 	if (!job) {
 		return;
 	}
-	job->idleTimer->start(m_config.receiveIdleTimeoutMSecs);
-
 	if (!job->haveManifest) {
+		// The sender may be relaying another transfer to the channel. Keep its
+		// ID until the authenticated manifest can identify our own chunks, and
+		// never extend a handshake timeout for unauthenticated early data.
 		if (job->earlyChunks.size() < EarlyChunkBufferMax) {
-			job->earlyChunks.append(blobForEarlyChunk(chunkIndex, data));
+			job->earlyChunks.append({ transferId, chunkIndex, data });
 		}
 		return;
 	}
@@ -554,6 +553,7 @@ void FileTransferEngine::feedReceiveChunk(std::shared_ptr< ReceiveJob > jobPtr, 
 			cleanupReceive(jobPtr);
 			return;
 		}
+		job.idleTimer->start(m_config.receiveIdleTimeoutMSecs);
 		job.spoolBytes += static_cast< quint64 >(record.size());
 		job.spooledBits[byteIndex] =
 			static_cast< char >(job.spooledBits.at(byteIndex) | bitMask);
@@ -609,6 +609,7 @@ void FileTransferEngine::feedReceiveChunk(std::shared_ptr< ReceiveJob > jobPtr, 
 		}
 	}
 
+	job.idleTimer->start(m_config.receiveIdleTimeoutMSecs);
 	job.leafHashes[static_cast< int >(index)] = merkleChunkHash(plaintext);
 	job.receivedBits[byteIndex] = static_cast< char >(job.receivedBits.at(byteIndex) | bitMask);
 	++job.receivedCount;

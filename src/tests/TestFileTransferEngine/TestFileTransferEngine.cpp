@@ -14,6 +14,7 @@
 #include "PQFileTransfer/crypto/CryptoUtils.h"
 #include "PQFileTransfer/crypto/SigMLDSA65.h"
 #include "PQFileTransfer/engine/FileTransferEngine.h"
+#include "PQFileTransfer/engine/FTMessages.h"
 #include "PQFileTransfer/engine/FileTransferSession.h"
 #include "PQFileTransfer/identity/FTIdentity.h"
 
@@ -59,6 +60,8 @@ private slots:
 	void privateReceiveStorage_data();
 	void privateReceiveStorage();
 	void predictableReceivePathCannotRedirectWrites();
+	void earlyChunksKeepTheirTransferIdentity();
+	void unrelatedChunksDoNotExtendPendingReceive();
 	void sendReceiveRoundTrip();
 	void passwordRoundTrip();
 	void wrongPasswordFailsClosed();
@@ -308,6 +311,73 @@ void TestFileTransferEngine::predictableReceivePathCannotRedirectWrites() {
 	QCOMPARE(victim.readAll(), sentinel);
 	pair.bob.abortTransfer(transfer);
 	QVERIFY(QFileInfo::exists(legacy + "/content.bin"));
+}
+
+void TestFileTransferEngine::earlyChunksKeepTheirTransferIdentity() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = 0;
+	config.chunkSize              = 16 * 1024;
+	pair.alice.setConfig(config);
+	QList< QByteArray > controls;
+	pair.alice.setTransport([&](unsigned int, const QByteArray &frame) { controls.append(frame); },
+							[&](const QByteArray &id, quint64 index, quint64 total, const QByteArray &data) {
+								pair.bob.onDataMessage(AliceSession, id, index, total, data);
+							});
+	QSignalSpy sent(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	const QString source = writeTestFile(32 * 1024);
+	QVERIFY(!source.isEmpty());
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	const QByteArray transfer = sent.first().first().value< PQFT::FTTransferInfo >().transferId;
+	// Complete M1/M3 while deliberately withholding the manifest.
+	while (!controls.isEmpty()) {
+		quint8 type = 0;
+		QVERIFY(PQFT::FTFrame::decodeHeader(controls.first(), type));
+		if (type == PQFT::FTFrame::TypeManifest)
+			break;
+		pair.bob.onControlMessage(AliceSession, controls.takeFirst());
+	}
+	QVERIFY(!controls.isEmpty());
+	const QByteArray unrelated = PQFT::randomBytes(PQFT::TransferIdSize);
+	QVERIFY(unrelated != transfer);
+	pair.bob.onDataMessage(AliceSession, unrelated, 0, 1, QByteArray(100, 'x'));
+	// Legitimate early chunks must still survive until their own manifest arrives.
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(sent, transfer, PQFT::FTTransferInfo::State::Saved), 3000);
+	while (!controls.isEmpty())
+		pair.bob.onControlMessage(AliceSession, controls.takeFirst());
+	QVERIFY(sawState(received, transfer, PQFT::FTTransferInfo::State::Ready));
+	QVERIFY(!sawState(received, transfer, PQFT::FTTransferInfo::State::Failed));
+	const QString target = m_tempDir.filePath("early-chunks-received.bin");
+	pair.bob.saveTransferAs(transfer, target);
+	QFile original(source), output(target);
+	QVERIFY(original.open(QIODevice::ReadOnly));
+	QVERIFY(output.open(QIODevice::ReadOnly));
+	QCOMPARE(output.readAll(), original.readAll());
+}
+
+void TestFileTransferEngine::unrelatedChunksDoNotExtendPendingReceive() {
+	PQFT::FileTransferEngine engine;
+	engine.setIdentity(m_bob.publicKey, [&](QByteArray &signature, const QByteArray &message, const QByteArray &context) {
+		PQFT::SigMLDSA65 sign;
+		return sign.sign(signature, m_bob.secretKey, message, context);
+	});
+	engine.setPinLookup([&](unsigned int) { return m_aliceFp; });
+	engine.setTransport([](unsigned int, const QByteArray &) {}, {});
+	PQFT::FileTransferEngine::Config config;
+	config.receiveIdleTimeoutMSecs = 100;
+	engine.setConfig(config);
+	QSignalSpy updates(&engine, &PQFT::FileTransferEngine::transferUpdated);
+	PQFT::FileTransferSession sender(PQFT::FileTransferSession::Role::Initiator, { m_alice.publicKey, {} }, m_bobFp);
+	engine.onControlMessage(AliceSession, sender.buildM1());
+	QTimer flood;
+	connect(&flood, &QTimer::timeout, &engine, [&]() {
+		engine.onDataMessage(AliceSession, PQFT::randomBytes(PQFT::TransferIdSize), 0, 1, QByteArray(100, 'x'));
+	});
+	flood.start(10);
+	QTest::qWait(350);
+	QVERIFY2(sawState(updates, {}, PQFT::FTTransferInfo::State::Failed),
+			 "Stray chunks kept an unfinished handshake alive");
 }
 
 void TestFileTransferEngine::sendReceiveRoundTrip() {
