@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestFFDHE" timestamp="2026-10-10T21:34:27" hostname="windows-validation-host" tests="13" failures="0" errors="0" skipped="0" time="0.019">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestFFDHE" time="0.002" />
+  <testcase name="exercise(ffdhe2048)" classname="TestFFDHE" time="0.013" />
+  <testcase name="exercise(ffdhe3072)" classname="TestFFDHE" time="0.000" />
+  <testcase name="exercise(ffdhe4096)" classname="TestFFDHE" time="0.000" />
+  <testcase name="exercise(ffdhe6144)" classname="TestFFDHE" time="0.000" />
+  <testcase name="exercise(ffdhe8192)" classname="TestFFDHE" time="0.000" />
+  <testcase name="exercise(ffdhe2048_upper)" classname="TestFFDHE" time="0.000" />
+  <testcase name="exercise(ffdhe2048_random)" classname="TestFFDHE" time="0.000" />
+  <testcase name="exercise(noname)" classname="TestFFDHE" time="0.000" />
+  <testcase name="exercise(typo)" classname="TestFFDHE" time="0.000" />
+  <testcase name="exercise(trailingspace)" classname="TestFFDHE" time="0.000" />
+  <testcase name="namedGroupsMethod" classname="TestFFDHE" time="0.000" />
+  <testcase name="cleanupTestCase" classname="TestFFDHE" time="0.000" />
+</testsuite>

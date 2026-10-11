@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestFileTransferSession" timestamp="2026-10-10T21:34:25" hostname="windows-validation-host" tests="13" failures="0" errors="0" skipped="0" time="0.024">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestFileTransferSession" time="0.000" />
+  <testcase name="happyPathDerivesSameKeys" classname="TestFileTransferSession" time="0.005" />
+  <testcase name="wrongPinFails" classname="TestFileTransferSession" time="0.000" />
+  <testcase name="tamperedHandshakeFails" classname="TestFileTransferSession" time="0.003" />
+  <testcase name="replayedFrameFails" classname="TestFileTransferSession" time="0.001" />
+  <testcase name="controlChannelSequencing" classname="TestFileTransferSession" time="0.004" />
+  <testcase name="sessionKekBoundToTransfer" classname="TestFileTransferSession" time="0.002" />
+  <testcase name="controlTamperFails" classname="TestFileTransferSession" time="0.002" />
+  <testcase name="manifestRoundTrip" classname="TestFileTransferSession" time="0.001" />
+  <testcase name="manifestTamperFails" classname="TestFileTransferSession" time="0.002" />
+  <testcase name="chunkRoundTrip" classname="TestFileTransferSession" time="0.001" />
+  <testcase name="fileKeyDoubleWrap" classname="TestFileTransferSession" time="0.000" />
+  <testcase name="cleanupTestCase" classname="TestFileTransferSession" time="0.000" />
+</testsuite>

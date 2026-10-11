@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestReleaseUpdate" timestamp="2026-10-10T21:34:29" hostname="windows-validation-host" tests="13" failures="0" errors="0" skipped="0" time="0.033">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestReleaseUpdate" time="0.000" />
+  <testcase name="ordersVersionsNumerically" classname="TestReleaseUpdate" time="0.000" />
+  <testcase name="separatesChannels" classname="TestReleaseUpdate" time="0.000" />
+  <testcase name="ignoresDraftsLegacyTagsAndIncompletePackages" classname="TestReleaseUpdate" time="0.000" />
+  <testcase name="rejectsUntrustedLinks" classname="TestReleaseUpdate" time="0.000" />
+  <testcase name="handlesEmptyAndMalformedFeeds" classname="TestReleaseUpdate" time="0.000" />
+  <testcase name="choosesOnlySupportedPlatformPackages" classname="TestReleaseUpdate" time="0.000" />
+  <testcase name="persistsConditionalResponsesAndSeparatesFeeds" classname="TestReleaseUpdate" time="0.005" />
+  <testcase name="throttlesFailedAttemptsAcrossLaunchesButAllowsManualChecks" classname="TestReleaseUpdate" time="0.007" />
+  <testcase name="preservesGoodCacheOnInvalidResponses" classname="TestReleaseUpdate" time="0.007" />
+  <testcase name="recoversFromCorruptCache" classname="TestReleaseUpdate" time="0.003" />
+  <testcase name="honorsPersistedServerBackoffForManualChecks" classname="TestReleaseUpdate" time="0.006" />
+  <testcase name="cleanupTestCase" classname="TestReleaseUpdate" time="0.000" />
+</testsuite>

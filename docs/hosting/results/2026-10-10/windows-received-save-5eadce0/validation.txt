@@ -1,0 +1,49 @@
+Windows received-file save trust validation: 5eadce0753b634147f97746e192ddef613019a02
+MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022); Windows 10 Pro 10.0.19045 x64.
+Strict Release/C++20; /W4 /WX /O2 /bigobj /options:strict; dynamic MSVC runtime; no source warning relaxation. Full native client/server and all test targets built.
+CTest: 42 registered, 41 enabled passed, 1 source-disabled (OverlayTest); no newly disabled tests; 38.75s.
+QtTest enabled-suite totals: 1168 cases, 1168 passed, 0 failures, 0 errors, 0 skipped.
+TestAudioWizard: 4 cases, 0 failures, 0 errors, 0 skipped, 0.027s.
+TestDatabasePath: 6 cases, 0 failures, 0 errors, 0 skipped, 1.839s.
+TestReleaseUpdate: 13 cases, 0 failures, 0 errors, 0 skipped, 0.033s.
+TestAnimatedImages: 10 cases, 0 failures, 0 errors, 0 skipped, 0.011s.
+TestChatWebM: 6 cases, 0 failures, 0 errors, 0 skipped, 0.027s.
+TestVideoFramePacketizer: 4 cases, 0 failures, 0 errors, 0 skipped, 0.249s.
+TestVideoPacketPacer: 12 cases, 0 failures, 0 errors, 0 skipped, 0.128s.
+TestVideoQualityProfile: 9 cases, 0 failures, 0 errors, 0 skipped, 0.250s.
+TestVideoViewUi: 5 cases, 0 failures, 0 errors, 0 skipped, 0.006s.
+TestXMLTools: 25 cases, 0 failures, 0 errors, 0 skipped, 0.004s.
+TestFileTransferUi: 78 cases, 0 failures, 0 errors, 0 skipped, 0.023s.
+TestFileTransferManager: 45 cases, 0 failures, 0 errors, 0 skipped, 6.962s.
+TestFileTransferTransport: 11 cases, 0 failures, 0 errors, 0 skipped, 0.005s.
+TestPQCrypto: 30 cases, 0 failures, 0 errors, 0 skipped, 0.580s.
+TestFTIdentity: 14 cases, 0 failures, 0 errors, 0 skipped, 4.370s.
+TestFileTransferSession: 13 cases, 0 failures, 0 errors, 0 skipped, 0.024s.
+TestFileTransferEngine: 43 cases, 0 failures, 0 errors, 0 skipped, 24.007s.
+TestFileTransferE2E: 5 cases, 0 failures, 0 errors, 0 skipped, 9.267s.
+TestSettingsJSONSerialization: 4 cases, 0 failures, 0 errors, 0 skipped, 0.008s.
+TestCrypt: 8 cases, 0 failures, 0 errors, 0 skipped, 0.013s.
+TestAudioReceiverBuffer: 10 cases, 0 failures, 0 errors, 0 skipped, 0.004s.
+TestQtLogger: 7 cases, 0 failures, 0 errors, 0 skipped, 1.811s.
+TestBandwidthRecord: 10 cases, 0 failures, 0 errors, 0 skipped, 0.286s.
+TestConnectionOutputQueue: 10 cases, 0 failures, 0 errors, 0 skipped, 0.130s.
+TestCaseInsensitiveQString: 10 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+TestCryptographicHash: 13 cases, 0 failures, 0 errors, 0 skipped, 0.006s.
+TestCryptographicRandom: 5 cases, 0 failures, 0 errors, 0 skipped, 1.322s.
+TestDatabase: 22 cases, 0 failures, 0 errors, 0 skipped, 0.177s.
+TestServerDatabase: 18 cases, 0 failures, 0 errors, 0 skipped, 0.333s.
+TestFFDHE: 13 cases, 0 failures, 0 errors, 0 skipped, 0.019s.
+TestIPCUtils: 3 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+TestPacketDataStream: 646 cases, 0 failures, 0 errors, 0 skipped, 0.009s.
+TestPasswordGenerator: 3 cases, 0 failures, 0 errors, 0 skipped, 0.007s.
+TestMumbleProtocol: 8 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+TestSelfSignedCertificate: 4 cases, 0 failures, 0 errors, 0 skipped, 0.288s.
+TestServerAddress: 10 cases, 0 failures, 0 errors, 0 skipped, 0.004s.
+TestSSLLocks: 3 cases, 0 failures, 0 errors, 0 skipped, 2.052s.
+TestStdAbs: 3 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+TestTimer: 4 cases, 0 failures, 0 errors, 0 skipped, 0.154s.
+TestUnresolvedServerAddress: 9 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+TestVersion: 12 cases, 0 failures, 0 errors, 0 skipped, 0.003s.
+Presented-identity manager/store/real-engine/UI required cases passed; full enabled regression assertions/deadlines unchanged; generated CTest registrations restored byte-for-byte. Source/personal state unchanged. Earlier committed evidence and saved binaries remain intact on E:; preservation record discloses earlier private-log loss. No C: copy/cleanup or GUI/auth automation.
+Overlay requires human inspection. Online and external database variants remain preexisting OFF. Windows source excludes WebM decoder/playback rows (six ChatWebM drop/budget/init/cleanup cases run); Unix permission/symlink branches compile-time conditional. Physical media, installed-client/signatures, server negotiation/receipts/queues/fan-out, CodeQL comparison execution, sanitizers/endurance and Windows 11 remain unqualified.
+Nine production receiver-manager save rows passed: verified/pinned/retry save exact bytes; removed/changed pin, unreadable database or missing trust store prevents output and retains Failed; duplicate-save writes only first authorized target and reports Saved; disconnect after rejection drains cleanup. Earlier de8 evidence records prior private 9b5b8e raw-log overwrite; committed evidence/binaries intact. Current final run has independent E: cache and eleven earlier private ledgers unchanged. Exact source automated qualification only; no shipping/GUI/media claim; prior Should-fix work order and sender post-M4 dialog lifecycle remain open.

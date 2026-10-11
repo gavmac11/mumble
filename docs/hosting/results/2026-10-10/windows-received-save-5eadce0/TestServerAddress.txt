@@ -1,0 +1,14 @@
+********* Start testing of TestServerAddress *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestServerAddress::initTestCase()
+PASS   : TestServerAddress::defaultCtor()
+PASS   : TestServerAddress::isValid()
+PASS   : TestServerAddress::ctor()
+PASS   : TestServerAddress::equals()
+PASS   : TestServerAddress::lessThan()
+PASS   : TestServerAddress::qhash()
+PASS   : TestServerAddress::match()
+PASS   : TestServerAddress::ipv6ToString()
+PASS   : TestServerAddress::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 4ms
+********* Finished testing of TestServerAddress *********

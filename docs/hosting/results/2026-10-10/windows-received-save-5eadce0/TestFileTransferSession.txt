@@ -1,0 +1,17 @@
+********* Start testing of TestFileTransferSession *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestFileTransferSession::initTestCase()
+PASS   : TestFileTransferSession::happyPathDerivesSameKeys()
+PASS   : TestFileTransferSession::wrongPinFails()
+PASS   : TestFileTransferSession::tamperedHandshakeFails()
+PASS   : TestFileTransferSession::replayedFrameFails()
+PASS   : TestFileTransferSession::controlChannelSequencing()
+PASS   : TestFileTransferSession::sessionKekBoundToTransfer()
+PASS   : TestFileTransferSession::controlTamperFails()
+PASS   : TestFileTransferSession::manifestRoundTrip()
+PASS   : TestFileTransferSession::manifestTamperFails()
+PASS   : TestFileTransferSession::chunkRoundTrip()
+PASS   : TestFileTransferSession::fileKeyDoubleWrap()
+PASS   : TestFileTransferSession::cleanupTestCase()
+Totals: 13 passed, 0 failed, 0 skipped, 0 blacklisted, 24ms
+********* Finished testing of TestFileTransferSession *********

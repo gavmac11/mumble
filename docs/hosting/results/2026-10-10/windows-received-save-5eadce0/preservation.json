@@ -1,0 +1,33 @@
+{
+  "source_commit": "5eadce0753b634147f97746e192ddef613019a02",
+  "prior_ledger_entries_verified": {
+    "mumble-rate-credit-20261010": 30,
+    "mumble-audio-wizard-20261010": 22,
+    "mumble-rate-credit-revised-20261010": 30,
+    "mumble-rate-credit-precision-20261010": 31,
+    "mumble-integrated-pacing-audio-20261010": 144,
+    "mumble-atomic-transfer-save-20261010": 31,
+    "mumble-atomic-save-sync-20261010": 31,
+    "mumble-automatic-save-safety-20261010": 29,
+    "mumble-automatic-save-migration-20261010": 28,
+    "mumble-presented-identity-20261010": 145,
+    "mumble-presented-sender-9b5b8e-20261010": 145,
+    "mumble-received-save-de8caa9-20261010": 288
+  },
+  "prior_presented_sender_source": "9b5b8e26684d6f2481591b11653397d390d39300",
+  "prior_presented_sender_evidence": "2ac0a94bc103cdfc9f3b684b638984118718bf28",
+  "prior_presented_sender_committed_checksum_entries_verified": 99,
+  "prior_binaries": "All 44 exact de8 client/server/test binaries and compiler commands preserved/hash verified on E: before reuse; all older snapshots retained",
+  "snapshot_binary_count": 44,
+  "c_drive_copies_or_cleanup": false,
+  "personal_mumble_state_changes": false,
+  "gui_authentication_or_hardware_actions": false,
+  "prior_private_cache_overwritten": "mumble-presented-sender-9b5b8e-20261010",
+  "prior_private_raw_logs_preserved": false,
+  "unchanged_prior_ledger_count": 11,
+  "prior_committed_evidence_and_binary_snapshot_preserved": true,
+  "prior_received_save_source": "de8caa9e6393da3d17e3f147cb5f8064758c13cb",
+  "prior_received_save_evidence": "6a56ad61b9b164bbf2e3c84b2c548878a53c5275",
+  "prior_received_save_committed_checksum_entries_verified": 99,
+  "current_run_cache_isolation_correct": true
+}

@@ -1,0 +1,633 @@
+Start testing: Oct 10 21:33 Pacific Daylight Time
+----------------------------------------------------------
+18/42 Testing: TestFileTransferE2E
+18/42 Test: TestFileTransferE2E
+Command: "<isolated-build-directory>/tests/TestFileTransferE2E.exe" "-o" "<validation-cache>/evidence/TestFileTransferE2E.txt,txt" "-o" "<validation-cache>/evidence/TestFileTransferE2E.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestFileTransferE2E
+"TestFileTransferE2E" start time: Oct 10 21:33 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =  10.09 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferE2E" end time: Oct 10 21:34 Pacific Daylight Time
+"TestFileTransferE2E" time elapsed: 00:00:10
+----------------------------------------------------------
+
+15/42 Testing: TestFTIdentity
+15/42 Test: TestFTIdentity
+Command: "<isolated-build-directory>/tests/TestFTIdentity.exe" "-o" "<validation-cache>/evidence/TestFTIdentity.txt,txt" "-o" "<validation-cache>/evidence/TestFTIdentity.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestFTIdentity
+"TestFTIdentity" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   5.14 sec
+----------------------------------------------------------
+Test Passed.
+"TestFTIdentity" end time: Oct 10 21:34 Pacific Daylight Time
+"TestFTIdentity" time elapsed: 00:00:05
+----------------------------------------------------------
+
+2/42 Testing: TestDatabasePath
+2/42 Test: TestDatabasePath
+Command: "<isolated-build-directory>/tests/TestDatabasePath.exe" "-platform" "offscreen" "-o" "<validation-cache>/evidence/TestDatabasePath.txt,txt" "-o" "<validation-cache>/evidence/TestDatabasePath.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestDatabasePath
+"TestDatabasePath" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   2.68 sec
+----------------------------------------------------------
+Test Passed.
+"TestDatabasePath" end time: Oct 10 21:34 Pacific Daylight Time
+"TestDatabasePath" time elapsed: 00:00:02
+----------------------------------------------------------
+
+38/42 Testing: TestSSLLocks
+38/42 Test: TestSSLLocks
+Command: "<isolated-build-directory>/tests/TestSSLLocks.exe" "-o" "<validation-cache>/evidence/TestSSLLocks.txt,txt" "-o" "<validation-cache>/evidence/TestSSLLocks.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestSSLLocks
+"TestSSLLocks" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   2.41 sec
+----------------------------------------------------------
+Test Passed.
+"TestSSLLocks" end time: Oct 10 21:34 Pacific Daylight Time
+"TestSSLLocks" time elapsed: 00:00:02
+----------------------------------------------------------
+
+23/42 Testing: TestQtLogger
+23/42 Test: TestQtLogger
+Command: "<isolated-build-directory>/tests/TestQtLogger.exe" "-o" "<validation-cache>/evidence/TestQtLogger.txt,txt" "-o" "<validation-cache>/evidence/TestQtLogger.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestQtLogger
+"TestQtLogger" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   2.16 sec
+----------------------------------------------------------
+Test Passed.
+"TestQtLogger" end time: Oct 10 21:34 Pacific Daylight Time
+"TestQtLogger" time elapsed: 00:00:02
+----------------------------------------------------------
+
+28/42 Testing: TestCryptographicRandom
+28/42 Test: TestCryptographicRandom
+Command: "<isolated-build-directory>/tests/TestCryptographicRandom.exe" "-o" "<validation-cache>/evidence/TestCryptographicRandom.txt,txt" "-o" "<validation-cache>/evidence/TestCryptographicRandom.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestCryptographicRandom
+"TestCryptographicRandom" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   1.68 sec
+----------------------------------------------------------
+Test Passed.
+"TestCryptographicRandom" end time: Oct 10 21:34 Pacific Daylight Time
+"TestCryptographicRandom" time elapsed: 00:00:01
+----------------------------------------------------------
+
+17/42 Testing: TestFileTransferEngine
+17/42 Test: TestFileTransferEngine
+Command: "<isolated-build-directory>/tests/TestFileTransferEngine.exe" "-o" "<validation-cache>/evidence/TestFileTransferEngine.txt,txt" "-o" "<validation-cache>/evidence/TestFileTransferEngine.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestFileTransferEngine
+"TestFileTransferEngine" start time: Oct 10 21:33 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =  25.04 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferEngine" end time: Oct 10 21:34 Pacific Daylight Time
+"TestFileTransferEngine" time elapsed: 00:00:25
+----------------------------------------------------------
+
+14/42 Testing: TestPQCrypto
+14/42 Test: TestPQCrypto
+Command: "<isolated-build-directory>/tests/TestPQCrypto.exe" "-o" "<validation-cache>/evidence/TestPQCrypto.txt,txt" "-o" "<validation-cache>/evidence/TestPQCrypto.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestPQCrypto
+"TestPQCrypto" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   1.39 sec
+----------------------------------------------------------
+Test Passed.
+"TestPQCrypto" end time: Oct 10 21:34 Pacific Daylight Time
+"TestPQCrypto" time elapsed: 00:00:01
+----------------------------------------------------------
+
+30/42 Testing: TestServerDatabase
+30/42 Test: TestServerDatabase
+Command: "<isolated-build-directory>/tests/TestServerDatabase.exe" "-o" "<validation-cache>/evidence/TestServerDatabase.txt,txt" "-o" "<validation-cache>/evidence/TestServerDatabase.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestDatabase/server
+"TestServerDatabase" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   1.21 sec
+----------------------------------------------------------
+Test Passed.
+"TestServerDatabase" end time: Oct 10 21:34 Pacific Daylight Time
+"TestServerDatabase" time elapsed: 00:00:01
+----------------------------------------------------------
+
+29/42 Testing: TestDatabase
+29/42 Test: TestDatabase
+Command: "<isolated-build-directory>/tests/TestDatabase.exe" "-o" "<validation-cache>/evidence/TestDatabase.txt,txt" "-o" "<validation-cache>/evidence/TestDatabase.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestDatabase
+"TestDatabase" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.97 sec
+----------------------------------------------------------
+Test Passed.
+"TestDatabase" end time: Oct 10 21:34 Pacific Daylight Time
+"TestDatabase" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/42 Testing: TestFileTransferUi
+11/42 Test: TestFileTransferUi
+Command: "<isolated-build-directory>/tests/TestFileTransferUi.exe" "-platform" "offscreen" "-o" "<validation-cache>/evidence/TestFileTransferUi.txt,txt" "-o" "<validation-cache>/evidence/TestFileTransferUi.xml,junitxml"
+Directory: <isolated-build-directory>
+"TestFileTransferUi" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.92 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferUi" end time: Oct 10 21:34 Pacific Daylight Time
+"TestFileTransferUi" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/42 Testing: TestSettingsJSONSerialization
+19/42 Test: TestSettingsJSONSerialization
+Command: "<isolated-build-directory>/tests/TestSettingsJSONSerialization.exe" "-o" "<validation-cache>/evidence/TestSettingsJSONSerialization.txt,txt" "-o" "<validation-cache>/evidence/TestSettingsJSONSerialization.xml,junitxml"
+Directory: <isolated-build-directory>
+"TestSettingsJSONSerialization" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.90 sec
+----------------------------------------------------------
+Test Passed.
+"TestSettingsJSONSerialization" end time: Oct 10 21:34 Pacific Daylight Time
+"TestSettingsJSONSerialization" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/42 Testing: TestChatWebM
+5/42 Test: TestChatWebM
+Command: "<isolated-build-directory>/tests/TestChatWebM.exe" "-o" "<validation-cache>/evidence/TestChatWebM.txt,txt" "-o" "<validation-cache>/evidence/TestChatWebM.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestChatWebM
+"TestChatWebM" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.91 sec
+----------------------------------------------------------
+Test Passed.
+"TestChatWebM" end time: Oct 10 21:34 Pacific Daylight Time
+"TestChatWebM" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/42 Testing: TestAnimatedImages
+4/42 Test: TestAnimatedImages
+Command: "<isolated-build-directory>/tests/TestAnimatedImages.exe" "-o" "<validation-cache>/evidence/TestAnimatedImages.txt,txt" "-o" "<validation-cache>/evidence/TestAnimatedImages.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestAnimatedImages
+"TestAnimatedImages" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.91 sec
+----------------------------------------------------------
+Test Passed.
+"TestAnimatedImages" end time: Oct 10 21:34 Pacific Daylight Time
+"TestAnimatedImages" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/42 Testing: TestFileTransferManager
+12/42 Test: TestFileTransferManager
+Command: "<isolated-build-directory>/tests/TestFileTransferManager.exe" "-o" "<validation-cache>/evidence/TestFileTransferManager.txt,txt" "-o" "<validation-cache>/evidence/TestFileTransferManager.xml,junitxml"
+Directory: <isolated-build-directory>
+"TestFileTransferManager" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   8.18 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferManager" end time: Oct 10 21:34 Pacific Daylight Time
+"TestFileTransferManager" time elapsed: 00:00:08
+----------------------------------------------------------
+
+1/42 Testing: TestAudioWizard
+1/42 Test: TestAudioWizard
+Command: "<isolated-build-directory>/tests/TestAudioWizard.exe" "-platform" "offscreen" "-o" "<validation-cache>/evidence/TestAudioWizard.txt,txt" "-o" "<validation-cache>/evidence/TestAudioWizard.xml,junitxml"
+Directory: <isolated-build-directory>
+"TestAudioWizard" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.91 sec
+----------------------------------------------------------
+Test Passed.
+"TestAudioWizard" end time: Oct 10 21:34 Pacific Daylight Time
+"TestAudioWizard" time elapsed: 00:00:00
+----------------------------------------------------------
+
+40/42 Testing: TestTimer
+40/42 Test: TestTimer
+Command: "<isolated-build-directory>/tests/TestTimer.exe" "-o" "<validation-cache>/evidence/TestTimer.txt,txt" "-o" "<validation-cache>/evidence/TestTimer.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestTimer
+"TestTimer" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.84 sec
+----------------------------------------------------------
+Test Passed.
+"TestTimer" end time: Oct 10 21:34 Pacific Daylight Time
+"TestTimer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/42 Testing: TestFileTransferSession
+16/42 Test: TestFileTransferSession
+Command: "<isolated-build-directory>/tests/TestFileTransferSession.exe" "-o" "<validation-cache>/evidence/TestFileTransferSession.txt,txt" "-o" "<validation-cache>/evidence/TestFileTransferSession.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestFileTransferSession
+"TestFileTransferSession" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.79 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferSession" end time: Oct 10 21:34 Pacific Daylight Time
+"TestFileTransferSession" time elapsed: 00:00:00
+----------------------------------------------------------
+
+36/42 Testing: TestSelfSignedCertificate
+36/42 Test: TestSelfSignedCertificate
+Command: "<isolated-build-directory>/tests/TestSelfSignedCertificate.exe" "-o" "<validation-cache>/evidence/TestSelfSignedCertificate.txt,txt" "-o" "<validation-cache>/evidence/TestSelfSignedCertificate.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestSelfSignedCertificate
+"TestSelfSignedCertificate" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.66 sec
+----------------------------------------------------------
+Test Passed.
+"TestSelfSignedCertificate" end time: Oct 10 21:34 Pacific Daylight Time
+"TestSelfSignedCertificate" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/42 Testing: TestConnectionOutputQueue
+25/42 Test: TestConnectionOutputQueue
+Command: "<isolated-build-directory>/tests/TestConnectionOutputQueue.exe" "-o" "<validation-cache>/evidence/TestConnectionOutputQueue.txt,txt" "-o" "<validation-cache>/evidence/TestConnectionOutputQueue.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestConnectionOutputQueue
+"TestConnectionOutputQueue" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.49 sec
+----------------------------------------------------------
+Test Passed.
+"TestConnectionOutputQueue" end time: Oct 10 21:34 Pacific Daylight Time
+"TestConnectionOutputQueue" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/42 Testing: TestCrypt
+21/42 Test: TestCrypt
+Command: "<isolated-build-directory>/tests/TestCrypt.exe" "-o" "<validation-cache>/evidence/TestCrypt.txt,txt" "-o" "<validation-cache>/evidence/TestCrypt.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestCrypt
+"TestCrypt" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.38 sec
+----------------------------------------------------------
+Test Passed.
+"TestCrypt" end time: Oct 10 21:34 Pacific Daylight Time
+"TestCrypt" time elapsed: 00:00:00
+----------------------------------------------------------
+
+41/42 Testing: TestUnresolvedServerAddress
+41/42 Test: TestUnresolvedServerAddress
+Command: "<isolated-build-directory>/tests/TestUnresolvedServerAddress.exe" "-o" "<validation-cache>/evidence/TestUnresolvedServerAddress.txt,txt" "-o" "<validation-cache>/evidence/TestUnresolvedServerAddress.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestUnresolvedServerAddress
+"TestUnresolvedServerAddress" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.41 sec
+----------------------------------------------------------
+Test Passed.
+"TestUnresolvedServerAddress" end time: Oct 10 21:34 Pacific Daylight Time
+"TestUnresolvedServerAddress" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/42 Testing: TestVideoPacketPacer
+7/42 Test: TestVideoPacketPacer
+Command: "<isolated-build-directory>/tests/TestVideoPacketPacer.exe" "-o" "<validation-cache>/evidence/TestVideoPacketPacer.txt,txt" "-o" "<validation-cache>/evidence/TestVideoPacketPacer.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestVideoPacketPacer
+"TestVideoPacketPacer" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.49 sec
+----------------------------------------------------------
+Test Passed.
+"TestVideoPacketPacer" end time: Oct 10 21:34 Pacific Daylight Time
+"TestVideoPacketPacer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+37/42 Testing: TestServerAddress
+37/42 Test: TestServerAddress
+Command: "<isolated-build-directory>/tests/TestServerAddress.exe" "-o" "<validation-cache>/evidence/TestServerAddress.txt,txt" "-o" "<validation-cache>/evidence/TestServerAddress.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestServerAddress
+"TestServerAddress" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.38 sec
+----------------------------------------------------------
+Test Passed.
+"TestServerAddress" end time: Oct 10 21:34 Pacific Daylight Time
+"TestServerAddress" time elapsed: 00:00:00
+----------------------------------------------------------
+
+33/42 Testing: TestPacketDataStream
+33/42 Test: TestPacketDataStream
+Command: "<isolated-build-directory>/tests/TestPacketDataStream.exe" "-o" "<validation-cache>/evidence/TestPacketDataStream.txt,txt" "-o" "<validation-cache>/evidence/TestPacketDataStream.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestPacketDataStream
+"TestPacketDataStream" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.42 sec
+----------------------------------------------------------
+Test Passed.
+"TestPacketDataStream" end time: Oct 10 21:34 Pacific Daylight Time
+"TestPacketDataStream" time elapsed: 00:00:00
+----------------------------------------------------------
+
+31/42 Testing: TestFFDHE
+31/42 Test: TestFFDHE
+Command: "<isolated-build-directory>/tests/TestFFDHE.exe" "-o" "<validation-cache>/evidence/TestFFDHE.txt,txt" "-o" "<validation-cache>/evidence/TestFFDHE.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestFFDHE
+"TestFFDHE" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.42 sec
+----------------------------------------------------------
+Test Passed.
+"TestFFDHE" end time: Oct 10 21:34 Pacific Daylight Time
+"TestFFDHE" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/42 Testing: TestCaseInsensitiveQString
+26/42 Test: TestCaseInsensitiveQString
+Command: "<isolated-build-directory>/tests/TestCaseInsensitiveQString.exe" "-o" "<validation-cache>/evidence/TestCaseInsensitiveQString.txt,txt" "-o" "<validation-cache>/evidence/TestCaseInsensitiveQString.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestCaseInsensitiveQString
+"TestCaseInsensitiveQString" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.37 sec
+----------------------------------------------------------
+Test Passed.
+"TestCaseInsensitiveQString" end time: Oct 10 21:34 Pacific Daylight Time
+"TestCaseInsensitiveQString" time elapsed: 00:00:00
+----------------------------------------------------------
+
+34/42 Testing: TestPasswordGenerator
+34/42 Test: TestPasswordGenerator
+Command: "<isolated-build-directory>/tests/TestPasswordGenerator.exe" "-o" "<validation-cache>/evidence/TestPasswordGenerator.txt,txt" "-o" "<validation-cache>/evidence/TestPasswordGenerator.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestPasswordGenerator
+"TestPasswordGenerator" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.38 sec
+----------------------------------------------------------
+Test Passed.
+"TestPasswordGenerator" end time: Oct 10 21:34 Pacific Daylight Time
+"TestPasswordGenerator" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/42 Testing: TestAudioReceiverBuffer
+22/42 Test: TestAudioReceiverBuffer
+Command: "<isolated-build-directory>/tests/TestAudioReceiverBuffer.exe" "-o" "<validation-cache>/evidence/TestAudioReceiverBuffer.txt,txt" "-o" "<validation-cache>/evidence/TestAudioReceiverBuffer.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestAudioReceiverBuffer
+"TestAudioReceiverBuffer" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.37 sec
+----------------------------------------------------------
+Test Passed.
+"TestAudioReceiverBuffer" end time: Oct 10 21:34 Pacific Daylight Time
+"TestAudioReceiverBuffer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+35/42 Testing: TestMumbleProtocol
+35/42 Test: TestMumbleProtocol
+Command: "<isolated-build-directory>/tests/TestMumbleProtocol.exe" "-o" "<validation-cache>/evidence/TestMumbleProtocol.txt,txt" "-o" "<validation-cache>/evidence/TestMumbleProtocol.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestMumbleProtocol
+"TestMumbleProtocol" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.37 sec
+----------------------------------------------------------
+Test Passed.
+"TestMumbleProtocol" end time: Oct 10 21:34 Pacific Daylight Time
+"TestMumbleProtocol" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/42 Testing: TestCryptographicHash
+27/42 Test: TestCryptographicHash
+Command: "<isolated-build-directory>/tests/TestCryptographicHash.exe" "-o" "<validation-cache>/evidence/TestCryptographicHash.txt,txt" "-o" "<validation-cache>/evidence/TestCryptographicHash.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestCryptographicHash
+"TestCryptographicHash" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.37 sec
+----------------------------------------------------------
+Test Passed.
+"TestCryptographicHash" end time: Oct 10 21:34 Pacific Daylight Time
+"TestCryptographicHash" time elapsed: 00:00:00
+----------------------------------------------------------
+
+39/42 Testing: TestStdAbs
+39/42 Test: TestStdAbs
+Command: "<isolated-build-directory>/tests/TestStdAbs.exe" "-o" "<validation-cache>/evidence/TestStdAbs.txt,txt" "-o" "<validation-cache>/evidence/TestStdAbs.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestStdAbs
+"TestStdAbs" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.42 sec
+----------------------------------------------------------
+Test Passed.
+"TestStdAbs" end time: Oct 10 21:34 Pacific Daylight Time
+"TestStdAbs" time elapsed: 00:00:00
+----------------------------------------------------------
+
+42/42 Testing: TestVersion
+42/42 Test: TestVersion
+Command: "<isolated-build-directory>/tests/TestVersion.exe" "-o" "<validation-cache>/evidence/TestVersion.txt,txt" "-o" "<validation-cache>/evidence/TestVersion.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestVersion
+"TestVersion" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.37 sec
+----------------------------------------------------------
+Test Passed.
+"TestVersion" end time: Oct 10 21:34 Pacific Daylight Time
+"TestVersion" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/42 Testing: TestXMLTools
+10/42 Test: TestXMLTools
+Command: "<isolated-build-directory>/tests/TestXMLTools.exe" "-o" "<validation-cache>/evidence/TestXMLTools.txt,txt" "-o" "<validation-cache>/evidence/TestXMLTools.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestXMLTools
+"TestXMLTools" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.37 sec
+----------------------------------------------------------
+Test Passed.
+"TestXMLTools" end time: Oct 10 21:34 Pacific Daylight Time
+"TestXMLTools" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/42 Testing: TestVideoFramePacketizer
+6/42 Test: TestVideoFramePacketizer
+Command: "<isolated-build-directory>/tests/TestVideoFramePacketizer.exe" "-o" "<validation-cache>/evidence/TestVideoFramePacketizer.txt,txt" "-o" "<validation-cache>/evidence/TestVideoFramePacketizer.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestVideoFramePacketizer
+"TestVideoFramePacketizer" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.36 sec
+----------------------------------------------------------
+Test Passed.
+"TestVideoFramePacketizer" end time: Oct 10 21:34 Pacific Daylight Time
+"TestVideoFramePacketizer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+32/42 Testing: TestIPCUtils
+32/42 Test: TestIPCUtils
+Command: "<isolated-build-directory>/tests/TestIPCUtils.exe" "-o" "<validation-cache>/evidence/TestIPCUtils.txt,txt" "-o" "<validation-cache>/evidence/TestIPCUtils.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestIPCUtils
+"TestIPCUtils" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.37 sec
+----------------------------------------------------------
+Test Passed.
+"TestIPCUtils" end time: Oct 10 21:34 Pacific Daylight Time
+"TestIPCUtils" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/42 Testing: TestReleaseUpdate
+3/42 Test: TestReleaseUpdate
+Command: "<isolated-build-directory>/tests/TestReleaseUpdate.exe" "-o" "<validation-cache>/evidence/TestReleaseUpdate.txt,txt" "-o" "<validation-cache>/evidence/TestReleaseUpdate.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestReleaseUpdate
+"TestReleaseUpdate" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.41 sec
+----------------------------------------------------------
+Test Passed.
+"TestReleaseUpdate" end time: Oct 10 21:34 Pacific Daylight Time
+"TestReleaseUpdate" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/42 Testing: TestVideoQualityProfile
+8/42 Test: TestVideoQualityProfile
+Command: "<isolated-build-directory>/tests/TestVideoQualityProfile.exe" "-o" "<validation-cache>/evidence/TestVideoQualityProfile.txt,txt" "-o" "<validation-cache>/evidence/TestVideoQualityProfile.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestVideoQualityProfile
+"TestVideoQualityProfile" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.36 sec
+----------------------------------------------------------
+Test Passed.
+"TestVideoQualityProfile" end time: Oct 10 21:34 Pacific Daylight Time
+"TestVideoQualityProfile" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/42 Testing: TestBandwidthRecord
+24/42 Test: TestBandwidthRecord
+Command: "<isolated-build-directory>/tests/TestBandwidthRecord.exe" "-o" "<validation-cache>/evidence/TestBandwidthRecord.txt,txt" "-o" "<validation-cache>/evidence/TestBandwidthRecord.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestBandwidthRecord
+"TestBandwidthRecord" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.42 sec
+----------------------------------------------------------
+Test Passed.
+"TestBandwidthRecord" end time: Oct 10 21:34 Pacific Daylight Time
+"TestBandwidthRecord" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/42 Testing: TestVideoViewUi
+9/42 Test: TestVideoViewUi
+Command: "<isolated-build-directory>/tests/TestVideoViewUi.exe" "-platform" "offscreen" "-o" "<validation-cache>/evidence/TestVideoViewUi.txt,txt" "-o" "<validation-cache>/evidence/TestVideoViewUi.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestVideoViewUi
+"TestVideoViewUi" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.39 sec
+----------------------------------------------------------
+Test Passed.
+"TestVideoViewUi" end time: Oct 10 21:34 Pacific Daylight Time
+"TestVideoViewUi" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/42 Testing: OverlayTest
+20/42 Test: OverlayTest
+Command: ""
+Directory: <isolated-build-directory>/src/tests/OverlayTest
+"OverlayTest" start time: 
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"OverlayTest" end time: Oct 10 21:34 Pacific Daylight Time
+"OverlayTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/42 Testing: TestFileTransferTransport
+13/42 Test: TestFileTransferTransport
+Command: "<isolated-build-directory>/tests/TestFileTransferTransport.exe" "-o" "<validation-cache>/evidence/TestFileTransferTransport.txt,txt" "-o" "<validation-cache>/evidence/TestFileTransferTransport.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestFileTransferTransport
+"TestFileTransferTransport" start time: Oct 10 21:34 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.36 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferTransport" end time: Oct 10 21:34 Pacific Daylight Time
+"TestFileTransferTransport" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 10 21:34 Pacific Daylight Time

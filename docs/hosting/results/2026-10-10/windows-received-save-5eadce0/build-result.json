@@ -1,0 +1,11 @@
+{
+  "source_commit": "5eadce0753b634147f97746e192ddef613019a02",
+  "configure_exit_code": 0,
+  "build_exit_code": 0,
+  "build_session": 3714,
+  "recorded_utc": "2026-10-11T04:33:51.1487069Z",
+  "selection": "Default all target",
+  "parallel": 6,
+  "temp": "Owned final E: fixture directory",
+  "accepted_attempt": "Independent correctly isolated cache; no failed current native attempt"
+}

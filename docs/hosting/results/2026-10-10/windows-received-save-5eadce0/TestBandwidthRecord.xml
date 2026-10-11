@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestBandwidthRecord" timestamp="2026-10-10T21:34:29" hostname="windows-validation-host" tests="10" failures="0" errors="0" skipped="0" time="0.286">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestBandwidthRecord" time="0.000" />
+  <testcase name="fileChunksRetireTheirEntireByteCharge" classname="TestBandwidthRecord" time="0.000" />
+  <testcase name="rejectsExcessAtTheWindowsMultiplicationBoundary" classname="TestBandwidthRecord" time="0.000" />
+  <testcase name="longIdleSlotStillEnforcesTheConfiguredRate" classname="TestBandwidthRecord" time="0.000" />
+  <testcase name="maximumWidthChargesDoNotOverflowTheRollingSum" classname="TestBandwidthRecord" time="0.000" />
+  <testcase name="displayedBandwidthClampsInsteadOfWrapping" classname="TestBandwidthRecord" time="0.000" />
+  <testcase name="voiceSizedChargesKeepTheirExistingBehavior" classname="TestBandwidthRecord" time="0.000" />
+  <testcase name="refusedChargeDoesNotAdvanceOrOverwriteAcceptedState" classname="TestBandwidthRecord" time="0.000" />
+  <testcase name="invalidChargesCannotReduceOrBypassTheBudget" classname="TestBandwidthRecord" time="0.000" />
+  <testcase name="cleanupTestCase" classname="TestBandwidthRecord" time="0.000" />
+</testsuite>

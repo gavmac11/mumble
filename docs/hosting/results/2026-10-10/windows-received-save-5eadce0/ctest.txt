@@ -1,0 +1,93 @@
+Internal ctest changing into directory: <isolated-build-directory>
+Test project <isolated-build-directory>
+      Start 17: TestFileTransferEngine
+      Start 18: TestFileTransferE2E
+ 1/42 Test #18: TestFileTransferE2E ..............   Passed   10.09 sec
+      Start 15: TestFTIdentity
+ 2/42 Test #15: TestFTIdentity ...................   Passed    5.14 sec
+      Start  2: TestDatabasePath
+ 3/42 Test  #2: TestDatabasePath .................   Passed    2.68 sec
+      Start 38: TestSSLLocks
+ 4/42 Test #38: TestSSLLocks .....................   Passed    2.41 sec
+      Start 23: TestQtLogger
+ 5/42 Test #23: TestQtLogger .....................   Passed    2.16 sec
+      Start 28: TestCryptographicRandom
+ 6/42 Test #28: TestCryptographicRandom ..........   Passed    1.68 sec
+      Start 12: TestFileTransferManager
+ 7/42 Test #17: TestFileTransferEngine ...........   Passed   25.04 sec
+      Start 14: TestPQCrypto
+ 8/42 Test #14: TestPQCrypto .....................   Passed    1.39 sec
+      Start 30: TestServerDatabase
+ 9/42 Test #30: TestServerDatabase ...............   Passed    1.21 sec
+      Start 29: TestDatabase
+10/42 Test #29: TestDatabase .....................   Passed    0.97 sec
+      Start 11: TestFileTransferUi
+11/42 Test #11: TestFileTransferUi ...............   Passed    0.92 sec
+      Start 19: TestSettingsJSONSerialization
+12/42 Test #19: TestSettingsJSONSerialization ....   Passed    0.90 sec
+      Start  5: TestChatWebM
+13/42 Test  #5: TestChatWebM .....................   Passed    0.91 sec
+      Start  4: TestAnimatedImages
+14/42 Test  #4: TestAnimatedImages ...............   Passed    0.91 sec
+      Start  1: TestAudioWizard
+15/42 Test #12: TestFileTransferManager ..........   Passed    8.18 sec
+      Start 40: TestTimer
+16/42 Test  #1: TestAudioWizard ..................   Passed    0.91 sec
+      Start 16: TestFileTransferSession
+17/42 Test #40: TestTimer ........................   Passed    0.84 sec
+      Start 36: TestSelfSignedCertificate
+18/42 Test #16: TestFileTransferSession ..........   Passed    0.79 sec
+      Start 25: TestConnectionOutputQueue
+19/42 Test #36: TestSelfSignedCertificate ........   Passed    0.66 sec
+      Start 21: TestCrypt
+20/42 Test #25: TestConnectionOutputQueue ........   Passed    0.49 sec
+      Start 41: TestUnresolvedServerAddress
+21/42 Test #21: TestCrypt ........................   Passed    0.38 sec
+      Start  7: TestVideoPacketPacer
+22/42 Test #41: TestUnresolvedServerAddress ......   Passed    0.41 sec
+      Start 37: TestServerAddress
+23/42 Test  #7: TestVideoPacketPacer .............   Passed    0.49 sec
+      Start 33: TestPacketDataStream
+24/42 Test #37: TestServerAddress ................   Passed    0.38 sec
+      Start 31: TestFFDHE
+25/42 Test #33: TestPacketDataStream .............   Passed    0.42 sec
+      Start 26: TestCaseInsensitiveQString
+26/42 Test #31: TestFFDHE ........................   Passed    0.42 sec
+      Start 34: TestPasswordGenerator
+27/42 Test #26: TestCaseInsensitiveQString .......   Passed    0.37 sec
+      Start 22: TestAudioReceiverBuffer
+28/42 Test #34: TestPasswordGenerator ............   Passed    0.38 sec
+      Start 35: TestMumbleProtocol
+29/42 Test #22: TestAudioReceiverBuffer ..........   Passed    0.37 sec
+      Start 27: TestCryptographicHash
+30/42 Test #35: TestMumbleProtocol ...............   Passed    0.37 sec
+      Start 39: TestStdAbs
+31/42 Test #27: TestCryptographicHash ............   Passed    0.37 sec
+      Start 42: TestVersion
+32/42 Test #39: TestStdAbs .......................   Passed    0.42 sec
+      Start 10: TestXMLTools
+33/42 Test #42: TestVersion ......................   Passed    0.37 sec
+      Start  6: TestVideoFramePacketizer
+34/42 Test #10: TestXMLTools .....................   Passed    0.37 sec
+      Start 32: TestIPCUtils
+35/42 Test  #6: TestVideoFramePacketizer .........   Passed    0.36 sec
+      Start  3: TestReleaseUpdate
+36/42 Test #32: TestIPCUtils .....................   Passed    0.37 sec
+      Start  8: TestVideoQualityProfile
+37/42 Test  #3: TestReleaseUpdate ................   Passed    0.41 sec
+      Start 24: TestBandwidthRecord
+38/42 Test  #8: TestVideoQualityProfile ..........   Passed    0.36 sec
+      Start  9: TestVideoViewUi
+39/42 Test #24: TestBandwidthRecord ..............   Passed    0.42 sec
+      Start 13: TestFileTransferTransport
+40/42 Test  #9: TestVideoViewUi ..................   Passed    0.39 sec
+      Start 20: OverlayTest
+41/42 Test #20: OverlayTest ......................***Not Run (Disabled)   0.00 sec
+42/42 Test #13: TestFileTransferTransport ........   Passed    0.36 sec
+
+100% tests passed, 0 tests failed out of 41
+
+Total Test time (real) =  38.75 sec
+
+The following tests did not run:
+	 20 - OverlayTest (Disabled)
