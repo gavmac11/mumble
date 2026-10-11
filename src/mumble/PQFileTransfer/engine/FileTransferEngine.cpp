@@ -930,6 +930,7 @@ void FileTransferEngine::paceSends() {
 	// This bounds one engine dispatch, not the downstream GUI/socket queues.
 	qint64 dispatchedBytes = 0;
 	int dispatchedChunks   = 0;
+	bool waitingForCredit  = false;
 	while (!m_sendPaceOrder.isEmpty() && dispatchedChunks < 32 && dispatchedBytes < 4 * 1024 * 1024) {
 		if (shutdownRequested())
 			return;
@@ -942,12 +943,16 @@ void FileTransferEngine::paceSends() {
 		const qint64 bytes =
 			static_cast< qint64 >(qMin< quint64 >(job->effectiveChunkSize, job->fileSize - job->bytesDone)) + TagSize;
 		if (rate > 0) {
-			if (m_sendCreditMilliBytes < bytes * 1000)
+			if (m_sendCreditMilliBytes < bytes * 1000) {
+				waitingForCredit = true;
 				break;
+			}
 			m_sendCreditMilliBytes -= bytes * 1000;
 		}
-		m_sendPaceOrder.removeFirst();
+		// Keep this job queued during callbacks so cleaning up another job
+		// cannot mistake an active sender for an empty queue and stop its timer.
 		sendNextChunk(*job);
+		m_sendPaceOrder.removeAll(id);
 		++dispatchedChunks;
 		dispatchedBytes += bytes;
 		if (m_sendJobs.value(id) == job && job->lastState == FTTransferInfo::State::Transferring)
@@ -956,6 +961,9 @@ void FileTransferEngine::paceSends() {
 	if (m_sendPaceOrder.isEmpty()) {
 		m_sendPaceTimer->stop();
 		m_sendCreditMilliBytes = 0;
+	} else {
+		// Yield to controls without imposing a 50 ms throughput cap per batch.
+		m_sendPaceTimer->start(waitingForCredit ? 50 : 0);
 	}
 }
 
@@ -1004,14 +1012,20 @@ void FileTransferEngine::sendNextChunk(SendJob &job) {
 	}
 
 	if (job.nextChunkIndex >= job.chunkCount) {
-		for (SendPeer &peer : job.peers) {
+		QList< QPair< unsigned int, QByteArray > > completions;
+		for (const SendPeer &peer : job.peers) {
 			if (peer.established && peer.session_) {
 				const QByteArray frame =
 					peer.session_->sealControl(FTFrame::TypeComplete, canonicalEmptyMap);
-				if (!frame.isEmpty() && m_transportControl) {
-					m_transportControl(peer.session, frame);
-				}
+				if (!frame.isEmpty())
+					completions.append({ peer.session, frame });
 			}
+		}
+		for (const auto &completion : completions) {
+			if (m_transportControl)
+				m_transportControl(completion.first, completion.second);
+			if (job.lastState != FTTransferInfo::State::Transferring)
+				return;
 		}
 		finishSend(job, true, QString());
 	}
