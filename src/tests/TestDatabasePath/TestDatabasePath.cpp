@@ -1,17 +1,22 @@
 // Copyright The Mumble Developers. All rights reserved.
 // BSD-style license: see LICENSE at the source root.
 #include "Database.h"
+#include "Logger.h"
 #include "Global.h"
 
 #include <QApplication>
 #include <QCryptographicHash>
 #include <QFile>
+#include <QMessageBox>
 #include <QProcess>
 #include <QProcessEnvironment>
 #include <QSqlQuery>
 #include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QTest>
+#include <QTimer>
+
+#include <cstdio>
 
 static bool seedDatabase(const QString &path) {
 	bool success = false;
@@ -43,7 +48,20 @@ static int databaseChild(const QString &root, const QString &mode) {
 	Global::g_global_struct = &global;
 	const QString expected =
 		QDir(root).filePath(mode == "default" ? QStringLiteral("mumble.sqlite") : QStringLiteral("explicit.sqlite"));
-	global.s.qsDatabaseLocation = mode == "default" ? QString() : (mode == "directory" ? root : expected);
+	const bool directory        = mode.startsWith("directory");
+	global.s.qsDatabaseLocation = mode == "default" ? QString() : (directory ? root : expected);
+	if (mode == "directory-app-logger")
+		mumble::log::init();
+	if (directory) {
+		QTimer::singleShot(0, [&root]() {
+			auto *dialog = qobject_cast< QMessageBox * >(QApplication::activeModalWidget());
+			if (dialog && dialog->textFormat() == Qt::PlainText && dialog->text().contains(root)) {
+				std::fputs("PRIVATE_CONFIG_ERROR_DIALOG_SHOWN\n", stdout);
+				std::fflush(stdout);
+				dialog->accept();
+			}
+		});
+	}
 	Database database("private-child");
 	return database.connection().databaseName() == expected ? 0 : 42;
 }
@@ -76,7 +94,13 @@ private slots:
 														  : QStringLiteral("mumble.sqlite"))),
 				 unselectedHash);
 	}
+	void configuredDirectoryCannotFallBack_data() {
+		QTest::addColumn< QString >("mode");
+		QTest::newRow("default-qt-handler") << QString("directory");
+		QTest::newRow("production-app-handler") << QString("directory-app-logger");
+	}
 	void configuredDirectoryCannotFallBack() {
+		QFETCH(QString, mode);
 		QTemporaryDir root;
 		QVERIFY(root.isValid());
 		const QString fallback = root.filePath("mumble.sqlite");
@@ -90,12 +114,19 @@ private slots:
 		environment.insert("QT_FORCE_STDERR_LOGGING", "1");
 		child.setProcessEnvironment(environment);
 		child.start(QCoreApplication::applicationFilePath(),
-					{ "-platform", "offscreen", "--database-child", root.path(), "directory" });
+					{ "-platform", "offscreen", "--database-child", root.path(), mode });
 		QVERIFY(child.waitForStarted());
 		QVERIFY(child.waitForFinished(10000));
-		QCOMPARE(child.exitStatus(), QProcess::CrashExit);
-		QVERIFY(child.exitCode() != 0);
-		QVERIFY(child.readAllStandardError().contains("Database: Unable to open configured database"));
+		if (mode == "directory-app-logger") {
+			QCOMPARE(child.exitStatus(), QProcess::NormalExit);
+			QCOMPARE(child.exitCode(), 1);
+		} else {
+			QCOMPARE(child.exitStatus(), QProcess::CrashExit);
+			QVERIFY(child.exitCode() != 0);
+		}
+		const QByteArray output = child.readAllStandardError() + child.readAllStandardOutput();
+		QVERIFY(output.contains("Database: Unable to open configured database"));
+		QVERIFY(output.contains("PRIVATE_CONFIG_ERROR_DIALOG_SHOWN"));
 		QCOMPARE(fileHash(fallback), before);
 	}
 };

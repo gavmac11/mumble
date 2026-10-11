@@ -1,0 +1,43 @@
+Test project /Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/build/stability
+    Start  1: TestDatabasePath
+1/2 Test  #1: TestDatabasePath .................***Failed    0.93 sec
+********* Start testing of TestDatabasePath *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestDatabasePath::initTestCase()
+PASS   : TestDatabasePath::explicitFileAndDefault(explicit-existing-file)
+PASS   : TestDatabasePath::explicitFileAndDefault(unconfigured-default)
+FAIL!  : TestDatabasePath::configuredDirectoryCannotFallBack(default-qt-handler) 'output.contains("PRIVATE_CONFIG_ERROR_DIALOG_SHOWN")' returned FALSE. ()
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestDatabasePath/TestDatabasePath.cpp(129)]
+FAIL!  : TestDatabasePath::configuredDirectoryCannotFallBack(production-app-handler) 'output.contains("PRIVATE_CONFIG_ERROR_DIALOG_SHOWN")' returned FALSE. ()
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestDatabasePath/TestDatabasePath.cpp(129)]
+PASS   : TestDatabasePath::cleanupTestCase()
+Totals: 4 passed, 2 failed, 0 skipped, 0 blacklisted, 743ms
+********* Finished testing of TestDatabasePath *********
+
+    Start 22: TestQtLogger
+2/2 Test #22: TestQtLogger .....................***Failed    1.16 sec
+********* Start testing of TestQtLogger *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestQtLogger::initTestCase()
+PASS   : TestQtLogger::lateQtLog(prior-handler)
+PASS   : TestQtLogger::lateQtLog(repeated-init)
+PASS   : TestQtLogger::lateQtLog(later-handler-owner)
+FAIL!  : TestQtLogger::fatalLogDoesNotRunStaticCleanup(qt-fatal-message) '!QFile::exists(marker)' returned FALSE. ()
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestQtLogger/TestQtLogger.cpp(97)]
+FAIL!  : TestQtLogger::fatalLogDoesNotRunStaticCleanup(direct-fatal-call) Compared values are not the same
+   Actual   (child.exitStatus())  : CrashExit
+   Expected (QProcess::NormalExit): NormalExit
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestQtLogger/TestQtLogger.cpp(94)]
+PASS   : TestQtLogger::cleanupTestCase()
+Totals: 5 passed, 2 failed, 0 skipped, 0 blacklisted, 431ms
+********* Finished testing of TestQtLogger *********
+
+
+0% tests passed, 2 tests failed out of 2
+
+Total Test time (real) =   2.10 sec
+
+The following tests FAILED:
+	  1 - TestDatabasePath (Failed)
+	 22 - TestQtLogger (Failed)
+Errors while running CTest
