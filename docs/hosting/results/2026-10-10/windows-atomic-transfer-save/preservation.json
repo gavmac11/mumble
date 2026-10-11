@@ -1,0 +1,18 @@
+{
+  "source_commit": "3119729df9ef8fba512bbda1b8edcacd6a22271d",
+  "prior_ledger_entries_verified": {
+    "mumble-rate-credit-20261010": 30,
+    "mumble-audio-wizard-20261010": 22,
+    "mumble-rate-credit-revised-20261010": 30,
+    "mumble-rate-credit-precision-20261010": 31,
+    "mumble-integrated-pacing-audio-20261010": 144
+  },
+  "combined_candidate_source": "17f0807e25f8924948c0c391e96d5742c51f817a",
+  "combined_candidate_evidence": "e79a39fb94daf6ac01fed1a53866e905b2a8882a",
+  "combined_committed_checksum_entries_verified": 98,
+  "prior_binaries": "All 44 combined client/server/test binaries plus exact compiler commands copied and hash verified on E: before requested reuse; earlier snapshots retained",
+  "snapshot_binary_count": 44,
+  "c_drive_copies_or_cleanup": false,
+  "personal_mumble_state_changes": false,
+  "gui_authentication_or_hardware_actions": false
+}

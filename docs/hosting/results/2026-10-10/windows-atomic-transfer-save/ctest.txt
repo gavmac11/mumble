@@ -1,0 +1,12 @@
+Internal ctest changing into directory: <isolated-build-directory>
+Test project <isolated-build-directory>
+    Start 17: TestFileTransferEngine
+    Start 18: TestFileTransferE2E
+1/3 Test #18: TestFileTransferE2E ..............   Passed   10.14 sec
+    Start 12: TestFileTransferManager
+2/3 Test #12: TestFileTransferManager ..........   Passed    0.90 sec
+3/3 Test #17: TestFileTransferEngine ...........   Passed   24.00 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =  24.02 sec
