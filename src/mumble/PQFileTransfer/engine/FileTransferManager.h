@@ -61,7 +61,7 @@ public:
 				   const QList< unsigned int > &recipients);
 
 	void abortTransfer(const QByteArray &transferId);
-	void saveTransferAs(const QByteArray &transferId, const QString &targetPath);
+	void saveTransferAs(const QByteArray &transferId, const QString &targetPath, bool replaceConfirmed = false);
 	void providePassword(const QByteArray &transferId, const QByteArray &password);
 
 	/// Called by the safety-number dialog: pin the (possibly new) fingerprint

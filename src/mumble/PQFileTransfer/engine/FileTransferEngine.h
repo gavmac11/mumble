@@ -101,8 +101,9 @@ public:
 	quint64 startSend(const QString &filePath, const QString &mimeType, bool passwordMode,
 					  QByteArray password, const QSet< unsigned int > &recipients);
 	void abortTransfer(const QByteArray &transferId);
-	/// Target must be on the same directory the user chose; engine verifies.
-	void saveTransferAs(const QByteArray &transferId, const QString &targetPath);
+	/// Existing targets are replaced only after explicit user confirmation.
+	/// Otherwise creation is exclusive; failed writes leave the receive retryable.
+	void saveTransferAs(const QByteArray &transferId, const QString &targetPath, bool replaceConfirmed = false);
 	void providePassword(const QByteArray &transferId, QByteArray password);
 	/// Resume a first-contact handshake the user verified (verified=true) or
 	/// drop it (verified=false).
