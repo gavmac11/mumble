@@ -1,0 +1,9 @@
+********* Start testing of TestFileTransferE2E *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestFileTransferE2E::initTestCase()
+PASS   : TestFileTransferE2E::endToEndTransfer()
+PASS   : TestFileTransferE2E::endToEndPasswordTransfer()
+PASS   : TestFileTransferE2E::capabilityGating()
+PASS   : TestFileTransferE2E::cleanupTestCase()
+Totals: 5 passed, 0 failed, 0 skipped, 0 blacklisted, 9067ms
+********* Finished testing of TestFileTransferE2E *********
