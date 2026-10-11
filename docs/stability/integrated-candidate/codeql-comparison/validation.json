@@ -1,0 +1,18 @@
+{
+  "source_head": "dfec74373083ef3739cf2c5967d6636bfe42cf7a",
+  "workflow_sha256": "4deecf88434a94938e186e8c52366789a7cff3d2e7349a36253998f50e7db6be",
+  "actionlint_exit": 0,
+  "prior_integrated_head": "873e4a2eb1f552b9abc3532895d0ccb7f2c578a9",
+  "prior_combined_check": {
+    "id": 114361685954,
+    "conclusion": "neutral",
+    "warning": "CodeQL-Build/os:ubuntu-latest missing; cannot determine introduced alerts"
+  },
+  "scan_languages": [
+    "cpp",
+    "python"
+  ],
+  "changes": "Actual second traced build/analysis job under historical matrix identity; current job preserved; shared steps and permissions use YAML aliases",
+  "hosted_exact_revision": "pending",
+  "clean_security_acceptance": false
+}
