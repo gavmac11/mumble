@@ -1,0 +1,75 @@
+{
+  "source_head": "30fa66b21914b82ea048afdd5cfd5122cbd5d70f",
+  "mac_release_ui_settings_targets": "passed; existing shared Homebrew dependency warnings, warnings-as-errors disabled",
+  "focused": {
+    "passed": 58,
+    "failed": 0,
+    "skipped": 0
+  },
+  "ui_settings_ctest": {
+    "passed": 2,
+    "failed": 0,
+    "seconds": 1.53
+  },
+  "full_build_ctest": {
+    "release_client_server_all_targets": "passed; warnings-as-errors disabled in available Homebrew build",
+    "ctest": {
+      "registered": 42,
+      "enabled": 41,
+      "passed": 41,
+      "failed": 0,
+      "disabled": [
+        "OverlayTest"
+      ],
+      "seconds": 61.35
+    }
+  },
+  "opus": {
+    "model": "claude-opus-5-5",
+    "duration_ms": 97083,
+    "read_only": true,
+    "must_fix": "none found",
+    "should_fix": "Older profiles may retain redirected auto-save folders; follow-upe1d12f7 adds fail-closed policy migration"
+  },
+  "native_windows_linux": {
+    "windows": {
+      "source_head": "30fa66b21914b82ea048afdd5cfd5122cbd5d70f",
+      "producer_commit": "fa89b2b24ad3be974cac4fffba79f80806d63828",
+      "strict_client_server_release": "passed",
+      "cases": {
+        "ui": 63,
+        "settings": 4,
+        "passed": 67,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "committed_hashes_verified": 20
+    },
+    "linux": {
+      "source_head": "30fa66b21914b82ea048afdd5cfd5122cbd5d70f",
+      "platform": "Debian12 amd64 container on Ubuntu24.04 host; Qt6.4.2; GCC12",
+      "full_release_build": "complete client/server/all enabled targets passed",
+      "compiler_exception": "Existing -Wno-error=restrict; remaining strict flags retained",
+      "ctest": {
+        "registered": 42,
+        "enabled": 41,
+        "passed": 41,
+        "failed": 0,
+        "execution_skipped": 0,
+        "disabled": [
+          "OverlayTest"
+        ],
+        "seconds": 55.62
+      },
+      "source_archive_sha256": "2af3fd61512de00636a8fc0431ebd011379c3690dd127caf102194c448054f64",
+      "build_image": "sha256:9cea5f8ec6743fe6066e43228478f723db31f8ea4796c4eadbb1e99f880fe7f8",
+      "mumble_sha256": "cc2b5a4255e29ee008160f65782d342070196fc972e93188996188b9f81b53f1",
+      "mumble_server_sha256": "09da8e26b49a0c784fb6e03b7913be8eaf1ab47290bfea6975a96bff410f31db",
+      "preservation": "Source09e and binaries preserved in private owned directories before building30fa; later30fa source/client/server also preserved before e1 qualification",
+      "limitations": "Source30fa only; migration follow-up, installed physical GUI/media/shipping and full filesystem acceptance remain unqualified"
+    }
+  },
+  "installed_gui": "pending; controller reports Mac locked",
+  "fixture_correction": "Initial C++ initializer-list type deduction failed compilation; corrected with explicit QStringList; no assertions relaxed"
+}

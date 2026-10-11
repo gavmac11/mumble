@@ -1,0 +1,101 @@
+{
+  "source_commit": "30fa66b21914b82ea048afdd5cfd5122cbd5d70f",
+  "algorithm": "SHA256",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+      "size_bytes": 29
+    },
+    {
+      "path": "build-result.json",
+      "sha256": "d01979df828f67dcadf3263530c80cb7b1b7f7405263a387fc22e80f08fcb3e2",
+      "size_bytes": 372
+    },
+    {
+      "path": "build.txt",
+      "sha256": "8fe7fe9a1ff47e353b75853f339292b866d2b4e436fcd23f0684e92b55875867",
+      "size_bytes": 22927
+    },
+    {
+      "path": "configure.txt",
+      "sha256": "c797037ce0f83b46229fdfd0a0181b7da588a812a615200c0335751aeab3b557",
+      "size_bytes": 5801
+    },
+    {
+      "path": "ctest.txt",
+      "sha256": "5f5bd25ea533201fd6a6554c66eb41aab3bf324909504bfc6a83202eaf6c2d87",
+      "size_bytes": 415
+    },
+    {
+      "path": "ctest.xml",
+      "sha256": "642eb9ca3eb01cdedde6b9e2178da9b6fa55388c3f32769f9b60525b0744f401",
+      "size_bytes": 539
+    },
+    {
+      "path": "excluded-preparation-attempt.txt",
+      "sha256": "f17ab786fc0949c3b9b0d58f0860263517b48ff9c67e33241c9364bad4326772",
+      "size_bytes": 457
+    },
+    {
+      "path": "filesystem.json",
+      "sha256": "a6ed3e90facf11b580ac47ca0232bfd69f56f4dadb9960bc40bf2049901ff254",
+      "size_bytes": 244
+    },
+    {
+      "path": "fixture-acl.json",
+      "sha256": "5b17f5817ff3bb984820e89a6f4e43b98997c1ad032f71cc7caa05e648577cd2",
+      "size_bytes": 364
+    },
+    {
+      "path": "LastTest.txt",
+      "sha256": "0c94ff355c582b0a82c647a7bfbef6183ebcecb9e9aec25441339a3787a29aef",
+      "size_bytes": 1732
+    },
+    {
+      "path": "preservation.json",
+      "sha256": "278dfa6754d6b56893c5a4f394ccba756effa367f138eaf74b9a3753d109dbdb",
+      "size_bytes": 1271
+    },
+    {
+      "path": "submodules.txt",
+      "sha256": "e820bdbbf6bb00cb7913cb55d701f13839c1cdf8d8e5a497a9614bf4a7043ca7",
+      "size_bytes": 1277
+    },
+    {
+      "path": "test-run-result.json",
+      "sha256": "59e028d52799bbc3441427c1259ce8171c41dda75f380d7cccafb72867ddd4e7",
+      "size_bytes": 123
+    },
+    {
+      "path": "TestFileTransferUi.txt",
+      "sha256": "146921ebe74013403b2f117f822cf4ab896b8fc423e8a51ac0d826ebd68f0d17",
+      "size_bytes": 4169
+    },
+    {
+      "path": "TestFileTransferUi.xml",
+      "sha256": "a1426d3678f3480075e0d4053aba35d62cc74dfe586fc561c72084df36aba38e",
+      "size_bytes": 6668
+    },
+    {
+      "path": "TestSettingsJSONSerialization.txt",
+      "sha256": "6a77b143711376f2d064a654162db3614d53cb329409f2980c508c295ade72eb",
+      "size_bytes": 568
+    },
+    {
+      "path": "TestSettingsJSONSerialization.xml",
+      "sha256": "0a8aec3ca9bafcb67e30c0d507c5f1cbed780c5aeb7fb93d5cfe166f362983c8",
+      "size_bytes": 865
+    },
+    {
+      "path": "validation.json",
+      "sha256": "a39f497d490e65ec1162c45d243fe722f87cc1063650fb59d3bcd5768e6b9248",
+      "size_bytes": 29309
+    },
+    {
+      "path": "validation.txt",
+      "sha256": "67b5b626a4d2da987416f6cca76f24c77aeae3b998599de31c954781857393bd",
+      "size_bytes": 1526
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+Windows automatic-save migration validation: e1d12f7e1140975da419909594127da0e8fa0a70
+MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022); Windows 10 Pro 10.0.19045 x64.
+Strict Release/C++20; /W4 /WX /O2 /bigobj /options:strict; dynamic MSVC runtime; no source warning relaxation. Native client/server and complete UI/settings test targets built.
+TestFileTransferUi: 78 cases, 0 failures, 0 errors, 0 skipped, 0.022s.
+TestSettingsJSONSerialization: 4 cases, 0 failures, 0 errors, 0 skipped, 0.007s.
+CTest: two complete suites passed, 1.37s; 82 Qt cases including initialization/cleanup.
+64 automatic-name rows (56 rejected, 8 accepted), eligibility and manual-history/legacy round-trip helpers passed unchanged; five policy-marker migration rows require folder preservation, disabled saving before review, version-1 serialization and explicit re-enable round-trip; seven existing UI cases also passed. Generated settings source includes qsFTManualSaveDir.
+NTFS is only the owned temporary fixture location. Pure string/settings/offscreen checks do not qualify physical GUI/media, interactive save/authentication, or target filesystem saving. Auth/trust-cache fixes and content-filter guarantees are outside this source; server receipts/queues and shipping gates remain open.
+No failed native build/test/exporter preparation attempts excluded. Earlier evidence/binaries preserved on E:; no C: copy/cleanup, personal changes or GUI/auth automation. Generated registrations restored; raw original logs retained privately and sanitized complete logs published.

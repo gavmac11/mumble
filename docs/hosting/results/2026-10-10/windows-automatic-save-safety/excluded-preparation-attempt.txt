@@ -1,0 +1,4 @@
+Excluded exporter-template preparation attempt; no native build/test failure.
+Observed: UnicodeEncodeError: 'charmap' codec can't encode characters in position 7390-7391: character maps to <undefined>
+Cause: Python 3.10 Windows default Windows-1252 write_text used for a generated exporter template containing CJK example text.
+Resolution: Prepared exporter using explicit UTF-8 before test output was read/published. Raw build/test text/XML unchanged.

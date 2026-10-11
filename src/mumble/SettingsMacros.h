@@ -11,12 +11,13 @@
 
 // Mappings between SettingsKey objects and the corresponding fields in the Settings struct
 
-#define FILE_TRANSFER_SETTINGS                                                           \
-	PROCESS(misc, FT_ENABLED_KEY, bFTEnabled)                                             \
-	PROCESS(misc, FT_CHUNK_SIZE_KEY, iFTChunkKB)                                          \
-	PROCESS(misc, FT_SEND_PACE_KEY, iFTSendPaceKiB)                                       \
-	PROCESS(misc, FT_MAX_RECEIVE_SIZE_KEY, iFTMaxReceiveMiB)                              \
-	PROCESS(misc, FT_DOWNLOAD_DIR_KEY, qsFTDownloadDir)                                   \
+#define FILE_TRANSFER_SETTINGS                               \
+	PROCESS(misc, FT_ENABLED_KEY, bFTEnabled)                \
+	PROCESS(misc, FT_CHUNK_SIZE_KEY, iFTChunkKB)             \
+	PROCESS(misc, FT_SEND_PACE_KEY, iFTSendPaceKiB)          \
+	PROCESS(misc, FT_MAX_RECEIVE_SIZE_KEY, iFTMaxReceiveMiB) \
+	PROCESS(misc, FT_DOWNLOAD_DIR_KEY, qsFTDownloadDir)      \
+	PROCESS(misc, FT_MANUAL_SAVE_DIR_KEY, qsFTManualSaveDir) \
 	PROCESS(misc, FT_AUTO_ACCEPT_PINNED_KEY, bFTAutoAcceptPinned)
 
 #define MISC_SETTINGS                                                               \

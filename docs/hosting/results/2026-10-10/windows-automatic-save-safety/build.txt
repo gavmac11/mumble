@@ -1,0 +1,187 @@
+[0/2] Re-checking globbed directories...
+[1/72] Building C object src\mumble\liboqs\src\CMakeFiles\oqs.dir\kem\kem.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[2/72] Building C object src\mumble\liboqs\src\CMakeFiles\oqs.dir\sig\sig.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[3/72] Building C object src\mumble\liboqs\src\CMakeFiles\oqs.dir\sig_stfl\sig_stfl.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[4/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\aes\aes_impl.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[5/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\aes\aes128_ni.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[6/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\aes\aes_c.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[7/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\aes\aes256_ni.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[8/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\aes\aes.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[9/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\sha2\sha2_impl.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[10/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\sha2\sha2.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[11/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\sha3\xkcp_sha3.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[12/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\sha3\xkcp_sha3x4.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[13/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\sha3\sha3.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[14/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\sha3\sha3x4.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[15/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\common.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[16/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\pqclean_shims\fips202.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[17/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\pqclean_shims\fips202x4.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[18/72] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\rand\rand.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[19/72] Building C object src\mumble\liboqs\src\kem\ml_kem\CMakeFiles\ml_kem_768_ref.dir\kem_ml_kem_768.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[20/72] Building C object src\mumble\liboqs\src\kem\ml_kem\CMakeFiles\ml_kem_768_ref.dir\mlkem-native_ml-kem-768_ref\mlkem\src\compress.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[21/72] Building C object src\mumble\liboqs\src\kem\ml_kem\CMakeFiles\ml_kem_768_ref.dir\mlkem-native_ml-kem-768_ref\mlkem\src\debug.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[22/72] Building C object src\mumble\liboqs\src\kem\ml_kem\CMakeFiles\ml_kem_768_ref.dir\mlkem-native_ml-kem-768_ref\mlkem\src\indcpa.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[23/72] Building C object src\mumble\liboqs\src\kem\ml_kem\CMakeFiles\ml_kem_768_ref.dir\mlkem-native_ml-kem-768_ref\mlkem\src\kem.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[24/72] Building CXX object src\database\soci\src\backends\sqlite3\CMakeFiles\soci_sqlite3.dir\Unity\unity_0_cxx.cxx.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+[25/72] Building C object src\mumble\liboqs\src\kem\ml_kem\CMakeFiles\ml_kem_768_ref.dir\mlkem-native_ml-kem-768_ref\mlkem\src\poly.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[26/72] Building CXX object src\database\soci\src\backends\mysql\CMakeFiles\soci_mysql.dir\Unity\unity_0_cxx.cxx.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+[27/72] Building CXX object src\database\soci\src\backends\postgresql\CMakeFiles\soci_postgresql.dir\Unity\unity_0_cxx.cxx.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+[28/72] Building C object src\mumble\liboqs\src\kem\ml_kem\CMakeFiles\ml_kem_768_ref.dir\mlkem-native_ml-kem-768_ref\mlkem\src\poly_k.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[29/72] Building C object src\mumble\liboqs\src\sig\ml_dsa\CMakeFiles\ml_dsa_65_ref.dir\sig_ml_dsa_65.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[30/72] Building C object src\mumble\liboqs\src\kem\ml_kem\CMakeFiles\ml_kem_768_ref.dir\mlkem-native_ml-kem-768_ref\mlkem\src\verify.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[31/72] Building C object src\mumble\liboqs\src\kem\ml_kem\CMakeFiles\ml_kem_768_ref.dir\mlkem-native_ml-kem-768_ref\mlkem\src\sampling.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[32/72] Building C object src\mumble\liboqs\src\sig\ml_dsa\CMakeFiles\ml_dsa_65_ref.dir\mldsa-native_ml-dsa-65_ref\mldsa\src\ct.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[33/72] Building C object src\mumble\liboqs\src\sig\ml_dsa\CMakeFiles\ml_dsa_65_ref.dir\mldsa-native_ml-dsa-65_ref\mldsa\src\debug.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[34/72] Building C object src\mumble\liboqs\src\sig\ml_dsa\CMakeFiles\ml_dsa_65_ref.dir\mldsa-native_ml-dsa-65_ref\mldsa\src\packing.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[35/72] Building C object src\mumble\liboqs\src\sig\ml_dsa\CMakeFiles\ml_dsa_65_ref.dir\mldsa-native_ml-dsa-65_ref\mldsa\src\poly.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[36/72] Building C object src\mumble\liboqs\src\sig\ml_dsa\CMakeFiles\ml_dsa_65_ref.dir\mldsa-native_ml-dsa-65_ref\mldsa\src\poly_kl.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[37/72] Building C object src\mumble\liboqs\src\sig\ml_dsa\CMakeFiles\ml_dsa_65_ref.dir\mldsa-native_ml-dsa-65_ref\mldsa\src\polyvec.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[38/72] Building C object src\mumble\liboqs\src\sig\ml_dsa\CMakeFiles\ml_dsa_65_ref.dir\mldsa-native_ml-dsa-65_ref\mldsa\src\polyvec_lazy.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[39/72] Building C object src\mumble\liboqs\src\sig\ml_dsa\CMakeFiles\ml_dsa_65_ref.dir\mldsa-native_ml-dsa-65_ref\mldsa\src\sign.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[40/72] Automatic RCC for ../../mumble_flags.qrc
+[41/71] Building CXX object src\database\soci\src\core\CMakeFiles\soci_core.dir\Unity\unity_0_cxx.cxx.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+[42/71] Linking CXX static library lib\soci_core.lib
+[43/71] Linking CXX static library lib\soci_mysql.lib
+[44/71] Linking CXX static library lib\soci_postgresql.lib
+[45/71] Linking CXX static library lib\soci_sqlite3.lib
+[46/71] Building CXX object src\murmur\database\CMakeFiles\mumble_server_database.dir\Unity\unity_0_cxx.cxx.obj
+[47/71] Building CXX object src\database\CMakeFiles\mumble_database.dir\Unity\unity_0_cxx.cxx.obj
+[48/71] Linking CXX static library src\database\mumble_database.lib
+[49/71] Linking CXX static library src\murmur\database\mumble_server_database.lib
+[50/71] Building C object src\mumble\liboqs\src\common\CMakeFiles\common.dir\sha2\sha2_c.c.obj
+cl : Command line warning D9025 : overriding '/W4' with '/w'
+cl : Command line warning D9025 : overriding '/MD' with '/MT'
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[51/71] Linking C static library src\mumble\liboqs\lib\oqs.lib
+[52/71] Automatic MOC for target mumble_server_object_lib
+[53/71] Automatic MOC and UIC for target mumble_client_object_lib
+[54/71] Building CXX object src\murmur\CMakeFiles\mumble_server_object_lib.dir\Unity\unity_0_cxx.cxx.obj
+[55/71] Building CXX object src\mumble\CMakeFiles\mumble_client_object_lib.dir\Unity\unity_2_cxx.cxx.obj
+[56/71] Building CXX object src\mumble\CMakeFiles\mumble_client_object_lib.dir\Unity\unity_3_cxx.cxx.obj
+WARNING: non-GNUC/Clang toolchain detected. liboqs cannot                      guarantee optimization barrier on unsupported platforms.                       Compiler may introduce non-constant-time behaviors. Please                     verify generated assembly and proceed with caution.
+[57/71] Building CXX object src\murmur\CMakeFiles\mumble-server.dir\Unity\unity_0_cxx.cxx.obj
+[58/71] Linking CXX executable mumble-server.exe
+[59/71] Building CXX object src\mumble\CMakeFiles\mumble_client_object_lib.dir\Unity\unity_1_cxx.cxx.obj
+[60/71] Building CXX object src\mumble\CMakeFiles\mumble_client_object_lib.dir\Unity\unity_0_cxx.cxx.obj
+[61/71] Automatic MOC and UIC for target mumble
+[62/71] Generating test-case for 'SettingsJSONSerialization'
+[63/71] Automatic MOC for target TestFileTransferUi
+[64/71] Automatic MOC for target TestSettingsJSONSerialization
+[65/71] Building CXX object src\tests\TestFileTransferUi\CMakeFiles\TestFileTransferUi.dir\Unity\unity_0_cxx.cxx.obj
+[66/71] Building CXX object src\tests\TestSettingsJSONSerialization\CMakeFiles\TestSettingsJSONSerialization.dir\Unity\unity_0_cxx.cxx.obj
+[67/71] Linking CXX executable tests\TestFileTransferUi.exe
+[68/71] Building CXX object src\mumble\CMakeFiles\mumble.dir\Unity\unity_0_cxx.cxx.obj
+[69/71] Linking CXX executable tests\TestSettingsJSONSerialization.exe
+[70/71] Linking CXX executable mumble.exe

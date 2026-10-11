@@ -1,0 +1,14 @@
+{
+  "source_commit": "e1d12f7e1140975da419909594127da0e8fa0a70",
+  "configure_exit_code": 0,
+  "build_exit_code": 0,
+  "build_session": 24670,
+  "recorded_utc": "2026-10-11T02:54:09.870331+00:00",
+  "targets": [
+    "mumble",
+    "mumble-server",
+    "TestFileTransferUi",
+    "TestSettingsJSONSerialization"
+  ],
+  "temporary_files": "Owned E: directory"
+}
