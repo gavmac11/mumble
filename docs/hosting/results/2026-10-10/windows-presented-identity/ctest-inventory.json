@@ -1,0 +1,1106 @@
+{
+  "backtraceGraph": {
+    "commands": [
+      "add_test"
+    ],
+    "files": [
+      "<isolated-source-directory>/src/tests/TestAudioWizard/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestDatabasePath/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestReleaseUpdate/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestAnimatedImages/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestChatWebM/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestVideoFramePacketizer/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestVideoPacketPacer/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestVideoQualityProfile/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestVideoViewUi/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestXMLTools/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestFileTransferUi/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestFileTransferManager/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestFileTransferTransport/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestPQCrypto/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestFTIdentity/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestFileTransferSession/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestFileTransferEngine/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestFileTransferE2E/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestSettingsJSONSerialization/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/OverlayTest/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestCrypt/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestAudioReceiverBuffer/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestQtLogger/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestBandwidthRecord/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestConnectionOutputQueue/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestCaseInsensitiveQString/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestCryptographicHash/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestCryptographicRandom/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestDatabase/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestDatabase/server/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestFFDHE/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestIPCUtils/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestPacketDataStream/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestPasswordGenerator/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestMumbleProtocol/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestSelfSignedCertificate/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestServerAddress/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestSSLLocks/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestStdAbs/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestTimer/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestUnresolvedServerAddress/CMakeLists.txt",
+      "<isolated-source-directory>/src/tests/TestVersion/CMakeLists.txt"
+    ],
+    "nodes": [
+      {
+        "file": 0
+      },
+      {
+        "command": 0,
+        "file": 0,
+        "line": 7,
+        "parent": 0
+      },
+      {
+        "file": 1
+      },
+      {
+        "command": 0,
+        "file": 1,
+        "line": 7,
+        "parent": 2
+      },
+      {
+        "file": 2
+      },
+      {
+        "command": 0,
+        "file": 2,
+        "line": 22,
+        "parent": 4
+      },
+      {
+        "file": 3
+      },
+      {
+        "command": 0,
+        "file": 3,
+        "line": 14,
+        "parent": 6
+      },
+      {
+        "file": 4
+      },
+      {
+        "command": 0,
+        "file": 4,
+        "line": 14,
+        "parent": 8
+      },
+      {
+        "file": 5
+      },
+      {
+        "command": 0,
+        "file": 5,
+        "line": 21,
+        "parent": 10
+      },
+      {
+        "file": 6
+      },
+      {
+        "command": 0,
+        "file": 6,
+        "line": 8,
+        "parent": 12
+      },
+      {
+        "file": 7
+      },
+      {
+        "command": 0,
+        "file": 7,
+        "line": 17,
+        "parent": 14
+      },
+      {
+        "file": 8
+      },
+      {
+        "command": 0,
+        "file": 8,
+        "line": 12,
+        "parent": 16
+      },
+      {
+        "file": 9
+      },
+      {
+        "command": 0,
+        "file": 9,
+        "line": 23,
+        "parent": 18
+      },
+      {
+        "file": 10
+      },
+      {
+        "command": 0,
+        "file": 10,
+        "line": 7,
+        "parent": 20
+      },
+      {
+        "file": 11
+      },
+      {
+        "command": 0,
+        "file": 11,
+        "line": 10,
+        "parent": 22
+      },
+      {
+        "file": 12
+      },
+      {
+        "command": 0,
+        "file": 12,
+        "line": 18,
+        "parent": 24
+      },
+      {
+        "file": 13
+      },
+      {
+        "command": 0,
+        "file": 13,
+        "line": 27,
+        "parent": 26
+      },
+      {
+        "file": 14
+      },
+      {
+        "command": 0,
+        "file": 14,
+        "line": 31,
+        "parent": 28
+      },
+      {
+        "file": 15
+      },
+      {
+        "command": 0,
+        "file": 15,
+        "line": 34,
+        "parent": 30
+      },
+      {
+        "file": 16
+      },
+      {
+        "command": 0,
+        "file": 16,
+        "line": 35,
+        "parent": 32
+      },
+      {
+        "file": 17
+      },
+      {
+        "command": 0,
+        "file": 17,
+        "line": 43,
+        "parent": 34
+      },
+      {
+        "file": 18
+      },
+      {
+        "command": 0,
+        "file": 18,
+        "line": 37,
+        "parent": 36
+      },
+      {
+        "file": 19
+      },
+      {
+        "command": 0,
+        "file": 19,
+        "line": 15,
+        "parent": 38
+      },
+      {
+        "file": 20
+      },
+      {
+        "command": 0,
+        "file": 20,
+        "line": 14,
+        "parent": 40
+      },
+      {
+        "file": 21
+      },
+      {
+        "command": 0,
+        "file": 21,
+        "line": 37,
+        "parent": 42
+      },
+      {
+        "file": 22
+      },
+      {
+        "command": 0,
+        "file": 22,
+        "line": 6,
+        "parent": 44
+      },
+      {
+        "file": 23
+      },
+      {
+        "command": 0,
+        "file": 23,
+        "line": 12,
+        "parent": 46
+      },
+      {
+        "file": 24
+      },
+      {
+        "command": 0,
+        "file": 24,
+        "line": 13,
+        "parent": 48
+      },
+      {
+        "file": 25
+      },
+      {
+        "command": 0,
+        "file": 25,
+        "line": 12,
+        "parent": 50
+      },
+      {
+        "file": 26
+      },
+      {
+        "command": 0,
+        "file": 26,
+        "line": 12,
+        "parent": 52
+      },
+      {
+        "file": 27
+      },
+      {
+        "command": 0,
+        "file": 27,
+        "line": 12,
+        "parent": 54
+      },
+      {
+        "file": 28
+      },
+      {
+        "command": 0,
+        "file": 28,
+        "line": 56,
+        "parent": 56
+      },
+      {
+        "file": 29
+      },
+      {
+        "command": 0,
+        "file": 29,
+        "line": 22,
+        "parent": 58
+      },
+      {
+        "file": 30
+      },
+      {
+        "command": 0,
+        "file": 30,
+        "line": 12,
+        "parent": 60
+      },
+      {
+        "file": 31
+      },
+      {
+        "command": 0,
+        "file": 31,
+        "line": 20,
+        "parent": 62
+      },
+      {
+        "file": 32
+      },
+      {
+        "command": 0,
+        "file": 32,
+        "line": 12,
+        "parent": 64
+      },
+      {
+        "file": 33
+      },
+      {
+        "command": 0,
+        "file": 33,
+        "line": 12,
+        "parent": 66
+      },
+      {
+        "file": 34
+      },
+      {
+        "command": 0,
+        "file": 34,
+        "line": 12,
+        "parent": 68
+      },
+      {
+        "file": 35
+      },
+      {
+        "command": 0,
+        "file": 35,
+        "line": 12,
+        "parent": 70
+      },
+      {
+        "file": 36
+      },
+      {
+        "command": 0,
+        "file": 36,
+        "line": 12,
+        "parent": 72
+      },
+      {
+        "file": 37
+      },
+      {
+        "command": 0,
+        "file": 37,
+        "line": 12,
+        "parent": 74
+      },
+      {
+        "file": 38
+      },
+      {
+        "command": 0,
+        "file": 38,
+        "line": 12,
+        "parent": 76
+      },
+      {
+        "file": 39
+      },
+      {
+        "command": 0,
+        "file": 39,
+        "line": 12,
+        "parent": 78
+      },
+      {
+        "file": 40
+      },
+      {
+        "command": 0,
+        "file": 40,
+        "line": 12,
+        "parent": 80
+      },
+      {
+        "file": 41
+      },
+      {
+        "command": 0,
+        "file": 41,
+        "line": 12,
+        "parent": 82
+      }
+    ]
+  },
+  "kind": "ctestInfo",
+  "tests": [
+    {
+      "backtrace": 1,
+      "command": [
+        "<isolated-build-directory>/tests/TestAudioWizard.exe",
+        "-platform",
+        "offscreen"
+      ],
+      "name": "TestAudioWizard",
+      "properties": [
+        {
+          "name": "ENVIRONMENT_MODIFICATION",
+          "value": [
+            "PATH=path_list_prepend:<isolated-build-directory>",
+            "PATH=path_list_prepend:<dependency-cache-root>/ffmpeg/ffmpeg-8.1-full_build-shared/bin"
+          ]
+        },
+        {
+          "name": "TIMEOUT",
+          "value": 30.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>"
+        }
+      ]
+    },
+    {
+      "backtrace": 3,
+      "command": [
+        "<isolated-build-directory>/tests/TestDatabasePath.exe",
+        "-platform",
+        "offscreen"
+      ],
+      "name": "TestDatabasePath",
+      "properties": [
+        {
+          "name": "ENVIRONMENT_MODIFICATION",
+          "value": [
+            "PATH=path_list_prepend:<isolated-build-directory>",
+            "PATH=path_list_prepend:<dependency-cache-root>/ffmpeg/ffmpeg-8.1-full_build-shared/bin"
+          ]
+        },
+        {
+          "name": "TIMEOUT",
+          "value": 30.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestDatabasePath"
+        }
+      ]
+    },
+    {
+      "backtrace": 5,
+      "command": [
+        "<isolated-build-directory>/tests/TestReleaseUpdate.exe"
+      ],
+      "name": "TestReleaseUpdate",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestReleaseUpdate"
+        }
+      ]
+    },
+    {
+      "backtrace": 7,
+      "command": [
+        "<isolated-build-directory>/tests/TestAnimatedImages.exe"
+      ],
+      "name": "TestAnimatedImages",
+      "properties": [
+        {
+          "name": "ENVIRONMENT_MODIFICATION",
+          "value": [
+            "PATH=path_list_prepend:<isolated-build-directory>",
+            "PATH=path_list_prepend:<dependency-cache-root>/ffmpeg/ffmpeg-8.1-full_build-shared/bin"
+          ]
+        },
+        {
+          "name": "TIMEOUT",
+          "value": 60.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestAnimatedImages"
+        }
+      ]
+    },
+    {
+      "backtrace": 9,
+      "command": [
+        "<isolated-build-directory>/tests/TestChatWebM.exe"
+      ],
+      "name": "TestChatWebM",
+      "properties": [
+        {
+          "name": "ENVIRONMENT_MODIFICATION",
+          "value": [
+            "PATH=path_list_prepend:<isolated-build-directory>",
+            "PATH=path_list_prepend:<dependency-cache-root>/ffmpeg/ffmpeg-8.1-full_build-shared/bin"
+          ]
+        },
+        {
+          "name": "TIMEOUT",
+          "value": 60.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestChatWebM"
+        }
+      ]
+    },
+    {
+      "backtrace": 11,
+      "command": [
+        "<isolated-build-directory>/tests/TestVideoFramePacketizer.exe"
+      ],
+      "name": "TestVideoFramePacketizer",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestVideoFramePacketizer"
+        }
+      ]
+    },
+    {
+      "backtrace": 13,
+      "command": [
+        "<isolated-build-directory>/tests/TestVideoPacketPacer.exe"
+      ],
+      "name": "TestVideoPacketPacer",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestVideoPacketPacer"
+        }
+      ]
+    },
+    {
+      "backtrace": 15,
+      "command": [
+        "<isolated-build-directory>/tests/TestVideoQualityProfile.exe"
+      ],
+      "name": "TestVideoQualityProfile",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestVideoQualityProfile"
+        }
+      ]
+    },
+    {
+      "backtrace": 17,
+      "command": [
+        "<isolated-build-directory>/tests/TestVideoViewUi.exe",
+        "-platform",
+        "offscreen"
+      ],
+      "name": "TestVideoViewUi",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestVideoViewUi"
+        }
+      ]
+    },
+    {
+      "backtrace": 19,
+      "command": [
+        "<isolated-build-directory>/tests/TestXMLTools.exe"
+      ],
+      "name": "TestXMLTools",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestXMLTools"
+        }
+      ]
+    },
+    {
+      "backtrace": 21,
+      "command": [
+        "<isolated-build-directory>/tests/TestFileTransferUi.exe",
+        "-platform",
+        "offscreen"
+      ],
+      "name": "TestFileTransferUi",
+      "properties": [
+        {
+          "name": "ENVIRONMENT",
+          "value": [
+            "MUMBLE_QR_FIXTURE_EXPORT=<isolated-build-directory>/test-results/safety-qr"
+          ]
+        },
+        {
+          "name": "ENVIRONMENT_MODIFICATION",
+          "value": [
+            "PATH=path_list_prepend:<isolated-build-directory>",
+            "PATH=path_list_prepend:<dependency-cache-root>/ffmpeg/ffmpeg-8.1-full_build-shared/bin"
+          ]
+        },
+        {
+          "name": "TIMEOUT",
+          "value": 30.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>"
+        }
+      ]
+    },
+    {
+      "backtrace": 23,
+      "command": [
+        "<isolated-build-directory>/tests/TestFileTransferManager.exe"
+      ],
+      "name": "TestFileTransferManager",
+      "properties": [
+        {
+          "name": "ENVIRONMENT_MODIFICATION",
+          "value": [
+            "PATH=path_list_prepend:<isolated-build-directory>",
+            "PATH=path_list_prepend:<dependency-cache-root>/ffmpeg/ffmpeg-8.1-full_build-shared/bin"
+          ]
+        },
+        {
+          "name": "TIMEOUT",
+          "value": 30.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>"
+        }
+      ]
+    },
+    {
+      "backtrace": 25,
+      "command": [
+        "<isolated-build-directory>/tests/TestFileTransferTransport.exe"
+      ],
+      "name": "TestFileTransferTransport",
+      "properties": [
+        {
+          "name": "ENVIRONMENT",
+          "value": [
+            "QT_FATAL_WARNINGS=1"
+          ]
+        },
+        {
+          "name": "TIMEOUT",
+          "value": 30.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestFileTransferTransport"
+        }
+      ]
+    },
+    {
+      "backtrace": 27,
+      "command": [
+        "<isolated-build-directory>/tests/TestPQCrypto.exe"
+      ],
+      "name": "TestPQCrypto",
+      "properties": [
+        {
+          "name": "TIMEOUT",
+          "value": 300.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestPQCrypto"
+        }
+      ]
+    },
+    {
+      "backtrace": 29,
+      "command": [
+        "<isolated-build-directory>/tests/TestFTIdentity.exe"
+      ],
+      "name": "TestFTIdentity",
+      "properties": [
+        {
+          "name": "TIMEOUT",
+          "value": 300.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestFTIdentity"
+        }
+      ]
+    },
+    {
+      "backtrace": 31,
+      "command": [
+        "<isolated-build-directory>/tests/TestFileTransferSession.exe"
+      ],
+      "name": "TestFileTransferSession",
+      "properties": [
+        {
+          "name": "TIMEOUT",
+          "value": 300.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestFileTransferSession"
+        }
+      ]
+    },
+    {
+      "backtrace": 33,
+      "command": [
+        "<isolated-build-directory>/tests/TestFileTransferEngine.exe"
+      ],
+      "name": "TestFileTransferEngine",
+      "properties": [
+        {
+          "name": "TIMEOUT",
+          "value": 600.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestFileTransferEngine"
+        }
+      ]
+    },
+    {
+      "backtrace": 35,
+      "command": [
+        "<isolated-build-directory>/tests/TestFileTransferE2E.exe"
+      ],
+      "name": "TestFileTransferE2E",
+      "properties": [
+        {
+          "name": "TIMEOUT",
+          "value": 600.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestFileTransferE2E"
+        }
+      ]
+    },
+    {
+      "backtrace": 37,
+      "command": [
+        "<isolated-build-directory>/tests/TestSettingsJSONSerialization.exe"
+      ],
+      "name": "TestSettingsJSONSerialization",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>"
+        }
+      ]
+    },
+    {
+      "backtrace": 39,
+      "command": [
+        "<isolated-build-directory>/tests/OverlayTest.exe"
+      ],
+      "name": "OverlayTest",
+      "properties": [
+        {
+          "name": "DISABLED",
+          "value": true
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/OverlayTest"
+        }
+      ]
+    },
+    {
+      "backtrace": 41,
+      "command": [
+        "<isolated-build-directory>/tests/TestCrypt.exe"
+      ],
+      "name": "TestCrypt",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestCrypt"
+        }
+      ]
+    },
+    {
+      "backtrace": 43,
+      "command": [
+        "<isolated-build-directory>/tests/TestAudioReceiverBuffer.exe"
+      ],
+      "name": "TestAudioReceiverBuffer",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestAudioReceiverBuffer"
+        }
+      ]
+    },
+    {
+      "backtrace": 45,
+      "command": [
+        "<isolated-build-directory>/tests/TestQtLogger.exe"
+      ],
+      "name": "TestQtLogger",
+      "properties": [
+        {
+          "name": "TIMEOUT",
+          "value": 30.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestQtLogger"
+        }
+      ]
+    },
+    {
+      "backtrace": 47,
+      "command": [
+        "<isolated-build-directory>/tests/TestBandwidthRecord.exe"
+      ],
+      "name": "TestBandwidthRecord",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestBandwidthRecord"
+        }
+      ]
+    },
+    {
+      "backtrace": 49,
+      "command": [
+        "<isolated-build-directory>/tests/TestConnectionOutputQueue.exe"
+      ],
+      "name": "TestConnectionOutputQueue",
+      "properties": [
+        {
+          "name": "TIMEOUT",
+          "value": 30.0
+        },
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestConnectionOutputQueue"
+        }
+      ]
+    },
+    {
+      "backtrace": 51,
+      "command": [
+        "<isolated-build-directory>/tests/TestCaseInsensitiveQString.exe"
+      ],
+      "name": "TestCaseInsensitiveQString",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestCaseInsensitiveQString"
+        }
+      ]
+    },
+    {
+      "backtrace": 53,
+      "command": [
+        "<isolated-build-directory>/tests/TestCryptographicHash.exe"
+      ],
+      "name": "TestCryptographicHash",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestCryptographicHash"
+        }
+      ]
+    },
+    {
+      "backtrace": 55,
+      "command": [
+        "<isolated-build-directory>/tests/TestCryptographicRandom.exe"
+      ],
+      "name": "TestCryptographicRandom",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestCryptographicRandom"
+        }
+      ]
+    },
+    {
+      "backtrace": 57,
+      "command": [
+        "<isolated-build-directory>/tests/TestDatabase.exe"
+      ],
+      "name": "TestDatabase",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestDatabase"
+        }
+      ]
+    },
+    {
+      "backtrace": 59,
+      "command": [
+        "<isolated-build-directory>/tests/TestServerDatabase.exe"
+      ],
+      "name": "TestServerDatabase",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestDatabase/server"
+        }
+      ]
+    },
+    {
+      "backtrace": 61,
+      "command": [
+        "<isolated-build-directory>/tests/TestFFDHE.exe"
+      ],
+      "name": "TestFFDHE",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestFFDHE"
+        }
+      ]
+    },
+    {
+      "backtrace": 63,
+      "command": [
+        "<isolated-build-directory>/tests/TestIPCUtils.exe"
+      ],
+      "name": "TestIPCUtils",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestIPCUtils"
+        }
+      ]
+    },
+    {
+      "backtrace": 65,
+      "command": [
+        "<isolated-build-directory>/tests/TestPacketDataStream.exe"
+      ],
+      "name": "TestPacketDataStream",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestPacketDataStream"
+        }
+      ]
+    },
+    {
+      "backtrace": 67,
+      "command": [
+        "<isolated-build-directory>/tests/TestPasswordGenerator.exe"
+      ],
+      "name": "TestPasswordGenerator",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestPasswordGenerator"
+        }
+      ]
+    },
+    {
+      "backtrace": 69,
+      "command": [
+        "<isolated-build-directory>/tests/TestMumbleProtocol.exe"
+      ],
+      "name": "TestMumbleProtocol",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestMumbleProtocol"
+        }
+      ]
+    },
+    {
+      "backtrace": 71,
+      "command": [
+        "<isolated-build-directory>/tests/TestSelfSignedCertificate.exe"
+      ],
+      "name": "TestSelfSignedCertificate",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestSelfSignedCertificate"
+        }
+      ]
+    },
+    {
+      "backtrace": 73,
+      "command": [
+        "<isolated-build-directory>/tests/TestServerAddress.exe"
+      ],
+      "name": "TestServerAddress",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestServerAddress"
+        }
+      ]
+    },
+    {
+      "backtrace": 75,
+      "command": [
+        "<isolated-build-directory>/tests/TestSSLLocks.exe"
+      ],
+      "name": "TestSSLLocks",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestSSLLocks"
+        }
+      ]
+    },
+    {
+      "backtrace": 77,
+      "command": [
+        "<isolated-build-directory>/tests/TestStdAbs.exe"
+      ],
+      "name": "TestStdAbs",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestStdAbs"
+        }
+      ]
+    },
+    {
+      "backtrace": 79,
+      "command": [
+        "<isolated-build-directory>/tests/TestTimer.exe"
+      ],
+      "name": "TestTimer",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestTimer"
+        }
+      ]
+    },
+    {
+      "backtrace": 81,
+      "command": [
+        "<isolated-build-directory>/tests/TestUnresolvedServerAddress.exe"
+      ],
+      "name": "TestUnresolvedServerAddress",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestUnresolvedServerAddress"
+        }
+      ]
+    },
+    {
+      "backtrace": 83,
+      "command": [
+        "<isolated-build-directory>/tests/TestVersion.exe"
+      ],
+      "name": "TestVersion",
+      "properties": [
+        {
+          "name": "WORKING_DIRECTORY",
+          "value": "<isolated-build-directory>/src/tests/TestVersion"
+        }
+      ]
+    }
+  ],
+  "version": {
+    "major": 1,
+    "minor": 0
+  }
+}

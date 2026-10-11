@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestSelfSignedCertificate" timestamp="2026-10-10T20:48:38" hostname="windows-validation-host" tests="4" failures="0" errors="0" skipped="0" time="0.239">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestSelfSignedCertificate" time="0.003" />
+  <testcase name="exerciseClientCert" classname="TestSelfSignedCertificate" time="0.179" />
+  <testcase name="exerciseServerCert" classname="TestSelfSignedCertificate" time="0.055" />
+  <testcase name="cleanupTestCase" classname="TestSelfSignedCertificate" time="0.000" />
+</testsuite>

@@ -1,0 +1,496 @@
+{
+  "source_commit": "f337b951482e121964e9162221e96611f94e068e",
+  "algorithm": "SHA256",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "2aaa015f69263d3b2c0a9816cddba00827b2fc3143ab1205ff7e56d4828bc405",
+      "size_bytes": 77
+    },
+    {
+      "path": "build-result.json",
+      "sha256": "ace23c226bfa94205ebd6165f904b1345eadf65494c380651a63f6d4350d6909",
+      "size_bytes": 298
+    },
+    {
+      "path": "build.txt",
+      "sha256": "eeca78571026d0dd0ed72bcc2203cd42577619d02acee69126a3ccb7c0f485b1",
+      "size_bytes": 27458
+    },
+    {
+      "path": "configure.txt",
+      "sha256": "7ba1895dbed30c7ce6f7ac2b251a83ad04d947e6765df178737e397e4e019a60",
+      "size_bytes": 5801
+    },
+    {
+      "path": "ctest-inventory.json",
+      "sha256": "903f7738079bf94f4a531954d3ee425f5f992d3778dcf673237e739ebaa34186",
+      "size_bytes": 27347
+    },
+    {
+      "path": "ctest.txt",
+      "sha256": "ea7d42788cd0eb419a795102a6d0ddd0c2890293f60bb1151b49170d699a3be0",
+      "size_bytes": 4842
+    },
+    {
+      "path": "ctest.xml",
+      "sha256": "a1d2617a55ce62d8b1e817a8b62cd30c934f3c218843b05aeb369b4209a0100b",
+      "size_bytes": 6709
+    },
+    {
+      "path": "filesystem.json",
+      "sha256": "68619c0a2d750d23b46bfc72c1a38f34a12c6e02fc8144b161a7f8221400d04d",
+      "size_bytes": 223
+    },
+    {
+      "path": "fixture-acl.json",
+      "sha256": "5b17f5817ff3bb984820e89a6f4e43b98997c1ad032f71cc7caa05e648577cd2",
+      "size_bytes": 364
+    },
+    {
+      "path": "LastTest.txt",
+      "sha256": "e99fb0ed690ae4f9305eacac82cc5dbe8ac73c91a0fd4f69e447b2fa4bd5d49c",
+      "size_bytes": 31710
+    },
+    {
+      "path": "preservation.json",
+      "sha256": "5cdb112d2bef4d39c8345775ebc245656fa95514aa5053a75e43b21559aaddd3",
+      "size_bytes": 1186
+    },
+    {
+      "path": "registration-counts.json",
+      "sha256": "31f5711c9c4ab60f8453b0bd483c9e2a38ea7f130e0ef6d12b1612cef4d6b9a9",
+      "size_bytes": 1391
+    },
+    {
+      "path": "submodules.txt",
+      "sha256": "e820bdbbf6bb00cb7913cb55d701f13839c1cdf8d8e5a497a9614bf4a7043ca7",
+      "size_bytes": 1277
+    },
+    {
+      "path": "test-run-result.json",
+      "sha256": "8dc6ab3a1c32f58a7d26ea487d8419f146c19766cd00fbf766cf8f9daef42775",
+      "size_bytes": 218
+    },
+    {
+      "path": "TestAnimatedImages.txt",
+      "sha256": "25ef450fba73ae83060564cc29aa9ab9c9f9e44787c91030e33dfc746e2871c3",
+      "size_bytes": 1184
+    },
+    {
+      "path": "TestAnimatedImages.xml",
+      "sha256": "a7faa406783934e7412c85eea471fe0fae87a4a74e7a82b3d2c44751d23932eb",
+      "size_bytes": 1710
+    },
+    {
+      "path": "TestAudioReceiverBuffer.txt",
+      "sha256": "b44adc4faa038fe95decf336fa90014881d06b9431bfadee893ae289861e23dd",
+      "size_bytes": 4735
+    },
+    {
+      "path": "TestAudioReceiverBuffer.xml",
+      "sha256": "21a099c3513c4a2857d6e74a44c29d31d8660eace54308126dba70eb0e04a099",
+      "size_bytes": 4323
+    },
+    {
+      "path": "TestAudioWizard.txt",
+      "sha256": "6615fe318b9bbf45db70deb55e00a478bb17fdd6a98f7a057c23b5baf8dc1901",
+      "size_bytes": 4068
+    },
+    {
+      "path": "TestAudioWizard.xml",
+      "sha256": "0568db281bf3b9770f1a4f4239c3665d895433ff59bf5100a22593da95fa7635",
+      "size_bytes": 3093
+    },
+    {
+      "path": "TestBandwidthRecord.txt",
+      "sha256": "d0b14ce1a39c85b5b96e4e249a731c4c3f7b4e58269ef71c17a712aa710dc4d3",
+      "size_bytes": 1020
+    },
+    {
+      "path": "TestBandwidthRecord.xml",
+      "sha256": "3405af9d85aaf586540941b69c4edef703c88e2a18c9512cfe00178a67c31cb9",
+      "size_bytes": 1535
+    },
+    {
+      "path": "TestCaseInsensitiveQString.txt",
+      "sha256": "edeb6d7459494748699085bacd1e534edc2ca1fcc2f0dc986a63ef4b068d714c",
+      "size_bytes": 832
+    },
+    {
+      "path": "TestCaseInsensitiveQString.xml",
+      "sha256": "775248d88d09f95ed08594f14ea6749183dcb4027310ec7dcb712830cb9e7e50",
+      "size_bytes": 1342
+    },
+    {
+      "path": "TestChatWebM.txt",
+      "sha256": "8fddf89da4fa7a94b0438f3957a789971f7090dd8e6eecd1eae17f486e226cce",
+      "size_bytes": 822
+    },
+    {
+      "path": "TestChatWebM.xml",
+      "sha256": "47ba1518a6502a1df7b76bdb02b5bbfa8087e7d4c06e440f4701956b96bbc231",
+      "size_bytes": 1222
+    },
+    {
+      "path": "TestConnectionOutputQueue.txt",
+      "sha256": "2420f05eb49ed0ae00da05b57deda027dd9f0a19c11fea77522a6ee0a7b435e3",
+      "size_bytes": 966
+    },
+    {
+      "path": "TestConnectionOutputQueue.xml",
+      "sha256": "942e8df8aad6b929d6a4b9f4c9270d9364c597f9e497d88e20811c8704a0b258",
+      "size_bytes": 1475
+    },
+    {
+      "path": "TestCrypt.txt",
+      "sha256": "1cdebd377645507ef35efde3b33fe5e9b475c05f8537a1152bf431b1a9a74a29",
+      "size_bytes": 566
+    },
+    {
+      "path": "TestCrypt.xml",
+      "sha256": "d198db7afcbd5914e94d0f3906fb21dbfba2a419147b02c4605156e8ba1fc580",
+      "size_bytes": 1022
+    },
+    {
+      "path": "TestCryptographicHash.txt",
+      "sha256": "98be5b26b6d1b69c792d8928b2b7266eb664bebfb6da34b8e0e0de4473083388",
+      "size_bytes": 905
+    },
+    {
+      "path": "TestCryptographicHash.xml",
+      "sha256": "49b6a4a404fd070c0a282846f5d1c1b128bc0a2a08ff1155662519a3139c5837",
+      "size_bytes": 1541
+    },
+    {
+      "path": "TestCryptographicRandom.txt",
+      "sha256": "5f86b1aebc56fa2d0a58d0bbdd99d95aeced810f6ea72c9d582287fec65f573b",
+      "size_bytes": 553
+    },
+    {
+      "path": "TestCryptographicRandom.xml",
+      "sha256": "c091e3a4b68ca9b8ea6d4c4873a624404413c0bc9385877ef9b54adce75e0b44",
+      "size_bytes": 888
+    },
+    {
+      "path": "TestDatabase.txt",
+      "sha256": "cd98fad1e23a26f67129e677e04fa72877b53b22790f46006f292215f0c280d1",
+      "size_bytes": 5673
+    },
+    {
+      "path": "TestDatabase.xml",
+      "sha256": "08947114f0d77ff24e0e652ba2a601b39c2da823003fd0595f5cd1921bfe9342",
+      "size_bytes": 5287
+    },
+    {
+      "path": "TestDatabasePath.txt",
+      "sha256": "8773e538f35a9f1d625beae38cb46c26099ca639327644b7159d895cdb2daf08",
+      "size_bytes": 704
+    },
+    {
+      "path": "TestDatabasePath.xml",
+      "sha256": "58df65c61c6b3bda0969a51febc0c52bd1bef46422646e3a8f5313a15b083820",
+      "size_bytes": 1089
+    },
+    {
+      "path": "TestFFDHE.txt",
+      "sha256": "822a3d4a56a5f9fc84ab1adab395ec41bce65533399aef3db2880627477d9721",
+      "size_bytes": 819
+    },
+    {
+      "path": "TestFFDHE.xml",
+      "sha256": "9c8204d4475f274ed827aa877c47defc6028917c60e1a1bef84c3f250697f6f5",
+      "size_bytes": 1470
+    },
+    {
+      "path": "TestFileTransferE2E.txt",
+      "sha256": "1d5e366f3a52b5c76c49c7a70bdbb2ad6167253894038c225f96ad8554dbf5d3",
+      "size_bytes": 558
+    },
+    {
+      "path": "TestFileTransferE2E.xml",
+      "sha256": "4f91432467c5f8c809b17204d0cf8cdd10bc198e3bc2715ea200963e4c52d9bb",
+      "size_bytes": 897
+    },
+    {
+      "path": "TestFileTransferEngine.txt",
+      "sha256": "f6ea8f0efa052a83e305698b5ddf2424610bc9b5289790ae2590c237134867a4",
+      "size_bytes": 3376
+    },
+    {
+      "path": "TestFileTransferEngine.xml",
+      "sha256": "9141ffe17b83ff892b88151afe30f4abb52556f3e7e7201675486f71b24dc304",
+      "size_bytes": 5037
+    },
+    {
+      "path": "TestFileTransferManager.txt",
+      "sha256": "56c734874f320108393f8a81ea1d05624774fc321a34fbfc313ea77ff6836461",
+      "size_bytes": 2235
+    },
+    {
+      "path": "TestFileTransferManager.xml",
+      "sha256": "c722a96836ef8e963beb40df66406df8f430982be333820037439f9c42c80108",
+      "size_bytes": 3300
+    },
+    {
+      "path": "TestFileTransferSession.txt",
+      "sha256": "5a681191bb5bce12d393cec5792bfd35a69ee2ea5db387e8189d5207ef4d8735",
+      "size_bytes": 1044
+    },
+    {
+      "path": "TestFileTransferSession.xml",
+      "sha256": "67ba4393276cd167771980879629b0edba910199fa2d5f2f1a4db6266a17d804",
+      "size_bytes": 1661
+    },
+    {
+      "path": "TestFileTransferTransport.txt",
+      "sha256": "ad39854fa338e7f2a4d834b8a4798eb3e7913e4266003bf03e7f7623ad2e1e2d",
+      "size_bytes": 1067
+    },
+    {
+      "path": "TestFileTransferTransport.xml",
+      "sha256": "57a8982ac21f34134015b6e3abe0025f345c2e9031a2c4ee01788ad9a2820932",
+      "size_bytes": 1617
+    },
+    {
+      "path": "TestFileTransferUi.txt",
+      "sha256": "fdee6762ac5717849cb5e32bc4613a8505fb9dc4309d671c997027efd985268f",
+      "size_bytes": 5121
+    },
+    {
+      "path": "TestFileTransferUi.xml",
+      "sha256": "7896b36c792f933001cbffc3a8353fe62025281992b2167a64b38e70b0eaf223",
+      "size_bytes": 8175
+    },
+    {
+      "path": "TestFTIdentity.txt",
+      "sha256": "37b4043704248bee7041f612d6cb2bbecc9a203c0397a8cbcc6b3be79d3057e9",
+      "size_bytes": 992
+    },
+    {
+      "path": "TestFTIdentity.xml",
+      "sha256": "fda0fc602ed4e42d2ec772e809def5e9ef839140c73ec0058fe1ddb8bbf758e6",
+      "size_bytes": 1651
+    },
+    {
+      "path": "TestIPCUtils.txt",
+      "sha256": "1094970fbde25a493fb8b3fda5d31576b02b625256fb066e759e71eaad8a7665",
+      "size_bytes": 422
+    },
+    {
+      "path": "TestIPCUtils.xml",
+      "sha256": "894792d28171602c090f981f9531d246e35612ffbdab5c15723a053b81901a69",
+      "size_bytes": 701
+    },
+    {
+      "path": "TestMumbleProtocol.txt",
+      "sha256": "3d12ff4a775b4d4c7003abab7d4c857573e86faffab77d74046bc65339d7d701",
+      "size_bytes": 2126
+    },
+    {
+      "path": "TestMumbleProtocol.xml",
+      "sha256": "eb838c4d796f45b3f911bf8080af7610f9e985613b961531a9125e3bb5c73dbd",
+      "size_bytes": 1930
+    },
+    {
+      "path": "TestPacketDataStream.txt",
+      "sha256": "a9019ed9217e4df7fa80169b59433f2f228475e9309bfa39848ed91e1bba23e7",
+      "size_bytes": 89887
+    },
+    {
+      "path": "TestPacketDataStream.xml",
+      "sha256": "e539df5b0f4f5a600144f5ece24fe971e27e4d607db06a2712bf721cfc6aa1b8",
+      "size_bytes": 91347
+    },
+    {
+      "path": "TestPasswordGenerator.txt",
+      "sha256": "6699094dc40bd979828b1e89ba3fa1d4f463551cbe6115c9ef48034949f223c1",
+      "size_bytes": 447
+    },
+    {
+      "path": "TestPasswordGenerator.xml",
+      "sha256": "1f4779374576fc60137b141d34c266637979e50df648dfa4f577b0a779b91d5e",
+      "size_bytes": 717
+    },
+    {
+      "path": "TestPQCrypto.txt",
+      "sha256": "ecfbe92121b22a9050dfb6ad4ffa09d8c5ed15d7649aaff754b1f768a2e61ef9",
+      "size_bytes": 1682
+    },
+    {
+      "path": "TestPQCrypto.xml",
+      "sha256": "aa98a442763e3fa5589c1ee1f1fb37697b24b104783ede877c81a560e25c85e2",
+      "size_bytes": 2912
+    },
+    {
+      "path": "TestQtLogger.txt",
+      "sha256": "0ea4de029c0883d0910e6f8a4528cdf229f48d0d57c6c9b702a0c462e77eb611",
+      "size_bytes": 674
+    },
+    {
+      "path": "TestQtLogger.xml",
+      "sha256": "c9c1975aafaa9768c5623de873f9d2d4520d94a1226d3e1fd4e2b4ef93759a4b",
+      "size_bytes": 1100
+    },
+    {
+      "path": "TestReleaseUpdate.txt",
+      "sha256": "87590bb1506881112893cbb18ac8a89f43858272066e9bec114cb3ee13738950",
+      "size_bytes": 1121
+    },
+    {
+      "path": "TestReleaseUpdate.xml",
+      "sha256": "e031a4de5c4c0da56cff366555b451145cf53ae8610efbc1c07979804d738b2d",
+      "size_bytes": 1744
+    },
+    {
+      "path": "TestSelfSignedCertificate.txt",
+      "sha256": "6e50cfd6d31709cfcf875dacbbeae12cb7b71e28aab2f60a80958d0eff5d3bba",
+      "size_bytes": 539
+    },
+    {
+      "path": "TestSelfSignedCertificate.xml",
+      "sha256": "8db9443124799fca899b03ebaa9747899ab3686919086a0e828a022f41ed0e41",
+      "size_bytes": 838
+    },
+    {
+      "path": "TestServerAddress.txt",
+      "sha256": "90d8a5a31de9906f18974b2b10bfd1ab0b3cea0b5c6cf00f7b4d2ee58ccbf96e",
+      "size_bytes": 704
+    },
+    {
+      "path": "TestServerAddress.xml",
+      "sha256": "9a1b709a1d55c7edca702e72250288c650fad08a2ee8e8a1733837917159f20f",
+      "size_bytes": 1223
+    },
+    {
+      "path": "TestServerDatabase.txt",
+      "sha256": "1e23de034dd0f974ec359987e7892c448639eed931f06b1b3e7a582b5673cb70",
+      "size_bytes": 12064
+    },
+    {
+      "path": "TestServerDatabase.xml",
+      "sha256": "5147bde5c646302a75be3f99a70111f0e88f128d67e8f9aa33d98e65913f5959",
+      "size_bytes": 8038
+    },
+    {
+      "path": "TestSettingsJSONSerialization.txt",
+      "sha256": "6a77b143711376f2d064a654162db3614d53cb329409f2980c508c295ade72eb",
+      "size_bytes": 568
+    },
+    {
+      "path": "TestSettingsJSONSerialization.xml",
+      "sha256": "8dcb66794c16c365e1730e9c76a9fd19480e877e25e666b6e24c0eca66f5fbc1",
+      "size_bytes": 865
+    },
+    {
+      "path": "TestSSLLocks.txt",
+      "sha256": "d8cd8cb54320db83a938bbd720095f8af0aaf5d752fc48a9a9135fc2db24b56e",
+      "size_bytes": 405
+    },
+    {
+      "path": "TestSSLLocks.xml",
+      "sha256": "d32e94965a317a63cc752d6d080883c8d6ef7394edfb89245c7e742705e521b8",
+      "size_bytes": 681
+    },
+    {
+      "path": "TestStdAbs.txt",
+      "sha256": "ba7eaacdc38c0ae0f642e74c8aa6b967590d7cdd20721b2efc501e8d3dce7077",
+      "size_bytes": 396
+    },
+    {
+      "path": "TestStdAbs.xml",
+      "sha256": "be1b7bf3a8ee4aad46a8ccc7bac885fb12d875c5385c3055e550b0935af0f9ae",
+      "size_bytes": 677
+    },
+    {
+      "path": "TestTimer.txt",
+      "sha256": "155147862cca747b7830ed3d34f6c3c1a88adc57e81c34792d52efa01d24e074",
+      "size_bytes": 628
+    },
+    {
+      "path": "TestTimer.xml",
+      "sha256": "6152a2b3b1d1359345b6852eec5b431585ae21b99f91daf93f4d3440208d48ea",
+      "size_bytes": 912
+    },
+    {
+      "path": "TestUnresolvedServerAddress.txt",
+      "sha256": "1d2f2dfb7a8d839ff1891af27ef808442b59966ed1ff8853aad471933a86932e",
+      "size_bytes": 1538
+    },
+    {
+      "path": "TestUnresolvedServerAddress.xml",
+      "sha256": "286eff0c536b547f9fadc711ed36aeb26b2a688802b0d35198c4b49a9e2e0e32",
+      "size_bytes": 1582
+    },
+    {
+      "path": "TestVersion.txt",
+      "sha256": "45450b24093d72494a84e7ddaaf2a7718faa5595ab74f393f38839bffef901e5",
+      "size_bytes": 760
+    },
+    {
+      "path": "TestVersion.xml",
+      "sha256": "26c70ca32f8ad6891129d939c9a411f6f5ad5bd9349467c5f9f0ad3a5789575a",
+      "size_bytes": 1355
+    },
+    {
+      "path": "TestVideoFramePacketizer.txt",
+      "sha256": "b51fb8be3bb21aadfc2e3a1c3eefdb9e616abc3975094b161201b42fcb4bf0ef",
+      "size_bytes": 554
+    },
+    {
+      "path": "TestVideoFramePacketizer.xml",
+      "sha256": "2c619514daddd9440d9fa8c9ec3991f87d4a216ae844428522247179373dedbb",
+      "size_bytes": 854
+    },
+    {
+      "path": "TestVideoPacketPacer.txt",
+      "sha256": "fabd045e006f131a5a4ecc6942e8042dd8b20bb8d2b89a3e8a83b9b7fbd87d25",
+      "size_bytes": 1200
+    },
+    {
+      "path": "TestVideoPacketPacer.xml",
+      "sha256": "2377ee9209020e35a0ad5c7380d2f083f5790e9d346c8f960934014fcf14c4b6",
+      "size_bytes": 1784
+    },
+    {
+      "path": "TestVideoQualityProfile.txt",
+      "sha256": "a1eccfca83bf2c6d07a7dc63658057aa95a083d1c481283859ac37637121c048",
+      "size_bytes": 892
+    },
+    {
+      "path": "TestVideoQualityProfile.xml",
+      "sha256": "3cd5c4fd12557b0b7e4de0d19870a750b693bac102222400b6c1383d5df17016",
+      "size_bytes": 1368
+    },
+    {
+      "path": "TestVideoViewUi.txt",
+      "sha256": "1b981b92769b91fb7f86003c8e55cfe39ec65937f891613a602cb2c1ffb9e5da",
+      "size_bytes": 1112
+    },
+    {
+      "path": "TestVideoViewUi.xml",
+      "sha256": "49317a9a0a7692fe1f76a6aaebe3cdac1bcf0a8ca8fb17ed93ebbcbecd476c96",
+      "size_bytes": 1381
+    },
+    {
+      "path": "TestXMLTools.txt",
+      "sha256": "abec901a09787e53b5296ae70133f13ee516589e0e337edb1d06c26db084819a",
+      "size_bytes": 1442
+    },
+    {
+      "path": "TestXMLTools.xml",
+      "sha256": "bc967b1ee76e6f3623d30d6d907f877ad2ad195eb4398dc8361a77569144e759",
+      "size_bytes": 2491
+    },
+    {
+      "path": "validation.json",
+      "sha256": "deeac3f97c38336e1dd98fc950a922fb2ac5823cb81808c9a3c6f62c7020af1d",
+      "size_bytes": 285420
+    },
+    {
+      "path": "validation.txt",
+      "sha256": "cd8788b894a860a2fb7bb1cee2034a2fe61f5cef116c85bfca56292ad73adc16",
+      "size_bytes": 4520
+    }
+  ]
+}

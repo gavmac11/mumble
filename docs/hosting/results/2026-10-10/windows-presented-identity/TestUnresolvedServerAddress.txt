@@ -1,0 +1,25 @@
+********* Start testing of TestUnresolvedServerAddress *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestUnresolvedServerAddress::initTestCase()
+PASS   : TestUnresolvedServerAddress::defaultCtor()
+PASS   : TestUnresolvedServerAddress::isValid()
+PASS   : TestUnresolvedServerAddress::ctor()
+PASS   : TestUnresolvedServerAddress::caseInsensitive()
+PASS   : TestUnresolvedServerAddress::equals()
+QWARN  : TestUnresolvedServerAddress::lessThan() 0 -> :0
+QWARN  : TestUnresolvedServerAddress::lessThan() 1 -> :1
+QWARN  : TestUnresolvedServerAddress::lessThan() 2 -> :999
+QWARN  : TestUnresolvedServerAddress::lessThan() 3 -> aaaaa:0
+QWARN  : TestUnresolvedServerAddress::lessThan() 4 -> baaaa:0
+QWARN  : TestUnresolvedServerAddress::lessThan() 5 -> baaaa:1
+QWARN  : TestUnresolvedServerAddress::lessThan() 6 -> maaaa:0
+QWARN  : TestUnresolvedServerAddress::lessThan() 7 -> maaaa:100
+QWARN  : TestUnresolvedServerAddress::lessThan() 8 -> maaaa:64738
+QWARN  : TestUnresolvedServerAddress::lessThan() 9 -> naaaa:64738
+QWARN  : TestUnresolvedServerAddress::lessThan() 10 -> zaaaa:0
+QWARN  : TestUnresolvedServerAddress::lessThan() 11 -> zaaaa:65535
+PASS   : TestUnresolvedServerAddress::lessThan()
+PASS   : TestUnresolvedServerAddress::qhash()
+PASS   : TestUnresolvedServerAddress::cleanupTestCase()
+Totals: 9 passed, 0 failed, 0 skipped, 0 blacklisted, 3ms
+********* Finished testing of TestUnresolvedServerAddress *********
