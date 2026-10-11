@@ -1,0 +1,91 @@
+{
+  "source_commit": "2059ef27a1d9aec63298b21fdd118ce80a405f70",
+  "algorithm": "SHA256",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+      "size_bytes": 29
+    },
+    {
+      "path": "build-result.json",
+      "sha256": "5976f78e8d659f8aaee325f558e2a4bc078f4c653ec9b0ee9cab39db4e0c1e49",
+      "size_bytes": 354
+    },
+    {
+      "path": "ctest.txt",
+      "sha256": "cbff9116774f81236219e30ff02854671cb69bfbc4bd52b3704322d6833201db",
+      "size_bytes": 519
+    },
+    {
+      "path": "ctest.xml",
+      "sha256": "a2390583848c7e3cd2a868380778798e114f35e9ced2f291aeeb2eee9aad9b3a",
+      "size_bytes": 692
+    },
+    {
+      "path": "fixture-acl.json",
+      "sha256": "68d42793c3cf7bb474fc5739721fea005c31e30e0f250e6ef0707c1b829b4df8",
+      "size_bytes": 839
+    },
+    {
+      "path": "partial-copy-cleanup-before.json",
+      "sha256": "ff63455d95b71e6ec992200b637fdcb073aa6354c69979aa9b85adb3b0a87aae",
+      "size_bytes": 486
+    },
+    {
+      "path": "partial-copy-cleanup-result.json",
+      "sha256": "7a2947d9d555168436e29300afa21495b9a1fd0309a5c7a87f620d2cf903512b",
+      "size_bytes": 149
+    },
+    {
+      "path": "storage-isolation.json",
+      "sha256": "d02fcf71d5905a2c1f41cc3ff2d776bfd355dad0588f88b58d4202a32197d846",
+      "size_bytes": 924
+    },
+    {
+      "path": "test-run-result.json",
+      "sha256": "59e028d52799bbc3441427c1259ce8171c41dda75f380d7cccafb72867ddd4e7",
+      "size_bytes": 123
+    },
+    {
+      "path": "TestFileTransferE2E.txt",
+      "sha256": "27a5856adf2b88315e875a17e30a543221e5bf85178e81651d95a866d66e9a07",
+      "size_bytes": 558
+    },
+    {
+      "path": "TestFileTransferE2E.xml",
+      "sha256": "e446eff893fb2c9999510bfe965a7bf51661c5abb858bd9dffcf451de8962d99",
+      "size_bytes": 897
+    },
+    {
+      "path": "TestFileTransferEngine.txt",
+      "sha256": "85703cab46be5c7ccadc9e270485de9f77e3441932a7060354648d9f5b8fd7a5",
+      "size_bytes": 1681
+    },
+    {
+      "path": "TestFileTransferEngine.xml",
+      "sha256": "9f3bbcccf61b56d08752d2dfc97ca87fcaf78163f3e3361b1b17906b4c7270e8",
+      "size_bytes": 2554
+    },
+    {
+      "path": "TestFileTransferManager.txt",
+      "sha256": "6da79ed171e427051b72335bb2a5af38030c67e83356c1f3740d22e9e2d8c218",
+      "size_bytes": 724
+    },
+    {
+      "path": "TestFileTransferManager.xml",
+      "sha256": "25c85aa0cb7669198886639fddf1d6d56538a126583dc11a08742c7a2e98ba61",
+      "size_bytes": 1096
+    },
+    {
+      "path": "validation.json",
+      "sha256": "a01d7ae6a5c4610cc28809eea85e4f5a8e7693611dc0897b860da32ecef2b7c7",
+      "size_bytes": 19572
+    },
+    {
+      "path": "validation.txt",
+      "sha256": "56fefcbdbc86fc168bf1bc3d733c53977250ae9654032a818476df307408852a",
+      "size_bytes": 1274
+    }
+  ]
+}
