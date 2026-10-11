@@ -1,0 +1,105 @@
+********* Start testing of DatabaseTest *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : DatabaseTest::initTestCase()
+QINFO  : DatabaseTest::hexConversions() Hex to binary
+QINFO  : DatabaseTest::hexConversions() Binary to hex
+QINFO  : DatabaseTest::hexConversions() Consistency checks
+PASS   : DatabaseTest::hexConversions()
+QINFO  : DatabaseTest::connect() Current backend: "SQLite"
+PASS   : DatabaseTest::connect()
+QINFO  : DatabaseTest::getBackendVersion() Current backend: "SQLite"
+QINFO  : DatabaseTest::getBackendVersion() Queried version: "3.51.2"
+PASS   : DatabaseTest::getBackendVersion()
+QINFO  : DatabaseTest::tableExistsInDB() Current backend: "SQLite"
+PASS   : DatabaseTest::tableExistsInDB()
+QINFO  : DatabaseTest::getExistingTables() Current backend: "SQLite"
+PASS   : DatabaseTest::getExistingTables()
+QINFO  : DatabaseTest::simpleExport() Current backend: "SQLite"
+PASS   : DatabaseTest::simpleExport()
+QINFO  : DatabaseTest::simpleImport() Current backend: "SQLite"
+PASS   : DatabaseTest::simpleImport()
+QINFO  : DatabaseTest::defaults() Current backend: "SQLite"
+PASS   : DatabaseTest::defaults()
+QINFO  : DatabaseTest::autoIncrement() Current backend: "SQLite"
+PASS   : DatabaseTest::autoIncrement()
+QINFO  : DatabaseTest::constraints() Current backend: "SQLite"
+QINFO  : DatabaseTest::constraints()   Current constraint:  0
+QINFO  : DatabaseTest::constraints()   Current constraint:  1
+PASS   : DatabaseTest::constraints()
+QINFO  : DatabaseTest::constraintFunctionality() Current backend: "SQLite"
+QINFO  : DatabaseTest::constraintFunctionality() Testing NOT NULL constraint
+QINFO  : DatabaseTest::constraintFunctionality() Testing UNIQUE constraint
+PASS   : DatabaseTest::constraintFunctionality()
+QINFO  : DatabaseTest::keys() Current backend: "SQLite"
+QINFO  : DatabaseTest::keys() Primary key
+QINFO  : DatabaseTest::keys() Composite primary key
+QINFO  : DatabaseTest::keys() Foreign key
+QINFO  : DatabaseTest::keys() Composite foreign key
+PASS   : DatabaseTest::keys()
+QINFO  : DatabaseTest::indices() Current backend: "SQLite"
+PASS   : DatabaseTest::indices()
+QINFO  : DatabaseTest::triggers() Current backend: "SQLite"
+QINFO  : DatabaseTest::triggers() Current timing: 0
+QINFO  : DatabaseTest::triggers() Current event: 0
+QINFO  : DatabaseTest::triggers() Current event: 1
+QINFO  : DatabaseTest::triggers() Current event: 2
+QINFO  : DatabaseTest::triggers() Current timing: 1
+QINFO  : DatabaseTest::triggers() Current event: 0
+QINFO  : DatabaseTest::triggers() Current event: 1
+QINFO  : DatabaseTest::triggers() Current event: 2
+PASS   : DatabaseTest::triggers()
+QINFO  : DatabaseTest::dataTypes() Current backend: "SQLite"
+QINFO  : DatabaseTest::dataTypes() Current data type: 0
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 1
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 2
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 3
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 4
+QINFO  : DatabaseTest::dataTypes() Sized: true
+QINFO  : DatabaseTest::dataTypes() Current data type: 5
+QINFO  : DatabaseTest::dataTypes() Sized: true
+QINFO  : DatabaseTest::dataTypes() Current data type: 6
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 7
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 8
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 9
+QINFO  : DatabaseTest::dataTypes() Sized: false
+QINFO  : DatabaseTest::dataTypes() Current data type: 10
+QINFO  : DatabaseTest::dataTypes() Sized: false
+PASS   : DatabaseTest::dataTypes()
+QINFO  : DatabaseTest::keyValueTable() Current backend: "SQLite"
+PASS   : DatabaseTest::keyValueTable()
+QINFO  : DatabaseTest::unicode() Current backend: "SQLite"
+QINFO  : DatabaseTest::unicode() Current symbol: "Ä"
+QINFO  : DatabaseTest::unicode() Current symbol: "è"
+QINFO  : DatabaseTest::unicode() Current symbol: "ß"
+QINFO  : DatabaseTest::unicode() Current symbol: "¼"
+QINFO  : DatabaseTest::unicode() Current symbol: "??"
+QINFO  : DatabaseTest::unicode() Current symbol: "??"
+QINFO  : DatabaseTest::unicode() Current symbol: "?"
+QINFO  : DatabaseTest::unicode() Current symbol: "F"
+QINFO  : DatabaseTest::unicode() Current symbol: "?"
+QINFO  : DatabaseTest::unicode() Current symbol: "??"
+QINFO  : DatabaseTest::unicode() Current symbol: "?"
+QINFO  : DatabaseTest::unicode() Current symbol: "¥"
+QINFO  : DatabaseTest::unicode() Current symbol: "?"
+QINFO  : DatabaseTest::unicode() Current symbol: "R"
+QINFO  : DatabaseTest::unicode() Current symbol: "¯_(?)_/¯"
+PASS   : DatabaseTest::unicode()
+QINFO  : DatabaseTest::fetchMinimumFreeID() Current backend: "SQLite"
+PASS   : DatabaseTest::fetchMinimumFreeID()
+QINFO  : DatabaseTest::dateToEpoch() Current backend: "SQLite"
+QINFO  : DatabaseTest::dateToEpoch()    "'2016-08-11 17:15'"
+QINFO  : DatabaseTest::dateToEpoch()    "'2007-01-26'"
+QINFO  : DatabaseTest::dateToEpoch()    "'2007-01-26'"
+PASS   : DatabaseTest::dateToEpoch()
+QINFO  : DatabaseTest::savepoints() Current backend: "SQLite"
+PASS   : DatabaseTest::savepoints()
+PASS   : DatabaseTest::cleanupTestCase()
+Totals: 22 passed, 0 failed, 0 skipped, 0 blacklisted, 170ms
+********* Finished testing of DatabaseTest *********
