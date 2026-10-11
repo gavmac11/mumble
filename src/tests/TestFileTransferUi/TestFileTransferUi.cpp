@@ -58,6 +58,16 @@ private slots:
 												QStringLiteral("LPT\u00b2"),
 												QStringLiteral("COM\u00b3"),
 												QStringLiteral("NUL .txt"),
+												QStringLiteral("\U0001f600.txt"),
+												QStringLiteral("\u00a0leading"),
+												QStringLiteral("trailing\u3000"),
+												QStringLiteral("\u200bleading"),
+												QStringLiteral("\ufeffleading"),
+												QStringLiteral("com\u00b9.txt"),
+												QStringLiteral("lpt\u00b3.log"),
+												QStringLiteral("name. "),
+												QStringLiteral("AUX"),
+												QStringLiteral("CON"),
 												QStringLiteral("trailing."),
 												QStringLiteral("trailing "),
 												QStringLiteral(" leading"),
@@ -151,6 +161,48 @@ private slots:
 		const Settings restoredLegacy = legacy.get< Settings >();
 		QVERIFY(restoredLegacy.qsFTManualSaveDir.isEmpty());
 		QCOMPARE(PQFT::manualSaveDirectory(restoredLegacy), automaticDir.path());
+	}
+	void olderAutomaticFolderRequiresReview_data() {
+		QTest::addColumn< QByteArray >("policyJson");
+		QTest::newRow("missing") << QByteArray();
+		QTest::newRow("old") << QByteArray("0");
+		QTest::newRow("unknown-future") << QByteArray("2");
+		QTest::newRow("string") << QByteArray("\"1\"");
+		QTest::newRow("boolean") << QByteArray("true");
+	}
+	void olderAutomaticFolderRequiresReview() {
+		QFETCH(QByteArray, policyJson);
+		QTemporaryDir dir;
+		QVERIFY(dir.isValid());
+		Settings settings;
+		settings.qsFTDownloadDir     = dir.path();
+		settings.bFTAutoAcceptPinned = true;
+		nlohmann::json legacy        = settings;
+		if (policyJson.isEmpty())
+			legacy["misc"].erase("file_transfer_auto_save_policy_version");
+		else
+			legacy["misc"]["file_transfer_auto_save_policy_version"] = nlohmann::json::parse(policyJson.constData());
+		QTest::ignoreMessage(QtWarningMsg, "Automatic file saving was disabled for an older profile. Review the "
+										   "download directory and enable it again in File Transfer settings.");
+		Settings restored = legacy.get< Settings >();
+		QVERIFY(!restored.bFTAutoAcceptPinned);
+		QCOMPARE(restored.qsFTDownloadDir, dir.path());
+		PQFT::FTTransferInfo info;
+		info.incoming = true;
+		info.state    = PQFT::FTTransferInfo::State::Ready;
+		info.fileName = QStringLiteral("next.txt");
+		QVERIFY(PQFT::automaticSaveTarget(restored, info, PQFT::TrustState::Verified).isEmpty());
+		// Saving the migrated profile does not silently enable automatic saving.
+		const nlohmann::json migrated = restored;
+		QVERIFY(migrated["misc"]["file_transfer_auto_save_policy_version"] == 1);
+		QVERIFY(!migrated.get< Settings >().bFTAutoAcceptPinned);
+		// Explicitly enabling the feature after reviewing the folder persists normally.
+		restored.bFTAutoAcceptPinned   = true;
+		const nlohmann::json confirmed = restored;
+		const Settings confirmedAgain  = confirmed.get< Settings >();
+		QVERIFY(confirmedAgain.bFTAutoAcceptPinned);
+		QCOMPARE(PQFT::automaticSaveTarget(confirmedAgain, info, PQFT::TrustState::Verified),
+				 QDir(dir.path()).filePath(info.fileName));
 	}
 	void qrContrast_data() {
 		QTest::addColumn< bool >("dark");

@@ -230,6 +230,7 @@ const SettingsKey FT_SEND_PACE_KEY                      = { "file_transfer_send_
 const SettingsKey FT_MAX_RECEIVE_SIZE_KEY               = { "file_transfer_max_receive_size_mib" };
 const SettingsKey FT_DOWNLOAD_DIR_KEY                   = { "file_transfer_download_dir" };
 const SettingsKey FT_MANUAL_SAVE_DIR_KEY                 = { "file_transfer_manual_save_dir" };
+const SettingsKey FT_AUTO_SAVE_POLICY_VERSION_KEY        = { "file_transfer_auto_save_policy_version" };
 const SettingsKey FT_AUTO_ACCEPT_PINNED_KEY             = { "file_transfer_auto_accept_pinned" };
 const SettingsKey SERVER_PING_CONSENT_MESSAGE_VIEWED_KEY = { "viewed_server_ping_consent_message" };
 const SettingsKey AUDIO_WIZARD_SHOWN_KEY                 = { "audio_wizard_has_been_shown" };
