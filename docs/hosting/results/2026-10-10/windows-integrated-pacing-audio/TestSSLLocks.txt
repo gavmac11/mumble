@@ -1,0 +1,7 @@
+********* Start testing of TestSSLLocks *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestSSLLocks::initTestCase()
+PASS   : TestSSLLocks::stress()
+PASS   : TestSSLLocks::cleanupTestCase()
+Totals: 3 passed, 0 failed, 0 skipped, 0 blacklisted, 2073ms
+********* Finished testing of TestSSLLocks *********

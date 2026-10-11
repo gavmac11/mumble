@@ -1,0 +1,23 @@
+{
+  "source_commit": "9b5b8e26684d6f2481591b11653397d390d39300",
+  "prior_ledger_entries_verified": {
+    "mumble-rate-credit-20261010": 30,
+    "mumble-audio-wizard-20261010": 22,
+    "mumble-rate-credit-revised-20261010": 30,
+    "mumble-rate-credit-precision-20261010": 31,
+    "mumble-integrated-pacing-audio-20261010": 144,
+    "mumble-atomic-transfer-save-20261010": 31,
+    "mumble-atomic-save-sync-20261010": 31,
+    "mumble-automatic-save-safety-20261010": 29,
+    "mumble-automatic-save-migration-20261010": 28,
+    "mumble-presented-identity-20261010": 145
+  },
+  "prior_presented_identity_source": "f337b951482e121964e9162221e96611f94e068e",
+  "prior_presented_identity_evidence": "e960c10f92628d11c19dc0317f8dfd0abef538b6",
+  "prior_presented_identity_committed_checksum_entries_verified": 99,
+  "prior_binaries": "All 44 exact f337 binaries and compiler commands copied/hash verified on E: before build reuse; all older snapshots retained",
+  "snapshot_binary_count": 44,
+  "c_drive_copies_or_cleanup": false,
+  "personal_mumble_state_changes": false,
+  "gui_authentication_or_hardware_actions": false
+}

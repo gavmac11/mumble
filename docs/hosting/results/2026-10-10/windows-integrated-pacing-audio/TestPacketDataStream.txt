@@ -1,0 +1,1284 @@
+********* Start testing of TestPacketDataStream *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestPacketDataStream::initTestCase()
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "Integer" - please rename.
+QWARN  : TestPacketDataStream::integer() Duplicate data tag "~Integer" - please rename.
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::integer(Integer)
+PASS   : TestPacketDataStream::integer(~Integer)
+PASS   : TestPacketDataStream::string(Empty)
+PASS   : TestPacketDataStream::string(Null)
+PASS   : TestPacketDataStream::string(Bærtur)
+PASS   : TestPacketDataStream::space()
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Positive" - please rename.
+QWARN  : TestPacketDataStream::floating() Duplicate data tag "Negative" - please rename.
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::floating(Positive)
+PASS   : TestPacketDataStream::floating(Negative)
+PASS   : TestPacketDataStream::undersize()
+PASS   : TestPacketDataStream::recursive()
+PASS   : TestPacketDataStream::cleanupTestCase()
+Totals: 646 passed, 0 failed, 0 skipped, 0 blacklisted, 9ms
+********* Finished testing of TestPacketDataStream *********

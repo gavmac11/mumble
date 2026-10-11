@@ -1,0 +1,23 @@
+{
+  "source_head": "17f0807e25f8924948c0c391e96d5742c51f817a",
+  "platform": "Debian 12 amd64 container on Ubuntu 24.04 host; Qt6.4.2; GCC12",
+  "build_image": "sha256:9cea5f8ec6743fe6066e43228478f723db31f8ea4796c4eadbb1e99f880fe7f8",
+  "source_archive_sha256": "1fa03982360b138303282653d7eea66e77bf76d9dae971e693d6e6282c87f6b2",
+  "full_release_build": "Complete client/server and all enabled test targets passed",
+  "compiler_exception": "Existing -Wno-error=restrict; all other strict flags retained",
+  "ctest": {
+    "registered": 42,
+    "enabled": 41,
+    "passed": 41,
+    "failed": 0,
+    "execution_skipped": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 56.14
+  },
+  "mumble_sha256": "cf22392a9e92ea0a4d5b9a59ef0adc844f7d31e03051c40eef511b19794b14af",
+  "mumble_server_sha256": "09da8e26b49a0c784fb6e03b7913be8eaf1ab47290bfea6975a96bff410f31db",
+  "preservation": "Previous task-owned source moved to source-004733-preserved before installing the verified frozen archive; no unrelated container touched",
+  "qualification": "Automated Linux only; no physical media/device, installed client or shipping/signature qualification"
+}

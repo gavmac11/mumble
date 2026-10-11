@@ -1,0 +1,31 @@
+********* Start testing of TestAudioWizard *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestAudioWizard::initTestCase()
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.qpa.fonts: Populating font family aliases took 78 ms. Replace uses of missing font family "Sans Serif" with one that exists to avoid this cost. 
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioInput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioInput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) QImage::scaled: Image is a null image
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) QImage::scaled: Image is a null image
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioInput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(pending-or-denied-input) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+PASS   : TestAudioWizard::unavailableDevices(pending-or-denied-input)
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioInput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioInput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) QImage::scaled: Image is a null image
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) QImage::scaled: Image is a null image
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioInput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+QWARN  : TestAudioWizard::unavailableDevices(both-unavailable) qt.core.qobject.connect: QObject::connect(AudioOutput, Unknown): invalid nullptr parameter
+PASS   : TestAudioWizard::unavailableDevices(both-unavailable)
+PASS   : TestAudioWizard::cleanupTestCase()
+Totals: 4 passed, 0 failed, 0 skipped, 0 blacklisted, 265ms
+********* Finished testing of TestAudioWizard *********

@@ -1,0 +1,28 @@
+********* Start testing of TestMumbleProtocol *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestMumbleProtocol::initTestCase()
+QWARN  : TestMumbleProtocol::test_ping_client_to_server() Using protocol version 1.7.0
+QWARN  : TestMumbleProtocol::test_ping_client_to_server() Using protocol version 1.7.0
+PASS   : TestMumbleProtocol::test_ping_client_to_server()
+QWARN  : TestMumbleProtocol::test_ping_server_to_client() Using protocol version 1.7.0
+QWARN  : TestMumbleProtocol::test_ping_server_to_client() Using protocol version 1.7.0
+PASS   : TestMumbleProtocol::test_ping_server_to_client()
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Using protocol version 1.3.0
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Partial re-encoding
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Removing positional data
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Using protocol version 1.5.0
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Partial re-encoding
+QWARN  : TestMumbleProtocol::test_audio_client_to_server() Removing positional data
+PASS   : TestMumbleProtocol::test_audio_client_to_server()
+QWARN  : TestMumbleProtocol::test_audio_server_to_client() Using protocol version 1.3.0
+QWARN  : TestMumbleProtocol::test_audio_server_to_client() Partial re-encoding
+QWARN  : TestMumbleProtocol::test_audio_server_to_client() Removing positional data
+QWARN  : TestMumbleProtocol::test_audio_server_to_client() Using protocol version 1.5.0
+QWARN  : TestMumbleProtocol::test_audio_server_to_client() Partial re-encoding
+QWARN  : TestMumbleProtocol::test_audio_server_to_client() Removing positional data
+PASS   : TestMumbleProtocol::test_audio_server_to_client()
+PASS   : TestMumbleProtocol::test_preEncode_audio_context()
+PASS   : TestMumbleProtocol::test_preEncode_volume_adjustments()
+PASS   : TestMumbleProtocol::cleanupTestCase()
+Totals: 8 passed, 0 failed, 0 skipped, 0 blacklisted, 3ms
+********* Finished testing of TestMumbleProtocol *********

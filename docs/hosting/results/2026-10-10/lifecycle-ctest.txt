@@ -1,0 +1,80 @@
+Test project <worktree>/build/stability
+      Start  1: TestReleaseUpdate
+ 1/36 Test  #1: TestReleaseUpdate ................   Passed    0.04 sec
+      Start  2: TestAnimatedImages
+ 2/36 Test  #2: TestAnimatedImages ...............   Passed    1.12 sec
+      Start  3: TestChatWebM
+ 3/36 Test  #3: TestChatWebM .....................   Passed   19.25 sec
+      Start  4: TestVideoFramePacketizer
+ 4/36 Test  #4: TestVideoFramePacketizer .........   Passed    0.07 sec
+      Start  5: TestVideoPacketPacer
+ 5/36 Test  #5: TestVideoPacketPacer .............   Passed    0.14 sec
+      Start  6: TestVideoQualityProfile
+ 6/36 Test  #6: TestVideoQualityProfile ..........   Passed    0.02 sec
+      Start  7: TestVideoViewUi
+ 7/36 Test  #7: TestVideoViewUi ..................   Passed    0.22 sec
+      Start  8: TestXMLTools
+ 8/36 Test  #8: TestXMLTools .....................   Passed    0.06 sec
+      Start  9: TestFileTransferManager
+ 9/36 Test  #9: TestFileTransferManager ..........   Passed    0.74 sec
+      Start 10: TestFileTransferTransport
+10/36 Test #10: TestFileTransferTransport ........   Passed    0.02 sec
+      Start 11: TestPQCrypto
+11/36 Test #11: TestPQCrypto .....................   Passed    0.86 sec
+      Start 12: TestFTIdentity
+12/36 Test #12: TestFTIdentity ...................   Passed    3.85 sec
+      Start 13: TestFileTransferSession
+13/36 Test #13: TestFileTransferSession ..........   Passed    0.47 sec
+      Start 14: TestFileTransferEngine
+14/36 Test #14: TestFileTransferEngine ...........   Passed    6.85 sec
+      Start 15: TestFileTransferE2E
+15/36 Test #15: TestFileTransferE2E ..............   Passed    7.36 sec
+      Start 16: TestSettingsJSONSerialization
+16/36 Test #16: TestSettingsJSONSerialization ....   Passed    0.98 sec
+      Start 17: OverlayTest
+17/36 Test #17: OverlayTest ......................***Not Run (Disabled)   0.00 sec
+      Start 18: TestCrypt
+18/36 Test #18: TestCrypt ........................   Passed    0.07 sec
+      Start 19: TestAudioReceiverBuffer
+19/36 Test #19: TestAudioReceiverBuffer ..........   Passed    0.06 sec
+      Start 20: TestCaseInsensitiveQString
+20/36 Test #20: TestCaseInsensitiveQString .......   Passed    0.06 sec
+      Start 21: TestCryptographicHash
+21/36 Test #21: TestCryptographicHash ............   Passed    0.07 sec
+      Start 22: TestCryptographicRandom
+22/36 Test #22: TestCryptographicRandom ..........   Passed    0.97 sec
+      Start 23: TestDatabase
+23/36 Test #23: TestDatabase .....................   Passed    0.14 sec
+      Start 24: TestServerDatabase
+24/36 Test #24: TestServerDatabase ...............   Passed    0.22 sec
+      Start 25: TestFFDHE
+25/36 Test #25: TestFFDHE ........................   Passed    0.23 sec
+      Start 26: TestIPCUtils
+26/36 Test #26: TestIPCUtils .....................   Passed    0.32 sec
+      Start 27: TestPacketDataStream
+27/36 Test #27: TestPacketDataStream .............   Passed    0.07 sec
+      Start 28: TestPasswordGenerator
+28/36 Test #28: TestPasswordGenerator ............   Passed    0.07 sec
+      Start 29: TestMumbleProtocol
+29/36 Test #29: TestMumbleProtocol ...............   Passed    0.06 sec
+      Start 30: TestSelfSignedCertificate
+30/36 Test #30: TestSelfSignedCertificate ........   Passed    0.53 sec
+      Start 31: TestServerAddress
+31/36 Test #31: TestServerAddress ................   Passed    0.06 sec
+      Start 32: TestSSLLocks
+32/36 Test #32: TestSSLLocks .....................   Passed    2.07 sec
+      Start 33: TestStdAbs
+33/36 Test #33: TestStdAbs .......................   Passed    0.06 sec
+      Start 34: TestTimer
+34/36 Test #34: TestTimer ........................   Passed    0.21 sec
+      Start 35: TestUnresolvedServerAddress
+35/36 Test #35: TestUnresolvedServerAddress ......   Passed    0.07 sec
+      Start 36: TestVersion
+36/36 Test #36: TestVersion ......................   Passed    0.07 sec
+
+100% tests passed out of 35
+
+Total Test time (real) =  47.49 sec
+
+The following tests did not run:
+	 17 - OverlayTest (Disabled)

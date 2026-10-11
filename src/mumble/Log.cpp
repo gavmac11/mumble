@@ -6,6 +6,9 @@
 #include "Log.h"
 
 #include "Accessibility.h"
+#ifdef USE_FILE_SHARING
+#	include "PQFileTransfer/engine/FTCardRender.h"
+#endif
 #include "AudioOutput.h"
 #include "AudioOutputSample.h"
 #include "AudioOutputToken.h"
@@ -517,6 +520,9 @@ const char *Log::colorClasses[] = { "time", "server", "privilege" };
 const QStringList Log::allowedSchemes() {
 	QStringList qslAllowedSchemeNames;
 	qslAllowedSchemeNames << QLatin1String("mumble");
+#ifdef USE_FILE_SHARING
+	qslAllowedSchemeNames << QLatin1String("mumble-file");
+#endif
 	qslAllowedSchemeNames << QLatin1String("http");
 	qslAllowedSchemeNames << QLatin1String("https");
 	qslAllowedSchemeNames << QLatin1String("gemini");
@@ -1351,8 +1357,7 @@ void LogDocument::toggleChatVideo(const QUrl &url) {
 
 #ifdef USE_FILE_SHARING
 QString Log::fileCardToHtml(const QByteArray &transferId) {
-	return QStringLiteral("<br /><img src=\"data:application/mumble-file;base64,%1\" alt=\"%2\" />")
-		.arg(QString::fromLatin1(transferId.toBase64()), QString::fromLatin1(transferId.toHex()));
+	return PQFT::fileCardToHtml(transferId);
 }
 #endif
 

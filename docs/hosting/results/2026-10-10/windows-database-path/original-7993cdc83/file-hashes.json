@@ -1,0 +1,111 @@
+{
+  "source_commit": "7993cdc830c7139b85cc4cb72efb12edfb3c0738",
+  "algorithm": "SHA256",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+      "size_bytes": 29
+    },
+    {
+      "path": "child-observations.json",
+      "sha256": "76cae111144d84946dc4a1ea213b3867c68186890f04113b7122a345c6092cf9",
+      "size_bytes": 2781
+    },
+    {
+      "path": "ctest.txt",
+      "sha256": "aee987d984929a748c5b625c5afa2222b2a0cafcf2ed15619eb5360a2a2d84cb",
+      "size_bytes": 595
+    },
+    {
+      "path": "ctest.xml",
+      "sha256": "34702a05cbcd99d0ee978d44536685816e9904e84ad1a7b3645ac8079bc52f06",
+      "size_bytes": 689
+    },
+    {
+      "path": "diagnostic-child-default-stderr.txt",
+      "sha256": "dbe64ec31b2b592a69844e83427c0655fcf3a733307d43de8645b1201d4508c0",
+      "size_bytes": 27
+    },
+    {
+      "path": "diagnostic-child-directory-stderr.txt",
+      "sha256": "1cb33517648d016bb5e68fa5794609efe9a7f7b6e5e2ab1ab40bf5a1da25938d",
+      "size_bytes": 145
+    },
+    {
+      "path": "diagnostic-child-file-stderr.txt",
+      "sha256": "dbe64ec31b2b592a69844e83427c0655fcf3a733307d43de8645b1201d4508c0",
+      "size_bytes": 27
+    },
+    {
+      "path": "diagnostic-children.json",
+      "sha256": "a99ed686940a5dcb13e54a16b0a52f04e30ad5b37151d2917399b841c3368083",
+      "size_bytes": 2847
+    },
+    {
+      "path": "forced-stderr-result.json",
+      "sha256": "badd4fcf38d117b27e37957c7e2ba53d66a6f8f9bd5fecd58cf95d2000c8a973",
+      "size_bytes": 240
+    },
+    {
+      "path": "link-policy.json",
+      "sha256": "1ba90bcc3c495015ece605cdf8e7ffa128c3dc3f935f8a8081990bbd5f94043f",
+      "size_bytes": 124
+    },
+    {
+      "path": "test-run-result.json",
+      "sha256": "d61c74c0038362518ff69fdae82c0530a23fe28fba27bf7e4f639a3cc7c991c2",
+      "size_bytes": 79
+    },
+    {
+      "path": "TestDatabasePath.txt",
+      "sha256": "20a420947caf5e80b42c11823695d3a51dc8186bec062d273a17554b74012885",
+      "size_bytes": 807
+    },
+    {
+      "path": "TestDatabasePath.xml",
+      "sha256": "0edafaa764ae037891d008aeba997a7724d6639e2badec2b3c59ddfb47ca5cd2",
+      "size_bytes": 1115
+    },
+    {
+      "path": "TestDatabasePathForcedStderr.txt",
+      "sha256": "ad4199ca4792bbb7c53f8a7d353a41f40c6222d6728d785c454969ae0edad562",
+      "size_bytes": 600
+    },
+    {
+      "path": "TestDatabasePathForcedStderr.xml",
+      "sha256": "a0b69c6db56c4651a8f23ef0b22bf7dee409c0bf2342f762af582f6a2fb5a32e",
+      "size_bytes": 946
+    },
+    {
+      "path": "TestFileTransferUi.txt",
+      "sha256": "0ad6ca2b43e630311372752e99daaac2c8ce706ee42c45ac4f47d72130f68fc6",
+      "size_bytes": 913
+    },
+    {
+      "path": "TestFileTransferUi.xml",
+      "sha256": "88da85bb6e469c1868ef78b9e7d2d81941752e1272f6b54d33b9c5f71c579c81",
+      "size_bytes": 1344
+    },
+    {
+      "path": "TestQtLogger.txt",
+      "sha256": "1b5e097a71994590d8d6c33937e086a105b4614f78ff5e9f759c1f9cfa04726e",
+      "size_bytes": 525
+    },
+    {
+      "path": "TestQtLogger.xml",
+      "sha256": "c687d8c37db375f72f5d558bf81047e54e6646b89007042badc967eb1dc691bd",
+      "size_bytes": 877
+    },
+    {
+      "path": "validation.json",
+      "sha256": "d8840c33cbdd96d10e5884888870039823b260359911b1eb041df2cad0634055",
+      "size_bytes": 19724
+    },
+    {
+      "path": "validation.txt",
+      "sha256": "8e6ac47fc0b69a4cd78eaf8e1c37e593d20e0249ae93a8aa0cd1f1bd8ac5dea3",
+      "size_bytes": 1230
+    }
+  ]
+}

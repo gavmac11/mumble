@@ -1,0 +1,7 @@
+{
+  "effective_access_rules_match_previous_normal_temp_fixture": true,
+  "inherited_drive_grants_blocked": true,
+  "rule_count": 7,
+  "scope": "Access rules copied only to new private E: test temp; owner/group and personal/system ACLs unchanged",
+  "unix_permissions_and_symlink_checks": "Compile-time conditional; Windows regular pre-created file fixture enabled"
+}

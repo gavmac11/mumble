@@ -1,0 +1,12 @@
+********* Start testing of TestFileTransferManager *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestFileTransferManager::initTestCase()
+FAIL!  : TestFileTransferManager::changedPresentedKeyDoesNotVerifyCachedPin() '!stored.verified' returned FALSE. (Accepting a changed presented key verified the previously cached key instead)
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferManager/TestFileTransferManager.cpp(71)]
+FAIL!  : TestFileTransferManager::joinedPeerChangedKeyIsBlockedBeforeDialog() Compared values are not the same
+   Actual   (contact.size()): 1
+   Expected (0)             : 0
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferManager/TestFileTransferManager.cpp(88)]
+PASS   : TestFileTransferManager::cleanupTestCase()
+Totals: 2 passed, 2 failed, 0 skipped, 0 blacklisted, 20ms
+********* Finished testing of TestFileTransferManager *********

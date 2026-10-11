@@ -1,0 +1,199 @@
+{
+  "published_head": "c5e28d6b222be750ff613cc3b7dd3797437567cc",
+  "runtime_source_head": "09e9b92a28cdeb3d5dd0eb4e3d51eb512e99eaaa",
+  "runs": [
+    {
+      "id": 38105830632,
+      "name": "CI",
+      "head_sha": "c5e28d6b222be750ff613cc3b7dd3797437567cc",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830632",
+      "created_at": "2026-10-11T02:38:57Z",
+      "updated_at": "2026-10-11T03:07:27Z",
+      "jobs": [
+        {
+          "id": 114371047594,
+          "name": "fetch_build_number",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830632/job/114371047594",
+          "started_at": "2026-10-11T02:39:00Z",
+          "completed_at": "2026-10-11T02:39:07Z"
+        },
+        {
+          "id": 114371071233,
+          "name": "build (macos-15, static, arm64)",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830632/job/114371071233",
+          "started_at": "2026-10-11T02:39:16Z",
+          "completed_at": "2026-10-11T02:59:04Z"
+        },
+        {
+          "id": 114371071237,
+          "name": "build (windows-2025-vs2026, static, x86_64)",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830632/job/114371071237",
+          "started_at": "2026-10-11T02:39:08Z",
+          "completed_at": "2026-10-11T03:07:15Z"
+        },
+        {
+          "id": 114371071252,
+          "name": "build (ubuntu-24.04, shared, x86_64)",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830632/job/114371071252",
+          "started_at": "2026-10-11T02:39:08Z",
+          "completed_at": "2026-10-11T02:50:24Z"
+        },
+        {
+          "id": 114371071301,
+          "name": "build (macos-15-intel, static, x86_64)",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830632/job/114371071301",
+          "started_at": "2026-10-11T02:39:09Z",
+          "completed_at": "2026-10-11T02:58:10Z"
+        },
+        {
+          "id": 114375583109,
+          "name": "Decode complete safety QR data",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830632/job/114375583109",
+          "started_at": "2026-10-11T03:07:17Z",
+          "completed_at": "2026-10-11T03:07:26Z"
+        }
+      ]
+    },
+    {
+      "id": 38105830626,
+      "name": "Preview installers",
+      "head_sha": "c5e28d6b222be750ff613cc3b7dd3797437567cc",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830626",
+      "created_at": "2026-10-11T02:38:57Z",
+      "updated_at": "2026-10-11T03:03:13Z",
+      "jobs": [
+        {
+          "id": 114371047807,
+          "name": "Windows x64",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830626/job/114371047807",
+          "started_at": "2026-10-11T02:38:59Z",
+          "completed_at": "2026-10-11T03:02:58Z"
+        },
+        {
+          "id": 114371047852,
+          "name": "Ubuntu 24.04 client (amd64)",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830626/job/114371047852",
+          "started_at": "2026-10-11T02:39:00Z",
+          "completed_at": "2026-10-11T02:54:22Z"
+        },
+        {
+          "id": 114371047908,
+          "name": "Debian 12 server (amd64)",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830626/job/114371047908",
+          "started_at": "2026-10-11T02:38:59Z",
+          "completed_at": "2026-10-11T02:42:09Z"
+        },
+        {
+          "id": 114371047925,
+          "name": "Update and publication tests",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830626/job/114371047925",
+          "started_at": "2026-10-11T02:39:00Z",
+          "completed_at": "2026-10-11T02:39:36Z"
+        },
+        {
+          "id": 114371048018,
+          "name": "macOS ARM64",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830626/job/114371048018",
+          "started_at": "2026-10-11T02:39:07Z",
+          "completed_at": "2026-10-11T02:48:05Z"
+        },
+        {
+          "id": 114374896569,
+          "name": "Decode complete safety QR data",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830626/job/114374896569",
+          "started_at": "2026-10-11T03:03:01Z",
+          "completed_at": "2026-10-11T03:03:12Z"
+        },
+        {
+          "id": 114374934279,
+          "name": "Publish versioned preview",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830626/job/114374934279",
+          "started_at": "2026-10-11T03:03:13Z",
+          "completed_at": "2026-10-11T03:03:13Z"
+        }
+      ]
+    },
+    {
+      "id": 38105830612,
+      "name": "Hosting rehearsal tools",
+      "head_sha": "c5e28d6b222be750ff613cc3b7dd3797437567cc",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830612",
+      "created_at": "2026-10-11T02:38:57Z",
+      "updated_at": "2026-10-11T02:39:15Z",
+      "jobs": [
+        {
+          "id": 114371047593,
+          "name": "validation",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830612/job/114371047593",
+          "started_at": "2026-10-11T02:38:59Z",
+          "completed_at": "2026-10-11T02:39:14Z"
+        }
+      ]
+    },
+    {
+      "id": 38105830599,
+      "name": "Security",
+      "head_sha": "c5e28d6b222be750ff613cc3b7dd3797437567cc",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830599",
+      "created_at": "2026-10-11T02:38:57Z",
+      "updated_at": "2026-10-11T02:59:11Z",
+      "jobs": [
+        {
+          "id": 114371047345,
+          "name": "CodeQL",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830599/job/114371047345",
+          "started_at": "2026-10-11T02:38:59Z",
+          "completed_at": "2026-10-11T02:57:58Z"
+        },
+        {
+          "id": 114371047498,
+          "name": "CodeQL legacy comparison (ubuntu-latest)",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/gavmac11/mumble/actions/runs/38105830599/job/114371047498",
+          "started_at": "2026-10-11T02:39:00Z",
+          "completed_at": "2026-10-11T02:59:10Z"
+        }
+      ]
+    }
+  ],
+  "limits": "CI and preview gates qualify this published head only, not later automatic-save/trust corrections. Preview publishing skipped. Security passes do not imply zero existing repository alerts; exact CodeQL evidence retained separately."
+}

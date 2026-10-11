@@ -1,0 +1,90 @@
+{
+  "source_head": "17f0807e25f8924948c0c391e96d5742c51f817a",
+  "mac_platform": "macOS 26.6.2 ARM64; Qt6.11.1; AppleClang21",
+  "mac_full_release_build": "passed client/server/all enabled test targets",
+  "mac_ctest": {
+    "registered": 42,
+    "enabled": 41,
+    "passed": 41,
+    "failed": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 61.76
+  },
+  "hosting_tests": {
+    "passed": 62,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 0.386
+  },
+  "unchanged_native_bridge_inputs_sha256": {
+    "scripts/hosting/ocb_bridge.cpp": "93f6a02ec614518f134583d78cd7dcf41684f342b02dce0cb71d453d313f246f",
+    "src/crypto/CryptStateOCB2.cpp": "62eb59d758b3b1790696d270e2cd1991b1d8339b929eac72d5c5629d63f3e13d",
+    "src/crypto/CryptState.cpp": "0d957f75e2ef7912b23e988c17eed3d594c24eba4e739740542d858eea125c88",
+    "src/crypto/CryptographicRandom.cpp": "9a6c8556d3aee025a2e42a207ce237a0f0e2c08decbb30eaa5d814ceafacaa26",
+    "src/Timer.cpp": "4f5f0dccf93e2fbe6ebf7778675e1f91c40ec8b363024fefe891a14eb34bdfe8",
+    "3rdparty/arc4random/arc4random_uniform.cpp": "8e33891780b07c3268004824696ffbe156cb13a98acf42c01b5e76d80a0ab66c",
+    "scripts/hosting/pacer_bridge.cpp": "1ac97119185bf18e0dda4f58b86e5f7d274ef942f1c4a6fb03ed202767e21713",
+    "src/mumble/VideoPacketPacer.cpp": "79415234e11ccae868ad0bd36366baef2a954d7661c8a1942745b4a59355dff4",
+    "src/mumble/VideoPacketPacer.h": "58ec54375a741cce706e6b4fee4e2767ad7b709b6e37fd508f54bd56e22fa1da"
+  },
+  "native_bridge_binaries_sha256": {
+    "libprivate_ocb.dylib": "f2d653ba006365de4840a7bb9d119f07a9f3d184f69b9dea4b4e99bb66213907",
+    "libprivate_pacer.dylib": "9b9876799412d294ff679745829eccc30c7e66c5469fbef92666557ad0441ca2"
+  },
+  "native_windows_components": {
+    "pacing_source": "4f30bc5778a2efbff0b25975d6b2cc0c2580e469",
+    "pacing_cases": 45,
+    "audio_source": "8c4269054798f6e3104426f1171dd77ef0a06465",
+    "audio_cases": 4,
+    "strict_release_builds": "passed client/server on both component sources",
+    "committed_sha256_verified": 28
+  },
+  "exact_combined_linux": {
+    "source_head": "17f0807e25f8924948c0c391e96d5742c51f817a",
+    "full_release_build": "complete client/server/all enabled test targets passed",
+    "ctest": {
+      "passed": 41,
+      "registered": 42,
+      "disabled": [
+        "OverlayTest"
+      ],
+      "seconds": 56.14
+    },
+    "compiler_exception": "Existing -Wno-error=restrict; remaining strict flags retained",
+    "source_archive_sha256": "1fa03982360b138303282653d7eea66e77bf76d9dae971e693d6e6282c87f6b2"
+  },
+  "exact_combined_windows": {
+    "source_head": "17f0807e25f8924948c0c391e96d5742c51f817a",
+    "producer_commit": "e79a39fb94daf6ac01fed1a53866e905b2a8882a",
+    "strict_release_build": "complete client/server/all enabled test targets passed",
+    "ctest": {
+      "registered": 42,
+      "enabled": 41,
+      "passed": 41,
+      "disabled": [
+        "OverlayTest"
+      ]
+    },
+    "qt_cases": {
+      "passed": 1047,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "committed_checksums_verified": 98,
+    "existing_platform_limits": [
+      "Windows WebM decoder/playback branches compiled out; six ChatWebM drop/budget/init/cleanup cases executed",
+      "Unix permission/symlink branches conditional"
+    ],
+    "no_newly_disabled_tests": true
+  },
+  "exact_hosted_matrix_security": "running; both actual C++/Python comparison configurations now present; no clean security result claimed",
+  "remaining": [
+    "Server recipient-only relay, delivery receipts/rate negotiation, downstream queue bounds",
+    "Trust identity and auto-save/confirmed replacement safety",
+    "Physical media/permission, shipping signatures/OS coverage, endurance",
+    "Fresh final-package deployment/recovery and paid economics"
+  ]
+}

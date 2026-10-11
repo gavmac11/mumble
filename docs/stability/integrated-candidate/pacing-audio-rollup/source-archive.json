@@ -1,0 +1,72 @@
+{
+  "source_head": "17f0807e25f8924948c0c391e96d5742c51f817a",
+  "archive": "integrated-pacing-audio-source-17f080.tar.gz",
+  "archive_sha256": "1fa03982360b138303282653d7eea66e77bf76d9dae971e693d6e6282c87f6b2",
+  "archive_bytes": 38605114,
+  "submodules": [
+    {
+      "path": "3rdparty/CLI11",
+      "commit": "4160d259d961cd393fd8d67590a8c7d210207348"
+    },
+    {
+      "path": "3rdparty/SPSCQueue",
+      "commit": "e0defee95d54785f767fd99a58fce391c2d04b81"
+    },
+    {
+      "path": "3rdparty/argon2",
+      "commit": "62358ba2123abd17fccf2a108a301d4b52c01a7c"
+    },
+    {
+      "path": "3rdparty/cmake-compiler-flags",
+      "commit": "c0e8552d47be4270a1c31b0be693c43faff51537"
+    },
+    {
+      "path": "3rdparty/flag-icons",
+      "commit": "38dbe5f294c9692804d3516d617b3dd991c17ecc"
+    },
+    {
+      "path": "3rdparty/liboqs",
+      "commit": "5a1a854b0dc9f2141bdc771c555ee60c37950183"
+    },
+    {
+      "path": "3rdparty/minhook",
+      "commit": "8b972409bd85f851b280f5334c16aecb7f131e76"
+    },
+    {
+      "path": "3rdparty/nlohmann_json",
+      "commit": "9cca280a4d0ccf0c08f47a99aa71d1b0e52f8d03"
+    },
+    {
+      "path": "3rdparty/rnnoise-src",
+      "commit": "d98345814b0531e61bf10d463be21fa94b352f9c"
+    },
+    {
+      "path": "3rdparty/soci",
+      "commit": "ce348126e7b8f8f851c0461ec4b5cf8e38f848d6"
+    },
+    {
+      "path": "3rdparty/soci/3rdparty/sqlite3",
+      "commit": "46a41f159b163d50fbb914c729d237e6b54ae72d"
+    },
+    {
+      "path": "3rdparty/spdlog",
+      "commit": "faa0a7a9c5a3550ed5461fab7d8e31c37fd1a2ef"
+    },
+    {
+      "path": "3rdparty/speexdsp",
+      "commit": "738e17905e1ca2a1fa932ddd9c2a85d089f4e845"
+    },
+    {
+      "path": "3rdparty/tracy",
+      "commit": "897aec5b062664d2485f4f9a213715d2e527e0ca"
+    },
+    {
+      "path": "3rdparty/utfcpp",
+      "commit": "e717ac3928b759b79c5e7e403fa2ecbcf4697205"
+    },
+    {
+      "path": "3rdparty/utfcpp/extern/ftest",
+      "commit": "c4ad4af0946b73ce1a40cbc72205d15d196c7e06"
+    }
+  ]
+}

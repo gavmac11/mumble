@@ -1,0 +1,6 @@
+{
+  "filesystem": "NTFS",
+  "allocation_unit_size": 4096,
+  "health_status": "Healthy",
+  "fixture_scope": "Owned local temporary directories on E:; pure policy/settings tests do not qualify target filesystem saving"
+}

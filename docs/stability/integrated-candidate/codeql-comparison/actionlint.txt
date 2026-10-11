@@ -1,0 +1,2 @@
+actionlint -shellcheck= -pyflakes= .github/workflows/code-ql.yml
+Exit: 0

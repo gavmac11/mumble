@@ -13,3 +13,5 @@ target_link_libraries(TestAnimatedImages PRIVATE mumble_client_object_lib Qt6::T
 
 add_test(NAME TestAnimatedImages COMMAND $<TARGET_FILE:TestAnimatedImages>)
 set_tests_properties(TestAnimatedImages PROPERTIES TIMEOUT 60)
+
+mumble_client_test_runtime(TestAnimatedImages)

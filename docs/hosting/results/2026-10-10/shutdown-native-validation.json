@@ -1,0 +1,71 @@
+{
+  "source_commit": "7598ad7da8c5b1cece02ac4001a82dbfa6810000",
+  "production_follow_up": "a6f9d089e68299c5f287d41bf20e112d275cab69",
+  "ci_url": "https://github.com/gavmac11/mumble/actions/runs/38084270166",
+  "ci_event": "workflow_dispatch",
+  "checkout": "Dispatched source branch at the pinned head; not the PR merge ref",
+  "conclusion": "success",
+  "platforms": [
+    {
+      "artifact": "tests-macos-15-arm64",
+      "registered": 36,
+      "enabled_passed": 35,
+      "disabled": 1,
+      "failures": 0,
+      "execution_skips": 0,
+      "seconds": 62.0,
+      "junit_sha256": "30904707954879e498e3cbb813d3af15d1fdac4b0fad62fd00c4597610725b26"
+    },
+    {
+      "artifact": "tests-macos-15-intel-x86_64",
+      "registered": 36,
+      "enabled_passed": 35,
+      "disabled": 1,
+      "failures": 0,
+      "execution_skips": 0,
+      "seconds": 73.0,
+      "junit_sha256": "01b0a3eccec3682cb1c4ae3dbfb995abfe4a793e7be3a96f04d82464ce6ed553"
+    },
+    {
+      "artifact": "tests-ubuntu-24.04-x86_64",
+      "registered": 36,
+      "enabled_passed": 35,
+      "disabled": 1,
+      "failures": 0,
+      "execution_skips": 0,
+      "seconds": 42.0,
+      "junit_sha256": "1bbbe4f436f83b6d3024a2bdaea3040a45c6de3e1bc358c3fb14ea59981f9a59"
+    },
+    {
+      "artifact": "tests-windows-2025-vs2026-x86_64",
+      "registered": 36,
+      "enabled_passed": 35,
+      "disabled": 1,
+      "failures": 0,
+      "execution_skips": 0,
+      "seconds": 105.0,
+      "junit_sha256": "9b3858ad20f1f8062dc31236e3d5c5356420630e2747cf25d98641a3732f2bd7"
+    }
+  ],
+  "preview_url": "https://github.com/gavmac11/mumble/actions/runs/38084273418",
+  "preview_conclusion": "success; publication skipped",
+  "native_windows": {
+    "source_commit": "7598ad7da8c5b1cece02ac4001a82dbfa6810000",
+    "os": "Windows 10 Pro 19045 x64",
+    "compiler": "MSVC 19.51.36257",
+    "qt": "6.10.0 static",
+    "requested_executables": 4,
+    "qt_test_cases": 58,
+    "failures": 0,
+    "skips": 0,
+    "warnings_as_errors": true,
+    "evidence_hashes_verified": true,
+    "published_representation": "Original Windows CRLF bytes; directory attributes disable Git newline conversion"
+  },
+  "open": [
+    "Native GUI and Windows 11 acceptance",
+    "Universal hard shutdown deadline",
+    "Abrupt kill/failed filesystem cleanup",
+    "Frozen integrated candidate and commercial acceptance"
+  ]
+}

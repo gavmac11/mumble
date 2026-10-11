@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestStdAbs" timestamp="2026-10-10T19:11:35" hostname="windows-validation-host" tests="3" failures="0" errors="0" skipped="0" time="0.003">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestStdAbs" time="0.000" />
+  <testcase name="floatWorks" classname="TestStdAbs" time="0.000" />
+  <testcase name="cleanupTestCase" classname="TestStdAbs" time="0.000" />
+</testsuite>

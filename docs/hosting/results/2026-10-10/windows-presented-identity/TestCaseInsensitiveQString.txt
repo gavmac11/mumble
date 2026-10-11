@@ -1,0 +1,14 @@
+********* Start testing of TestCaseInsensitiveQString *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestCaseInsensitiveQString::initTestCase()
+PASS   : TestCaseInsensitiveQString::equality()
+PASS   : TestCaseInsensitiveQString::inequality()
+PASS   : TestCaseInsensitiveQString::less_than()
+PASS   : TestCaseInsensitiveQString::less_equal()
+PASS   : TestCaseInsensitiveQString::greater_than()
+PASS   : TestCaseInsensitiveQString::greater_equal()
+PASS   : TestCaseInsensitiveQString::hash()
+PASS   : TestCaseInsensitiveQString::use_in_qhash()
+PASS   : TestCaseInsensitiveQString::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 3ms
+********* Finished testing of TestCaseInsensitiveQString *********

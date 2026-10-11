@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="Win32-ninja" tests="4" failures="0" disabled="0" skipped="0" hostname="windows-validation-host" time="11" timestamp="2026-10-10T13:45:10">
+  <testcase name="TestFileTransferManager" classname="TestFileTransferManager" time="1.76531" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestPQCrypto" classname="TestPQCrypto" time="1.37923" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestFileTransferEngine" classname="TestFileTransferEngine" time="8.90741" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestFileTransferE2E" classname="TestFileTransferE2E" time="10.1532" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+</testsuite>

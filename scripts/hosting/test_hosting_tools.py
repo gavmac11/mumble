@@ -3,6 +3,8 @@
 import unittest
 import asyncio
 from types import SimpleNamespace
+from pathlib import Path
+import tempfile
 from unittest.mock import AsyncMock, patch
 
 import capacity_model
@@ -12,6 +14,24 @@ import opus_fixture
 
 
 class VideoAccountingTests(unittest.IsolatedAsyncioTestCase):
+    async def test_private_password_is_sent_in_authentication_record(self):
+        client = relay_probe.Client("test", {})
+        client.session = 1
+        client.ready.set_result(None)
+        with tempfile.TemporaryDirectory() as directory:
+            password = Path(directory) / "password"
+            password.write_text("test-secret\n")
+            args = SimpleNamespace(host="localhost", port=64738, server_name="localhost",
+                                   transport="tcp", native_pacer_library=None,
+                                   server_password_file=password)
+            with patch.object(relay_probe.asyncio, "open_connection", new=AsyncMock(return_value=(None, None))), \
+                    patch.object(client, "send", new=AsyncMock()) as send, \
+                    patch.object(client, "receive", new=AsyncMock()):
+                await client.connect(args, None)
+                authentication = next(call.args[1] for call in send.call_args_list if call.args[0] == 2)
+                self.assertEqual(relay_probe.fields(authentication)[2], b"test-secret")
+                await client.reader_task
+
     async def test_connection_uses_the_exact_documented_webcam_wire_rate(self):
         client = relay_probe.Client("test", {})
         client.session = 1

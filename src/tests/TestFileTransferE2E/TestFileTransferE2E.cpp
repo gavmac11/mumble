@@ -24,9 +24,11 @@
 
 #include <QCryptographicHash>
 #include <QDir>
+#include <QElapsedTimer>
 #include <QFile>
 #include <QFileInfo>
 #include <QProcess>
+#include <QProcessEnvironment>
 #include <QSignalSpy>
 #include <QSslSocket>
 #include <QSqlDatabase>
@@ -288,20 +290,35 @@ bool TestFileTransferE2E::startMurmur() {
 	}
 
 	m_murmur.setProcessChannelMode(QProcess::ForwardedChannels);
-	m_murmur.start(QStringLiteral(MUMBLE_TEST_MURMUR_BINARY), { "--ini", iniPath });
+#ifdef Q_OS_WIN
+	// The test runner uses the offscreen plugin, while the static Windows
+	// server only imports the native platform plugin.
+	QProcessEnvironment serverEnvironment = QProcessEnvironment::systemEnvironment();
+	serverEnvironment.remove(QStringLiteral("QT_QPA_PLATFORM"));
+	m_murmur.setProcessEnvironment(serverEnvironment);
+#endif
+	// Unix servers detach by default. Keep the fixture owned by QProcess so
+	// startup failures are visible and cleanup cannot leave a daemon behind.
+	m_murmur.start(QStringLiteral(MUMBLE_TEST_MURMUR_BINARY), { "--foreground", "--ini", iniPath });
 	if (!m_murmur.waitForStarted(10000)) {
 		return false;
 	}
 
 	// First start generates the server certificate; give it up to 60 s
-	return waitFor(
-		[]() {
+	bool ready = false;
+	waitFor(
+		[this, &ready]() {
+			if (m_murmur.state() == QProcess::NotRunning) {
+				return true;
+			}
 			QTcpSocket probe;
 			probe.connectToHost(QHostAddress::LocalHost, MurmurPort);
 			probe.waitForConnected(200);
-			return probe.state() == QAbstractSocket::ConnectedState;
+			ready = probe.state() == QAbstractSocket::ConnectedState;
+			return ready;
 		},
 		60000);
+	return ready;
 }
 
 bool TestFileTransferE2E::waitFor(const std::function< bool() > &predicate, int timeoutMSecs) {
@@ -355,10 +372,10 @@ void TestFileTransferE2E::endToEndTransfer() {
 	const QByteArray bobFp   = bob.identity()->fingerprint();
 	alice.trust()->checkAndPin(alice.serverDigest(), "bob", bobFp,
 							   PQFT::safetyNumber(aliceFp, bobFp));
-	alice.trust()->markVerified(alice.serverDigest(), "bob");
+	QVERIFY(alice.trust()->markVerified(alice.serverDigest(), "bob", bobFp));
 	bob.trust()->checkAndPin(bob.serverDigest(), "alice", aliceFp,
 							 PQFT::safetyNumber(aliceFp, bobFp));
-	bob.trust()->markVerified(bob.serverDigest(), "alice");
+	QVERIFY(bob.trust()->markVerified(bob.serverDigest(), "alice", aliceFp));
 
 	alice.installEngine();
 	bob.installEngine();
@@ -368,7 +385,7 @@ void TestFileTransferE2E::endToEndTransfer() {
 	const QString source = writeTestFile("e2e-payload.bin", 1536 * 1024);   // 6 chunks
 	QVERIFY(!source.isEmpty());
 	QCOMPARE(alice.engine().startSend(source, "application/octet-stream", false, QByteArray(),
-									  { bob.sessionOf("bob") }),
+									  { { bob.sessionOf("bob"), bobFp } }),
 			 1536ull * 1024);
 
 	QByteArray readyTransfer;
@@ -420,10 +437,10 @@ void TestFileTransferE2E::endToEndPasswordTransfer() {
 	const QByteArray bobFp   = bob.identity()->fingerprint();
 	alice.trust()->checkAndPin(alice.serverDigest(), "dave", bobFp,
 							   PQFT::safetyNumber(aliceFp, bobFp));
-	alice.trust()->markVerified(alice.serverDigest(), "dave");
+	QVERIFY(alice.trust()->markVerified(alice.serverDigest(), "dave", bobFp));
 	bob.trust()->checkAndPin(bob.serverDigest(), "carol", aliceFp,
 							 PQFT::safetyNumber(aliceFp, bobFp));
-	bob.trust()->markVerified(bob.serverDigest(), "carol");
+	QVERIFY(bob.trust()->markVerified(bob.serverDigest(), "carol", aliceFp));
 
 	alice.installEngine();
 	bob.installEngine();
@@ -433,8 +450,8 @@ void TestFileTransferE2E::endToEndPasswordTransfer() {
 
 	const QString source = writeTestFile("e2e-pw-payload.bin", 512 * 1024);
 	QVERIFY(!source.isEmpty());
-	QCOMPARE(alice.engine().startSend(source, "application/octet-stream", true,
-									  QByteArray("e2e file password"), { bob.sessionOf("dave") }),
+	QCOMPARE(alice.engine().startSend(source, "application/octet-stream", true, QByteArray("e2e file password"),
+									  { { bob.sessionOf("dave"), bobFp } }),
 			 512ull * 1024);
 
 	QByteArray passwordTransfer;
@@ -505,10 +522,10 @@ void TestFileTransferE2E::capabilityGating() {
 	const QByteArray bobFp   = bob.identity()->fingerprint();
 	alice.trust()->checkAndPin(alice.serverDigest(), "frank", bobFp,
 							   PQFT::safetyNumber(aliceFp, bobFp));
-	alice.trust()->markVerified(alice.serverDigest(), "frank");
+	QVERIFY(alice.trust()->markVerified(alice.serverDigest(), "frank", bobFp));
 	bob.trust()->checkAndPin(bob.serverDigest(), "erin", aliceFp,
 							 PQFT::safetyNumber(aliceFp, bobFp));
-	bob.trust()->markVerified(bob.serverDigest(), "erin");
+	QVERIFY(bob.trust()->markVerified(bob.serverDigest(), "erin", aliceFp));
 
 	alice.installEngine();
 	bob.installEngine();
@@ -518,7 +535,7 @@ void TestFileTransferE2E::capabilityGating() {
 	const QString source = writeTestFile("e2e-gate-payload.bin", 64 * 1024);
 	QVERIFY(!source.isEmpty());
 	QCOMPARE(alice.engine().startSend(source, "application/octet-stream", false, QByteArray(),
-									  { bob.sessionOf("frank") }),
+									  { { bob.sessionOf("frank"), bobFp } }),
 			 64ull * 1024);
 
 	QByteArray readyTransfer;

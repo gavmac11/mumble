@@ -1,0 +1,81 @@
+{
+  "schema_version": 2,
+  "scope": "synthetic video payload; no decoded media validation",
+  "transport": "tcp",
+  "media_deliveries_by_transport": {
+    "tcp": 120,
+    "udp": 0
+  },
+  "crypto_library_sha256": null,
+  "run_id": "eec52081",
+  "probe_sha256": "124964da4b03e987f01de54aea33ce555faeb7b69902702005565f4f0ed56ef0",
+  "fixture_sha256": null,
+  "voice_fixture_sha256": null,
+  "start_time_utc": "2026-10-10T19:40:41.083019+00:00",
+  "end_time_utc": "2026-10-10T19:40:45.085740+00:00",
+  "clients": 3,
+  "senders": 1,
+  "stagger_video_frames": false,
+  "video_send_cap_mbps": 0,
+  "native_pacer_library_sha256": null,
+  "native_pacer_rejected_frames": 0,
+  "frames_per_second": 30,
+  "width": 1280,
+  "height": 720,
+  "requested_sender_payload_mbps": 0.1,
+  "requested_seconds": 2.0,
+  "actual_offer_seconds": 2.0012,
+  "generator_cpu_seconds_during_offer": 0.0595,
+  "generator_cpu_percent_of_one_core": 2.97,
+  "settle_seconds": 2,
+  "offered_payload_mbps": 0.0998,
+  "submitted_payload_mbps": 0.0998,
+  "offered_fragments": 60,
+  "accepted_fragments": 60,
+  "pacer_rejected_fragments": 0,
+  "accepted_not_submitted_by_deadline": 0,
+  "sent_fragments": 60,
+  "offered_expected_deliveries": 120,
+  "expected_deliveries": 120,
+  "undelivered_by_deadline": 0,
+  "total_missing_deliveries": 0,
+  "observed_unique_deliveries": 120,
+  "integrity_errors": [],
+  "complete_fanout": true,
+  "voice": {
+    "senders": 0,
+    "packet_duration_ms": null,
+    "sent_packets": 0,
+    "expected_deliveries": 0,
+    "observed_unique_deliveries": 0,
+    "undelivered_by_deadline": 0,
+    "offered_payload_mbps": 0.0,
+    "relay_delay_ms": null
+  },
+  "relay_delay_ms": {
+    "p50": 8.384,
+    "p95": 11.185,
+    "p99": 15.585,
+    "max": 15.601
+  },
+  "scheduled_frame_to_fragment_delivery_ms": {
+    "p50": 9.259,
+    "p95": 12.624,
+    "p99": 17.429,
+    "max": 17.446
+  },
+  "control_ping_rtt_ms": {
+    "p50": 9.501,
+    "p95": 15.453,
+    "p99": 15.547,
+    "max": 15.547
+  },
+  "encrypted_udp_ping_rtt_ms": null,
+  "generator_event_loop_lag_ms": {
+    "p50": 1.101,
+    "p95": 2.834,
+    "p99": 10.946,
+    "max": 15.346
+  },
+  "captures": []
+}

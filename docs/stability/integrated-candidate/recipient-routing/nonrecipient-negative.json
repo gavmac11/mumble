@@ -1,0 +1,23 @@
+{
+  "server_address": "loopback-only private fixture",
+  "server_certificate_sha256": "da92e35b4f767389fdc49341c9a26f856133d52af0ab4b5cc7538bb7cef1a96a",
+  "payload": "synthetic opaque relay chunk; not a valid encrypted file/session test",
+  "server_binary_runtime": "Existing isolated Mac server; source head not verified by this probe",
+  "declared_recipient_count": 1,
+  "observed": {
+    "selected": [
+      {
+        "actor_matches_authenticated_sender": true,
+        "payload_matches": true
+      }
+    ],
+    "nonrecipient": [
+      {
+        "actor_matches_authenticated_sender": true,
+        "payload_matches": true
+      }
+    ]
+  },
+  "expected": "selected receives exactly one chunk; nonrecipient receives zero",
+  "negative_reproduced": true
+}

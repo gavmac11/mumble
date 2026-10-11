@@ -1,0 +1,11 @@
+Windows Qt logger validation: 440c2fc01c9c36e2db7bfd312f1d17b68698465a
+MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022); Windows 10 Pro 10.0.19045 x64.
+Release/C++20; /W4 /WX /O2 /bigobj /options:strict; dynamic MSVC runtime; no source warning relaxation.
+mumble client/server, TestQtLogger, TestConnectionOutputQueue and TestFileTransferE2E built successfully.
+TestQtLogger: 5 cases, 0 failures, 0 errors, 0 skipped, 1.129s.
+TestConnectionOutputQueue: 10 cases, 0 failures, 0 errors, 0 skipped, 0.135s.
+TestFileTransferE2E: 5 cases, 0 failures, 0 errors, 0 skipped, 9.296s.
+CTest: three suites passed, 10.16s elapsed.
+Logger test checks late Qt logging in three subprocess modes after spdlog shutdown. Queue test has eight behavior cases plus initialization/cleanup. E2E uses an owned local TLS/protobuf server.
+Windows bulk stalled-receiver/memory acceptance, sanitizer, full suite, GUI and packaging/signing were not run.
+Generated CTest output registrations restored; implementation and personal settings unchanged. Complete logs kept private.

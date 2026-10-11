@@ -1,0 +1,6 @@
+{
+  "filesystem": "NTFS",
+  "allocation_unit_size": 4096,
+  "health_status": "Healthy",
+  "fixture_scope": "Owned local destination and receive temporary directory on E:; no other target filesystem qualified"
+}

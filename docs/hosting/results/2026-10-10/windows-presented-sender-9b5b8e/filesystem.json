@@ -1,0 +1,6 @@
+{
+  "filesystem": "NTFS",
+  "allocation_unit_size": 4096,
+  "health_status": "Healthy",
+  "fixture_scope": "Owned local temporary/save directories on E: NTFS; no other target filesystem or power-loss qualification"
+}

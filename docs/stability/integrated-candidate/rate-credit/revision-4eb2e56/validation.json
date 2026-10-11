@@ -1,0 +1,47 @@
+{
+  "source_head": "4eb2e56a23c57d7b5c3e9f01c9bda6cff613c532",
+  "platform": "macOS 26.6.2 ARM64; Qt 6.11.1; AppleClang 21",
+  "full_release_build": "passed client/server/all enabled tests",
+  "ctest": {
+    "passed": 40,
+    "registered": 41,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 55.82
+  },
+  "engine": {
+    "passed": 31,
+    "failed": 0,
+    "skipped": 0
+  },
+  "focused": {
+    "passed": 11,
+    "failed": 0,
+    "skipped": 0
+  },
+  "negative_controls": {
+    "callback_cleanup": {
+      "production": "c80433c2c1a66a94b7b06f7fea9fa955e7495d3c",
+      "failed": 1
+    },
+    "high_rate_paused_callback": {
+      "production": "06bdf56e0",
+      "failed": 1
+    }
+  },
+  "opus_reviews": {
+    "model": "claude-opus-5-5",
+    "first_duration_ms": 151831,
+    "second_duration_ms": 169639,
+    "remaining_defects": [
+      "Sub-millisecond clock restart loses earned credit",
+      "Unchanged configuration resets shared credit",
+      "Low rate and large chunk can exceed receiver idle timeout"
+    ]
+  },
+  "limitations": [
+    "Engine loopback only; no server receipts, budget negotiation or downstream queue bound",
+    "An earlier weaker pause fixture passed before its stronger regression; it is not a failing negative control"
+  ]
+}

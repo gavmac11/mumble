@@ -1,0 +1,11 @@
+Windows early-routing validation: 991c97537fce9fac6ca39f6b82cf092ed1f60af5
+MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022); Windows 10 Pro 10.0.19045 x64.
+Release/C++20; /W4 /WX /O2 /bigobj /options:strict; dynamic MSVC runtime; no source warning relaxation.
+mumble client/server, TestFileTransferEngine, TestFileTransferE2E and TestFileTransferManager built successfully.
+TestFileTransferEngine: 22 cases, 0 failures, 0 errors, 0 skipped, 9.447s.
+TestFileTransferE2E: 5 cases, 0 failures, 0 errors, 0 skipped, 9.198s.
+TestFileTransferManager: 6 cases, 0 failures, 0 errors, 0 skipped, 0.027s.
+CTest: three suites passed, 10.98s elapsed.
+Both new engine cases pass: wrong-transfer early chunks cannot contaminate legitimate output; stray chunks do not extend pending handshake timeout. Prior private-storage, cleanup, shutdown and stale trust regressions also pass.
+Windows regular pre-created legacy fixture exercised; Unix permission/symlink branches conditional; no skipped cases. Original Windows baseline, server broadcast/fan-out, full matrix/hosting, sanitizer and installed-client GUI/Save remain unqualified.
+Generated CTest registrations restored; source/personal state unchanged. Prior evidence/binaries preserved entirely on E:; no new cleanup or large C: copies. Complete logs kept private.

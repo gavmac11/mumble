@@ -1,0 +1,10 @@
+{
+  "head": "4f30bc5778a2efbff0b25975d6b2cc0c2580e469",
+  "sha256": {
+    "TestFileTransferEngine.cpp": "4225e1168f21275d0f9ec235e063a422cea57972332079be9c6142a3f7f1f364",
+    "FileTransferEngine.cpp": "4852d342ddd71fb458134eedb1dd79cc6cf7bc9ad54711b3c89f482013be19dd",
+    "PQFTConstants.h": "01511cfa25b164f97100c5baf77eb4d8a472c7c127ca62481757030ebaa82c29",
+    "FileTransferEngine.h": "22f343296ce2d51ebf11d43e0556b965333eab5fff3eba89eb709ce651b97504",
+    "FileTransferManager.cpp": "29c9d56323cc37c740cf71fb0b9976b2f86726cab2aad52926f90cf36a31f5ad"
+  }
+}

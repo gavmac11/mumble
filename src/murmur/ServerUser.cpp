@@ -19,6 +19,9 @@ ServerUser::ServerUser(Server *p, QSslSocket *socket)
 	: Connection(p, socket), ServerUserInfo(), s(nullptr), leakyBucket(p->iMessageLimit, p->iMessageBurst),
 	  m_pluginMessageBucket(p->iPluginMessageLimit, p->iPluginMessageBurst),
 	  m_fileControlBucket(p->iFileControlLimit, p->iFileControlBurst) {
+	// Covers the largest accepted protocol frame (8 MiB) with room for
+	// normal bursts, while bounding retained output to a stalled receiver.
+	setMaxPendingSendBytes(16 * 1024 * 1024);
 	sState       = ServerUser::Connected;
 	m_clientType = ClientType::REGULAR;
 	sUdpSocket   = INVALID_SOCKET;
@@ -42,84 +45,6 @@ ServerUser::ServerUser(Server *p, QSslSocket *socket)
 ServerUser::operator QString() const {
 	return QString::fromLatin1("%1:%2(%3)").arg(qsName).arg(uiSession).arg(iId);
 }
-BandwidthRecord::BandwidthRecord() {
-	iRecNum = 0;
-	iSum    = 0;
-	for (int i = 0; i < N_BANDWIDTH_SLOTS; i++)
-		a_iBW[i] = 0;
-}
-
-bool BandwidthRecord::addFrame(int size, int maxpersec) {
-	QMutexLocker ml(&qmMutex);
-
-	long elapsed = a_qtWhen[iRecNum].elapsed().count();
-
-	if (elapsed == 0)
-		return false;
-
-	int nsum = iSum - a_iBW[iRecNum] + size;
-	int bw   = static_cast< int >((static_cast< long >(nsum) * 1000000L) / elapsed);
-
-	if (bw > maxpersec)
-		return false;
-
-	a_iBW[iRecNum] = static_cast< unsigned short >(size);
-	a_qtWhen[iRecNum].restart();
-
-	iSum = nsum;
-
-	iRecNum++;
-	if (iRecNum == N_BANDWIDTH_SLOTS)
-		iRecNum = 0;
-
-	return true;
-}
-
-int BandwidthRecord::onlineSeconds() const {
-	QMutexLocker ml(&qmMutex);
-
-	return static_cast< int >(tFirst.elapsed< std::chrono::seconds >().count());
-}
-
-int BandwidthRecord::idleSeconds() const {
-	QMutexLocker ml(&qmMutex);
-
-	std::chrono::microseconds iIdle = a_qtWhen[(iRecNum + N_BANDWIDTH_SLOTS - 1) % N_BANDWIDTH_SLOTS].elapsed();
-	if (tIdleControl.elapsed() < iIdle)
-		iIdle = tIdleControl.elapsed();
-
-	return static_cast< int >(std::chrono::duration_cast< std::chrono::seconds >(iIdle).count());
-}
-
-void BandwidthRecord::resetIdleSeconds() {
-	QMutexLocker ml(&qmMutex);
-
-	tIdleControl.restart();
-}
-
-int BandwidthRecord::bandwidth() const {
-	QMutexLocker ml(&qmMutex);
-
-	int sum = 0;
-	std::chrono::microseconds elapsed{ 0 };
-
-	for (int i = 1; i < N_BANDWIDTH_SLOTS; ++i) {
-		int idx                     = (iRecNum + N_BANDWIDTH_SLOTS - i) % N_BANDWIDTH_SLOTS;
-		std::chrono::microseconds e = a_qtWhen[idx].elapsed();
-		if (e > std::chrono::seconds(1)) {
-			break;
-		} else {
-			sum += a_iBW[idx];
-			elapsed = e;
-		}
-	}
-
-	if (elapsed < std::chrono::milliseconds(250))
-		return 0;
-
-	return static_cast< int >((static_cast< long long >(sum) * 1000000LL) / elapsed.count());
-}
-
 LeakyBucket::LeakyBucket(unsigned int tokensPerSec, unsigned int maxTokens)
 	: m_tokensPerSec(tokensPerSec), m_maxTokens(maxTokens), m_currentTokens(0), m_timer() {
 	m_timer.start();

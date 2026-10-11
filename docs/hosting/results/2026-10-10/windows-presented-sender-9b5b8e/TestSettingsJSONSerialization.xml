@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestSettingsJSONSerialization" timestamp="2026-10-10T21:01:53" hostname="windows-validation-host" tests="4" failures="0" errors="0" skipped="0" time="0.007">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestSettingsJSONSerialization" time="0.000" />
+  <testcase name="noDefaultValuesMatched" classname="TestSettingsJSONSerialization" time="0.003" />
+  <testcase name="testJSONSerialization" classname="TestSettingsJSONSerialization" time="0.001" />
+  <testcase name="cleanupTestCase" classname="TestSettingsJSONSerialization" time="0.000" />
+</testsuite>

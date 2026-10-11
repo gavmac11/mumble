@@ -4,16 +4,18 @@
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
 #include "PQFileTransfer/engine/FileTransferManager.h"
+#include "PQFileTransfer/engine/FileTransferTransport.h"
 
 #include "Channel.h"
 #include "ClientUser.h"
 #include "Database.h"
-#include "Global.h"
 #include "ServerHandler.h"
+#include "Global.h"
 
 #include <QThread>
 
 #include <algorithm>
+#include <utility>
 
 FileTransferManager::FileTransferManager(QObject *parent) : QObject(parent) {
 	qRegisterMetaType< PQFT::FTTransferInfo >("PQFT::FTTransferInfo");
@@ -21,109 +23,176 @@ FileTransferManager::FileTransferManager(QObject *parent) : QObject(parent) {
 	if (Global::get().db) {
 		const QSqlDatabase connection = Global::get().db->connection();
 		PQFT::FileTransferIdentity::ensureSchema(connection);
-		m_identity	= std::make_unique< FileTransferIdentity >(connection);
+		m_identity   = std::make_unique< FileTransferIdentity >(connection);
 		m_trustStore = std::make_unique< PeerTrustStore >(connection);
 	}
 
 	m_workerThread = std::make_unique< QThread >(this);
 	m_workerThread->setObjectName(QStringLiteral("FileTransferWorker"));
-	m_engine = new PQFT::FileTransferEngine();
+	m_engine = std::make_unique< PQFT::FileTransferEngine >().release();
+	setupEngineTransports();
 	m_engine->moveToThread(m_workerThread.get());
 	connect(m_workerThread.get(), &QThread::finished, m_engine, &QObject::deleteLater);
 	m_workerThread->start();
 
-	setupEngineTransports();
 	applyEngineConfig();
 }
 
 FileTransferManager::~FileTransferManager() {
+	m_workerThread->requestInterruption();
 	m_workerThread->quit();
-	m_workerThread->wait(3000);
+	// The engine still uses this manager's identity and pin cache. Keep them
+	// alive until its current operation and worker-owned cleanup have finished.
+	m_workerThread->wait();
 }
 
 void FileTransferManager::setupEngineTransports() {
-	// The engine calls these from the worker thread; sends are marshaled to
-	// the ServerHandler thread (which owns the socket).
-	m_engine->setTransport(
-		[](unsigned int targetSession, const QByteArray &payload) {
-			auto sh = Global::get().sh;
-			if (sh) {
-				QMetaObject::invokeMethod(sh.get(), "sendFileTransferControl", Qt::QueuedConnection,
-										  Q_ARG(QList< unsigned int >, QList< unsigned int >{ targetSession }),
-										  Q_ARG(QByteArray, payload));
-			}
-		},
-		[](const QByteArray &transferId, quint64 index, quint64 total, const QByteArray &data) {
-			auto sh = Global::get().sh;
-			if (sh) {
-				QMetaObject::invokeMethod(sh.get(), "sendFileData", Qt::QueuedConnection,
-										  Q_ARG(QByteArray, transferId), Q_ARG(quint64, index),
-										  Q_ARG(std::optional< quint64 >, std::optional< quint64 >(total)),
-										  Q_ARG(QByteArray, data));
-			}
-		});
-
 	// Engine pin lookups run on the worker thread against the cache
-	PQFT::FileTransferEngine *engine = m_engine;
-	QMutex *cacheMutex				 = &m_pinCacheMutex;
+	PQFT::FileTransferEngine *engine         = m_engine;
+	QMutex *cacheMutex                       = &m_pinCacheMutex;
 	QHash< unsigned int, QByteArray > *cache = &m_pinCache;
 	engine->setPinLookup([cacheMutex, cache](unsigned int peerSession) -> QByteArray {
 		QMutexLocker lock(cacheMutex);
 		return cache->value(peerSession);
 	});
 
-	// Identity signing: FileTransferIdentity::sign only touches in-memory
-	// keys, so it is safe to call from the worker.
-	FileTransferIdentity *identity = m_identity.get();
-	if (identity) {
-		engine->setIdentity(QByteArray(), [identity](QByteArray &sig, const QByteArray &msg,
-													 const QByteArray &ctx) {
-			return identity->sign(sig, msg, ctx);
-		});
-	}
+	engine->setPeerNameLookup([this](unsigned int peerSession) {
+		QMutexLocker lock(&m_pinCacheMutex);
+		return m_peerNameCache.value(peerSession);
+	});
 
-	connect(engine, &PQFT::FileTransferEngine::transferUpdated, this,
-			&FileTransferManager::transferUpdated, Qt::QueuedConnection);
-	connect(engine, &PQFT::FileTransferEngine::firstContact, this,
-			[this](unsigned int peerSession, const QByteArray &peerFingerprint,
-				   const QString &safetyNumberStr, const QByteArray &, bool pinOnObservation) {
-				if (pinOnObservation) {
-					// Sender side: the handshake (M4, signatures + MACs) has
-					// already authenticated the presented key — pin on first
-					// observation (the documented TOFU deviation). The user
-					// can still verify later from the dialog.
-					if (const ClientUser *user = ClientUser::get(peerSession)) {
-						if (m_trustStore && !serverDigest().isEmpty()) {
-							PQFT::PinnedPeer existing;
-							if (!m_trustStore->lookup(existing, serverDigest(), user->qsName)) {
-								m_trustStore->checkAndPin(serverDigest(), user->qsName,
-														  peerFingerprint, safetyNumberStr);
-								refreshPinCache();
-							}
-						}
+	connect(
+		engine, &PQFT::FileTransferEngine::transferUpdated, this,
+		[this](const PQFT::FTTransferInfo &info) {
+			forwardEngineEvent([this, info]() {
+				if (m_trustStore && info.incoming && info.state == PQFT::FTTransferInfo::State::Ready) {
+					QByteArray pinned;
+					const auto state = trustStateForTransfer(info, pinned);
+					if (state == PQFT::TrustState::NewPeer || state == PQFT::TrustState::Changed) {
+						abortTransfer(info.transferId);
+						auto failed  = info;
+						failed.state = PQFT::FTTransferInfo::State::Failed;
+						failed.error = tr("The sender's saved identity changed. Verify the sender and try again.");
+						emit transferUpdated(failed);
+						emit peerBlocked(info.peerSession, info.peerName);
+						return;
 					}
-				} else {
-					// Receiver side: a plain M1 is an unauthenticated claim.
-					// Keep it in memory only — the pin is written when (and
-					// only when) the user accepts the safety-number dialog.
-					m_pendingFirstContact.insert(peerSession,
-												 qMakePair(peerFingerprint, safetyNumberStr));
 				}
+				emit transferUpdated(info);
+			});
+		},
+		Qt::DirectConnection);
+	connect(
+		engine, &PQFT::FileTransferEngine::firstContact, this,
+		[this](unsigned int peerSession, const QByteArray &peerFingerprint, const QString &safetyNumberStr,
+			   const QByteArray &pendingTransferId, bool pinOnObservation) {
+			forwardEngineEvent([this, peerSession, peerFingerprint, safetyNumberStr, pinOnObservation,
+								pendingTransferId]() {
+				ClientUser *user        = ClientUser::get(peerSession);
+				const QByteArray digest = serverDigest();
+				auto resume             = [this, peerSession](bool accepted) {
+					QMetaObject::invokeMethod(
+						m_engine,
+						[this, peerSession, accepted]() { m_engine->resolveFirstContact(peerSession, accepted); },
+						Qt::QueuedConnection);
+				};
+				if (m_trustStore) {
+					const ClientUser *self = ClientUser::get(Global::get().uiSession);
+					if (!user || !user->bFileTransferCapable || !Global::get().s.bFTEnabled || digest.isEmpty() || !self
+						|| !self->cChannel || user->cChannel != self->cChannel) {
+						resume(false);
+						return;
+					}
+					const auto state = m_trustStore->check(digest, user->qsName, peerFingerprint, safetyNumberStr);
+					if (state == PQFT::TrustState::Changed) {
+						if (!pendingTransferId.isEmpty())
+							abortTransfer(pendingTransferId);
+						m_pendingFirstContact.remove(peerSession);
+						resume(false);
+						refreshPinCache();
+						emit peerBlocked(peerSession, user->qsName);
+						return;
+					}
+					if (!pinOnObservation && state != PQFT::TrustState::NewPeer) {
+						// A join may race the worker cache refresh. A matching stored key is already pinned;
+						// resume with the fresh cache, retaining its existing verification state.
+						refreshPinCache();
+						resume(true);
+						return;
+					}
+					if (pinOnObservation) {
+						// Sender-side M4 has authenticated the key; receiver-side M1 remains memory-only.
+						if (m_trustStore->checkAndPin(digest, user->qsName, peerFingerprint, safetyNumberStr)
+							== PQFT::TrustState::Changed) {
+							if (!pendingTransferId.isEmpty())
+								abortTransfer(pendingTransferId);
+							resume(false);
+							emit peerBlocked(peerSession, user->qsName);
+							return;
+						}
+						refreshPinCache();
+					}
+				}
+				m_pendingFirstContact.insert(
+					peerSession, PendingFirstContact{ peerFingerprint, safetyNumberStr, QPointer< ClientUser >(user),
+													  user ? user->qsName : QString(), digest, ++m_nextPromptToken });
 				emit firstContact(peerSession, peerFingerprint, safetyNumberStr);
-			},
-			Qt::QueuedConnection);
-	connect(engine, &PQFT::FileTransferEngine::peerBlocked, this,
-			[this](unsigned int peerSession) {
+			});
+		},
+		Qt::DirectConnection);
+	connect(
+		engine, &PQFT::FileTransferEngine::peerBlocked, this,
+		[this](unsigned int peerSession) {
+			forwardEngineEvent([this, peerSession]() {
 				const ClientUser *user = ClientUser::get(peerSession);
 				emit peerBlocked(peerSession, user ? user->qsName : tr("Unknown user"));
-			},
-			Qt::QueuedConnection);
-	connect(engine, &PQFT::FileTransferEngine::passwordRequired, this,
-			[this](const QByteArray &transferId) { emit passwordRequired(transferId, QString()); },
-			Qt::QueuedConnection);
+			});
+		},
+		Qt::DirectConnection);
+	connect(
+		engine, &PQFT::FileTransferEngine::passwordRequired, this,
+		[this](const QByteArray &transferId) {
+			forwardEngineEvent([this, transferId]() { emit passwordRequired(transferId, QString()); });
+		},
+		Qt::DirectConnection);
+}
+
+void FileTransferManager::forwardEngineEvent(std::function< void() > event) {
+	// Read only the worker-owned generation here. GUI invalidation can happen
+	// while the worker is busy, before its queued cleanup has had time to run.
+	const quint64 generation = m_engineGeneration;
+	QMetaObject::invokeMethod(
+		this,
+		[this, generation, event = std::move(event)]() {
+			if (generation == m_connectionGeneration) {
+				event();
+			}
+		},
+		Qt::QueuedConnection);
+}
+
+void FileTransferManager::updateConnectionTransport() {
+	// Only the GUI thread reads Global::sh. Worker callbacks retain this exact
+	// connection, so reconnects cannot race a shared_ptr read or redirect old data.
+	const std::weak_ptr< ServerHandler > connection = Global::get().sh;
+	PQFT::FileTransferEngine *engine                = m_engine;
+	QMetaObject::invokeMethod(
+		engine,
+		[engine, connection]() {
+			engine->setTransport(
+				[connection](unsigned int targetSession, const QByteArray &payload) {
+					PQFT::Transport::queueControl(connection, targetSession, payload);
+				},
+				[connection](const QByteArray &transferId, quint64 index, quint64 total, const QByteArray &data) {
+					PQFT::Transport::queueChunk(connection, transferId, index, total, data);
+				});
+		},
+		Qt::QueuedConnection);
 }
 
 QByteArray FileTransferManager::serverDigest() const {
+	if (m_serverDigestProvider)
+		return m_serverDigestProvider();
 	auto sh = Global::get().sh;
 	return sh ? sh->qbaDigest : QByteArray();
 }
@@ -134,9 +203,8 @@ void FileTransferManager::handleControlMessage(const MumbleProto::FileTransferCo
 		return;
 	}
 	const QByteArray payload(msg.payload().data(), static_cast< int >(msg.payload().size()));
-	QMetaObject::invokeMethod(m_engine, [this, actor, payload]() {
-				m_engine->onControlMessage(actor, payload);
-			}, Qt::QueuedConnection);
+	QMetaObject::invokeMethod(
+		m_engine, [this, actor, payload]() { m_engine->onControlMessage(actor, payload); }, Qt::QueuedConnection);
 }
 
 void FileTransferManager::handleDataMessage(const MumbleProto::FileData &msg) {
@@ -149,11 +217,14 @@ void FileTransferManager::handleDataMessage(const MumbleProto::FileData &msg) {
 	}
 	const QByteArray transferId(msg.transfer_id().data(), static_cast< int >(msg.transfer_id().size()));
 	const QByteArray data(msg.data().data(), static_cast< int >(msg.data().size()));
-	const quint64 index	 = msg.chunk_index();
-	const quint64 hint	 = msg.has_chunk_count() ? msg.chunk_count() : 0;
-	QMetaObject::invokeMethod(m_engine, [this, actor, transferId, index, hint, data]() {
-				m_engine->onDataMessage(actor, transferId, index, hint, data);
-			}, Qt::QueuedConnection);
+	const quint64 index = msg.chunk_index();
+	const quint64 hint  = msg.has_chunk_count() ? msg.chunk_count() : 0;
+	QMetaObject::invokeMethod(
+		m_engine,
+		[this, actor, transferId, index, hint, data]() {
+			m_engine->onDataMessage(actor, transferId, index, hint, data);
+		},
+		Qt::QueuedConnection);
 }
 
 FileTransferIdentity *FileTransferManager::identity() const {
@@ -173,122 +244,145 @@ void FileTransferManager::pushIdentityToEngine() {
 		return;
 	}
 	FileTransferIdentity *id = m_identity.get();
-	const QByteArray pk	  = id->publicKey();
+	const QByteArray pk      = id->publicKey();
+	updateConnectionTransport();
 	QMetaObject::invokeMethod(
-		m_engine, [this, pk, id]() { m_engine->setIdentity(pk, [id](QByteArray &sig, const QByteArray &msg, const QByteArray &ctx) { return id->sign(sig, msg, ctx); }); },
+		m_engine,
+		[this, pk, id]() {
+			m_engine->setIdentity(pk, [id](QByteArray &sig, const QByteArray &msg, const QByteArray &ctx) {
+				return id->sign(sig, msg, ctx);
+			});
+		},
 		Qt::QueuedConnection);
 }
 
+std::optional< FileTransferManager::SendRecipient > FileTransferManager::sendRecipient(unsigned int session) const {
+	ClientUser *user        = ClientUser::get(session);
+	const ClientUser *self  = ClientUser::get(Global::get().uiSession);
+	const QByteArray digest = serverDigest();
+	if (!user || user == self || !user->bFileTransferCapable || !self || !self->cChannel
+		|| user->cChannel != self->cChannel || !m_trustStore || digest.isEmpty() || !Global::get().s.bFTEnabled)
+		return std::nullopt;
+	PQFT::PinnedPeer peer;
+	bool querySucceeded = false;
+	const bool pinned   = m_trustStore->lookup(peer, digest, user->qsName, &querySucceeded);
+	if (!querySucceeded || (pinned && peer.fingerprint.size() != PQFT::HashSize))
+		return std::nullopt;
+	SendRecipient recipient;
+	recipient.session     = session;
+	recipient.name        = user->qsName;
+	recipient.fingerprint = pinned ? peer.fingerprint : QByteArray();
+	recipient.trust =
+		pinned ? (peer.verified ? PQFT::TrustState::Verified : PQFT::TrustState::Pinned) : PQFT::TrustState::NewPeer;
+	recipient.user         = user;
+	recipient.serverDigest = digest;
+	recipient.generation   = m_connectionGeneration;
+	recipient.channelId    = self->cChannel->iId;
+	return recipient;
+}
+
+bool FileTransferManager::sendRecipientStillCurrent(const SendRecipient &recipient) const {
+	const auto current = sendRecipient(recipient.session);
+	return current && current->user == recipient.user && current->name == recipient.name
+		   && current->fingerprint == recipient.fingerprint && current->trust == recipient.trust
+		   && current->serverDigest == recipient.serverDigest && current->generation == recipient.generation
+		   && current->channelId == recipient.channelId;
+}
+
 bool FileTransferManager::startSend(const QString &filePath, const QString &mimeType, bool passwordMode,
-									const QByteArray &password,
-									const QList< unsigned int > &recipients) {
+									const QByteArray &password, const QList< SendRecipient > &recipients) {
 	if (!hasUsableIdentity() || m_engine == nullptr || !Global::get().s.bFTEnabled) {
 		return false;
 	}
-	QSet< unsigned int > sessions;
-	for (unsigned int session : recipients) {
-		sessions.insert(session);
+	QHash< unsigned int, QByteArray > sessions;
+	if (recipients.isEmpty())
+		return false;
+	for (const SendRecipient &recipient : recipients) {
+		if (!sendRecipientStillCurrent(recipient))
+			return false;
+		sessions.insert(recipient.session, recipient.fingerprint);
 	}
-	// Refresh the public key in the engine in case the identity changed
-	m_engine->setIdentity(m_identity->publicKey(), [id = m_identity.get()](QByteArray &sig,
-																		  const QByteArray &msg,
-																		  const QByteArray &ctx) {
-		return id->sign(sig, msg, ctx);
-	});
+	// Queue identity and connection updates before starting work on the engine.
+	pushIdentityToEngine();
 
 	refreshPinCache();
 
 	const QString path = filePath;
 	const QString mime = mimeType;
 	const bool pwMode  = passwordMode;
-	QByteArray pw	  = password;
-	QMetaObject::invokeMethod(m_engine,
-							  [this, path, mime, pwMode, pw, sessions]() {
-								  m_engine->startSend(path, mime, pwMode, pw, sessions);
-							  },
-							  Qt::QueuedConnection);
+	QByteArray pw      = password;
+	QMetaObject::invokeMethod(
+		m_engine, [this, path, mime, pwMode, pw, sessions]() { m_engine->startSend(path, mime, pwMode, pw, sessions); },
+		Qt::QueuedConnection);
 	return true;
 }
 
 void FileTransferManager::abortTransfer(const QByteArray &transferId) {
-	QMetaObject::invokeMethod(m_engine, [this, transferId]() { m_engine->abortTransfer(transferId); },
-							  Qt::QueuedConnection);
+	QMetaObject::invokeMethod(
+		m_engine, [this, transferId]() { m_engine->abortTransfer(transferId); }, Qt::QueuedConnection);
 }
 
-void FileTransferManager::saveTransferAs(const QByteArray &transferId, const QString &targetPath) {
-	QMetaObject::invokeMethod(m_engine,
-							  [this, transferId, targetPath]() {
-								  m_engine->saveTransferAs(transferId, targetPath);
-							  },
-							  Qt::QueuedConnection);
+void FileTransferManager::saveTransferAs(const QByteArray &transferId, const QString &targetPath,
+										 bool replaceConfirmed) {
+	QMetaObject::invokeMethod(
+		m_engine,
+		[this, transferId, targetPath, replaceConfirmed]() {
+			m_engine->saveTransferAs(transferId, targetPath, replaceConfirmed);
+		},
+		Qt::QueuedConnection);
 }
 
 void FileTransferManager::providePassword(const QByteArray &transferId, const QByteArray &password) {
 	QByteArray pw = password;
-	QMetaObject::invokeMethod(m_engine, [this, transferId, pw]() { m_engine->providePassword(transferId, pw); },
-							  Qt::QueuedConnection);
+	QMetaObject::invokeMethod(
+		m_engine, [this, transferId, pw]() { m_engine->providePassword(transferId, pw); }, Qt::QueuedConnection);
 }
 
-void FileTransferManager::resolveFirstContact(unsigned int peerSession, bool verified) {
-	// GUI thread: the dialog finished. On acceptance make sure the pin the
-	// engine's retry will look up actually exists (the dialog flow calls
-	// pinPeer first; fall back to the in-memory presented fingerprint); on
-	// decline nothing was ever persisted.
-	if (verified) {
-		QMutexLocker lock(&m_pinCacheMutex);
-		const bool alreadyPinned = m_pinCache.contains(peerSession);
-		lock.unlock();
-		if (!alreadyPinned && !pinPeer(peerSession, true)) {
-			verified = false;   // nothing to verify against — treat as declined
-		}
-	}
+bool FileTransferManager::resolveFirstContact(unsigned int peerSession, const QByteArray &shownFingerprint,
+											  quint64 promptToken, bool verified) {
+	const auto pending = m_pendingFirstContact.constFind(peerSession);
+	// An older dialog cannot accept or decline a newer request, even when the key is unchanged.
+	if (pending == m_pendingFirstContact.constEnd() || pending->fingerprint != shownFingerprint
+		|| pending->promptToken != promptToken)
+		return false;
+	const bool accepted = verified && pinPeer(peerSession, shownFingerprint, true);
 	m_pendingFirstContact.remove(peerSession);
-	const bool v = verified;
-	QMetaObject::invokeMethod(m_engine, [this, peerSession, v]() {
-		m_engine->resolveFirstContact(peerSession, v);
-	}, Qt::QueuedConnection);
+	QMetaObject::invokeMethod(
+		m_engine, [this, peerSession, accepted]() { m_engine->resolveFirstContact(peerSession, accepted); },
+		Qt::QueuedConnection);
+	return accepted;
 }
 
-bool FileTransferManager::pinPeer(unsigned int peerSession, bool verified) {
-	const ClientUser *user = ClientUser::get(peerSession);
-	if (!user || !m_trustStore) {
+quint64 FileTransferManager::firstContactToken(unsigned int peerSession) const {
+	return m_pendingFirstContact.value(peerSession).promptToken;
+}
+
+bool FileTransferManager::pinPeer(unsigned int peerSession, const QByteArray &shownFingerprint, bool verified) {
+	const auto it = m_pendingFirstContact.constFind(peerSession);
+	if (!m_trustStore || it == m_pendingFirstContact.constEnd() || shownFingerprint.size() != PQFT::HashSize)
 		return false;
-	}
-	// Which fingerprint? For a receiver-side first contact the pin cache and
-	// trust store are intentionally empty (nothing is persisted before the
-	// dialog) — the manager kept the presented key in memory instead. The
-	// cache covers everyone else (pinned peers, sender-side TOFU).
-	QByteArray fp;
-	{
-		QMutexLocker lock(&m_pinCacheMutex);
-		fp = m_pinCache.value(peerSession);
-	}
-	if (fp.isEmpty()) {
-		PQFT::PinnedPeer peer;
-		if (m_trustStore->lookup(peer, serverDigest(), user->qsName)) {
-			fp = peer.fingerprint;
-		}
-	}
-	if (fp.isEmpty()) {
-		fp = m_pendingFirstContact.value(peerSession).first;
-	}
-	if (fp.isEmpty()) {
+	const PendingFirstContact pending = it.value();
+	ClientUser *user                  = ClientUser::get(peerSession);
+	const ClientUser *self            = ClientUser::get(Global::get().uiSession);
+	const QByteArray digest           = serverDigest();
+	if (!user || !pending.user || user != pending.user.data() || user->qsName != pending.username || digest.isEmpty()
+		|| digest != pending.serverDigest || shownFingerprint != pending.fingerprint || !self || !self->cChannel
+		|| user->cChannel != self->cChannel || !user->bFileTransferCapable || !Global::get().s.bFTEnabled)
 		return false;
-	}
-	QString safety = m_pendingFirstContact.value(peerSession).second;
-	if (safety.isEmpty()) {
-		safety = safetyNumberFor(peerSession);
-	}
-	m_trustStore->checkAndPin(serverDigest(), user->qsName, fp, safety);
-	if (verified) {
-		m_trustStore->markVerified(serverDigest(), user->qsName);
-	}
+	const auto state = m_trustStore->checkAndPin(digest, pending.username, shownFingerprint, pending.safetyNumber);
+	if (state != PQFT::TrustState::Pinned && state != PQFT::TrustState::Verified)
+		return false;
+	if (verified && !m_trustStore->markVerified(digest, pending.username, shownFingerprint))
+		return false;
+	PQFT::PinnedPeer stored;
+	if (!m_trustStore->lookup(stored, digest, pending.username) || stored.fingerprint != shownFingerprint
+		|| (verified && !stored.verified))
+		return false;
 	refreshPinCache();
 	return true;
 }
 
-PQFT::TrustState FileTransferManager::trustStateFor(unsigned int peerSession,
-													QByteArray &pinnedFingerprint) {
+PQFT::TrustState FileTransferManager::trustStateFor(unsigned int peerSession, QByteArray &pinnedFingerprint) {
 	pinnedFingerprint.clear();
 	const ClientUser *user = ClientUser::get(peerSession);
 	if (!user || !m_trustStore || serverDigest().isEmpty()) {
@@ -299,6 +393,22 @@ PQFT::TrustState FileTransferManager::trustStateFor(unsigned int peerSession,
 		return PQFT::TrustState::NewPeer;
 	}
 	pinnedFingerprint = peer.fingerprint;
+	return peer.verified ? PQFT::TrustState::Verified : PQFT::TrustState::Pinned;
+}
+
+PQFT::TrustState FileTransferManager::trustStateForTransfer(const PQFT::FTTransferInfo &info,
+															QByteArray &pinnedFingerprint) {
+	pinnedFingerprint.clear();
+	const QByteArray digest = serverDigest();
+	if (!info.incoming || info.peerName.isEmpty() || info.peerFingerprint.size() != PQFT::HashSize || !m_trustStore
+		|| digest.isEmpty())
+		return PQFT::TrustState::NewPeer;
+	PQFT::PinnedPeer peer;
+	if (!m_trustStore->lookup(peer, digest, info.peerName))
+		return PQFT::TrustState::NewPeer;
+	pinnedFingerprint = peer.fingerprint;
+	if (peer.fingerprint != info.peerFingerprint)
+		return PQFT::TrustState::Changed;
 	return peer.verified ? PQFT::TrustState::Verified : PQFT::TrustState::Pinned;
 }
 
@@ -315,35 +425,53 @@ QString FileTransferManager::safetyNumberFor(unsigned int peerSession) {
 }
 
 void FileTransferManager::disconnectCleanup() {
+	const quint64 generation = ++m_connectionGeneration;
 	if (m_engine) {
-		QMetaObject::invokeMethod(m_engine, [this]() { m_engine->abortAll(); },
-								  Qt::QueuedConnection);
+		QMetaObject::invokeMethod(
+			m_engine,
+			[this, generation]() {
+				// Aborted state updates belong to this cleanup, while prompts
+				// queued before invalidation retain their obsolete generation.
+				m_engineGeneration = generation;
+				m_engine->abortAll();
+				m_engine->setTransport({}, {});
+			},
+			Qt::QueuedConnection);
 	}
 	m_pendingFirstContact.clear();
 	QMutexLocker lock(&m_pinCacheMutex);
 	m_pinCache.clear();
+	m_peerNameCache.clear();
 }
 
 void FileTransferManager::refreshPinCache() {
 	if (!m_trustStore || !m_identity) {
+		QMutexLocker lock(&m_pinCacheMutex);
+		m_pinCache.clear();
+		m_peerNameCache.clear();
 		return;
 	}
 	// Re-apply limits whenever the world changes; cheap and idempotent
 	applyEngineConfig();
 	const QByteArray digest = serverDigest();
 	if (digest.isEmpty()) {
+		QMutexLocker lock(&m_pinCacheMutex);
+		m_pinCache.clear();
+		m_peerNameCache.clear();
 		return;
 	}
 
 	QHash< unsigned int, QByteArray > fresh;
+	QHash< unsigned int, QString > names;
 	// Only channel peers with the file-transfer capability can ever talk to
 	// us; cache every user we have a pin for.
 	const ClientUser *self = ClientUser::get(Global::get().uiSession);
 	if (self && self->cChannel) {
 		for (const User *u : self->cChannel->qlUsers) {
 			const auto *user = static_cast< const ClientUser * >(u);
-			if (!user || user->uiSession == Global::get().uiSession)
+			if (!user || !user->bFileTransferCapable || user->uiSession == Global::get().uiSession)
 				continue;
+			names.insert(user->uiSession, user->qsName);
 			PQFT::PinnedPeer peer;
 			if (m_trustStore->lookup(peer, digest, user->qsName)) {
 				fresh.insert(user->uiSession, peer.fingerprint);
@@ -353,6 +481,7 @@ void FileTransferManager::refreshPinCache() {
 
 	QMutexLocker lock(&m_pinCacheMutex);
 	m_pinCache = std::move(fresh);
+	m_peerNameCache = std::move(names);
 }
 
 void FileTransferManager::applyEngineConfig() {
@@ -361,16 +490,12 @@ void FileTransferManager::applyEngineConfig() {
 	}
 	const Settings &s = Global::get().s;
 	PQFT::FileTransferEngine::Config config;
-	config.chunkSize = static_cast< quint32 >(
-		qBound(16, s.iFTChunkKB, 1024) * 1024);
-	config.sendRateBytesPerSecond =
-		static_cast< quint32 >(qBound(0, s.iFTSendPaceKiB, 1 << 20)) * 1024ull;
-	config.maxReceiveSize =
-		static_cast< quint64 >(qMax(1, s.iFTMaxReceiveMiB)) * 1024ull * 1024ull;
+	config.chunkSize               = static_cast< quint32 >(qBound(16, s.iFTChunkKB, 1024) * 1024);
+	config.sendRateBytesPerSecond  = static_cast< quint32 >(qBound(0, s.iFTSendPaceKiB, 1 << 20)) * 1024ull;
+	config.maxReceiveSize          = static_cast< quint64 >(qMax(1, s.iFTMaxReceiveMiB)) * 1024ull * 1024ull;
 	config.handshakeTimeoutMSecs   = 10000;
 	config.receiveIdleTimeoutMSecs = 60000;
-	QMetaObject::invokeMethod(m_engine, [this, config]() { m_engine->setConfig(config); },
-							  Qt::QueuedConnection);
+	QMetaObject::invokeMethod(m_engine, [this, config]() { m_engine->setConfig(config); }, Qt::QueuedConnection);
 
 	// A disabled feature stops everything in flight
 	if (!s.bFTEnabled) {

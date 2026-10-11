@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="Win32-ninja" tests="42" failures="0" disabled="1" skipped="0" hostname="windows-validation-host" time="38" timestamp="2026-10-10T19:10:59">
+  <testcase name="TestAudioWizard" classname="TestAudioWizard" time="0.868953" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestDatabasePath" classname="TestDatabasePath" time="2.65854" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestReleaseUpdate" classname="TestReleaseUpdate" time="0.435005" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestAnimatedImages" classname="TestAnimatedImages" time="0.865156" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestChatWebM" classname="TestChatWebM" time="0.893266" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestVideoFramePacketizer" classname="TestVideoFramePacketizer" time="0.758183" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestVideoPacketPacer" classname="TestVideoPacketPacer" time="0.530602" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestVideoQualityProfile" classname="TestVideoQualityProfile" time="0.420925" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestVideoViewUi" classname="TestVideoViewUi" time="0.402138" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestXMLTools" classname="TestXMLTools" time="0.745681" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestFileTransferUi" classname="TestFileTransferUi" time="0.85883" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestFileTransferManager" classname="TestFileTransferManager" time="0.867888" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestFileTransferTransport" classname="TestFileTransferTransport" time="0.396806" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestPQCrypto" classname="TestPQCrypto" time="1.35025" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestFTIdentity" classname="TestFTIdentity" time="5.46643" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestFileTransferSession" classname="TestFileTransferSession" time="0.857812" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestFileTransferEngine" classname="TestFileTransferEngine" time="23.5966" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestFileTransferE2E" classname="TestFileTransferE2E" time="9.90392" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestSettingsJSONSerialization" classname="TestSettingsJSONSerialization" time="0.922683" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="OverlayTest" classname="OverlayTest" time="0" status="disabled">
+    <properties />
+    <system-out>Disabled</system-out>
+  </testcase>
+  <testcase name="TestCrypt" classname="TestCrypt" time="0.861252" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestAudioReceiverBuffer" classname="TestAudioReceiverBuffer" time="0.825208" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestQtLogger" classname="TestQtLogger" time="2.16365" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestBandwidthRecord" classname="TestBandwidthRecord" time="0.422567" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestConnectionOutputQueue" classname="TestConnectionOutputQueue" time="1.0348" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestCaseInsensitiveQString" classname="TestCaseInsensitiveQString" time="0.81421" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestCryptographicHash" classname="TestCryptographicHash" time="0.806623" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestCryptographicRandom" classname="TestCryptographicRandom" time="2.13111" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestDatabase" classname="TestDatabase" time="0.993716" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestServerDatabase" classname="TestServerDatabase" time="1.29914" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestFFDHE" classname="TestFFDHE" time="0.828787" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestIPCUtils" classname="TestIPCUtils" time="0.65138" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestPacketDataStream" classname="TestPacketDataStream" time="0.800014" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestPasswordGenerator" classname="TestPasswordGenerator" time="0.826902" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestMumbleProtocol" classname="TestMumbleProtocol" time="0.819615" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestSelfSignedCertificate" classname="TestSelfSignedCertificate" time="0.978381" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestServerAddress" classname="TestServerAddress" time="0.976261" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestSSLLocks" classname="TestSSLLocks" time="2.84243" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestStdAbs" classname="TestStdAbs" time="0.779764" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestTimer" classname="TestTimer" time="0.966024" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestUnresolvedServerAddress" classname="TestUnresolvedServerAddress" time="1.08536" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestVersion" classname="TestVersion" time="0.767866" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+</testsuite>

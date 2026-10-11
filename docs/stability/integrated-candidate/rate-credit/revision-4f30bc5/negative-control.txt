@@ -1,0 +1,12 @@
+********* Start testing of TestFileTransferEngine *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestFileTransferEngine::initTestCase()
+FAIL!  : TestFileTransferEngine::slowSendMakesProgress(unchanged-config-refresh) 'sawState(received, {}, PQFT::FTTransferInfo::State::Ready)' returned FALSE. ()
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp(303)]
+FAIL!  : TestFileTransferEngine::slowSendMakesProgress(large-chunk-at-low-rate) 'sawState(received, {}, PQFT::FTTransferInfo::State::Ready)' returned FALSE. ()
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp(303)]
+FAIL!  : TestFileTransferEngine::frequentRefillsPreserveElapsedCredit() 'sawState(received, {}, PQFT::FTTransferInfo::State::Ready)' returned FALSE. ()
+   Loc: [/Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/src/tests/TestFileTransferEngine/TestFileTransferEngine.cpp(342)]
+PASS   : TestFileTransferEngine::cleanupTestCase()
+Totals: 2 passed, 3 failed, 0 skipped, 0 blacklisted, 3449ms
+********* Finished testing of TestFileTransferEngine *********

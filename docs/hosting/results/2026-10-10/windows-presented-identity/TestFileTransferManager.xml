@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="TestFileTransferManager" timestamp="2026-10-10T20:48:40" hostname="windows-validation-host" tests="25" failures="0" errors="0" skipped="0" time="0.086">
+  <properties>
+    <property name="QTestVersion" value="6.10.0" />
+    <property name="QtVersion" value="6.10.0" />
+    <property name="QtBuild" value="Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022)" />
+  </properties>
+  <testcase name="initTestCase" classname="TestFileTransferManager" time="0.000" />
+  <testcase name="changedPresentedKeyDoesNotVerifyCachedPin" classname="TestFileTransferManager" time="0.007" />
+  <testcase name="joinedPeerChangedKeyIsBlockedBeforeDialog" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="displayedKeyIsPinnedAndVerified" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="joinedMatchingPeerKeepsVerificationWithoutDialog" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="renamedPeerDoesNotBorrowAnotherKeysVerification" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="incomingReadyUsesCapturedIdentity(rename)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="incomingReadyUsesCapturedIdentity(disconnect)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="incomingReadyUsesCapturedIdentity(changed-key)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="incomingReadyUsesCapturedIdentity(removed-pin)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="incomingReadyUsesCapturedIdentity(missing-name)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="incomingReadyUsesCapturedIdentity(missing-key)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="changedDialogContextDoesNotPin(rename)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="changedDialogContextDoesNotPin(connection)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="changedDialogContextDoesNotPin(session-reuse)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="changedDialogContextDoesNotPin(channel)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="changedDialogContextDoesNotPin(capability)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="changedDialogContextDoesNotPin(disabled)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="staleDialogCannotDeclineNewPrompt(different-key)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="staleDialogCannotDeclineNewPrompt(same-key)" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="currentWorkerTrustPromptReachesGui" classname="TestFileTransferManager" time="0.002" />
+  <testcase name="disconnectRejectsQueuedTrustEvents" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="reconnectAcceptsCurrentPromptForReusedSession" classname="TestFileTransferManager" time="0.003" />
+  <testcase name="shutdownJoinsBusyWorkerBeforeDestroyingEngine" classname="TestFileTransferManager" time="0.018" />
+  <testcase name="cleanupTestCase" classname="TestFileTransferManager" time="0.000" />
+</testsuite>

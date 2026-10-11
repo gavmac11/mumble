@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite name="TestBandwidthRecord" timestamp="2026&#x002D;10&#x002D;10T14:17:53" hostname="Adams&#x002D;MacBook&#x002D;Pro.local" tests="10" failures="4" errors="0" skipped="0" time="0.003">
+  <properties>
+    <property name="QTestVersion" value="6.11.1"/>
+    <property name="QtVersion" value="6.11.1"/>
+    <property name="QtBuild" value="Qt 6.11.1 (arm64&#x002D;little_endian&#x002D;lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang&#x002D;2100.0.123.102))"/>
+  </properties>
+  <testcase name="initTestCase" classname="TestBandwidthRecord" time="0.000"/>
+  <testcase name="fileChunksRetireTheirEntireByteCharge" classname="TestBandwidthRecord" time="0.000">
+    <failure type="fail" message="Compared values are not the same">
+      <![CDATA[   Actual   (static_cast< qint64 >(record.iSum)): 378548176
+   Expected (expected)                          : 377499600]]>
+    </failure>
+  </testcase>
+  <testcase name="rejectsExcessAtTheWindowsMultiplicationBoundary" classname="TestBandwidthRecord" time="0.000"/>
+  <testcase name="longIdleSlotStillEnforcesTheConfiguredRate" classname="TestBandwidthRecord" time="0.000"/>
+  <testcase name="maximumWidthChargesDoNotOverflowTheRollingSum" classname="TestBandwidthRecord" time="0.000">
+    <failure type="fail" message="Compared values are not the same">
+      <![CDATA[   Actual   (static_cast< qint64 >(record.iSum)): -2
+   Expected (expected)                          : 4294967294]]>
+    </failure>
+  </testcase>
+  <testcase name="displayedBandwidthClampsInsteadOfWrapping" classname="TestBandwidthRecord" time="0.000">
+    <failure type="fail" message="Compared values are not the same">
+      <![CDATA[   Actual   (record.bandwidth())               : 393210
+   Expected (std::numeric_limits< int >::max()): 2147483647]]>
+    </failure>
+  </testcase>
+  <testcase name="voiceSizedChargesKeepTheirExistingBehavior" classname="TestBandwidthRecord" time="0.000"/>
+  <testcase name="refusedChargeDoesNotAdvanceOrOverwriteAcceptedState" classname="TestBandwidthRecord" time="0.000"/>
+  <testcase name="invalidChargesCannotReduceOrBypassTheBudget" classname="TestBandwidthRecord" time="0.000">
+    <failure type="fail" message="&apos;!record.addFrame(&#x002D;1, 1000)&apos; returned FALSE. ()"/>
+  </testcase>
+  <testcase name="cleanupTestCase" classname="TestBandwidthRecord" time="0.000"/>
+</testsuite>

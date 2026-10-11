@@ -1,0 +1,8 @@
+Internal ctest changing into directory: <isolated-build-directory>
+Test project <isolated-build-directory>
+    Start 20: TestBandwidthRecord
+1/1 Test #20: TestBandwidthRecord ..............   Passed    0.42 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.71 sec

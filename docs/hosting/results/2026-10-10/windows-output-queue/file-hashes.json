@@ -1,0 +1,56 @@
+{
+  "source_commit": "0e0671cf5d58cffe905c83e162dd287686a666f2",
+  "algorithm": "SHA256",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+      "size_bytes": 29
+    },
+    {
+      "path": "ctest.txt",
+      "sha256": "e9facfe1d1c3afdd061827ee322c3436e8572284df8d62b0fd867cf8fe6d0ffa",
+      "size_bytes": 412
+    },
+    {
+      "path": "ctest.xml",
+      "sha256": "78f38219d73683a6cc3856694eb1d1c9dcf95fac1eb44498eaa9b36b1bde9128",
+      "size_bytes": 534
+    },
+    {
+      "path": "test-run-result.json",
+      "sha256": "5a946574350b9bb77100eeaf2399afca8a5d4622f96ca3e28daed5da6a1c9350",
+      "size_bytes": 79
+    },
+    {
+      "path": "TestConnectionOutputQueue.txt",
+      "sha256": "71847ef36d7e27cca7d72611b3e79b6f4e38848fd3bd80a1c5c43482207866f3",
+      "size_bytes": 966
+    },
+    {
+      "path": "TestConnectionOutputQueue.xml",
+      "sha256": "6c7644eefee1d84c3f29ddc4c87bb854ce3ad1a3f321b32d4e9a7c28173f7022",
+      "size_bytes": 1475
+    },
+    {
+      "path": "TestFileTransferE2E.txt",
+      "sha256": "009b397e4f028fdc86cf00aa5f37b2d88d97586ef6471e05fce603394a55a17a",
+      "size_bytes": 558
+    },
+    {
+      "path": "TestFileTransferE2E.xml",
+      "sha256": "bb206e6e1748231ad0450a70115c385d64d863a4017b46127b54a079738d866c",
+      "size_bytes": 897
+    },
+    {
+      "path": "validation.json",
+      "sha256": "bae7bb5ccd9840ef8603c13eaaa600635e219a52e1342ba0cf6793b2d7c10a6c",
+      "size_bytes": 8557
+    },
+    {
+      "path": "validation.txt",
+      "sha256": "f034b97bc206a4ac1ae786611748d61f38b928cf3da3cfbc7ffe19eed73e99fc",
+      "size_bytes": 917
+    }
+  ]
+}

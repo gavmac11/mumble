@@ -19,12 +19,12 @@ jobs:
     name: CodeQL
     runs-on: ubuntu-latest
 
-    permissions:
+    permissions: &codeql_permissions
       security-events: write
       actions: read
       contents: read
 
-    steps:
+    steps: &codeql_steps
     - uses: actions/checkout@v6
       with:
           submodules: 'recursive'
@@ -56,3 +56,15 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
+
+  # GitHub still compares PRs with this historical matrix configuration.
+  # Keep the current scan and run identical traced C++/Python analysis under
+  # the historical identity so neither comparison silently loses coverage.
+  CodeQL-Build:
+    name: CodeQL legacy comparison (${{ matrix.os }})
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    permissions: *codeql_permissions
+    steps: *codeql_steps

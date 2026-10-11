@@ -1,0 +1,133 @@
+{
+  "exception": {
+    "codes": "0x0000000000000001, 0x0000000000000008",
+    "rawCodes": [
+      1,
+      8
+    ],
+    "type": "EXC_BAD_ACCESS",
+    "signal": "SIGSEGV",
+    "subtype": "KERN_INVALID_ADDRESS at 0x0000000000000008"
+  },
+  "termination": {
+    "flags": 0,
+    "code": 11,
+    "namespace": "SIGNAL",
+    "indicator": "Segmentation fault: 11",
+    "byProc": "exc handler",
+    "byPid": 41077
+  },
+  "faulting_thread": 0,
+  "frames": [
+    {
+      "symbol": "QThread::start(QThread::Priority)",
+      "offset": 48,
+      "image": "QtCore"
+    },
+    {
+      "symbol": "AudioWizard::on_qcbInputDevice_activated(int)",
+      "offset": 488,
+      "image": "Mumble"
+    },
+    {
+      "symbol": "AudioWizard::qt_metacall(QMetaObject::Call, int, void**)",
+      "offset": 80,
+      "image": "Mumble"
+    },
+    {
+      "symbol": "void doActivate<false>(QObject*, int, void**)",
+      "offset": 1252,
+      "image": "QtCore"
+    },
+    {
+      "symbol": "QComboBoxPrivate::emitActivated(QModelIndex const&)",
+      "offset": 188,
+      "image": "QtWidgets"
+    },
+    {
+      "symbol": "QComboBoxPrivate::itemSelected(QModelIndex const&)",
+      "offset": 192,
+      "image": "QtWidgets"
+    },
+    {
+      "symbol": "void doActivate<false>(QObject*, int, void**)",
+      "offset": 1344,
+      "image": "QtCore"
+    },
+    {
+      "symbol": "QComboBoxPrivateContainer::eventFilter(QObject*, QEvent*)",
+      "offset": 1316,
+      "image": "QtWidgets"
+    },
+    {
+      "symbol": "QCoreApplicationPrivate::sendThroughObjectEventFilters(QObject*, QEvent*)",
+      "offset": 256,
+      "image": "QtCore"
+    },
+    {
+      "symbol": "QApplicationPrivate::notify_helper(QObject*, QEvent*)",
+      "offset": 304,
+      "image": "QtWidgets"
+    },
+    {
+      "symbol": "QApplication::notify(QObject*, QEvent*)",
+      "offset": 4808,
+      "image": "QtWidgets"
+    },
+    {
+      "symbol": "QCoreApplication::sendSpontaneousEvent(QObject*, QEvent*)",
+      "offset": 172,
+      "image": "QtCore"
+    },
+    {
+      "symbol": "QApplicationPrivate::sendMouseEvent(QWidget*, QMouseEvent*, QWidget*, QWidget*, QWidget**, QPointer<QWidget>&, bool, bool)",
+      "offset": 964,
+      "image": "QtWidgets"
+    },
+    {
+      "symbol": "QWidgetWindow::handleMouseEvent(QMouseEvent*)",
+      "offset": 1944,
+      "image": "QtWidgets"
+    },
+    {
+      "symbol": "QWidgetWindow::event(QEvent*)",
+      "offset": 100,
+      "image": "QtWidgets"
+    },
+    {
+      "symbol": "QApplicationPrivate::notify_helper(QObject*, QEvent*)",
+      "offset": 336,
+      "image": "QtWidgets"
+    },
+    {
+      "symbol": "QApplication::notify(QObject*, QEvent*)",
+      "offset": 468,
+      "image": "QtWidgets"
+    },
+    {
+      "symbol": "QCoreApplication::sendSpontaneousEvent(QObject*, QEvent*)",
+      "offset": 172,
+      "image": "QtCore"
+    },
+    {
+      "symbol": "QWindowPrivate::forwardToPopup(QEvent*, QWindow const*)",
+      "offset": 1604,
+      "image": "QtGui"
+    },
+    {
+      "symbol": "QGuiApplicationPrivate::processMouseEvent(QWindowSystemInterfacePrivate::MouseEvent*)",
+      "offset": 1964,
+      "image": "QtGui"
+    },
+    {
+      "symbol": "QWindowSystemInterface::sendWindowSystemEvents(QFlags<QEventLoop::ProcessEventsFlag>)",
+      "offset": 408,
+      "image": "QtGui"
+    },
+    {
+      "symbol": "QCocoaEventDispatcherPrivate::postedEventsSourceCallback(void*)",
+      "offset": 576,
+      "image": "libqcocoa.dylib"
+    }
+  ]
+}

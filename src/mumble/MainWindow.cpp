@@ -52,6 +52,7 @@
 #include "ScreenShareWindow.h"
 #ifdef USE_FILE_SHARING
 #	include "PQFileTransfer/engine/FTCardRender.h"
+#	include "PQFileTransfer/engine/FTSavePolicy.h"
 #	include "PQFileTransfer/engine/FileTransferManager.h"
 #	include "PQFileTransfer/identity/FTIdentity.h"
 #	include "PQFileTransfer/widgets/FileTransferDialogs.h"
@@ -93,6 +94,7 @@
 #include <QAccessible>
 #include <QtCore/QDir>
 #include <QtCore/QMimeDatabase>
+#include <QtCore/QPointer>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QUrlQuery>
 #include <QtGui/QClipboard>
@@ -3723,6 +3725,10 @@ void MainWindow::serverConnected() {
 }
 
 void MainWindow::serverDisconnected(QAbstractSocket::SocketError err, QString reason) {
+	if (Global::get().fileTransferManager) {
+		Global::get().fileTransferManager->disconnectCleanup();
+	}
+
 	// clear ChannelListener
 	Global::get().channelListenerManager->clear();
 
@@ -4059,6 +4065,15 @@ void MainWindow::customEvent(QEvent *evt) {
 
 
 void MainWindow::on_qteLog_anchorClicked(const QUrl &url) {
+#ifdef USE_FILE_SHARING
+	if (url.scheme() == QLatin1String("mumble-file")) {
+		bool ok = false;
+		const QByteArray transferId = PQFT::fileCardActionId(url, ok);
+		if (ok)
+			onFileCardClicked(transferId);
+		return;
+	}
+#endif
 	if (!handleSpecialContextMenu(url, QCursor::pos(), true)) {
 		if (url.scheme() != QLatin1String("file") && url.scheme() != QLatin1String("qrc") && !url.isRelative())
 			QDesktopServices::openUrl(url);
@@ -4817,12 +4832,12 @@ void MainWindow::onFileTransferUpdated(const PQFT::FTTransferInfo &info) {
 	}
 
 	// Auto-save files from verified contacts when enabled
-	if (info.incoming && info.state == PQFT::FTTransferInfo::State::Ready
-		&& Global::get().s.bFTAutoAcceptPinned && !Global::get().s.qsFTDownloadDir.isEmpty()) {
+	if (info.incoming && info.state == PQFT::FTTransferInfo::State::Ready && info.error.isEmpty()
+		&& Global::get().s.bFTAutoAcceptPinned) {
 		QByteArray pinnedFp;
-		if (manager->trustStateFor(info.peerSession, pinnedFp)
-			== PQFT::TrustState::Verified) {
-			const QString target = QDir(Global::get().s.qsFTDownloadDir).filePath(info.fileName);
+		const QString target =
+			PQFT::automaticSaveTarget(Global::get().s, info, manager->trustStateForTransfer(info, pinnedFp));
+		if (!target.isEmpty()) {
 			manager->saveTransferAs(info.transferId, target);
 		}
 	}
@@ -4830,9 +4845,9 @@ void MainWindow::onFileTransferUpdated(const PQFT::FTTransferInfo &info) {
 	// Create the log entry when the transfer becomes visible
 	if (isNew && !info.fileName.isEmpty()) {
 		const ClientUser *sender = ClientUser::get(info.peerSession);
-		const QString senderName =
-			sender ? Log::formatClientUser(const_cast< ClientUser * >(sender), Log::Source)
-				   : tr("Unknown user");
+		const QString senderName = sender && (!info.incoming || sender->qsName == info.peerName)
+									   ? Log::formatClientUser(const_cast< ClientUser * >(sender), Log::Source)
+									   : (info.peerName.isEmpty() ? tr("Unknown user") : info.peerName.toHtmlEscaped());
 		QString intro;
 		if (info.incoming) {
 			intro = tr("%1 sent a file:").arg(senderName);
@@ -4853,40 +4868,50 @@ void MainWindow::onFileCardClicked(const QByteArray &transferId) {
 		return;
 	}
 	const PQFT::FTTransferInfo info = it.value();
+	const quint64 generation        = manager->connectionGeneration();
 
 	switch (info.state) {
 		case PQFT::FTTransferInfo::State::Ready: {
-			QString baseDir = Global::get().s.qsFTDownloadDir;
-			if (baseDir.isEmpty()) {
-				baseDir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-			}
+			const QString baseDir   = PQFT::manualSaveDirectory(Global::get().s);
 			const QString suggested = baseDir + "/" + info.fileName;
-			QString target			 = QFileDialog::getSaveFileName(this, tr("Save file"), suggested,
-																	  QString(), nullptr,
-																	  QFileDialog::DontConfirmOverwrite);
-			if (!target.isEmpty()) {
-				Global::get().s.qsFTDownloadDir = QFileInfo(target).absolutePath();
-				manager->saveTransferAs(transferId, target);
+			QString target          = QFileDialog::getSaveFileName(this, tr("Save file"), suggested, QString(), nullptr,
+																   QFileDialog::DontConfirmOverwrite);
+			if (!target.isEmpty() && generation == manager->connectionGeneration()) {
+				bool replaceConfirmed = false;
+				if (QFileInfo::exists(target)) {
+					QMessageBox confirmation(
+						QMessageBox::Question, tr("Replace file?"),
+						tr("A file already exists at %1. Replace it?").arg(QDir::toNativeSeparators(target)),
+						QMessageBox::Yes | QMessageBox::No, this);
+					confirmation.setTextFormat(Qt::PlainText);
+					confirmation.setDefaultButton(QMessageBox::No);
+					if (confirmation.exec() != QMessageBox::Yes)
+						break;
+					replaceConfirmed = true;
+				}
+				if (generation != manager->connectionGeneration())
+					break;
+				PQFT::rememberManualSaveDirectory(Global::get().s, target);
+				manager->saveTransferAs(transferId, target, replaceConfirmed);
 			}
 			break;
 		}
 		case PQFT::FTTransferInfo::State::WaitingPassword: {
-			bool ok		  = false;
-			const QString pw = QInputDialog::getText(
-				this, tr("Password required"),
-				tr("Enter the password to decrypt \"%1\":").arg(info.fileName.toHtmlEscaped()),
-				QLineEdit::Password, QString(), &ok);
-			if (ok && !pw.isEmpty()) {
+			bool ok = false;
+			const QString pw =
+				QInputDialog::getText(this, tr("Password required"),
+									  tr("Enter the password to decrypt \"%1\":").arg(info.fileName.toHtmlEscaped()),
+									  QLineEdit::Password, QString(), &ok);
+			if (ok && !pw.isEmpty() && generation == manager->connectionGeneration()) {
 				manager->providePassword(transferId, pw.toUtf8());
 			}
 			break;
 		}
 		case PQFT::FTTransferInfo::State::Handshaking:
 		case PQFT::FTTransferInfo::State::Transferring: {
-			const auto button = QMessageBox::question(
-				this, tr("Cancel transfer?"), tr("Cancel this file transfer?"),
-				QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-			if (button == QMessageBox::Yes) {
+			const auto button = QMessageBox::question(this, tr("Cancel transfer?"), tr("Cancel this file transfer?"),
+													  QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+			if (button == QMessageBox::Yes && generation == manager->connectionGeneration()) {
 				manager->abortTransfer(transferId);
 			}
 			break;
@@ -4898,14 +4923,17 @@ void MainWindow::onFileCardClicked(const QByteArray &transferId) {
 
 void MainWindow::onFileFirstContact(unsigned int peerSession, const QByteArray &peerFingerprint,
 									const QString &safetyNumber) {
-	Q_UNUSED(peerFingerprint);
-
 	auto *manager = Global::get().fileTransferManager;
 	if (!manager) {
 		return;
 	}
-	const ClientUser *user = ClientUser::get(peerSession);
-	const QString name	  = user ? user->qsName : tr("Unknown user");
+	const QPointer< ClientUser > user = ClientUser::get(peerSession);
+	if (!user) {
+		return;
+	}
+	const QString name       = user->qsName;
+	const quint64 generation = manager->connectionGeneration();
+	const quint64 promptToken = manager->firstContactToken(peerSession);
 
 	QByteArray qrPayload;
 	if (manager->identity() && manager->identity()->isUnlocked()) {
@@ -4914,20 +4942,25 @@ void MainWindow::onFileFirstContact(unsigned int peerSession, const QByteArray &
 
 	SafetyNumberDialog dialog(name, safetyNumber, qrPayload, this);
 	const bool verified = (dialog.exec() == QDialog::Accepted) && dialog.verified();
-
-	if (verified) {
-		manager->pinPeer(peerSession, true);
+	// Modal dialogs process disconnects and user-list changes. Never apply
+	// their result to a replacement connection or a reused session number.
+	if (generation != manager->connectionGeneration() || !user || ClientUser::get(peerSession) != user.data()) {
+		return;
 	}
-	manager->resolveFirstContact(peerSession, verified);
+
+	if (!manager->resolveFirstContact(peerSession, peerFingerprint, promptToken, verified) && verified) {
+		Global::get().l->log(
+			Log::Warning,
+			tr("The peer or connection changed while verifying. Their identity was not marked verified. Try again."));
+	}
 }
 
 void MainWindow::onFilePeerBlocked(unsigned int peerSession, const QString &peerName) {
 	Q_UNUSED(peerSession);
-	Global::get().l->log(
-		Log::CriticalError,
-		tr("Blocked a file transfer from %1: their file-transfer identity has CHANGED. Contact them "
-		   "through a channel you trust and re-verify before accepting files again.")
-			.arg(peerName.toHtmlEscaped()));
+	Global::get().l->log(Log::CriticalError,
+						 tr("Blocked a file transfer from %1: their file-transfer identity has CHANGED. Contact them "
+							"through a channel you trust and re-verify before accepting files again.")
+							 .arg(peerName.toHtmlEscaped()));
 }
 
 void MainWindow::onFilePasswordRequired(const QByteArray &transferId, const QString &fileName) {
@@ -4944,7 +4977,18 @@ void MainWindow::startFileSend(const QString &path) {
 	if (!manager->hasUsableIdentity()) {
 		bootstrapFileTransferIdentity();
 		if (!manager->hasUsableIdentity()) {
-			return;
+			// The once-per-launch ServerSync prompt was declined or failed; an
+			// explicit send must not degrade into a silent no-op.
+			const auto choice = QMessageBox::question(this, tr("File transfer"),
+													  tr("Sending files requires a one-time file-transfer "
+														 "identity key. Set it up now?"),
+													  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+			if (choice == QMessageBox::Yes && promptForFileTransferIdentity()) {
+				announceFileTransferCapability();
+			}
+			if (!manager->hasUsableIdentity()) {
+				return;
+			}
 		}
 	}
 
@@ -4960,17 +5004,26 @@ void MainWindow::startFileSend(const QString &path) {
 	}
 
 	QList< FileSendDialog::Recipient > recipients;
+	const quint64 generation     = manager->connectionGeneration();
+	const unsigned int channelId = self->cChannel->iId;
+	QHash< unsigned int, FileTransferManager::SendRecipient > recipientChoices;
 	for (const User *u : self->cChannel->qlUsers) {
 		const auto *user = static_cast< const ClientUser * >(u);
 		if (!user || user == self || !user->bFileTransferCapable) {
 			continue;
 		}
+		const auto choice = manager->sendRecipient(user->uiSession);
+		if (!choice) {
+			QMessageBox::information(this, tr("File transfer"),
+									 tr("Could not read the recipient identity. Try again."));
+			return;
+		}
 		FileSendDialog::Recipient recipient;
 		recipient.session = user->uiSession;
-		recipient.name	 = user->qsName;
-		QByteArray pinned;
-		recipient.trustState = static_cast< int >(manager->trustStateFor(user->uiSession, pinned));
+		recipient.name    = user->qsName;
+		recipient.trustState = static_cast< int >(choice->trust);
 		recipients.append(recipient);
+		recipientChoices.insert(user->uiSession, *choice);
 	}
 	if (recipients.isEmpty()) {
 		QMessageBox::information(this, tr("File transfer"),
@@ -4979,8 +5032,7 @@ void MainWindow::startFileSend(const QString &path) {
 		return;
 	}
 
-	FileSendDialog dialog(fileInfo.fileName(), static_cast< quint64 >(fileInfo.size()), recipients,
-						  this);
+	FileSendDialog dialog(fileInfo.fileName(), static_cast< quint64 >(fileInfo.size()), recipients, this);
 	if (dialog.exec() != QDialog::Accepted) {
 		return;
 	}
@@ -4988,17 +5040,41 @@ void MainWindow::startFileSend(const QString &path) {
 	if (sessions.isEmpty()) {
 		return;
 	}
+	self = ClientUser::get(Global::get().uiSession);
+	bool recipientsChanged =
+		generation != manager->connectionGeneration() || !self || !self->cChannel || self->cChannel->iId != channelId;
+	QList< FileTransferManager::SendRecipient > selected;
+	for (unsigned int session : sessions) {
+		const auto choice = recipientChoices.constFind(session);
+		if (choice == recipientChoices.constEnd() || !manager->sendRecipientStillCurrent(choice.value())) {
+			recipientsChanged = true;
+		} else {
+			selected.append(choice.value());
+		}
+	}
+	if (recipientsChanged) {
+		QMessageBox::information(
+			this, tr("File transfer"),
+			tr("The connection, channel or recipients changed. Choose the file and recipients again."));
+		return;
+	}
 
 	const QMimeType mimeType = QMimeDatabase().mimeTypeForFile(path);
 	// The card appears via the manager's first transferUpdated signal.
-	manager->startSend(path, mimeType.name(), dialog.passwordEnabled(), dialog.password(), sessions);
+	if (!manager->startSend(path, mimeType.name(), dialog.passwordEnabled(), dialog.password(), selected)) {
+		QMessageBox::information(
+			this, tr("File transfer"),
+			tr("The recipient identity could not be confirmed. Choose the file and recipients again."));
+	}
 }
 
 void MainWindow::bootstrapFileTransferIdentity() {
-	// The guard covers the interactive part only (once per launch): prompting
-	// again on every reconnect would be annoying. The capability announcement
-	// below must run for EVERY ServerSync - a reconnected client that stays
-	// silent is invisible to other senders and the relay drops its chunks.
+	// The guard covers the automatic (ServerSync) prompt only: prompting again
+	// on every reconnect would be annoying. Declining it must not, however,
+	// disable later sends - startFileSend offers the one-time setup again via
+	// promptForFileTransferIdentity(). The capability announcement must run
+	// for EVERY ServerSync - a reconnected client that stays silent is
+	// invisible to other senders and the relay drops its chunks.
 	static bool prompted = false;
 
 	auto *manager = Global::get().fileTransferManager;
@@ -5008,61 +5084,74 @@ void MainWindow::bootstrapFileTransferIdentity() {
 
 	if (!prompted) {
 		prompted = true;
+		promptForFileTransferIdentity();
+	}
 
-		if (!manager->identity()->hasIdentity()) {
-			while (true) {
-				bool ok						  = false;
-				const QString passphrase	  = QInputDialog::getText(
-					  this, tr("File-transfer identity"),
-					  tr("Choose a passphrase to protect your file-transfer identity key. You will need "
-						 "it every time you start the client."),
-					  QLineEdit::Password, QString(), &ok);
-				if (!ok || passphrase.size() < PQFT::MinPasswordLength) {
-					if (!ok) {
-						return;
-					}
-					QMessageBox::information(this, tr("File-transfer identity"),
-												 tr("The passphrase must be at least 8 characters."));
-					continue;
-				}
-				bool confirmedOk		   = false;
-				const QString confirmation = QInputDialog::getText(
-					this, tr("File-transfer identity"), tr("Repeat the passphrase:"), QLineEdit::Password,
-					QString(), &confirmedOk);
-				if (!confirmedOk || confirmation != passphrase) {
-					QMessageBox::information(this, tr("File-transfer identity"),
-												 tr("The passphrases did not match."));
-					continue;
-				}
-				if (manager->identity()->createIdentity(passphrase)) {
-					break;
-				}
-				QMessageBox::warning(this, tr("File-transfer identity"),
-										 tr("Could not create the identity key. Try again."));
-			}
-		}
+	announceFileTransferCapability();
+}
 
-		if (!manager->identity()->isUnlocked()) {
-			while (true) {
-				bool ok				 = false;
-				const QString passphrase = QInputDialog::getText(
-					this, tr("File-transfer identity"),
-					tr("Enter the passphrase of your file-transfer identity key:"), QLineEdit::Password,
-					QString(), &ok);
+bool MainWindow::promptForFileTransferIdentity() {
+	auto *manager = Global::get().fileTransferManager;
+	if (!manager || !manager->identity()) {
+		return false;
+	}
+
+	if (!manager->identity()->hasIdentity()) {
+		while (true) {
+			bool ok                  = false;
+			const QString passphrase = QInputDialog::getText(
+				this, tr("File-transfer identity"),
+				tr("Choose a passphrase to protect your file-transfer identity key. You will need "
+				   "it every time you start the client."),
+				QLineEdit::Password, QString(), &ok);
+			if (!ok || passphrase.size() < PQFT::MinPasswordLength) {
 				if (!ok) {
-					return;
+					return false;
 				}
-				if (manager->identity()->unlock(passphrase)) {
-					break;
-				}
-				QMessageBox::information(this, tr("File-transfer identity"), tr("Wrong passphrase."));
+				QMessageBox::information(this, tr("File-transfer identity"),
+										 tr("The passphrase must be at least 8 characters."));
+				continue;
 			}
+			bool confirmedOk = false;
+			const QString confirmation =
+				QInputDialog::getText(this, tr("File-transfer identity"), tr("Repeat the passphrase:"),
+									  QLineEdit::Password, QString(), &confirmedOk);
+			if (!confirmedOk || confirmation != passphrase) {
+				QMessageBox::information(this, tr("File-transfer identity"), tr("The passphrases did not match."));
+				continue;
+			}
+			if (manager->identity()->createIdentity(passphrase)) {
+				break;
+			}
+			QMessageBox::warning(this, tr("File-transfer identity"),
+								 tr("Could not create the identity key. Try again."));
 		}
 	}
 
+	if (!manager->identity()->isUnlocked()) {
+		while (true) {
+			bool ok                  = false;
+			const QString passphrase = QInputDialog::getText(
+				this, tr("File-transfer identity"), tr("Enter the passphrase of your file-transfer identity key:"),
+				QLineEdit::Password, QString(), &ok);
+			if (!ok) {
+				return false;
+			}
+			if (manager->identity()->unlock(passphrase)) {
+				break;
+			}
+			QMessageBox::information(this, tr("File-transfer identity"), tr("Wrong passphrase."));
+		}
+	}
+
+	return manager->hasUsableIdentity();
+}
+
+void MainWindow::announceFileTransferCapability() {
+	auto *manager = Global::get().fileTransferManager;
 	// Per-connection: announce whenever an identity is usable. Stays silent
-	// only when the user declined the (once-per-launch) passphrase prompts.
-	if (!manager->hasUsableIdentity()) {
+	// only when the user declined the passphrase prompts.
+	if (!manager || !manager->hasUsableIdentity()) {
 		return;
 	}
 	manager->pushIdentityToEngine();

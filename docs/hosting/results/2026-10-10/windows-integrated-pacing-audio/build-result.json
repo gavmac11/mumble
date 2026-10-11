@@ -1,0 +1,10 @@
+{
+  "source_commit": "17f0807e25f8924948c0c391e96d5742c51f817a",
+  "configure_exit_code": 0,
+  "build_exit_code": 0,
+  "build_session": 88736,
+  "recorded_utc": "2026-10-11T02:10:59.103737+00:00",
+  "selection": "Default all build target: native full client/server and every registered test executable, including disabled OverlayTest",
+  "parallel": 6,
+  "temporary_files": "Owned E: directory"
+}

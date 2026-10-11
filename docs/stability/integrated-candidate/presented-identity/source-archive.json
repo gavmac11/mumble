@@ -1,0 +1,24 @@
+{
+  "source_head": "f337b951482e121964e9162221e96611f94e068e",
+  "sha256": "3139b1eedb795693014a8296998f04156930175b7d96eb9db5bfc6c80fb3d8a6",
+  "bytes": 38887813,
+  "pinned_submodules": {
+    "3rdparty/CLI11": "4160d259d961cd393fd8d67590a8c7d210207348",
+    "3rdparty/SPSCQueue": "e0defee95d54785f767fd99a58fce391c2d04b81",
+    "3rdparty/argon2": "62358ba2123abd17fccf2a108a301d4b52c01a7c",
+    "3rdparty/cmake-compiler-flags": "c0e8552d47be4270a1c31b0be693c43faff51537",
+    "3rdparty/flag-icons": "38dbe5f294c9692804d3516d617b3dd991c17ecc",
+    "3rdparty/liboqs": "5a1a854b0dc9f2141bdc771c555ee60c37950183",
+    "3rdparty/minhook": "8b972409bd85f851b280f5334c16aecb7f131e76",
+    "3rdparty/nlohmann_json": "9cca280a4d0ccf0c08f47a99aa71d1b0e52f8d03",
+    "3rdparty/rnnoise-src": "d98345814b0531e61bf10d463be21fa94b352f9c",
+    "3rdparty/soci": "ce348126e7b8f8f851c0461ec4b5cf8e38f848d6",
+    "3rdparty/soci/3rdparty/sqlite3": "46a41f159b163d50fbb914c729d237e6b54ae72d",
+    "3rdparty/spdlog": "faa0a7a9c5a3550ed5461fab7d8e31c37fd1a2ef",
+    "3rdparty/speexdsp": "738e17905e1ca2a1fa932ddd9c2a85d089f4e845",
+    "3rdparty/tracy": "897aec5b062664d2485f4f9a213715d2e527e0ca",
+    "3rdparty/utfcpp": "e717ac3928b759b79c5e7e403fa2ecbcf4697205",
+    "3rdparty/utfcpp/extern/ftest": "c4ad4af0946b73ce1a40cbc72205d15d196c7e06"
+  },
+  "export": "git archive exact source and every pinned recursive submodule; no private/untracked worktree files"
+}

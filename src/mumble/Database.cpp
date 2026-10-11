@@ -94,7 +94,19 @@ Database::Database(const QString &dbname) {
 		QFile configuredLocation(Global::get().s.qsDatabaseLocation);
 		if (configuredLocation.exists()) {
 			db.setDatabaseName(Global::get().s.qsDatabaseLocation);
-			db.open();
+			if (!db.open()) {
+				const QSqlError error(db.lastError());
+				QMessageBox message(QMessageBox::Critical, tr("Database error"),
+									tr("Mumble could not open the configured database file '%1'.\n\n%2\n\n"
+									   "Check the database path and its file permissions, then restart Mumble.")
+										.arg(Global::get().s.qsDatabaseLocation, error.text()),
+									QMessageBox::Ok);
+				message.setTextFormat(Qt::PlainText);
+				message.exec();
+				qFatal("Database: Unable to open configured database at %s: %s (%s)",
+					   qPrintable(Global::get().s.qsDatabaseLocation), qPrintable(error.text()),
+					   qPrintable(error.nativeErrorCode()));
+			}
 		} else {
 			QMessageBox messageBox(QMessageBox::Critical, QLatin1String("Mumble"),
 								   tr("The database file '%1' set in the configuration file does not "

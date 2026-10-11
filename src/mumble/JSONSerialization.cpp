@@ -7,6 +7,8 @@
 #include "Cert.h"
 #include "SettingsMacros.h"
 
+#include <QDebug>
+
 
 template< typename T, bool isEnum > struct SaveValueConverter {
 	static const T &getValue(const T &value) { return value; }
@@ -95,6 +97,8 @@ void load(const nlohmann::json &json, const char *category, const SettingsKey &k
 
 void to_json(nlohmann::json &j, const Settings &settings) {
 	j[SettingsKeys::SETTINGS_VERSION_KEY] = 1;
+	// Always record the safe folder-history policy, including profiles with no manual-save history yet.
+	save(j, "misc", SettingsKeys::FT_AUTO_SAVE_POLICY_VERSION_KEY, 1);
 
 	const Settings defaultValues;
 
@@ -106,6 +110,7 @@ void to_json(nlohmann::json &j, const Settings &settings) {
 	PROCESS_ALL_SETTINGS
 
 #undef PROCESS
+
 
 	if (settings.qlShortcuts != defaultValues.qlShortcuts) {
 		// We only remove server specific shortcuts since they are saved in the DB.
@@ -185,6 +190,18 @@ void from_json(const nlohmann::json &j, Settings &settings) {
 	PROCESS_ALL_SETTINGS
 
 #undef PROCESS
+	// Older clients could redirect this directory through a manual save. Preserve the folder,
+	// but require the user to review it and explicitly enable automatic saving in settings again.
+	const auto misc                  = json.find("misc");
+	const bool currentAutoSavePolicy = misc != json.end()
+									   && misc->contains(SettingsKeys::FT_AUTO_SAVE_POLICY_VERSION_KEY)
+									   && misc->at(SettingsKeys::FT_AUTO_SAVE_POLICY_VERSION_KEY).is_number_integer()
+									   && misc->at(SettingsKeys::FT_AUTO_SAVE_POLICY_VERSION_KEY) == 1;
+	if (settings.bFTAutoAcceptPinned && !currentAutoSavePolicy) {
+		settings.bFTAutoAcceptPinned = false;
+		qWarning("Automatic file saving was disabled for an older profile. Review the download directory and enable it "
+				 "again in File Transfer settings.");
+	}
 
 	if (json.contains("shortcuts") && json.at("shortcuts").contains("defined")) {
 		settings.qlShortcuts = json.at("shortcuts").at("defined");

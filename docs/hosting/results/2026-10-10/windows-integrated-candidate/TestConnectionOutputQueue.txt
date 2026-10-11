@@ -1,0 +1,14 @@
+********* Start testing of TestConnectionOutputQueue *********
+Config: Using QtTest library 6.10.0, Qt 6.10.0 (x86_64-little_endian-llp64 static release build; by MSVC 2022), windows 10
+PASS   : TestConnectionOutputQueue::initTestCase()
+PASS   : TestConnectionOutputQueue::admitsExactBoundary()
+PASS   : TestConnectionOutputQueue::admitsLargestProtocolFrame()
+PASS   : TestConnectionOutputQueue::disconnectedSocketDoesNotWrite()
+PASS   : TestConnectionOutputQueue::refusesFurtherWritesBeforeDeferredClose()
+PASS   : TestConnectionOutputQueue::unboundedDefault()
+PASS   : TestConnectionOutputQueue::emptyWriteDoesNotDisconnect()
+PASS   : TestConnectionOutputQueue::largeQueueDoesNotOverflow()
+PASS   : TestConnectionOutputQueue::destroyingConnectionCancelsDeferredClose()
+PASS   : TestConnectionOutputQueue::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 130ms
+********* Finished testing of TestConnectionOutputQueue *********

@@ -1,0 +1,14 @@
+********* Start testing of TestConnectionOutputQueue *********
+Config: Using QtTest library 6.11.1, Qt 6.11.1 (arm64-little_endian-lp64 shared (dynamic) release build; by Apple LLVM 21.0.0 (clang-2100.0.123.102)), macos 26.6.2
+PASS   : TestConnectionOutputQueue::initTestCase()
+PASS   : TestConnectionOutputQueue::admitsExactBoundary()
+PASS   : TestConnectionOutputQueue::admitsLargestProtocolFrame()
+PASS   : TestConnectionOutputQueue::disconnectedSocketDoesNotWrite()
+PASS   : TestConnectionOutputQueue::refusesFurtherWritesBeforeDeferredClose()
+PASS   : TestConnectionOutputQueue::unboundedDefault()
+PASS   : TestConnectionOutputQueue::emptyWriteDoesNotDisconnect()
+PASS   : TestConnectionOutputQueue::largeQueueDoesNotOverflow()
+PASS   : TestConnectionOutputQueue::destroyingConnectionCancelsDeferredClose()
+PASS   : TestConnectionOutputQueue::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 178ms
+********* Finished testing of TestConnectionOutputQueue *********

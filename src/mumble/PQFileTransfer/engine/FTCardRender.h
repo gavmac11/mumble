@@ -22,6 +22,9 @@ namespace PQFT {
 /// HTML for embedding a transfer's card into the log.
 QString fileCardToHtml(const QByteArray &transferId);
 
+/// Decode the internal keyboard action URL. Invalid/external URLs never invoke file actions.
+QByteArray fileCardActionId(const QUrl &url, bool &ok);
+
 /// Extract the transfer id from a mumble-file data URL.
 QByteArray fileCardTransferId(const QUrl &url, bool &ok);
 

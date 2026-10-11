@@ -1,0 +1,7 @@
+Test project /Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/build/stability
+    Start 1: TestAudioWizard
+1/1 Test #1: TestAudioWizard ..................   Passed    0.90 sec
+
+100% tests passed out of 1
+
+Total Test time (real) =   0.91 sec

@@ -1,0 +1,1 @@
+{"mode": "seed", "administrator_login": true, "tls_identity_matches": true, "permanent_channel_matches": true, "registered_certificate_login": true, "member_channel_entry_allowed": true, "outsider_channel_entry_denied": true, "group_membership_matches": true, "acl_rules_match": true, "certificate_ban_matches": true, "banned_certificate_login_denied": true}

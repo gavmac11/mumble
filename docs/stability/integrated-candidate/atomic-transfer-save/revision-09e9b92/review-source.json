@@ -1,0 +1,8 @@
+{
+  "head": "09e9b92a28cdeb3d5dd0eb4e3d51eb512e99eaaa",
+  "sha256": {
+    "TestFileTransferEngine.cpp": "7ac03ec252faaf1c86364e430bd8d3f8be68d9c58d98e12285dea0de6e93ee73",
+    "FileTransferEngine.cpp": "1cffcbd47d967919933f85f1d3d2736840a927920de0b9f58e0dd08be815f16c",
+    "FileTransferEngine.h": "8388de4a9c8880b3db51fa8cbbdfe349131db38a3dda5dda8cfc7dcfe8093921"
+  }
+}

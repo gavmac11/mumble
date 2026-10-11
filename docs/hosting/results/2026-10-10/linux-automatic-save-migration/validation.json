@@ -1,0 +1,23 @@
+{
+  "source_head": "e1d12f7e1140975da419909594127da0e8fa0a70",
+  "platform": "Debian12 amd64 container on Ubuntu24.04 host; Qt6.4.2; GCC12",
+  "full_release_build": "complete client/server/all enabled targets passed",
+  "compiler_exception": "Existing -Wno-error=restrict; remaining strict flags retained",
+  "ctest": {
+    "registered": 42,
+    "enabled": 41,
+    "passed": 41,
+    "failed": 0,
+    "execution_skipped": 0,
+    "disabled": [
+      "OverlayTest"
+    ],
+    "seconds": 57.91
+  },
+  "source_archive_sha256": "69b969e2566200c74b6cd2db782d71f5ed5b63e0c7d6e7a28e0f5a1c0e5f069a",
+  "build_image": "sha256:9cea5f8ec6743fe6066e43228478f723db31f8ea4796c4eadbb1e99f880fe7f8",
+  "mumble_sha256": "284d0a3b0e019dcd5043860a681ce427a7690b04bda2947bde5cd74fe9552571",
+  "mumble_server_sha256": "09da8e26b49a0c784fb6e03b7913be8eaf1ab47290bfea6975a96bff410f31db",
+  "preservation": "Owned30fa source/client/server binaries preserved before installing verified e1 archive",
+  "limitations": "Automated source checks only; no installed GUI/device/shipping, full filesystem/power-loss or trust freshness qualification"
+}

@@ -1,0 +1,10 @@
+Windows output-queue validation: 0e0671cf5d58cffe905c83e162dd287686a666f2
+MSVC 19.51.36257.0; Qt 6.10.0 static (dependency built with MSVC 2022); Windows 10 Pro 10.0.19045 x64.
+Release/C++20; /W4 /WX /O2 /bigobj /options:strict; dynamic MSVC runtime; no source warning relaxation.
+mumble-server, TestConnectionOutputQueue and TestFileTransferE2E built successfully.
+TestConnectionOutputQueue: 10 cases, 0 failures, 0 errors, 0 skipped, 0.139s.
+TestFileTransferE2E: 5 cases, 0 failures, 0 errors, 0 skipped, 9.157s.
+CTest: two suites passed, 10.09s elapsed.
+Queue test includes eight behavior cases plus initialization/cleanup. E2E uses an owned local TLS/protobuf server.
+Windows bulk stalled-receiver/memory acceptance, sanitizer, full suite, GUI and packaging/signing were not run.
+Generated CTest output registrations restored; implementation and personal settings unchanged. Complete logs kept private.

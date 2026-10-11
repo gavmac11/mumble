@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "kind": "loopback_tls_slow_receiver",
+  "source_revision": "7c7d4578e5073d6262e8dea6069c01d4f7ebb128",
+  "bytes_sent": 41943040,
+  "chunk_bytes": 65536,
+  "healthy_chunks": 640,
+  "healthy_payload_sha256": "09f7e41461cc77e391f4cbad70d9a473807d79637655dc8c9d3a4d0504d0dfe8",
+  "slow_chunks_after_resume": 640,
+  "slow_closed": false,
+  "healthy_observed_slow_removal": false,
+  "expected_disconnect_asserted": false,
+  "rss_initial_bytes": 38141952,
+  "rss_paused_bytes": 50774016,
+  "rss_peak_bytes": 63176704,
+  "rss_growth_bytes": 12632064,
+  "healthy_ping_count": 134,
+  "healthy_ping_max_seconds": 0.0029102498665452003,
+  "duration_seconds": 27.563825624994934,
+  "filebandwidth_bits_per_second": 16000000,
+  "aggregate_bits_per_second": 64000000,
+  "limits": "Opaque valid-length FileData relay, not a cryptographic file engine or native media test"
+}

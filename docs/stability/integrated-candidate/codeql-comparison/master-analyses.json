@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1904926966,
+    "ref": "refs/heads/master",
+    "commit_sha": "7fc94bf23cfb7e773282fdd67f30982e5bd25b33",
+    "analysis_key": ".github/workflows/code-ql.yml:codeql",
+    "environment": "{}",
+    "category": ".github/workflows/code-ql.yml:codeql",
+    "created_at": "2026-10-06T23:46:55Z",
+    "tool": {
+      "name": "CodeQL",
+      "guid": null,
+      "version": "2.27.1"
+    }
+  },
+  {
+    "id": 1692710916,
+    "ref": "refs/heads/master",
+    "commit_sha": "2f2beb731962b7f6d456f9296905443bd145c5ef",
+    "analysis_key": ".github/workflows/code-ql.yml:CodeQL-Build",
+    "environment": "{\"os\":\"ubuntu-latest\"}",
+    "category": ".github/workflows/code-ql.yml:CodeQL-Build/os:ubuntu-latest",
+    "created_at": "2026-08-29T22:48:57Z",
+    "tool": {
+      "name": "CodeQL",
+      "guid": null,
+      "version": "2.26.4"
+    }
+  }
+]

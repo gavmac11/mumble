@@ -1,0 +1,24 @@
+Internal ctest changing into directory: <isolated-build-directory>
+Test project <isolated-build-directory>
+    Start 17: TestFileTransferE2E
+    Start  1: TestDatabasePath
+1/9 Test  #1: TestDatabasePath .................   Passed    2.87 sec
+    Start 22: TestQtLogger
+2/9 Test #22: TestQtLogger .....................   Passed    1.69 sec
+    Start 24: TestConnectionOutputQueue
+3/9 Test #24: TestConnectionOutputQueue ........   Passed    0.51 sec
+    Start 10: TestFileTransferUi
+4/9 Test #10: TestFileTransferUi ...............   Passed    0.93 sec
+    Start 11: TestFileTransferManager
+5/9 Test #11: TestFileTransferManager ..........   Passed    0.94 sec
+    Start 13: TestPQCrypto
+6/9 Test #13: TestPQCrypto .....................   Passed    1.42 sec
+    Start 16: TestFileTransferEngine
+7/9 Test #17: TestFileTransferE2E ..............   Passed    9.93 sec
+    Start 23: TestBandwidthRecord
+8/9 Test #23: TestBandwidthRecord ..............   Passed    0.44 sec
+9/9 Test #16: TestFileTransferEngine ...........   Passed    8.57 sec
+
+100% tests passed, 0 tests failed out of 9
+
+Total Test time (real) =  17.41 sec

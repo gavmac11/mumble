@@ -1,0 +1,61 @@
+{
+  "source_commit": "3c5b5ea3997e94c2292f1c52aaca2dea328a92ab",
+  "algorithm": "SHA256",
+  "files": [
+    {
+      "path": "baseline-extraction.json",
+      "sha256": "82bf444e1d55770eca2531a6165e286f8f06f26dbd3c80c9496e9c8ccbe275bd",
+      "size_bytes": 1035
+    },
+    {
+      "path": "comparison-result.json",
+      "sha256": "82d1693d46e4790c4cce88c9855e88dd4ac8a8cf3d0d1958594e232b24c3eb25",
+      "size_bytes": 206
+    },
+    {
+      "path": "ctest.txt",
+      "sha256": "35be0cd25bc3c8b84d368d93cfa526490191cc3363f6ec1b3c17dc0d4f51d5fc",
+      "size_bytes": 300
+    },
+    {
+      "path": "ctest.xml",
+      "sha256": "b867e2b210869d53e9e9e0156960c151b40b706bfeb8fbc2906e57fd7202d2e6",
+      "size_bytes": 365
+    },
+    {
+      "path": "TestBandwidthRecord.txt",
+      "sha256": "e995ac8a7be705fe0699bfc32e286e36728f7fee642214600636c03b4dff9b90",
+      "size_bytes": 1020
+    },
+    {
+      "path": "TestBandwidthRecord.xml",
+      "sha256": "1c22f4291ba9b8d7c0923025b058b4d9d8ea2d50adecfcf8fd37799432a013cf",
+      "size_bytes": 1535
+    },
+    {
+      "path": "TestBandwidthRecordBaseline.txt",
+      "sha256": "7b784d76258923acc118ce2631d1ba04c7d47af35242dc9d16eb6fa279fb640b",
+      "size_bytes": 2177
+    },
+    {
+      "path": "TestBandwidthRecordBaseline.xml",
+      "sha256": "017f147b1f170d19437a167bbb7a56c86861fb99cde1e907d69beb11c81821cd",
+      "size_bytes": 2645
+    },
+    {
+      "path": "validation.json",
+      "sha256": "c92217f5dbb120d53f9076fe9caeb0d470d6bd102c4aad7fea15f53c7e3a5217",
+      "size_bytes": 11395
+    },
+    {
+      "path": "validation.txt",
+      "sha256": "ba4f570b66d89d875dbcc3b66092b37e3d0b8758b0dca5b0b502657e540a5190",
+      "size_bytes": 1267
+    },
+    {
+      "path": "widths.txt",
+      "sha256": "6050f9815ec20a743e446c66749ceccac9bd2942fee3bc6b3df24f3a88d8c66c",
+      "size_bytes": 66
+    }
+  ]
+}

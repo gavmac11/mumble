@@ -1,0 +1,48 @@
+Start testing: Oct 10 19:19 Pacific Daylight Time
+----------------------------------------------------------
+18/42 Testing: TestFileTransferE2E
+18/42 Test: TestFileTransferE2E
+Command: "<isolated-build-directory>/tests/TestFileTransferE2E.exe" "-o" "<validation-cache>/evidence/TestFileTransferE2E.txt,txt" "-o" "<validation-cache>/evidence/TestFileTransferE2E.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestFileTransferE2E
+"TestFileTransferE2E" start time: Oct 10 19:19 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =  10.14 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferE2E" end time: Oct 10 19:19 Pacific Daylight Time
+"TestFileTransferE2E" time elapsed: 00:00:10
+----------------------------------------------------------
+
+12/42 Testing: TestFileTransferManager
+12/42 Test: TestFileTransferManager
+Command: "<isolated-build-directory>/tests/TestFileTransferManager.exe" "-o" "<validation-cache>/evidence/TestFileTransferManager.txt,txt" "-o" "<validation-cache>/evidence/TestFileTransferManager.xml,junitxml"
+Directory: <isolated-build-directory>
+"TestFileTransferManager" start time: Oct 10 19:19 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.90 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferManager" end time: Oct 10 19:19 Pacific Daylight Time
+"TestFileTransferManager" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/42 Testing: TestFileTransferEngine
+17/42 Test: TestFileTransferEngine
+Command: "<isolated-build-directory>/tests/TestFileTransferEngine.exe" "-o" "<validation-cache>/evidence/TestFileTransferEngine.txt,txt" "-o" "<validation-cache>/evidence/TestFileTransferEngine.xml,junitxml"
+Directory: <isolated-build-directory>/src/tests/TestFileTransferEngine
+"TestFileTransferEngine" start time: Oct 10 19:19 Pacific Daylight Time
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =  24.00 sec
+----------------------------------------------------------
+Test Passed.
+"TestFileTransferEngine" end time: Oct 10 19:19 Pacific Daylight Time
+"TestFileTransferEngine" time elapsed: 00:00:24
+----------------------------------------------------------
+
+End testing: Oct 10 19:19 Pacific Daylight Time

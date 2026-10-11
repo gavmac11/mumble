@@ -1,0 +1,121 @@
+-- Using Win7 as the oldest supported Windows version
+-- Using (among others) the following compiler flags: /WX;/W4;/O2;/bigobj;/options:strict
+-- ##################################################
+-- Mumble version:              1.7.0
+-- Architecture:                x64
+-- Build type:                  Release
+-- Using LTO in release builds: OFF
+-- ##################################################
+-- Using system ZLIB.
+-- Using system PCRE2.
+-- Qt6 component found: Core | Version: 6.10.0
+-- Qt6 component found: Network | Version: 6.10.0
+-- Qt6 component found: Xml | Version: 6.10.0
+-- OpenSSL component found: Crypto | Version: 3.6.1
+-- OpenSSL component found: SSL | Version: 3.6.1
+-- TRACY_ENABLE: OFF
+-- TRACY_ON_DEMAND: ON
+-- TRACY_CALLSTACK: OFF
+-- TRACY_NO_CALLSTACK: OFF
+-- TRACY_NO_CALLSTACK_INLINES: OFF
+-- TRACY_ONLY_LOCALHOST: OFF
+-- TRACY_NO_BROADCAST: OFF
+-- TRACY_ONLY_IPV4: OFF
+-- TRACY_NO_CODE_TRANSFER: OFF
+-- TRACY_NO_CONTEXT_SWITCH: OFF
+-- TRACY_NO_EXIT: OFF
+-- TRACY_NO_SAMPLING: OFF
+-- TRACY_NO_VERIFY: OFF
+-- TRACY_NO_VSYNC_CAPTURE: OFF
+-- TRACY_NO_FRAME_IMAGE: OFF
+-- TRACY_NO_SYSTEM_TRACING: OFF
+-- TRACY_DELAYED_INIT: OFF
+-- TRACY_MANUAL_LIFETIME: OFF
+-- TRACY_FIBERS: OFF
+-- TRACY_NO_CRASH_HANDLER: OFF
+-- TRACY_TIMER_FALLBACK: OFF
+-- Disabling warnings for targets: TracyClient
+-- Tracy: OFF
+-- Qt6 component found: Concurrent | Version: 6.10.0
+-- Found OpenSSL: <dependency-cache-root>/env/mumble_env.x64-windows-static-md.b1fe4a4257/installed/x64-windows-static-md/lib/libcrypto.lib (found version "3.6.1")
+-- Qt6 component found: Sql | Version: 6.10.0
+-- Using system PNG.
+-- Using system Harfbuzz.
+-- Using system Freetype.
+-- Using system Jpeg.
+-- Qt6 component found: Svg | Version: 6.10.0
+-- Qt6 component found: Widgets | Version: 6.10.0
+-- MAINWINDOW_UI_HASH: 4183
+CMake Warning at <dependency-cache-root>/env/mumble_env.x64-windows-static-md.b1fe4a4257/installed/x64-windows-static-md/share/unofficial-utf8proc/unofficial-utf8proc-config.cmake:1 (message):
+  find_package(unofficial-utf8proc) is deprecated.
+
+  utf8proc provides CMake targets:
+
+
+
+    find_package(utf8proc)
+    target_link_libraries(main PRIVATE utf8proc::utf8proc)
+
+Call Stack (most recent call first):
+  <dependency-cache-root>/env/mumble_env.x64-windows-static-md.b1fe4a4257/scripts/buildsystems/vcpkg.cmake:908 (_find_package)
+  <cmake-install-root>/share/cmake-3.29/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)
+  <dependency-cache-root>/env/mumble_env.x64-windows-static-md.b1fe4a4257/installed/x64-windows-static-md/share/poco/PocoFoundationConfig.cmake:6 (find_dependency)
+  <dependency-cache-root>/env/mumble_env.x64-windows-static-md.b1fe4a4257/scripts/buildsystems/vcpkg.cmake:908 (_find_package)
+  <cmake-install-root>/share/cmake-3.29/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)
+  <dependency-cache-root>/env/mumble_env.x64-windows-static-md.b1fe4a4257/installed/x64-windows-static-md/share/poco/PocoXMLConfig.cmake:2 (find_dependency)
+  <dependency-cache-root>/env/mumble_env.x64-windows-static-md.b1fe4a4257/scripts/buildsystems/vcpkg.cmake:908 (_find_package)
+  <dependency-cache-root>/env/mumble_env.x64-windows-static-md.b1fe4a4257/installed/x64-windows-static-md/share/poco/PocoConfig.cmake:35 (find_package)
+  <dependency-cache-root>/env/mumble_env.x64-windows-static-md.b1fe4a4257/scripts/buildsystems/vcpkg.cmake:908 (_find_package)
+  cmake/pkg-utils.cmake:77 (find_package)
+  src/mumble/CMakeLists.txt:493 (find_pkg)
+
+
+-- Poco component found: XML | Version: 1.14.1
+-- Poco component found: Zip | Version: 1.14.1
+-- Using the multi-header code from <isolated-source-directory>/3rdparty/nlohmann_json/include/
+-- Boost component found: system | Version: 1.90.0
+-- Boost component found: thread | Version: 1.90.0
+-- Disabling warnings for targets: xinputcheck
+-- speexdsp: Variable sized arrays supported: FALSE
+-- speexdsp: alloca available: FALSE
+-- speexdsp: SSE available: TRUE
+-- speexdsp: SSE2 available: TRUE
+-- Disabling warnings for targets: speexdsp
+-- Disabling warnings for targets: rnnoise
+CMake Warning at src/mumble/CMakeLists.txt:905 (message):
+  Can't bundle Qt translations if translations are disabled!
+
+
+-- OQS Testing: Pytest parallel workers set to 'auto'
+-- CMAKE_BUILD_TYPE=Release
+-- Algorithms filtered for KEM_ml_kem_768;SIG_ml_dsa_65
+CMake Warning at 3rdparty/soci/CMakeLists.txt:76 (message):
+  Setting CMAKE_{LIBRARY, ARCHIVE, RUNTIME}_DIRECTORY variables which should
+  have done by the embedding cmake project
+
+
+-- Found Boost: v1.90.0 in <dependency-cache-root>/env/mumble_env.x64-windows-static-md.b1fe4a4257/installed/x64-windows-static-md/include (with date_time component)
+-- Disabling warnings for targets: soci_mysql;soci_postgresql;soci_sqlite3;soci_core
+-- Qt6 component found: Sql | Version: 6.10.0
+-- File: <isolated-build-directory>/src/murmur/murmur_autogen
+-- Using system PNG.
+-- Using system Harfbuzz.
+-- Using system Freetype.
+-- Using system Jpeg.
+-- Qt6 component found: Widgets | Version: 6.10.0
+-- Boost found | Version: 1.90.0
+-- Qt6 component found: Test | Version: 6.10.0
+-- Using system PNG.
+-- Using system Harfbuzz.
+-- Using system Freetype.
+-- Using system Jpeg.
+-- Qt6 component found: Widgets | Version: 6.10.0
+-- Qt6 component found: Sql | Version: 6.10.0
+-- Qt6 component found: Network | Version: 6.10.0
+-- Qt6 component found: Widgets | Version: 6.10.0
+-- Qt6 component found: Gui | Version: 6.10.0
+-- Qt6 component found: Widgets | Version: 6.10.0
+-- Omitting online tests - Testing can be performed without an active internet connection
+-- Configuring done (16.4s)
+-- Generating done (1.0s)
+-- Build files have been written to: <isolated-build-directory>

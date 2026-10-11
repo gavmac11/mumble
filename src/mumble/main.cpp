@@ -56,6 +56,7 @@
 #include <CLI/CLI.hpp>
 
 #include <QLocale>
+#include <QScopeGuard>
 #include <QScreen>
 #include <QtCore/QProcess>
 #include <QtGui/QDesktopServices>
@@ -435,7 +436,9 @@ int main(int argc, char **argv) {
 
 	auto logBox = new QTextBrowser();
 	initLog(logBox);
-	Global::get().c = new DeveloperConsole(logBox);
+	// Restore the previous handler before the application and static Qt plugins unload.
+	const auto restoreQtLogging = qScopeGuard([] { mumble::log::restoreQtMessageHandler(); });
+	Global::get().c             = new DeveloperConsole(logBox);
 
 	qInfo("This is Mumble v%s", qUtf8Printable(Version::getRelease()));
 

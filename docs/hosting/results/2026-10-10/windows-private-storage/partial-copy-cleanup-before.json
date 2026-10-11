@@ -1,0 +1,9 @@
+{
+  "partial_file": "owned incomplete mumble-server.exe duplicate",
+  "partial_bytes": 52428800,
+  "partial_sha256": "7A375BF5BCE064763CEDF500752CB9B1083CF7D6AB97F9C1C96D328816C551F5",
+  "original_bytes": 69701632,
+  "original_sha256": "668CCC410CA4F5287A79BCD1E5EFD926D1F8D4EBA628D4D58C293598B78D2C9D",
+  "original_matches_prior_integrated_record": true,
+  "scope": "One individually verified incomplete copy; complete snapshots, original build and prior evidence retained"
+}

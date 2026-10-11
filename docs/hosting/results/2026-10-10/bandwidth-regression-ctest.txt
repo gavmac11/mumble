@@ -1,0 +1,15 @@
+Test project <workspace>/build/stability
+    Start 15: TestFileTransferE2E
+1/5 Test #15: TestFileTransferE2E ..............   Passed    8.03 sec
+    Start 18: TestCrypt
+2/5 Test #18: TestCrypt ........................   Passed    0.07 sec
+    Start 19: TestAudioReceiverBuffer
+3/5 Test #19: TestAudioReceiverBuffer ..........   Passed    0.06 sec
+    Start 20: TestBandwidthRecord
+4/5 Test #20: TestBandwidthRecord ..............   Passed    0.19 sec
+    Start 30: TestMumbleProtocol
+5/5 Test #30: TestMumbleProtocol ...............   Passed    0.06 sec
+
+100% tests passed out of 5
+
+Total Test time (real) =   8.42 sec

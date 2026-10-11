@@ -1,0 +1,434 @@
+{
+  "recorded_utc": "2026-10-10T20:45:55.329413+00:00",
+  "source_commit": "7598ad7da8c5b1cece02ac4001a82dbfa6810000",
+  "production_follow_up": "a6f9d089e68299c5f287d41bf20e112d275cab69",
+  "pull_request": "https://github.com/gavmac11/mumble/pull/33",
+  "source_tree_clean": true,
+  "os": {
+    "name": "Windows 10 Pro",
+    "version": "10.0.19045",
+    "architecture": "x64"
+  },
+  "compiler": "MSVC 19.51.36257.0 / VS 2026 Build Tools",
+  "qt": "6.10.0 static",
+  "openssl": "3.6.1",
+  "ffmpeg": "8.1 shared",
+  "vcpkg_environment": "2026-02 b1fe4a4257 / x64-windows-static-md",
+  "configuration": "Release, Ninja unity build, symbols off, LTO off, tests/server on, translations/ICE/overlay/plugins/packaging off",
+  "compiler_warnings_as_errors": true,
+  "msvc_c4018_reproduced_on_candidate": false,
+  "built_targets": [
+    "TestFileTransferManager",
+    "TestPQCrypto",
+    "TestFileTransferEngine",
+    "TestFileTransferE2E",
+    "mumble-server"
+  ],
+  "server_executable_sha256": "353dcfb9ce62edc958b6088a2e6ae91abc9abcd7939a982dd011411aa08cdcb5",
+  "tests": [
+    {
+      "suite": "TestFileTransferManager",
+      "cases": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.037,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferManager",
+          "time": "0.000"
+        },
+        {
+          "name": "currentWorkerTrustPromptReachesGui",
+          "classname": "TestFileTransferManager",
+          "time": "0.008"
+        },
+        {
+          "name": "disconnectRejectsQueuedTrustEvents",
+          "classname": "TestFileTransferManager",
+          "time": "0.004"
+        },
+        {
+          "name": "reconnectAcceptsCurrentPromptForReusedSession",
+          "classname": "TestFileTransferManager",
+          "time": "0.004"
+        },
+        {
+          "name": "shutdownJoinsBusyWorkerBeforeDestroyingEngine",
+          "classname": "TestFileTransferManager",
+          "time": "0.018"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferManager",
+          "time": "0.000"
+        }
+      ],
+      "executable_sha256": "85054d2cc31df5393c000fb6b3862204cb99572dac4019b2eae36182ef16efaa",
+      "txt_report": "TestFileTransferManager.txt",
+      "junit_report": "TestFileTransferManager.xml"
+    },
+    {
+      "suite": "TestPQCrypto",
+      "cases": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.579,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "sha384Vector",
+          "classname": "TestPQCrypto",
+          "time": "0.002"
+        },
+        {
+          "name": "hmacSha384Vector",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "constantTimeCompare",
+          "classname": "TestPQCrypto",
+          "time": "0.001"
+        },
+        {
+          "name": "hkdfVectors",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "x25519Rfc7748",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "x25519RoundTrip",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "x25519SmallOrderRejected",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "aesGcmNistVector",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "aesGcmTamperFails",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "aesGcmEmptyPlaintext",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "mlkemRoundTrip",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "mlkemBadCiphertext",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "mldsaSignVerify",
+          "classname": "TestPQCrypto",
+          "time": "0.001"
+        },
+        {
+          "name": "mldsaTamperFails",
+          "classname": "TestPQCrypto",
+          "time": "0.001"
+        },
+        {
+          "name": "mldsaContextSeparated",
+          "classname": "TestPQCrypto",
+          "time": "0.001"
+        },
+        {
+          "name": "argon2Vector",
+          "classname": "TestPQCrypto",
+          "time": "0.005"
+        },
+        {
+          "name": "argon2Bounds",
+          "classname": "TestPQCrypto",
+          "time": "0.563"
+        },
+        {
+          "name": "cborEncodeVector",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "cborRejectsNonCanonical",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "cborRejectsDuplicateKeys",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "merkleVectors",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "merkleRejectsBadLeaf",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "merkleCancellation(before-input)",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "merkleCancellation(validating-digests)",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "merkleCancellation(building-leaves)",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "merkleCancellation(building-parent-level)",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "deviceHashCancellation",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "deviceHashRejectsWrongCount",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestPQCrypto",
+          "time": "0.000"
+        }
+      ],
+      "executable_sha256": "7ffd8c94d67c6205b3dc76c555c1a6077e5e3fe3ac0e999de0b1e2e2abaf761d",
+      "txt_report": "TestPQCrypto.txt",
+      "junit_report": "TestPQCrypto.xml"
+    },
+    {
+      "suite": "TestFileTransferEngine",
+      "cases": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 8.007,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferEngine",
+          "time": "0.002"
+        },
+        {
+          "name": "sendReceiveRoundTrip",
+          "classname": "TestFileTransferEngine",
+          "time": "0.143"
+        },
+        {
+          "name": "passwordRoundTrip",
+          "classname": "TestFileTransferEngine",
+          "time": "1.156"
+        },
+        {
+          "name": "wrongPasswordFailsClosed",
+          "classname": "TestFileTransferEngine",
+          "time": "1.140"
+        },
+        {
+          "name": "duplicateChunkIsFatal",
+          "classname": "TestFileTransferEngine",
+          "time": "0.129"
+        },
+        {
+          "name": "latePasswordSpoolsAllChunks",
+          "classname": "TestFileTransferEngine",
+          "time": "1.333"
+        },
+        {
+          "name": "secondTransferWhileFirstReady",
+          "classname": "TestFileTransferEngine",
+          "time": "0.258"
+        },
+        {
+          "name": "readyTransferDoesNotExpire",
+          "classname": "TestFileTransferEngine",
+          "time": "2.126"
+        },
+        {
+          "name": "firstContactPinFlags",
+          "classname": "TestFileTransferEngine",
+          "time": "0.678"
+        },
+        {
+          "name": "incomingAbortCleansUpSafely",
+          "classname": "TestFileTransferEngine",
+          "time": "0.011"
+        },
+        {
+          "name": "passwordSpoolIsBounded",
+          "classname": "TestFileTransferEngine",
+          "time": "0.700"
+        },
+        {
+          "name": "cancelledPromptTimerCannotRemoveReplacementHandshake(disconnect)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.000"
+        },
+        {
+          "name": "cancelledPromptTimerCannotRemoveReplacementHandshake(declined-prompt)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.000"
+        },
+        {
+          "name": "shutdownRemovesUnsavedPlaintext(ready-unsaved)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.124"
+        },
+        {
+          "name": "shutdownRemovesUnsavedPlaintext(saved-file-preserved)",
+          "classname": "TestFileTransferEngine",
+          "time": "0.126"
+        },
+        {
+          "name": "unlimitedSendStopsOnWorkerInterruption",
+          "classname": "TestFileTransferEngine",
+          "time": "0.077"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferEngine",
+          "time": "0.000"
+        }
+      ],
+      "executable_sha256": "a493457429dfc019418c273e7a9df5dd72de2b021aa9424fa07f1eddf5d97fe4",
+      "txt_report": "TestFileTransferEngine.txt",
+      "junit_report": "TestFileTransferEngine.xml"
+    },
+    {
+      "suite": "TestFileTransferE2E",
+      "cases": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 9.295,
+      "case_results": [
+        {
+          "name": "initTestCase",
+          "classname": "TestFileTransferE2E",
+          "time": "2.168"
+        },
+        {
+          "name": "endToEndTransfer",
+          "classname": "TestFileTransferE2E",
+          "time": "2.226"
+        },
+        {
+          "name": "endToEndPasswordTransfer",
+          "classname": "TestFileTransferE2E",
+          "time": "2.976"
+        },
+        {
+          "name": "capabilityGating",
+          "classname": "TestFileTransferE2E",
+          "time": "1.769"
+        },
+        {
+          "name": "cleanupTestCase",
+          "classname": "TestFileTransferE2E",
+          "time": "0.153"
+        }
+      ],
+      "executable_sha256": "a813e8b97cab3c78eb7e84c61e6e082a7c80eb7b70c0314ec72f2150ffe0ddc1",
+      "txt_report": "TestFileTransferE2E.txt",
+      "junit_report": "TestFileTransferE2E.xml"
+    }
+  ],
+  "ctest": {
+    "enabled_suites_passed": 4,
+    "failed_suites": 0,
+    "seconds": "11",
+    "qt_platform": "offscreen",
+    "runtime_path": "CTest source-defined client/FFmpeg environment properties retained; no external PATH additions in the test runner",
+    "output_capture": "Only QtTest -o text/JUnit arguments temporarily appended to generated CTest registrations; originals and modified commands retained, registrations restored after run. Repository source unmodified."
+  },
+  "scope": [
+    "Cooperative busy-worker shutdown joins before engine destruction",
+    "Device and Merkle hashing cancellation with existing vector checks",
+    "Maximum-width invalid chunk/count bounds",
+    "Unlimited-send interruption after first encrypted chunk",
+    "Unsaved Ready plaintext directory removed at normal engine destruction",
+    "Saved output remains byte-for-byte intact",
+    "Real local server plain/password transfer and capability gating"
+  ],
+  "not_run": [
+    "Unfixed Windows baseline reproduction",
+    "Windows ASan/UBSan run",
+    "Native GUI capture, file-card Download or interactive quit during device/media activity",
+    "Endurance or universal shutdown deadline qualification",
+    "Packaging/signing/Windows 11 acceptance"
+  ],
+  "setup_notes": [
+    "GitHub dependency fetch stalled for nlohmann_json and Tracy. Owned fetch tree was stopped, then exact pinned submodules were sourced from prior verified local checkouts.",
+    "Initial configure found incomplete newly cloned submodule files. These were restored to their pinned HEADs; the failed setup log was retained separately. Final source/submodules were clean before compilation.",
+    "Original checkout, personal Mumble settings/installation and earlier validation/diagnostic worktrees preserved."
+  ],
+  "general_ci": {
+    "run_id": 38084270166,
+    "url": "https://github.com/gavmac11/mumble/actions/runs/38084270166",
+    "head_sha": "7598ad7da8c5b1cece02ac4001a82dbfa6810000",
+    "snapshot_status": "in_progress",
+    "snapshot_recorded_utc": "2026-10-10T20:45:55.329413+00:00",
+    "result_qualifies_local_checks": false
+  },
+  "qt_dependency_build_compiler": "MSVC 2022 (Qt dependency); application/test compilation used MSVC 19.51.36257.0",
+  "warning_policy_verification": {
+    "enabled": [
+      "/W4",
+      "/WX"
+    ],
+    "C4018_suppressed": false,
+    "compiler_command_log": "Verified locally and retained privately; omitted from publication."
+  },
+  "publication": {
+    "directory": "docs/hosting/results/2026-10-10/windows-shutdown",
+    "originals": "Complete original evidence retained privately and unchanged.",
+    "changes": [
+      "Removed private absolute directory fields from validation JSON.",
+      "Replaced the private CTest build path with <isolated-build-directory>.",
+      "Anonymized JUnit/CTest hostnames as windows-validation-host."
+    ],
+    "omitted": [
+      "Credentials and personal settings",
+      "Complete compiler command and configure/build logs",
+      "Build artifacts and binaries",
+      "Generated test registrations and private absolute paths"
+    ],
+    "test_results_changed": false
+  }
+}

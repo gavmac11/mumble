@@ -57,9 +57,27 @@ QString stateLabel(const FTTransferInfo &info) {
 } // namespace
 
 QString fileCardToHtml(const QByteArray &transferId) {
-	return QStringLiteral("<br /><img src=\"data:application/mumble-file;base64,%1\" alt=\"%2\" />")
-		.arg(QString::fromLatin1(transferId.toBase64()),
-			 QString::fromLatin1(transferId.toHex()));
+	const QString id = QString::fromLatin1(transferId.toHex());
+	return QStringLiteral("<br /><img src=\"data:application/mumble-file;base64,%1\" alt=\"%2\" />"
+						  "<br /><a href=\"mumble-file:/%3\">%4</a>")
+		.arg(QString::fromLatin1(transferId.toBase64()), FileTransferEngine::tr("File transfer").toHtmlEscaped(), id,
+			 FileTransferEngine::tr("Save or manage file").toHtmlEscaped());
+}
+
+QByteArray fileCardActionId(const QUrl &url, bool &ok) {
+	ok = false;
+	if (url.scheme() != QLatin1String("mumble-file") || !url.authority().isEmpty() || url.hasQuery()
+		|| url.hasFragment())
+		return {};
+	const QByteArray path = url.path(QUrl::FullyEncoded).toLatin1();
+	if (path.size() != TransferIdSize * 2 + 1 || !path.startsWith('/'))
+		return {};
+	const QByteArray hex = path.mid(1);
+	const QByteArray id  = QByteArray::fromHex(hex);
+	if (id.size() != TransferIdSize || id.toHex() != hex)
+		return {};
+	ok = true;
+	return id;
 }
 
 QByteArray fileCardTransferId(const QUrl &url, bool &ok) {
@@ -81,6 +99,8 @@ QByteArray fileCardTransferId(const QUrl &url, bool &ok) {
 		payload = QByteArray::fromBase64(payload);
 		data.chop(7);
 	}
+	if (data != QByteArray("application/mumble-file"))
+		return {};
 	if (payload.size() == TransferIdSize) {
 		ok = true;
 	}

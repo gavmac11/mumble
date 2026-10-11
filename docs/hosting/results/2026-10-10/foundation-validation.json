@@ -1,0 +1,315 @@
+{
+  "source_commit": "4e6c0bee814577c8ef91bff14bcf8309e18deaaa",
+  "date": "2026-10-10",
+  "environment": {
+    "os": "macOS 26.6.2",
+    "architecture": "arm64",
+    "compiler": "Apple Clang 21.0.0",
+    "qt": "6.11.1",
+    "dependencies": "Homebrew dynamic libraries; bundled liboqs/argon2"
+  },
+  "cmake": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "CMAKE_OSX_DEPLOYMENT_TARGET": "",
+    "CMAKE_UNITY_BUILD": "ON",
+    "client": "ON",
+    "server": "ON",
+    "tests": "ON",
+    "screen-sharing": "ON",
+    "file-sharing": "ON",
+    "packaging": "OFF",
+    "plugins": "OFF",
+    "overlay": "OFF",
+    "ice": "OFF",
+    "symbols": "OFF",
+    "lto": "OFF",
+    "test-lto": "OFF",
+    "bundled-spdlog": "OFF",
+    "database-sqlite-tests": "ON",
+    "database-mysql-tests": "OFF",
+    "database-postgresql-tests": "OFF",
+    "warnings-as-errors": "OFF"
+  },
+  "ctest": {
+    "summary": {
+      "name": "Darwin-c++",
+      "tests": "35",
+      "failures": "0",
+      "disabled": "1",
+      "skipped": "0",
+      "time": "51",
+      "timestamp": "2026-10-10T11:29:13"
+    },
+    "tests": [
+      {
+        "name": "TestReleaseUpdate",
+        "status": "run",
+        "seconds": "0.0404129",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestAnimatedImages",
+        "status": "run",
+        "seconds": "1.42471",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestChatWebM",
+        "status": "run",
+        "seconds": "19.9531",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestVideoFramePacketizer",
+        "status": "run",
+        "seconds": "0.66359",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestVideoPacketPacer",
+        "status": "run",
+        "seconds": "0.148524",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestVideoQualityProfile",
+        "status": "run",
+        "seconds": "0.0243751",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestVideoViewUi",
+        "status": "run",
+        "seconds": "0.264548",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestXMLTools",
+        "status": "run",
+        "seconds": "0.747021",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestFileTransferTransport",
+        "status": "run",
+        "seconds": "0.0204001",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestPQCrypto",
+        "status": "run",
+        "seconds": "2.27798",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestFTIdentity",
+        "status": "run",
+        "seconds": "5.06266",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestFileTransferSession",
+        "status": "run",
+        "seconds": "0.542357",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestFileTransferEngine",
+        "status": "run",
+        "seconds": "7.11151",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestFileTransferE2E",
+        "status": "run",
+        "seconds": "7.12033",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestSettingsJSONSerialization",
+        "status": "run",
+        "seconds": "1.21889",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "OverlayTest",
+        "status": "disabled",
+        "seconds": "0",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestCrypt",
+        "status": "run",
+        "seconds": "0.0669256",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestAudioReceiverBuffer",
+        "status": "run",
+        "seconds": "0.0532464",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestCaseInsensitiveQString",
+        "status": "run",
+        "seconds": "0.0548382",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestCryptographicHash",
+        "status": "run",
+        "seconds": "0.0635159",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestCryptographicRandom",
+        "status": "run",
+        "seconds": "0.93929",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestDatabase",
+        "status": "run",
+        "seconds": "0.126085",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestServerDatabase",
+        "status": "run",
+        "seconds": "0.214006",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestFFDHE",
+        "status": "run",
+        "seconds": "0.21092",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestIPCUtils",
+        "status": "run",
+        "seconds": "0.022553",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestPacketDataStream",
+        "status": "run",
+        "seconds": "0.06629",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestPasswordGenerator",
+        "status": "run",
+        "seconds": "0.0711935",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestMumbleProtocol",
+        "status": "run",
+        "seconds": "0.0571529",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestSelfSignedCertificate",
+        "status": "run",
+        "seconds": "0.371589",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestServerAddress",
+        "status": "run",
+        "seconds": "0.0548523",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestSSLLocks",
+        "status": "run",
+        "seconds": "2.06765",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestStdAbs",
+        "status": "run",
+        "seconds": "0.0630353",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestTimer",
+        "status": "run",
+        "seconds": "0.207819",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestUnresolvedServerAddress",
+        "status": "run",
+        "seconds": "0.0567325",
+        "failure": false,
+        "skipped": false
+      },
+      {
+        "name": "TestVersion",
+        "status": "run",
+        "seconds": "0.0557024",
+        "failure": false,
+        "skipped": false
+      }
+    ]
+  },
+  "transport_sanitizers": {
+    "address": "passed",
+    "undefined_behavior": "passed",
+    "scope": "standalone TestFileTransferTransport only; third-party Qt is not instrumented"
+  },
+  "regression_mutation": {
+    "original_string_dispatch": "expected failure; Receiver method not registered with Qt metaobject"
+  },
+  "release_gate_negative_checks": {
+    "missing_suite": "rejected",
+    "empty_suite": "rejected"
+  },
+  "unverified": [
+    "Windows execution",
+    "Ubuntu execution and package staging",
+    "static Qt execution",
+    "macOS 15 runtime compatibility",
+    "installed GUI acceptance",
+    "signed/notarized releases",
+    "cross-platform GUI interoperability",
+    "endurance/slow receivers",
+    "deploy/restore",
+    "commercial pilot/economics"
+  ]
+}

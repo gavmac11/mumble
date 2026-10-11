@@ -61,6 +61,16 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
+     <widget class="QLabel" name="qlDeviceStatus">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QGroupBox" name="qgbInput">
       <property name="title">
        <string>Input Device</string>
