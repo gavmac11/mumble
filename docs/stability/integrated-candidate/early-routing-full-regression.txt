@@ -1,0 +1,90 @@
+Test project /Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/build/stability
+      Start  1: TestDatabasePath
+ 1/41 Test  #1: TestDatabasePath .................   Passed    1.84 sec
+      Start  2: TestReleaseUpdate
+ 2/41 Test  #2: TestReleaseUpdate ................   Passed    0.03 sec
+      Start  3: TestAnimatedImages
+ 3/41 Test  #3: TestAnimatedImages ...............   Passed    0.80 sec
+      Start  4: TestChatWebM
+ 4/41 Test  #4: TestChatWebM .....................   Passed   16.08 sec
+      Start  5: TestVideoFramePacketizer
+ 5/41 Test  #5: TestVideoFramePacketizer .........   Passed    0.43 sec
+      Start  6: TestVideoPacketPacer
+ 6/41 Test  #6: TestVideoPacketPacer .............   Passed    0.14 sec
+      Start  7: TestVideoQualityProfile
+ 7/41 Test  #7: TestVideoQualityProfile ..........   Passed    0.03 sec
+      Start  8: TestVideoViewUi
+ 8/41 Test  #8: TestVideoViewUi ..................   Passed    0.18 sec
+      Start  9: TestXMLTools
+ 9/41 Test  #9: TestXMLTools .....................   Passed    0.71 sec
+      Start 10: TestFileTransferUi
+10/41 Test #10: TestFileTransferUi ...............   Passed    1.08 sec
+      Start 11: TestFileTransferManager
+11/41 Test #11: TestFileTransferManager ..........   Passed    0.77 sec
+      Start 12: TestFileTransferTransport
+12/41 Test #12: TestFileTransferTransport ........   Passed    0.02 sec
+      Start 13: TestPQCrypto
+13/41 Test #13: TestPQCrypto .....................   Passed    0.86 sec
+      Start 14: TestFTIdentity
+14/41 Test #14: TestFTIdentity ...................   Passed    3.72 sec
+      Start 15: TestFileTransferSession
+15/41 Test #15: TestFileTransferSession ..........   Passed    0.41 sec
+      Start 16: TestFileTransferEngine
+16/41 Test #16: TestFileTransferEngine ...........   Passed    8.12 sec
+      Start 17: TestFileTransferE2E
+17/41 Test #17: TestFileTransferE2E ..............   Passed    7.67 sec
+      Start 18: TestSettingsJSONSerialization
+18/41 Test #18: TestSettingsJSONSerialization ....   Passed    0.78 sec
+      Start 19: OverlayTest
+19/41 Test #19: OverlayTest ......................***Not Run (Disabled)   0.00 sec
+      Start 20: TestCrypt
+20/41 Test #20: TestCrypt ........................   Passed    0.43 sec
+      Start 21: TestAudioReceiverBuffer
+21/41 Test #21: TestAudioReceiverBuffer ..........   Passed    0.40 sec
+      Start 22: TestQtLogger
+22/41 Test #22: TestQtLogger .....................   Passed    0.62 sec
+      Start 23: TestBandwidthRecord
+23/41 Test #23: TestBandwidthRecord ..............   Passed    0.02 sec
+      Start 24: TestConnectionOutputQueue
+24/41 Test #24: TestConnectionOutputQueue ........   Passed    0.69 sec
+      Start 25: TestCaseInsensitiveQString
+25/41 Test #25: TestCaseInsensitiveQString .......   Passed    0.54 sec
+      Start 26: TestCryptographicHash
+26/41 Test #26: TestCryptographicHash ............   Passed    0.56 sec
+      Start 27: TestCryptographicRandom
+27/41 Test #27: TestCryptographicRandom ..........   Passed    1.39 sec
+      Start 28: TestDatabase
+28/41 Test #28: TestDatabase .....................   Passed    0.48 sec
+      Start 29: TestServerDatabase
+29/41 Test #29: TestServerDatabase ...............   Passed    0.78 sec
+      Start 30: TestFFDHE
+30/41 Test #30: TestFFDHE ........................   Passed    0.59 sec
+      Start 31: TestIPCUtils
+31/41 Test #31: TestIPCUtils .....................   Passed    0.02 sec
+      Start 32: TestPacketDataStream
+32/41 Test #32: TestPacketDataStream .............   Passed    0.42 sec
+      Start 33: TestPasswordGenerator
+33/41 Test #33: TestPasswordGenerator ............   Passed    0.39 sec
+      Start 34: TestMumbleProtocol
+34/41 Test #34: TestMumbleProtocol ...............   Passed    0.37 sec
+      Start 35: TestSelfSignedCertificate
+35/41 Test #35: TestSelfSignedCertificate ........   Passed    0.84 sec
+      Start 36: TestServerAddress
+36/41 Test #36: TestServerAddress ................   Passed    0.42 sec
+      Start 37: TestSSLLocks
+37/41 Test #37: TestSSLLocks .....................   Passed    2.62 sec
+      Start 38: TestStdAbs
+38/41 Test #38: TestStdAbs .......................   Passed    0.36 sec
+      Start 39: TestTimer
+39/41 Test #39: TestTimer ........................   Passed    0.57 sec
+      Start 40: TestUnresolvedServerAddress
+40/41 Test #40: TestUnresolvedServerAddress ......   Passed    0.36 sec
+      Start 41: TestVersion
+41/41 Test #41: TestVersion ......................   Passed    0.35 sec
+
+100% tests passed out of 40
+
+Total Test time (real) =  56.94 sec
+
+The following tests did not run:
+	 19 - OverlayTest (Disabled)
