@@ -1,0 +1,19 @@
+{
+  "source_head": "30fa66b21914b82ea048afdd5cfd5122cbd5d70f",
+  "mac_release_ui_settings_targets": "passed; existing shared Homebrew dependency warnings, warnings-as-errors disabled",
+  "focused": {
+    "passed": 58,
+    "failed": 0,
+    "skipped": 0
+  },
+  "ui_settings_ctest": {
+    "passed": 2,
+    "failed": 0,
+    "seconds": 1.53
+  },
+  "full_build_ctest": "pending",
+  "opus": "pending",
+  "native_windows_linux": "pending",
+  "installed_gui": "pending; controller reports Mac locked",
+  "fixture_correction": "Initial C++ initializer-list type deduction failed compilation; corrected with explicit QStringList; no assertions relaxed"
+}

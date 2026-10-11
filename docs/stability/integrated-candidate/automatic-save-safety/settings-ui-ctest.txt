@@ -1,0 +1,9 @@
+Test project /Users/adamtarantino/.codex/worktrees/stability-vps-plan/mumble/build/stability
+    Start 11: TestFileTransferUi
+1/2 Test #11: TestFileTransferUi ...............   Passed    0.37 sec
+    Start 19: TestSettingsJSONSerialization
+2/2 Test #19: TestSettingsJSONSerialization ....   Passed    1.15 sec
+
+100% tests passed out of 2
+
+Total Test time (real) =   1.53 sec
