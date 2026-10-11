@@ -910,7 +910,7 @@ void FileTransferEngine::buildAndSendManifests(SendJob &job) {
 	}
 }
 
-void FileTransferEngine::paceSends() {
+void FileTransferEngine::refillSendCredit() {
 	const qint64 elapsedMSecs = qBound< qint64 >(qint64(0), m_sendPaceClock.restart(), qint64(1000));
 	const qint64 rate         = m_config.sendRateBytesPerSecond;
 	if (rate > 0) {
@@ -925,7 +925,9 @@ void FileTransferEngine::paceSends() {
 		capacity += rate / 20;
 		m_sendCreditMilliBytes = qMin(capacity * 1000, m_sendCreditMilliBytes + rate * elapsedMSecs);
 	}
+}
 
+void FileTransferEngine::paceSends() {
 	// Yield to cancellation and incoming controls, including at unlimited rate.
 	// This bounds one engine dispatch, not the downstream GUI/socket queues.
 	qint64 dispatchedBytes = 0;
@@ -942,12 +944,12 @@ void FileTransferEngine::paceSends() {
 		}
 		const qint64 bytes =
 			static_cast< qint64 >(qMin< quint64 >(job->effectiveChunkSize, job->fileSize - job->bytesDone)) + TagSize;
-		if (rate > 0) {
+		refillSendCredit();
+		if (m_config.sendRateBytesPerSecond > 0) {
 			if (m_sendCreditMilliBytes < bytes * 1000) {
 				waitingForCredit = true;
 				break;
 			}
-			m_sendCreditMilliBytes -= bytes * 1000;
 		}
 		// Keep this job queued during callbacks so cleaning up another job
 		// cannot mistake an active sender for an empty queue and stop its timer.
@@ -994,6 +996,14 @@ void FileTransferEngine::sendNextChunk(SendJob &job) {
 			finishSend(job, false, tr("Encryption error"));
 			return;
 		}
+		if (shutdownRequested())
+			return;
+		// Charge at dispatch, after potentially slow file reads/encryption.
+		// Refresh between packets so a paused callback cannot spend stale credit
+		// and then immediately refill a second burst on the next timer event.
+		refillSendCredit();
+		if (m_config.sendRateBytesPerSecond > 0)
+			m_sendCreditMilliBytes -= static_cast< qint64 >(ciphertext.size()) * 1000;
 		const quint64 index = job.nextChunkIndex;
 		job.bytesDone += static_cast< quint64 >(chunk.size());
 		++job.nextChunkIndex;

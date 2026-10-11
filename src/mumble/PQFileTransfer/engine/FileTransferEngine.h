@@ -88,6 +88,7 @@ public:
 	void setTransport(TransportControl control, TransportChunk chunk);
 	void setPinLookup(PinLookup lookup);
 	void setIdentity(QByteArray identityPublicKey, IdentitySign sign);
+	/// Call in the engine's owning thread; the manager queues configuration updates.
 	void setConfig(const Config &config);
 
 	// ---- Inbound (queued from the manager; ordering preserved) ----
@@ -217,6 +218,7 @@ private:
 	void maybeStartHandshakePhase2(SendJob &job);
 	void buildAndSendManifests(SendJob &job);
 	void paceSends();
+	void refillSendCredit();
 	void sendNextChunk(SendJob &job);
 	void finishSend(SendJob &job, bool success, const QString &error);
 	void updateSendState(SendJob &job, FTTransferInfo::State state, const QString &error = QString());

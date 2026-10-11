@@ -83,6 +83,9 @@ private slots:
 	void simultaneousSendsShareRateLimit();
 	void unlimitedSendYieldsToQueuedAbort();
 	void synchronousChunkAbortStaysAborted();
+	void abortingAnotherJobDoesNotStopPacing();
+	void synchronousCompletionAbortStaysAborted();
+	void pausedDeliveryDoesNotReleaseUnboundedCredit();
 
 private:
 	QString writeTestFile(qsizetype size);
@@ -269,8 +272,10 @@ void TestFileTransferEngine::simultaneousSendsShareRateLimit() {
 	quint64 sentBytes = 0;
 	QString violation;
 	QSet< QByteArray > delivered;
+	QList< QByteArray > deliveryOrder;
 	pair.onChunkDelivered = [&](const QByteArray &id, quint64, quint64, const QByteArray &data) {
 		delivered.insert(id);
+		deliveryOrder.append(id);
 		sentBytes += static_cast< quint64 >(data.size());
 		const quint64 allowed = quint64(config.sendRateBytesPerSecond) * quint64(elapsed.elapsed() + 2) / 1000;
 		if (sentBytes > allowed && violation.isEmpty())
@@ -294,6 +299,8 @@ void TestFileTransferEngine::simultaneousSendsShareRateLimit() {
 	};
 	QTRY_VERIFY_WITH_TIMEOUT(finished(), 15000);
 	QCOMPARE(delivered.size(), 2);
+	QVERIFY(deliveryOrder.size() >= 2);
+	QVERIFY(deliveryOrder.at(0) != deliveryOrder.at(1));
 	QVERIFY2(violation.isEmpty(), qPrintable(violation));
 	QSet< QByteArray > ready;
 	for (const auto &args : received) {
@@ -344,6 +351,109 @@ void TestFileTransferEngine::synchronousChunkAbortStaysAborted() {
 	QVERIFY(pair.alice.startSend(writeTestFile(64 * 1024), "application/octet-stream", false, {}, { BobSession }) > 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(updates, {}, PQFT::FTTransferInfo::State::Aborted), 10000);
 	QVERIFY(!sawState(updates, {}, PQFT::FTTransferInfo::State::Saved));
+}
+
+void TestFileTransferEngine::abortingAnotherJobDoesNotStopPacing() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = 64 * 1024;
+	config.chunkSize              = 16 * 1024;
+	pair.alice.setConfig(config);
+	pair.alice.setTransport(
+		[&](unsigned int target, const QByteArray &frame) {
+			if (target == BobSession)
+				pair.bob.onControlMessage(AliceSession, frame);
+		},
+		[&](const QByteArray &id, quint64 index, quint64 count, const QByteArray &data) {
+			if (pair.onChunkDelivered)
+				pair.onChunkDelivered(id, index, count, data);
+			pair.bob.onDataMessage(AliceSession, id, index, count, data);
+		});
+	QSignalSpy sent(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	const QString source = writeTestFile(64 * 1024);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { 3 }) > 0);
+	QByteArray waiting;
+	for (const auto &args : sent) {
+		const auto info = args.first().value< PQFT::FTTransferInfo >();
+		if (info.peerSession == 3)
+			waiting = info.transferId;
+	}
+	QVERIFY(!waiting.isEmpty());
+	bool cancelled        = false;
+	pair.onChunkDelivered = [&](const QByteArray &, quint64, quint64, const QByteArray &) {
+		if (!cancelled) {
+			cancelled = true;
+			pair.alice.abortTransfer(waiting);
+		}
+	};
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready), 3000);
+	QVERIFY(cancelled);
+	QVERIFY(sawState(sent, waiting, PQFT::FTTransferInfo::State::Aborted));
+}
+
+void TestFileTransferEngine::synchronousCompletionAbortStaysAborted() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = 0;
+	pair.alice.setConfig(config);
+	QByteArray completeId;
+	pair.onChunkDelivered = [&](const QByteArray &id, quint64 index, quint64 count, const QByteArray &) {
+		if (index + 1 == count)
+			completeId = id;
+	};
+	pair.alice.setTransport(
+		[&](unsigned int, const QByteArray &frame) {
+			if (!completeId.isEmpty()) {
+				const QByteArray id = completeId;
+				completeId.clear();
+				pair.alice.abortTransfer(id);
+				return;
+			}
+			pair.bob.onControlMessage(AliceSession, frame);
+		},
+		[&](const QByteArray &id, quint64 index, quint64 count, const QByteArray &data) {
+			pair.onChunkDelivered(id, index, count, data);
+			pair.bob.onDataMessage(AliceSession, id, index, count, data);
+		});
+	QSignalSpy updates(&pair.alice, &PQFT::FileTransferEngine::transferUpdated);
+	QVERIFY(pair.alice.startSend(writeTestFile(64 * 1024), "application/octet-stream", false, {}, { BobSession }) > 0);
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(updates, {}, PQFT::FTTransferInfo::State::Aborted), 10000);
+	QVERIFY(!sawState(updates, {}, PQFT::FTTransferInfo::State::Saved));
+}
+
+void TestFileTransferEngine::pausedDeliveryDoesNotReleaseUnboundedCredit() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = 16 * 1024 * 1024;
+	config.chunkSize              = 16 * 1024;
+	pair.alice.setConfig(config);
+	QElapsedTimer elapsed;
+	QList< QPair< qint64, quint64 > > deliveries;
+	quint64 total = 0;
+	QString violation;
+	pair.onChunkDelivered = [&](const QByteArray &, quint64, quint64, const QByteArray &data) {
+		total += static_cast< quint64 >(data.size());
+		const qint64 now    = elapsed.elapsed();
+		const quint64 burst = quint64(config.chunkSize) + PQFT::TagSize + config.sendRateBytesPerSecond / 20;
+		for (const auto &previous : deliveries) {
+			const quint64 allowed =
+				burst + quint64(config.sendRateBytesPerSecond) * quint64(now - previous.first + 2) / 1000;
+			if (total - previous.second > allowed && violation.isEmpty())
+				violation = QString("Paused callback released %1 bytes in %2 ms")
+								.arg(total - previous.second)
+								.arg(now - previous.first);
+		}
+		deliveries.append({ now, total });
+		if (deliveries.size() == 1)
+			QTest::qSleep(300);
+	};
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	elapsed.start();
+	QVERIFY(pair.alice.startSend(writeTestFile(4 * 1024 * 1024), "application/octet-stream", false, {}, { BobSession }) > 0);
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready), 10000);
+	QVERIFY2(violation.isEmpty(), qPrintable(violation));
 }
 
 namespace {
@@ -519,7 +629,7 @@ void TestFileTransferEngine::unrelatedChunksDoNotExtendPendingReceive() {
 void TestFileTransferEngine::sendReceiveRoundTrip() {
 	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
 	PQFT::FileTransferEngine::Config fast;
-	fast.sendRateBytesPerSecond = 0;   // unlimited: drain in one tick
+	fast.sendRateBytesPerSecond = 0;   // unlimited: bounded batches yield to controls
 	pair.alice.setConfig(fast);
 	pair.bob.setConfig(fast);
 
@@ -1080,7 +1190,7 @@ void TestFileTransferEngine::firstContactPinFlags() {
 void TestFileTransferEngine::incomingAbortCleansUpSafely() {
 	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
 	PQFT::FileTransferEngine::Config trickled;
-	trickled.sendRateBytesPerSecond = 32 * 1024;   // one 16 KiB chunk per tick
+	trickled.sendRateBytesPerSecond = 32 * 1024; // about one 16 KiB chunk per half second
 	trickled.chunkSize              = 16 * 1024;
 	pair.alice.setConfig(trickled);
 	pair.bob.setConfig(trickled);
