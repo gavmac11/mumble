@@ -59,5 +59,45 @@
       "legacy protocol certificate ban SHA1 identifier"
     ],
     "source_head": "901014211cf1c8742fc50e1fc814c1c8e4878d6f"
+  },
+  "baseline_hosted": {
+    "source_head": "901014211cf1c8742fc50e1fc814c1c8e4878d6f",
+    "ci_run": 38097022655,
+    "general": "all four platform jobs and QR decoder passed",
+    "preview_run": 38097022652,
+    "preview": "all build/test/install/launch and QR gates passed; publication skipped",
+    "hosting_run": 38097022719,
+    "hosting": "passed",
+    "security": "combined check failed; follow-up source qualification pending"
+  },
+  "review_fixes": {
+    "tested_source_head": "004733f9266e765b5d32caf2f9be56031d5ac405",
+    "ctest": {
+      "registered": 41,
+      "enabled": 40,
+      "passed": 40,
+      "failed": 0,
+      "execution_skipped": 0,
+      "disabled": [
+        "OverlayTest"
+      ],
+      "seconds": 55.68
+    },
+    "hosting_python": {
+      "tests": 59,
+      "passed": 59,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 0.43,
+      "bridge_inputs": "compiled baseline bridges reused; production crypto/pacer inputs unchanged against this source"
+    },
+    "fatal_source": "d8bb735ba17e89dbe723b458f36a02f4bc79918a",
+    "fatal_windows_cases": 13,
+    "storage_source": "2059ef27a1d9aec63298b21fdd118ce80a405f70",
+    "storage_windows_cases": 31,
+    "storage_linux_cases": 44,
+    "early_routing_source": "991c97537fce9fac6ca39f6b82cf092ed1f60af5",
+    "early_routing_mac_cases": 22,
+    "qualification": "latest full Linux, Windows early routing and hosted exact-candidate gates pending; native/media/signing/endurance/hosting/commercial gates open"
   }
 }
