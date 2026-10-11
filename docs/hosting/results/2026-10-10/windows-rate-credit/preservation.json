@@ -1,0 +1,11 @@
+{
+  "source_commit": "c80433c2c1a66a94b7b06f7fea9fa955e7495d3c",
+  "prior_early_routing_source": "991c97537fce9fac6ca39f6b82cf092ed1f60af5",
+  "prior_early_routing_evidence": "c6ce47a7aab726d1ecaeba588eb7a5e2a0392cca",
+  "prior_ledger_entries_verified": 30,
+  "prior_client_server_and_test_binaries": "Five binaries copied and checksum verified on E: before requested build reuse",
+  "prior_compile_commands": "Copied on E:; prior private compiler-command evidence retained",
+  "c_drive_copies_or_cleanup": false,
+  "personal_mumble_state_changes": false,
+  "gui_or_authentication_actions": false
+}
