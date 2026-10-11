@@ -74,6 +74,7 @@ public:
 		std::function< bool(QByteArray &sig, const QByteArray &msg, const QByteArray &ctx) >;
 
 	struct Config {
+		// Maximum plaintext chunk size; low rates use smaller protocol-valid chunks.
 		quint32 chunkSize  = 256 * 1024;
 		// Shared ciphertext-byte budget across all sends; 0 = unlimited.
 		quint32 sendRateBytesPerSecond = 4 * 1024 * 1024;
@@ -255,6 +256,8 @@ private:
 	std::unique_ptr< QTimer > m_sendPaceTimer;
 	QElapsedTimer m_sendPaceClock;
 	qint64 m_sendCreditMilliBytes = 0;
+	qint64 m_sendCreditLastNSecs  = 0;
+	qint64 m_sendCreditRemainder  = 0;
 	QList< QByteArray > m_sendPaceOrder;
 
 	QHash< QByteArray, std::shared_ptr< SendJob > > m_sendJobs;

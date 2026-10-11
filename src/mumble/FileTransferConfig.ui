@@ -77,14 +77,14 @@
       <item row="0" column="0">
        <widget class="QLabel" name="qlFTChunkSize">
         <property name="text">
-         <string>Chunk size (KiB)</string>
+         <string>Maximum chunk size (KiB)</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
        <widget class="QSpinBox" name="qsbFTChunkSize">
         <property name="toolTip">
-         <string>Size of the encrypted chunks a file is split into (16–1024 KiB)</string>
+         <string>Maximum chunk size (16–1024 KiB); slower sending rates use smaller chunks to keep transfers moving</string>
         </property>
         <property name="minimum">
          <number>16</number>

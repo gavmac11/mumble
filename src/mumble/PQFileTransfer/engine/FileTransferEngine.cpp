@@ -92,10 +92,17 @@ void FileTransferEngine::setIdentity(QByteArray identityPublicKey, IdentitySign 
 }
 
 void FileTransferEngine::setConfig(const Config &config) {
+	const bool rateChanged = m_config.sendRateBytesPerSecond != config.sendRateBytesPerSecond;
 	m_config = config;
-	m_sendCreditMilliBytes = 0;
-	if (m_sendPaceTimer->isActive())
-		m_sendPaceClock.start();
+	// Pin-cache refreshes and new sends also apply configuration. Preserve
+	// earned credit unless the rate itself changes, so these cannot starve sends.
+	if (rateChanged) {
+		m_sendCreditMilliBytes = 0;
+		m_sendCreditLastNSecs  = 0;
+		m_sendCreditRemainder  = 0;
+		if (m_sendPaceTimer->isActive())
+			m_sendPaceClock.start();
+	}
 }
 
 QByteArray FileTransferEngine::preManifestKey(unsigned int peerSession) {
@@ -676,6 +683,13 @@ quint64 FileTransferEngine::startSend(const QString &filePath, const QString &mi
 	job->fileSize		= static_cast< quint64 >(fileInfo.size());
 	job->effectiveChunkSize = qBound< quint32 >(static_cast< quint32 >(MinChunkSize), m_config.chunkSize,
 												static_cast< quint32 >(MaxChunkSize));
+	if (m_config.sendRateBytesPerSecond > 0) {
+		// Aim for progress every quarter second, respecting the protocol's
+		// minimum. At the UI's minimum 1 KiB/s, a 16 KiB chunk takes ~16 s,
+		// rather than letting a configured 1 MiB chunk exceed the 60 s idle limit.
+		const quint32 rateChunk = qMax< quint32 >(MinChunkSize, m_config.sendRateBytesPerSecond / 4);
+		job->effectiveChunkSize = qMin(job->effectiveChunkSize, rateChunk);
+	}
 	job->file			= new QFile(fileInfo.absoluteFilePath());
 	if (!job->file->open(QIODevice::ReadOnly)) {
 		cleanupSend(*job, true);
@@ -905,13 +919,19 @@ void FileTransferEngine::buildAndSendManifests(SendJob &job) {
 	m_sendPaceOrder.append(job.transferId);
 	if (!m_sendPaceTimer->isActive()) {
 		m_sendCreditMilliBytes = 0;
+		m_sendCreditLastNSecs  = 0;
+		m_sendCreditRemainder  = 0;
 		m_sendPaceClock.start();
 		m_sendPaceTimer->start(50);
 	}
 }
 
 void FileTransferEngine::refillSendCredit() {
-	const qint64 elapsedMSecs = qBound< qint64 >(qint64(0), m_sendPaceClock.restart(), qint64(1000));
+	// Keep the clock running: restarting it for every packet would discard
+	// all sub-millisecond time. Carry the division remainder as well.
+	const qint64 nowNSecs     = m_sendPaceClock.nsecsElapsed();
+	const qint64 elapsedNSecs = qBound< qint64 >(qint64(0), nowNSecs - m_sendCreditLastNSecs, qint64(1000000000));
+	m_sendCreditLastNSecs     = nowNSecs;
 	const qint64 rate         = m_config.sendRateBytesPerSecond;
 	if (rate > 0) {
 		// Accumulate enough credit for one whole chunk, even at low rates.
@@ -923,7 +943,13 @@ void FileTransferEngine::refillSendCredit() {
 				capacity = qMax(capacity, qint64(job->effectiveChunkSize) + TagSize);
 		}
 		capacity += rate / 20;
-		m_sendCreditMilliBytes = qMin(capacity * 1000, m_sendCreditMilliBytes + rate * elapsedMSecs);
+		// Even the full quint32 rate times the capped one-second interval
+		// fits qint64. Credit is stored in thousandths of a ciphertext byte.
+		const qint64 earned    = rate * elapsedNSecs + m_sendCreditRemainder;
+		m_sendCreditRemainder  = earned % 1000000;
+		m_sendCreditMilliBytes = qMin(capacity * 1000, m_sendCreditMilliBytes + earned / 1000000);
+		if (m_sendCreditMilliBytes == capacity * 1000)
+			m_sendCreditRemainder = 0;
 	}
 }
 

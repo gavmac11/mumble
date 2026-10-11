@@ -86,6 +86,9 @@ private slots:
 	void abortingAnotherJobDoesNotStopPacing();
 	void synchronousCompletionAbortStaysAborted();
 	void pausedDeliveryDoesNotReleaseUnboundedCredit();
+	void slowSendMakesProgress_data();
+	void slowSendMakesProgress();
+	void frequentRefillsPreserveElapsedCredit();
 
 private:
 	QString writeTestFile(qsizetype size);
@@ -260,6 +263,83 @@ void TestFileTransferEngine::sendingRespectsConfiguredRate() {
 	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
 	QTRY_VERIFY_WITH_TIMEOUT(sawState(updates, {}, PQFT::FTTransferInfo::State::Ready), 15000);
 	QVERIFY2(violation.isEmpty(), qPrintable(violation));
+}
+
+void TestFileTransferEngine::slowSendMakesProgress_data() {
+	QTest::addColumn< quint32 >("rate");
+	QTest::addColumn< quint32 >("chunkSize");
+	QTest::addColumn< bool >("refreshConfig");
+	QTest::newRow("unchanged-config-refresh") << quint32(32 * 1024) << quint32(16 * 1024) << true;
+	QTest::newRow("large-chunk-at-low-rate") << quint32(64 * 1024) << quint32(1024 * 1024) << false;
+}
+
+void TestFileTransferEngine::slowSendMakesProgress() {
+	QFETCH(quint32, rate);
+	QFETCH(quint32, chunkSize);
+	QFETCH(bool, refreshConfig);
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond  = rate;
+	config.chunkSize               = chunkSize;
+	config.receiveIdleTimeoutMSecs = 700;
+	pair.alice.setConfig(config);
+	pair.bob.setConfig(config);
+	QTimer refresh;
+	connect(&refresh, &QTimer::timeout, &pair.alice, [&]() { pair.alice.setConfig(config); });
+	if (refreshConfig)
+		refresh.start(80);
+	int chunks             = 0;
+	qsizetype largestChunk = 0;
+	pair.onChunkDelivered  = [&](const QByteArray &, quint64, quint64, const QByteArray &data) {
+		++chunks;
+		largestChunk = qMax(largestChunk, data.size());
+	};
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	const QString source = writeTestFile(80 * 1024);
+	QVERIFY(pair.alice.startSend(source, "application/octet-stream", false, {}, { BobSession }) > 0);
+	QTRY_VERIFY_WITH_TIMEOUT(sawState(received, {}, PQFT::FTTransferInfo::State::Ready)
+								 || sawState(received, {}, PQFT::FTTransferInfo::State::Failed),
+							 5000);
+	QVERIFY(sawState(received, {}, PQFT::FTTransferInfo::State::Ready));
+	QCOMPARE(chunks, 5);
+	QVERIFY(largestChunk <= 16 * 1024 + PQFT::TagSize);
+	QByteArray id;
+	for (const auto &args : received) {
+		const auto info = args.first().value< PQFT::FTTransferInfo >();
+		if (info.state == PQFT::FTTransferInfo::State::Ready)
+			id = info.transferId;
+	}
+	const QString target = m_tempDir.filePath(QString::fromLatin1(id.toHex()) + ".bin");
+	pair.bob.saveTransferAs(id, target);
+	QFile output(target);
+	QFile input(source);
+	QVERIFY(output.open(QIODevice::ReadOnly));
+	QVERIFY(input.open(QIODevice::ReadOnly));
+	QCOMPARE(output.readAll(), input.readAll());
+}
+
+void TestFileTransferEngine::frequentRefillsPreserveElapsedCredit() {
+	EnginePair pair(m_alice, m_bob, m_aliceFp, m_bobFp);
+	PQFT::FileTransferEngine::Config config;
+	config.sendRateBytesPerSecond = 64 * 1024;
+	config.chunkSize              = 16 * 1024;
+	pair.alice.setConfig(config);
+	QSignalSpy received(&pair.bob, &PQFT::FileTransferEngine::transferUpdated);
+	QVERIFY(pair.alice.startSend(writeTestFile(64 * 1024), "application/octet-stream", false, {}, { BobSession }) > 0);
+	QPointer< QTimer > pacer;
+	for (QTimer *timer : pair.alice.findChildren< QTimer * >()) {
+		if (timer->isActive() && timer->interval() == 50)
+			pacer = timer;
+	}
+	QVERIFY(pacer);
+	// Request refills far more often than once per millisecond. The same
+	// elapsed budget must survive the calls, instead of rounding each to zero.
+	QElapsedTimer elapsed;
+	elapsed.start();
+	while (elapsed.elapsed() < 2000 && !sawState(received, {}, PQFT::FTTransferInfo::State::Ready)) {
+		QVERIFY(QMetaObject::invokeMethod(pacer.data(), "timeout", Qt::DirectConnection));
+	}
+	QVERIFY(sawState(received, {}, PQFT::FTTransferInfo::State::Ready));
 }
 
 void TestFileTransferEngine::simultaneousSendsShareRateLimit() {
