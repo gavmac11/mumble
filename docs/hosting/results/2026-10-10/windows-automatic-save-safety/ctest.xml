@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="Win32-ninja" tests="2" failures="0" disabled="0" skipped="0" hostname="windows-validation-host" time="1" timestamp="2026-10-10T19:47:45">
+  <testcase name="TestFileTransferUi" classname="TestFileTransferUi" time="0.865023" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+  <testcase name="TestSettingsJSONSerialization" classname="TestSettingsJSONSerialization" time="0.96968" status="run">
+    <properties />
+    <system-out />
+  </testcase>
+</testsuite>
