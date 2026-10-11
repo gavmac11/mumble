@@ -1,0 +1,621 @@
+[1/601] Running cpp protocol buffer compiler on /work/source/src/MumbleUDP.proto
+[2/601] Running cpp protocol buffer compiler on /work/source/src/Mumble.proto
+[3/601] Automatic MOC for target shared
+[4/601] Building CXX object ipcutils/CMakeFiles/ipcutils.dir/IPCUtils_c.cpp.o
+[5/601] Building CXX object ipcutils/CMakeFiles/ipcutils.dir/IPCUtils.cpp.o
+[6/601] Linking CXX static library ipcutils/libipcutils.a
+[7/601] Building CXX object src/mumble/CMakeFiles/smallft.dir/__/__/3rdparty/smallft/smallft.cpp.o
+[8/601] Building CXX object src/CMakeFiles/shared.dir/shared_autogen/mocs_compilation.cpp.o
+[9/601] Building CXX object src/CMakeFiles/shared.dir/MumbleUDP.pb.cc.o
+[10/601] Building CXX object src/CMakeFiles/shared.dir/ExceptionUtils.cpp.o
+[11/601] Building CXX object src/CMakeFiles/shared.dir/Ban.cpp.o
+[12/601] Building CXX object src/CMakeFiles/shared.dir/EnvUtils.cpp.o
+[13/601] Building CXX object src/CMakeFiles/shared.dir/FFDHE.cpp.o
+[14/601] Building CXX object src/CMakeFiles/shared.dir/HTMLFilter.cpp.o
+[15/601] Building CXX object src/CMakeFiles/shared.dir/HostAddress.cpp.o
+[16/601] Building CXX object src/CMakeFiles/shared.dir/License.cpp.o
+[17/601] Building CXX object src/CMakeFiles/shared.dir/LogEmitter.cpp.o
+[18/601] Building CXX object src/CMakeFiles/shared.dir/Mumble.pb.cc.o
+[19/601] Building CXX object src/CMakeFiles/shared.dir/Logger.cpp.o
+[20/601] Building CXX object src/CMakeFiles/shared.dir/OSInfo.cpp.o
+[21/601] Building CXX object src/CMakeFiles/shared.dir/PasswordGenerator.cpp.o
+[22/601] Building CXX object src/CMakeFiles/shared.dir/PlatformCheck.cpp.o
+[23/601] Building CXX object src/CMakeFiles/shared.dir/MumbleProtocol.cpp.o
+[24/601] Building CXX object src/CMakeFiles/shared.dir/QtUtils.cpp.o
+[25/601] Building CXX object src/CMakeFiles/shared.dir/ProcessResolver.cpp.o
+[26/601] Building CXX object src/CMakeFiles/shared.dir/ProtoUtils.cpp.o
+[27/601] Building CXX object src/CMakeFiles/shared.dir/SelfSignedCertificate.cpp.o
+[28/601] Building CXX object src/CMakeFiles/shared.dir/ServerAddress.cpp.o
+[29/601] Building CXX object src/CMakeFiles/shared.dir/ServerResolverRecord.cpp.o
+[30/601] Building CXX object src/CMakeFiles/shared.dir/ServerResolver.cpp.o
+[31/601] Building CXX object src/CMakeFiles/shared.dir/Timer.cpp.o
+[32/601] Building CXX object src/CMakeFiles/shared.dir/SSLLocks.cpp.o
+[33/601] Building CXX object src/CMakeFiles/shared.dir/SSL.cpp.o
+[34/601] Building CXX object src/CMakeFiles/shared.dir/VolumeAdjustment.cpp.o
+[35/601] Building CXX object src/CMakeFiles/shared.dir/UnresolvedServerAddress.cpp.o
+[36/601] Building CXX object src/CMakeFiles/shared.dir/crypto/CryptographicHash.cpp.o
+[37/601] Building CXX object src/CMakeFiles/shared.dir/Version.cpp.o
+[38/601] Building CXX object src/CMakeFiles/shared.dir/__/3rdparty/arc4random/arc4random_uniform.cpp.o
+[39/601] Linking CXX static library src/mumble/libsmallft.a
+[40/601] Building CXX object src/CMakeFiles/shared.dir/crypto/CryptState.cpp.o
+[41/601] Automatic RCC for ../../mumble_flags.qrc
+[42/600] Building CXX object src/CMakeFiles/shared.dir/crypto/CryptographicRandom.cpp.o
+[43/600] Building C object src/mumble/speexdsp/CMakeFiles/speexdsp.dir/__/speexdsp/libspeexdsp/fftwrap.c.o
+[44/600] Building C object src/mumble/speexdsp/CMakeFiles/speexdsp.dir/__/speexdsp/libspeexdsp/filterbank.c.o
+[45/600] Building C object src/mumble/speexdsp/CMakeFiles/speexdsp.dir/__/speexdsp/libspeexdsp/jitter.c.o
+[46/600] Building CXX object src/CMakeFiles/shared.dir/crypto/CryptStateOCB2.cpp.o
+[47/600] Linking CXX static library src/libshared.a
+[48/600] Building C object src/mumble/speexdsp/CMakeFiles/speexdsp.dir/__/speexdsp/libspeexdsp/preprocess.c.o
+[49/600] Building C object src/mumble/speexdsp/CMakeFiles/speexdsp.dir/__/speexdsp/libspeexdsp/scal.c.o
+[50/600] Building C object src/mumble/speexdsp/CMakeFiles/speexdsp.dir/__/speexdsp/libspeexdsp/resample.c.o
+[51/600] Building C object src/mumble/liboqs/src/CMakeFiles/oqs.dir/kem/kem.c.o
+[52/600] Building C object src/mumble/liboqs/src/CMakeFiles/oqs.dir/sig/sig.c.o
+[53/600] Building C object src/mumble/speexdsp/CMakeFiles/speexdsp.dir/__/speexdsp/libspeexdsp/mdf.c.o
+[54/600] Building C object src/mumble/liboqs/src/CMakeFiles/oqs.dir/sig_stfl/sig_stfl.c.o
+[55/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/aes/aes_impl.c.o
+[56/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/aes/aes128_ni.c.o
+[57/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/aes/aes256_ni.c.o
+[58/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/aes/aes.c.o
+[59/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/aes/aes_c.c.o
+[60/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/sha2/sha2.c.o
+[61/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/sha2/sha2_ossl.c.o
+[62/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/sha3/xkcp_sha3x4.c.o
+[63/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/sha3/xkcp_sha3.c.o
+[64/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/sha3/avx512vl_sha3.c.o
+[65/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/sha3/avx512vl_sha3x4.c.o
+[66/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/sha3/sha3x4.c.o
+[67/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/sha3/sha3.c.o
+[68/600] Building CXX object src/mumble/CMakeFiles/qrcodegen.dir/__/__/3rdparty/qrcodegen/qrcodegen.cpp.o
+[69/600] Linking CXX static library src/mumble/libqrcodegen.a
+[70/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/ossl_helpers.c.o
+[71/600] Building C object src/mumble/speexdsp/CMakeFiles/speexdsp.dir/__/speexdsp/libspeexdsp/smallft.c.o
+[72/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/pqclean_shims/fips202.c.o
+[73/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/common.c.o
+[74/600] Linking C static library src/mumble/speexdsp/libspeexdsp.a
+[75/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_ref.dir/kem_ml_kem_768.c.o
+[76/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/rand/rand.c.o
+[77/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_ref.dir/mlkem-native_ml-kem-768_ref/mlkem/src/debug.c.o
+[78/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_ref.dir/mlkem-native_ml-kem-768_ref/mlkem/src/compress.c.o
+[79/600] Building C object src/mumble/liboqs/src/common/CMakeFiles/common.dir/pqclean_shims/fips202x4.c.o
+[80/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_ref.dir/mlkem-native_ml-kem-768_ref/mlkem/src/kem.c.o
+[81/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_ref.dir/mlkem-native_ml-kem-768_ref/mlkem/src/indcpa.c.o
+[82/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_ref.dir/mlkem-native_ml-kem-768_ref/mlkem/src/verify.c.o
+[83/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_x86_64.dir/mlkem-native_ml-kem-768_x86_64/mlkem/src/compress.c.o
+[84/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_ref.dir/mlkem-native_ml-kem-768_ref/mlkem/src/poly.c.o
+[85/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_x86_64.dir/mlkem-native_ml-kem-768_x86_64/mlkem/src/debug.c.o
+[86/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_ref.dir/mlkem-native_ml-kem-768_ref/mlkem/src/poly_k.c.o
+[87/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_x86_64.dir/mlkem-native_ml-kem-768_x86_64/mlkem/src/native/x86_64/src/compress_consts.c.o
+[88/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_x86_64.dir/mlkem-native_ml-kem-768_x86_64/mlkem/src/native/x86_64/src/consts.c.o
+[89/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_x86_64.dir/mlkem-native_ml-kem-768_x86_64/mlkem/src/native/x86_64/src/rej_uniform_table.c.o
+[90/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_ref.dir/mlkem-native_ml-kem-768_ref/mlkem/src/sampling.c.o
+[91/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_x86_64.dir/mlkem-native_ml-kem-768_x86_64/mlkem/src/indcpa.c.o
+[92/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_x86_64.dir/mlkem-native_ml-kem-768_x86_64/mlkem/src/kem.c.o
+[93/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_x86_64.dir/mlkem-native_ml-kem-768_x86_64/mlkem/src/verify.c.o
+[94/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_ref.dir/sig_ml_dsa_65.c.o
+[95/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_ref.dir/mldsa-native_ml-dsa-65_ref/mldsa/src/ct.c.o
+[96/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_ref.dir/mldsa-native_ml-dsa-65_ref/mldsa/src/debug.c.o
+[97/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_x86_64.dir/mlkem-native_ml-kem-768_x86_64/mlkem/src/poly.c.o
+[98/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_ref.dir/mldsa-native_ml-dsa-65_ref/mldsa/src/packing.c.o
+[99/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_x86_64.dir/mlkem-native_ml-kem-768_x86_64/mlkem/src/poly_k.c.o
+[100/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_ref.dir/mldsa-native_ml-dsa-65_ref/mldsa/src/polyvec.c.o
+[101/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_ref.dir/mldsa-native_ml-dsa-65_ref/mldsa/src/polyvec_lazy.c.o
+[102/600] Building C object src/mumble/liboqs/src/kem/ml_kem/CMakeFiles/ml_kem_768_x86_64.dir/mlkem-native_ml-kem-768_x86_64/mlkem/src/sampling.c.o
+[103/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/ct.c.o
+[104/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/debug.c.o
+[105/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/native/x86_64/src/consts.c.o
+[106/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_ref.dir/mldsa-native_ml-dsa-65_ref/mldsa/src/poly.c.o
+[107/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_ref.dir/mldsa-native_ml-dsa-65_ref/mldsa/src/poly_kl.c.o
+[108/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/native/x86_64/src/poly_decompose_88_avx2.c.o
+[109/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/native/x86_64/src/poly_chknorm_avx2.c.o
+[110/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/native/x86_64/src/poly_use_hint_88_avx2.c.o
+[111/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_ref.dir/mldsa-native_ml-dsa-65_ref/mldsa/src/sign.c.o
+[112/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/native/x86_64/src/polyz_unpack_17_avx2.c.o
+[113/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/native/x86_64/src/poly_decompose_32_avx2.c.o
+[114/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/native/x86_64/src/rej_uniform_eta2_avx2.c.o
+[115/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/native/x86_64/src/poly_use_hint_32_avx2.c.o
+[116/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/native/x86_64/src/rej_uniform_table.c.o
+[117/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/packing.c.o
+[118/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/native/x86_64/src/polyz_unpack_19_avx2.c.o
+[119/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/native/x86_64/src/rej_uniform_avx2.c.o
+[120/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/polyvec.c.o
+[121/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/polyvec_lazy.c.o
+[122/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/native/x86_64/src/rej_uniform_eta4_avx2.c.o
+[123/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/poly.c.o
+[124/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/poly_kl.c.o
+[125/600] Building C object src/mumble/liboqs/src/sig/ml_dsa/CMakeFiles/ml_dsa_65_x86_64.dir/mldsa-native_ml-dsa-65_x86_64/mldsa/src/sign.c.o
+[126/600] Linking C static library src/mumble/liboqs/lib/liboqs.a
+[127/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/Column.cpp.o
+[128/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/Backend.cpp.o
+[129/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/Constraint.cpp.o
+[130/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/ForeignKey.cpp.o
+[131/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/DataType.cpp.o
+In file included from /usr/include/c++/12/string:40,
+                 from /usr/include/c++/12/stdexcept:39,
+                 from /work/source/src/database/Exception.h:9,
+                 from /work/source/src/database/Backend.h:9,
+                 from /work/source/src/database/DataType.h:9,
+                 from /work/source/src/database/DataType.cpp:6:
+In static member function 'static constexpr std::char_traits<char>::char_type* std::char_traits<char>::copy(char_type*, const char_type*, std::size_t)',
+    inlined from 'static constexpr void std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::_S_copy(_CharT*, const _CharT*, size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:423:21,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Allocator>& std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::_M_replace(size_type, size_type, const _CharT*, size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.tcc:532:22,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Alloc>& std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::replace(size_type, size_type, const _CharT*, size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:2171:19,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Alloc>& std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::insert(size_type, const _CharT*) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:1928:22,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Allocator> std::operator+(const _CharT*, __cxx11::basic_string<_CharT, _Traits, _Allocator>&&) [with _CharT = char; _Traits = char_traits<char>; _Alloc = allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:3541:36,
+    inlined from 'std::string mumble::db::DataType::sqlRepresentation(mumble::db::Backend) const' at /work/source/src/database/DataType.cpp:192:19:
+/usr/include/c++/12/bits/char_traits.h:431:56: warning: 'void* __builtin_memcpy(void*, const void*, long unsigned int)' accessing 9223372036854775810 or more bytes at offsets [2, 9223372036854775807] and 1 may overlap up to 9223372036854775813 bytes at offset -3 [-Wrestrict]
+  431 |         return static_cast<char_type*>(__builtin_memcpy(__s1, __s2, __n));
+      |                                        ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+[132/600] Automatic MOC and UIC for target mumble_client_object_lib
+[133/600] Automatic RCC for mumble.qrc
+[134/600] Automatic RCC for ../../themes/DefaultTheme.qrc
+[135/600] Automatic RCC for ../../themes/ExtraThemes.qrc
+[136/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/Index.cpp.o
+[137/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/ConversionUtils.cpp.o
+[138/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/Database.cpp.o
+[139/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Accessibility.cpp.o
+[140/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/About.cpp.o
+[141/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioConfigDialog.cpp.o
+[142/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/API_v_1_x_x.cpp.o
+[143/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ACLEditor.cpp.o
+[144/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Audio.cpp.o
+[145/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioOutputCache.cpp.o
+[146/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/mumble_client_object_lib_autogen/mocs_compilation.cpp.o
+[147/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioOutputSample.cpp.o
+[148/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioOutputSpeech.cpp.o
+[149/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioPreprocessor.cpp.o
+[150/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioOutputBuffer.cpp.o
+[151/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioInput.cpp.o
+[152/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioOutput.cpp.o
+[153/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioStats.cpp.o
+[154/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Cert.cpp.o
+[155/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/BanEditor.cpp.o
+[156/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/AudioWizard.cpp.o
+[157/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ClientUser.cpp.o
+[158/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ConfigWidget.cpp.o
+[159/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ConfigDialog.cpp.o
+[160/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/DeveloperConsole.cpp.o
+[161/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Database.cpp.o
+[162/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/CustomElements.cpp.o
+[163/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/EchoCancelOption.cpp.o
+[164/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/EnumStringConversions.cpp.o
+[165/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Global.cpp.o
+[166/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ConnectDialog.cpp.o
+[167/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/GlobalShortcutButtons.cpp.o
+[168/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/LegacyPlugin.cpp.o
+[169/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/GlobalShortcut.cpp.o
+[170/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/LCD.cpp.o
+[171/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/FileTransferConfig.cpp.o
+[172/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ListenerVolumeSlider.cpp.o
+[173/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/JSONSerialization.cpp.o
+[174/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Markdown.cpp.o
+[175/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/MenuLabel.cpp.o
+[176/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/LookConfig.cpp.o
+[177/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Log.cpp.o
+[178/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/MumbleApplication.cpp.o
+[179/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/NetworkConfig.cpp.o
+[180/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Plugin.cpp.o
+[181/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Messages.cpp.o
+[182/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/MainWindow.cpp.o
+[183/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PluginConfig.cpp.o
+[184/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PluginInstaller.cpp.o
+[185/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PluginManifest.cpp.o
+[186/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PositionalAudioViewer.cpp.o
+[187/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PositionalData.cpp.o
+[188/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PluginUpdater.cpp.o
+[189/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PluginManager.cpp.o
+[190/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/QtWidgetUtils.cpp.o
+[191/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PTTButtonWidget.cpp.o
+[192/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Screen.cpp.o
+[193/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ScreenShareReceiver.cpp.o
+[194/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ScreenCapture.cpp.o
+[195/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ScreenShareViewer.cpp.o
+[196/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/RichTextEditor.cpp.o
+[197/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ScreenShareWindow.cpp.o
+[198/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/SelfSharePreview.cpp.o
+[199/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/VideoFramePacketizer.cpp.o
+[200/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/VideoPacketPacer.cpp.o
+[201/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/VideoQualityProfile.cpp.o
+[202/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/SettingsKeys.cpp.o
+[203/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/SearchDialog.cpp.o
+[204/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ServerInformation.cpp.o
+[205/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/SharedMemory.cpp.o
+[206/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ServerHandler.cpp.o
+[207/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/SvgIcon.cpp.o
+[208/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/TalkingUIContainer.cpp.o
+[209/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/SocketRPC.cpp.o
+[210/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/TalkingUI.cpp.o
+[211/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/TalkingUIEntry.cpp.o
+[212/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/TextMessage.cpp.o
+[213/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/TalkingUISelection.cpp.o
+[214/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ThemeInfo.cpp.o
+[215/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Themes.cpp.o
+[216/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Translations.cpp.o
+[217/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Tokens.cpp.o
+[218/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Usage.cpp.o
+[219/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/Settings.cpp.o
+[220/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/UserEdit.cpp.o
+[221/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/UserListModel.cpp.o
+[222/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/UserLocalNicknameDialog.cpp.o
+[223/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/UserInformation.cpp.o
+[224/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/UserLocalVolumeSlider.cpp.o
+[225/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ReleaseUpdate.cpp.o
+[226/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ReleaseUpdateCache.cpp.o
+[227/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/UserView.cpp.o
+[228/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ViewCert.cpp.o
+[229/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/VersionCheck.cpp.o
+[230/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/UserModel.cpp.o
+[231/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/VolumeSliderWidgetAction.cpp.o
+[232/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/XMLTools.cpp.o
+[233/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/WebFetch.cpp.o
+[234/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/VoiceRecorder.cpp.o
+[235/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/VoiceRecorderDialog.cpp.o
+[236/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/CompletablePage.cpp.o
+[237/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/EventFilters.cpp.o
+[238/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/AccessibleQGroupBox.cpp.o
+[239/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/MultiStyleWidgetWrapper.cpp.o
+[240/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/MUComboBox.cpp.o
+[241/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/BanDialog.cpp.o
+[242/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/MultiColumnTreeWidget.cpp.o
+[243/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/RichTextItemDelegate.cpp.o
+[244/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/SearchDialogItemDelegate.cpp.o
+[245/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/FailedConnectionDialog.cpp.o
+[246/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/SearchDialogTree.cpp.o
+[247/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/SemanticSlider.cpp.o
+[248/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/ResponsiveImageDialog.cpp.o
+[249/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/__/ACL.cpp.o
+[250/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/widgets/TrayIcon.cpp.o
+[251/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/__/ChannelListenerManager.cpp.o
+[252/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/__/Connection.cpp.o
+[253/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/__/Group.cpp.o
+[254/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/__/User.cpp.o
+[255/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/os_unix.cpp.o
+[256/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/SharedMemory_unix.cpp.o
+[257/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/__/Channel.cpp.o
+[258/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/TextToSpeech_unix.cpp.o
+[259/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/GlobalShortcut_unix.cpp.o
+[260/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ScreenPickerDialog.cpp.o
+[261/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ChatVideoDecoder.cpp.o
+[262/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/V4L2Capture_unix.cpp.o
+[263/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ChatVideoPlayer.cpp.o
+[264/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/DBus.cpp.o
+[265/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/crypto/Argon2Wrap.cpp.o
+[266/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/CaptureSourceLister_unix.cpp.o
+[267/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/crypto/CryptoUtils.cpp.o
+[268/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/crypto/KemMLKEM768.cpp.o
+[269/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/crypto/SigMLDSA65.cpp.o
+[270/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/XdgPortalCapture_unix.cpp.o
+[271/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/crypto/CanonicalCBOR.cpp.o
+[272/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/crypto/Merkle.cpp.o
+[273/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/engine/FTMessages.cpp.o
+[274/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/identity/PeerTrustStore.cpp.o
+[275/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/identity/FTIdentity.cpp.o
+[276/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/engine/FileTransferSession.cpp.o
+[277/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/engine/FTManifest.cpp.o
+[278/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/engine/FileTransferEngine.cpp.o
+[279/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/engine/FTCardRender.cpp.o
+[280/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/engine/FTSavePolicy.cpp.o
+[281/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/engine/FileTransferManager.cpp.o
+[282/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/mumble_client_object_lib_autogen/EWIEGA46WW/qrc_mumble.cpp.o
+[283/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/mumble_client_object_lib_autogen/6RJHKKPRHE/qrc_DefaultTheme.cpp.o
+[284/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PQFileTransfer/widgets/FileTransferDialogs.cpp.o
+[285/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/mumble_client_object_lib_autogen/6RJHKKPRHE/qrc_ExtraThemes.cpp.o
+[286/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/MySQLConnectionParameter.cpp.o
+[287/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/PostgreSQLConnectionParameter.cpp.o
+[288/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/PrimaryKey.cpp.o
+[289/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/MetaTable.cpp.o
+[290/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/Savepoint.cpp.o
+[291/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/PipeWire.cpp.o
+[292/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/SQLiteConnectionParameter.cpp.o
+[293/600] Building CXX object src/mumble/CMakeFiles/mumble_client_object_lib.dir/ALSAAudio.cpp.o
+[294/600] Generating ApplicationPalette.h
+[295/600] Automatic MOC and UIC for target mumble
+[296/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/TransactionHolder.cpp.o
+[297/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/Trigger.cpp.o
+[298/600] Building CXX object src/mumble/CMakeFiles/mumble.dir/mumble_autogen/mocs_compilation.cpp.o
+[299/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/Version.cpp.o
+[300/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/Utils.cpp.o
+[301/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/DBChannel.cpp.o
+[302/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/DBUser.cpp.o
+[303/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/DBUserData.cpp.o
+[304/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/DBGroup.cpp.o
+[305/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/ServerDatabase.cpp.o
+[306/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/DBGroupMember.cpp.o
+[307/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/DBChannelLink.cpp.o
+[308/600] Building CXX object src/database/CMakeFiles/mumble_database.dir/Table.cpp.o
+In file included from /usr/include/c++/12/string:40,
+                 from /usr/include/c++/12/stdexcept:39,
+                 from /work/source/src/database/Exception.h:9,
+                 from /work/source/src/database/Backend.h:9,
+                 from /work/source/src/database/Table.h:9,
+                 from /work/source/src/database/Table.cpp:6:
+In static member function 'static constexpr std::char_traits<char>::char_type* std::char_traits<char>::copy(char_type*, const char_type*, std::size_t)',
+    inlined from 'static constexpr void std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::_S_copy(_CharT*, const _CharT*, size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:423:21,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Allocator>& std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::_M_replace(size_type, size_type, const _CharT*, size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.tcc:532:22,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Alloc>& std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::replace(size_type, size_type, const _CharT*, size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:2171:19,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Alloc>& std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::insert(size_type, const _CharT*) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:1928:22,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Allocator> std::operator+(const _CharT*, __cxx11::basic_string<_CharT, _Traits, _Allocator>&&) [with _CharT = char; _Traits = char_traits<char>; _Alloc = allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:3541:36,
+    inlined from 'virtual void mumble::db::Table::create()' at /work/source/src/database/Table.cpp:114:24:
+/usr/include/c++/12/bits/char_traits.h:431:56: warning: 'void* __builtin_memcpy(void*, const void*, long unsigned int)' accessing 9223372036854775810 or more bytes at offsets [2, 9223372036854775807] and 1 may overlap up to 9223372036854775813 bytes at offset -3 [-Wrestrict]
+  431 |         return static_cast<char_type*>(__builtin_memcpy(__s1, __s2, __n));
+      |                                        ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+[309/600] Linking CXX static library src/database/libmumble_database.a
+[310/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/DBAcl.cpp.o
+[311/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/DBChannelListener.cpp.o
+[312/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/ACLCompat.cpp.o
+[313/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/DBBan.cpp.o
+[314/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/ServerTable.cpp.o
+[315/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/LogTable.cpp.o
+[316/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/ConfigTable.cpp.o
+[317/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/ChannelTable.cpp.o
+[318/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/ChannelPropertyTable.cpp.o
+[319/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/UserPropertyTable.cpp.o
+[320/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/UserTable.cpp.o
+[321/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/GroupTable.cpp.o
+[322/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/GroupMemberTable.cpp.o
+[323/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/ACLTable.cpp.o
+[324/600] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/ChannelLinkTable.cpp.o
+[325/600] Automatic MOC for target TestAudioWizard
+[326/599] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/BanTable.cpp.o
+[327/599] Automatic MOC for target TestDatabasePath
+[328/598] Building CXX object src/murmur/database/CMakeFiles/mumble_server_database.dir/ChannelListenerTable.cpp.o
+[329/598] Linking CXX static library src/murmur/database/libmumble_server_database.a
+[330/598] Building CXX object src/mumble/CMakeFiles/mumble.dir/main.cpp.o
+[331/598] Automatic MOC for target mumble_server_object_lib
+[332/598] Linking CXX executable mumble
+[333/598] Building CXX object src/tests/TestAudioWizard/CMakeFiles/TestAudioWizard.dir/TestAudioWizard.cpp.o
+[334/598] Building CXX object src/tests/TestDatabasePath/CMakeFiles/TestDatabasePath.dir/TestDatabasePath.cpp.o
+[335/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/BandwidthRecord.cpp.o
+[336/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/AudioReceiverBuffer.cpp.o
+[337/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/LegacyPasswordHash.cpp.o
+[338/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/mumble_server_object_lib_autogen/mocs_compilation.cpp.o
+[339/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/PBKDF2.cpp.o
+[340/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/Cert.cpp.o
+[341/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/Register.cpp.o
+[342/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/Meta.cpp.o
+[343/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/RPC.cpp.o
+[344/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/Globals.cpp.o
+[345/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/ServerApplication.cpp.o
+[346/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/Messages.cpp.o
+[347/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/ServerUser.cpp.o
+[348/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/__/ACL.cpp.o
+[349/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/__/Channel.cpp.o
+[350/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/__/ChannelListenerManager.cpp.o
+[351/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/__/Connection.cpp.o
+[352/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/DBWrapper.cpp.o
+[353/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/Server.cpp.o
+[354/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/__/User.cpp.o
+[355/598] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/__/Group.cpp.o
+[356/598] Automatic MOC for target TestReleaseUpdate
+[357/597] Linking CXX executable tests/TestAudioWizard
+[358/597] Linking CXX executable tests/TestDatabasePath
+[359/597] Building CXX object src/murmur/CMakeFiles/mumble_server_object_lib.dir/UnixMurmur.cpp.o
+[360/597] Automatic MOC for target mumble-server
+[361/596] Building CXX object src/tests/TestReleaseUpdate/CMakeFiles/TestReleaseUpdate.dir/__/__/mumble/ReleaseUpdate.cpp.o
+[362/596] Building CXX object src/tests/TestReleaseUpdate/CMakeFiles/TestReleaseUpdate.dir/__/__/mumble/ReleaseUpdateCache.cpp.o
+[363/596] Automatic MOC for target TestAnimatedImages
+[364/595] Automatic MOC for target TestChatWebM
+[365/594] Building CXX object src/tests/TestReleaseUpdate/CMakeFiles/TestReleaseUpdate.dir/TestReleaseUpdate.cpp.o
+[366/594] Linking CXX executable tests/TestReleaseUpdate
+[367/594] Automatic MOC for target TestVideoFramePacketizer
+[368/593] Building CXX object src/tests/TestVideoFramePacketizer/CMakeFiles/TestVideoFramePacketizer.dir/TestVideoFramePacketizer.cpp.o
+[369/593] Building CXX object src/tests/TestVideoFramePacketizer/CMakeFiles/TestVideoFramePacketizer.dir/__/__/mumble/VideoFramePacketizer.cpp.o
+[370/593] Linking CXX executable tests/TestVideoFramePacketizer
+[371/593] Automatic MOC for target TestVideoPacketPacer
+[372/593] Building CXX object src/tests/TestAnimatedImages/CMakeFiles/TestAnimatedImages.dir/TestAnimatedImages.cpp.o
+[373/593] Building CXX object src/tests/TestChatWebM/CMakeFiles/TestChatWebM.dir/TestChatWebM.cpp.o
+[374/593] Building CXX object src/tests/TestVideoPacketPacer/CMakeFiles/TestVideoPacketPacer.dir/TestVideoPacketPacer_autogen/mocs_compilation.cpp.o
+[375/593] Linking CXX executable tests/TestAnimatedImages
+[376/593] Linking CXX executable tests/TestChatWebM
+[377/593] Automatic MOC for target TestVideoQualityProfile
+[378/592] Building CXX object src/tests/TestVideoPacketPacer/CMakeFiles/TestVideoPacketPacer.dir/__/__/mumble/VideoPacketPacer.cpp.o
+[379/592] Building CXX object src/tests/TestVideoQualityProfile/CMakeFiles/TestVideoQualityProfile.dir/TestVideoQualityProfile.cpp.o
+[380/592] Building CXX object src/tests/TestVideoQualityProfile/CMakeFiles/TestVideoQualityProfile.dir/__/__/mumble/VideoQualityProfile.cpp.o
+[381/592] Building CXX object src/tests/TestVideoPacketPacer/CMakeFiles/TestVideoPacketPacer.dir/TestVideoPacketPacer.cpp.o
+[382/592] Linking CXX executable tests/TestVideoQualityProfile
+[383/592] Automatic MOC for target TestVideoViewUi
+[384/591] Linking CXX executable tests/TestVideoPacketPacer
+[385/591] Automatic MOC for target TestFileTransferUi
+[386/590] Automatic MOC for target TestXMLTools
+[387/590] Building CXX object src/tests/TestXMLTools/CMakeFiles/TestXMLTools.dir/TestXMLTools_autogen/mocs_compilation.cpp.o
+[388/590] Building CXX object src/murmur/CMakeFiles/mumble-server.dir/main.cpp.o
+[389/590] Linking CXX executable mumble-server
+[390/590] Building CXX object src/tests/TestVideoViewUi/CMakeFiles/TestVideoViewUi.dir/TestVideoViewUi.cpp.o
+[391/590] Linking CXX executable tests/TestVideoViewUi
+[392/590] Automatic MOC for target TestFileTransferManager
+[393/589] Building CXX object src/tests/TestXMLTools/CMakeFiles/TestXMLTools.dir/TestXMLTools.cpp.o
+[394/589] Building CXX object src/tests/TestXMLTools/CMakeFiles/TestXMLTools.dir/__/__/mumble/XMLTools.cpp.o
+[395/589] Automatic MOC for target TestFileTransferTransport
+[396/588] Linking CXX executable tests/TestXMLTools
+[397/588] Automatic MOC for target TestPQCrypto
+[398/587] Building CXX object src/tests/TestFileTransferUi/CMakeFiles/TestFileTransferUi.dir/TestFileTransferUi.cpp.o
+[399/587] Building CXX object src/tests/TestFileTransferTransport/CMakeFiles/TestFileTransferTransport.dir/TestFileTransferTransport.cpp.o
+[400/587] Linking CXX executable tests/TestFileTransferTransport
+[401/587] Building CXX object src/tests/TestPQCrypto/CMakeFiles/TestPQCrypto.dir/__/__/mumble/PQFileTransfer/crypto/Argon2Wrap.cpp.o
+[402/587] Building CXX object src/tests/TestPQCrypto/CMakeFiles/TestPQCrypto.dir/TestPQCrypto.cpp.o
+[403/587] Linking CXX executable tests/TestFileTransferUi
+[404/587] Building CXX object src/tests/TestFileTransferManager/CMakeFiles/TestFileTransferManager.dir/TestFileTransferManager.cpp.o
+[405/587] Building CXX object src/tests/TestPQCrypto/CMakeFiles/TestPQCrypto.dir/__/__/mumble/PQFileTransfer/crypto/CryptoUtils.cpp.o
+[406/587] Building CXX object src/tests/TestPQCrypto/CMakeFiles/TestPQCrypto.dir/__/__/mumble/PQFileTransfer/crypto/KemMLKEM768.cpp.o
+[407/587] Building CXX object src/tests/TestPQCrypto/CMakeFiles/TestPQCrypto.dir/__/__/mumble/PQFileTransfer/crypto/CanonicalCBOR.cpp.o
+[408/587] Automatic MOC for target TestFTIdentity
+[409/586] Building CXX object src/tests/TestPQCrypto/CMakeFiles/TestPQCrypto.dir/__/__/mumble/PQFileTransfer/crypto/SigMLDSA65.cpp.o
+[410/586] Building CXX object src/tests/TestPQCrypto/CMakeFiles/TestPQCrypto.dir/__/__/mumble/PQFileTransfer/crypto/Merkle.cpp.o
+[411/586] Linking CXX executable tests/TestFileTransferManager
+[412/586] Linking CXX executable tests/TestPQCrypto
+[413/586] Building CXX object src/tests/TestFTIdentity/CMakeFiles/TestFTIdentity.dir/__/__/mumble/PQFileTransfer/crypto/Argon2Wrap.cpp.o
+[414/586] Building CXX object src/tests/TestFTIdentity/CMakeFiles/TestFTIdentity.dir/__/__/mumble/PQFileTransfer/crypto/CryptoUtils.cpp.o
+[415/586] Building CXX object src/tests/TestFTIdentity/CMakeFiles/TestFTIdentity.dir/__/__/mumble/PQFileTransfer/crypto/KemMLKEM768.cpp.o
+[416/586] Building CXX object src/tests/TestFTIdentity/CMakeFiles/TestFTIdentity.dir/__/__/mumble/PQFileTransfer/crypto/SigMLDSA65.cpp.o
+[417/586] Building CXX object src/tests/TestFTIdentity/CMakeFiles/TestFTIdentity.dir/__/__/mumble/PQFileTransfer/crypto/CanonicalCBOR.cpp.o
+[418/586] Building CXX object src/tests/TestFTIdentity/CMakeFiles/TestFTIdentity.dir/TestFTIdentity.cpp.o
+[419/586] Automatic MOC for target TestFileTransferSession
+[420/585] Building CXX object src/tests/TestFTIdentity/CMakeFiles/TestFTIdentity.dir/__/__/mumble/PQFileTransfer/crypto/Merkle.cpp.o
+[421/585] Building CXX object src/tests/TestFileTransferSession/CMakeFiles/TestFileTransferSession.dir/__/__/mumble/PQFileTransfer/crypto/Argon2Wrap.cpp.o
+[422/585] Building CXX object src/tests/TestFTIdentity/CMakeFiles/TestFTIdentity.dir/__/__/mumble/PQFileTransfer/identity/FTIdentity.cpp.o
+[423/585] Building CXX object src/tests/TestFTIdentity/CMakeFiles/TestFTIdentity.dir/__/__/mumble/PQFileTransfer/identity/PeerTrustStore.cpp.o
+[424/585] Linking CXX executable tests/TestFTIdentity
+[425/585] Building CXX object src/tests/TestFileTransferSession/CMakeFiles/TestFileTransferSession.dir/__/__/mumble/PQFileTransfer/crypto/CryptoUtils.cpp.o
+[426/585] Building CXX object src/tests/TestFileTransferSession/CMakeFiles/TestFileTransferSession.dir/__/__/mumble/PQFileTransfer/crypto/KemMLKEM768.cpp.o
+[427/585] Building CXX object src/tests/TestFileTransferSession/CMakeFiles/TestFileTransferSession.dir/__/__/mumble/PQFileTransfer/crypto/CanonicalCBOR.cpp.o
+[428/585] Building CXX object src/tests/TestFileTransferSession/CMakeFiles/TestFileTransferSession.dir/TestFileTransferSession.cpp.o
+[429/585] Building CXX object src/tests/TestFileTransferSession/CMakeFiles/TestFileTransferSession.dir/__/__/mumble/PQFileTransfer/crypto/SigMLDSA65.cpp.o
+[430/585] Building CXX object src/tests/TestFileTransferSession/CMakeFiles/TestFileTransferSession.dir/__/__/mumble/PQFileTransfer/crypto/Merkle.cpp.o
+[431/585] Building CXX object src/tests/TestFileTransferSession/CMakeFiles/TestFileTransferSession.dir/__/__/mumble/PQFileTransfer/engine/FTMessages.cpp.o
+[432/585] Building CXX object src/tests/TestFileTransferSession/CMakeFiles/TestFileTransferSession.dir/__/__/mumble/PQFileTransfer/identity/FTIdentity.cpp.o
+[433/585] Building CXX object src/tests/TestFileTransferSession/CMakeFiles/TestFileTransferSession.dir/__/__/mumble/PQFileTransfer/identity/PeerTrustStore.cpp.o
+[434/585] Automatic MOC for target TestFileTransferEngine
+[435/585] Automatic MOC for target TestFileTransferE2E
+[436/585] Building CXX object src/tests/TestFileTransferSession/CMakeFiles/TestFileTransferSession.dir/__/__/mumble/PQFileTransfer/engine/FileTransferSession.cpp.o
+[437/585] Building CXX object src/tests/TestFileTransferSession/CMakeFiles/TestFileTransferSession.dir/__/__/mumble/PQFileTransfer/engine/FTManifest.cpp.o
+[438/585] Linking CXX executable tests/TestFileTransferSession
+[439/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/__/__/mumble/PQFileTransfer/crypto/Argon2Wrap.cpp.o
+[440/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/TestFileTransferEngine_autogen/mocs_compilation.cpp.o
+[441/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/__/__/mumble/PQFileTransfer/crypto/KemMLKEM768.cpp.o
+[442/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/__/__/mumble/PQFileTransfer/crypto/CryptoUtils.cpp.o
+[443/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/__/__/mumble/PQFileTransfer/crypto/CanonicalCBOR.cpp.o
+[444/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/__/__/mumble/PQFileTransfer/crypto/SigMLDSA65.cpp.o
+[445/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/__/__/mumble/PQFileTransfer/crypto/Merkle.cpp.o
+[446/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/__/__/mumble/PQFileTransfer/engine/FTMessages.cpp.o
+[447/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/__/__/mumble/PQFileTransfer/identity/FTIdentity.cpp.o
+[448/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/__/__/mumble/PQFileTransfer/identity/PeerTrustStore.cpp.o
+[449/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/__/__/mumble/PQFileTransfer/engine/FileTransferSession.cpp.o
+[450/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/__/__/mumble/PQFileTransfer/engine/FTManifest.cpp.o
+[451/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/TestFileTransferEngine.cpp.o
+[452/585] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/__/__/mumble/PQFileTransfer/crypto/Argon2Wrap.cpp.o
+[453/585] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/TestFileTransferE2E_autogen/mocs_compilation.cpp.o
+[454/585] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/__/__/mumble/PQFileTransfer/crypto/CryptoUtils.cpp.o
+[455/585] Building CXX object src/tests/TestFileTransferEngine/CMakeFiles/TestFileTransferEngine.dir/__/__/mumble/PQFileTransfer/engine/FileTransferEngine.cpp.o
+[456/585] Linking CXX executable tests/TestFileTransferEngine
+[457/585] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/__/__/mumble/PQFileTransfer/crypto/CanonicalCBOR.cpp.o
+[458/585] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/__/__/mumble/PQFileTransfer/crypto/KemMLKEM768.cpp.o
+[459/585] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/__/__/mumble/PQFileTransfer/crypto/SigMLDSA65.cpp.o
+[460/585] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/__/__/mumble/PQFileTransfer/crypto/Merkle.cpp.o
+[461/585] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/TestFileTransferE2E.cpp.o
+[462/585] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/__/__/mumble/PQFileTransfer/identity/FTIdentity.cpp.o
+[463/585] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/__/__/mumble/PQFileTransfer/engine/FTMessages.cpp.o
+[464/585] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/__/__/mumble/PQFileTransfer/identity/PeerTrustStore.cpp.o
+[465/585] Generating test-case for 'SettingsJSONSerialization'
+[466/585] Automatic MOC for target TestSettingsJSONSerialization
+[467/584] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/__/__/mumble/PQFileTransfer/engine/FileTransferSession.cpp.o
+[468/584] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/__/__/mumble/PQFileTransfer/engine/FTManifest.cpp.o
+[469/584] Automatic MOC for target OverlayTest
+[470/583] Automatic MOC for target TestCrypt
+[471/582] Building CXX object src/tests/TestFileTransferE2E/CMakeFiles/TestFileTransferE2E.dir/__/__/mumble/PQFileTransfer/engine/FileTransferEngine.cpp.o
+[472/582] Linking CXX executable tests/TestFileTransferE2E
+[473/582] Copying necessary source files
+[474/582] Automatic MOC for target TestAudioReceiverBuffer
+[475/581] Building CXX object src/tests/TestCrypt/CMakeFiles/TestCrypt.dir/TestCrypt.cpp.o
+[476/581] Linking CXX executable tests/TestCrypt
+[477/581] Building CXX object src/tests/OverlayTest/CMakeFiles/OverlayTest.dir/OverlayTest.cpp.o
+[478/581] Building CXX object src/tests/TestAudioReceiverBuffer/CMakeFiles/TestAudioReceiverBuffer.dir/AudioReceiverBuffer.cpp.o
+[479/581] Automatic MOC for target TestQtLogger
+[480/580] Linking CXX executable tests/OverlayTest
+[481/580] Building CXX object src/tests/TestSettingsJSONSerialization/CMakeFiles/TestSettingsJSONSerialization.dir/TestSettingsJSONSerialization.cpp.o
+[482/580] Automatic MOC for target TestBandwidthRecord
+[483/579] Building CXX object src/tests/TestAudioReceiverBuffer/CMakeFiles/TestAudioReceiverBuffer.dir/TestAudioReceiverBuffer.cpp.o
+[484/579] Linking CXX executable tests/TestAudioReceiverBuffer
+[485/579] Linking CXX executable tests/TestSettingsJSONSerialization
+[486/579] Building CXX object src/tests/TestBandwidthRecord/CMakeFiles/TestBandwidthRecord.dir/__/__/murmur/BandwidthRecord.cpp.o
+[487/579] Building CXX object src/tests/TestBandwidthRecord/CMakeFiles/TestBandwidthRecord.dir/TestBandwidthRecord.cpp.o
+[488/579] Building CXX object src/tests/TestBandwidthRecord/CMakeFiles/TestBandwidthRecord.dir/__/__/Timer.cpp.o
+[489/579] Automatic MOC for target TestCaseInsensitiveQString
+[490/578] Automatic MOC for target TestConnectionOutputQueue
+[491/578] Linking CXX executable tests/TestBandwidthRecord
+[492/578] Building CXX object src/tests/TestQtLogger/CMakeFiles/TestQtLogger.dir/TestQtLogger.cpp.o
+[493/578] Linking CXX executable tests/TestQtLogger
+[494/578] Building CXX object src/tests/TestConnectionOutputQueue/CMakeFiles/TestConnectionOutputQueue.dir/TestConnectionOutputQueue_autogen/mocs_compilation.cpp.o
+[495/578] Automatic MOC for target TestCryptographicHash
+[496/577] Building CXX object src/tests/TestCaseInsensitiveQString/CMakeFiles/TestCaseInsensitiveQString.dir/TestCaseInsensitiveQString.cpp.o
+[497/577] Building CXX object src/tests/TestConnectionOutputQueue/CMakeFiles/TestConnectionOutputQueue.dir/__/__/Connection.cpp.o
+[498/577] Linking CXX executable tests/TestCaseInsensitiveQString
+[499/577] Automatic MOC for target TestCryptographicRandom
+[500/576] Building CXX object src/tests/TestConnectionOutputQueue/CMakeFiles/TestConnectionOutputQueue.dir/TestConnectionOutputQueue.cpp.o
+[501/576] Automatic MOC for target TestDatabase
+[502/575] Linking CXX executable tests/TestConnectionOutputQueue
+[503/575] Building CXX object src/tests/TestDatabase/CMakeFiles/TestDatabase.dir/DefaultTable.cpp.o
+[504/575] Building CXX object src/tests/TestCryptographicHash/CMakeFiles/TestCryptographicHash.dir/TestCryptographicHash.cpp.o
+[505/575] Linking CXX executable tests/TestCryptographicHash
+[506/575] Building CXX object src/tests/TestCryptographicRandom/CMakeFiles/TestCryptographicRandom.dir/TestCryptographicRandom.cpp.o
+[507/575] Linking CXX executable tests/TestCryptographicRandom
+[508/575] Building CXX object src/tests/TestDatabase/CMakeFiles/TestDatabase.dir/KeyValueTable.cpp.o
+[509/575] Building CXX object src/tests/TestDatabase/CMakeFiles/TestDatabase.dir/TestUtils.cpp.o
+[510/575] Building CXX object src/tests/TestDatabase/CMakeFiles/TestDatabase.dir/ConstraintTable.cpp.o
+[511/575] Building CXX object src/tests/TestDatabase/CMakeFiles/TestDatabase.dir/AutoIncrementTable.cpp.o
+[512/575] Building CXX object src/tests/TestDatabase/CMakeFiles/TestDatabase.dir/PrimaryKeyTable.cpp.o
+[513/575] Building CXX object src/tests/TestDatabase/CMakeFiles/TestDatabase.dir/CompositePrimaryKeyTable.cpp.o
+[514/575] Building CXX object src/tests/TestDatabase/CMakeFiles/TestDatabase.dir/ForeignKeyTable.cpp.o
+[515/575] Building CXX object src/tests/TestDatabase/CMakeFiles/TestDatabase.dir/CompositeForeignKeyTable.cpp.o
+[516/575] Building CXX object src/tests/TestDatabase/CMakeFiles/TestDatabase.dir/IntegerTable.cpp.o
+[517/575] Automatic MOC for target TestServerDatabase
+[518/574] Automatic MOC for target TestIPCUtils
+[519/573] Automatic MOC for target TestFFDHE
+[520/572] Building CXX object src/tests/TestDatabase/CMakeFiles/TestDatabase.dir/DatabaseTest.cpp.o
+[521/572] Linking CXX executable tests/TestDatabase
+[522/572] Building CXX object src/tests/TestDatabase/server/CMakeFiles/TestServerDatabase.dir/JSONLocator.cpp.o
+[523/572] Building CXX object src/tests/TestDatabase/server/CMakeFiles/TestServerDatabase.dir/__/TestUtils.cpp.o
+[524/572] Building CXX object src/tests/TestFFDHE/CMakeFiles/TestFFDHE.dir/TestFFDHE.cpp.o
+[525/572] Building CXX object src/tests/TestDatabase/server/CMakeFiles/TestServerDatabase.dir/JSONAssembler.cpp.o
+In file included from /usr/include/c++/12/string:40,
+                 from /usr/include/c++/12/stdexcept:39,
+                 from /work/source/src/database/Exception.h:9,
+                 from /work/source/src/database/Backend.h:9,
+                 from /work/source/src/murmur/database/ServerDatabase.h:9,
+                 from /work/source/src/tests/TestDatabase/server/JSONAssembler.h:9,
+                 from /work/source/src/tests/TestDatabase/server/JSONAssembler.cpp:6:
+In static member function 'static constexpr std::char_traits<char>::char_type* std::char_traits<char>::copy(char_type*, const char_type*, std::size_t)',
+    inlined from 'static constexpr void std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::_S_copy(_CharT*, const _CharT*, size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:423:21,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Allocator>& std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::_M_replace(size_type, size_type, const _CharT*, size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.tcc:532:22,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Alloc>& std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::replace(size_type, size_type, const _CharT*, size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:2171:19,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Alloc>& std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::insert(size_type, const _CharT*) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:1928:22,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Allocator> std::operator+(const _CharT*, __cxx11::basic_string<_CharT, _Traits, _Allocator>&&) [with _CharT = char; _Traits = char_traits<char>; _Alloc = allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:3541:36,
+    inlined from 'const nlohmann::json_abi_v3_11_3::json& mumble::db::test::selectSchemaVersion(const nlohmann::json_abi_v3_11_3::json&, unsigned int)' at /work/source/src/tests/TestDatabase/server/JSONAssembler.cpp:64:27:
+/usr/include/c++/12/bits/char_traits.h:431:56: warning: 'void* __builtin_memcpy(void*, const void*, long unsigned int)' accessing 9223372036854775810 or more bytes at offsets [2, 9223372036854775807] and 1 may overlap up to 9223372036854775813 bytes at offset -3 [-Wrestrict]
+  431 |         return static_cast<char_type*>(__builtin_memcpy(__s1, __s2, __n));
+      |                                        ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+In static member function 'static constexpr std::char_traits<char>::char_type* std::char_traits<char>::copy(char_type*, const char_type*, std::size_t)',
+    inlined from 'static constexpr void std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::_S_copy(_CharT*, const _CharT*, size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:423:21,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Allocator>& std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::_M_replace(size_type, size_type, const _CharT*, size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.tcc:532:22,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Alloc>& std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::replace(size_type, size_type, const _CharT*, size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:2171:19,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Alloc>& std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::insert(size_type, const _CharT*) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:1928:22,
+    inlined from 'constexpr std::__cxx11::basic_string<_CharT, _Traits, _Allocator> std::operator+(const _CharT*, __cxx11::basic_string<_CharT, _Traits, _Allocator>&&) [with _CharT = char; _Traits = char_traits<char>; _Alloc = allocator<char>]' at /usr/include/c++/12/bits/basic_string.h:3541:36,
+    inlined from 'const nlohmann::json_abi_v3_11_3::json& mumble::db::test::selectSchemaVersion(const nlohmann::json_abi_v3_11_3::json&, unsigned int)' at /work/source/src/tests/TestDatabase/server/JSONAssembler.cpp:75:20:
+/usr/include/c++/12/bits/char_traits.h:431:56: warning: 'void* __builtin_memcpy(void*, const void*, long unsigned int)' accessing 9223372036854775810 or more bytes at offsets [2, 9223372036854775807] and 1 may overlap up to 9223372036854775813 bytes at offset -3 [-Wrestrict]
+  431 |         return static_cast<char_type*>(__builtin_memcpy(__s1, __s2, __n));
+      |                                        ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+[526/572] Linking CXX executable tests/TestFFDHE
+[527/572] Building CXX object src/tests/TestIPCUtils/CMakeFiles/TestIPCUtils.dir/TestIPCUtils.cpp.o
+[528/572] Linking CXX executable tests/TestIPCUtils
+[529/572] Automatic MOC for target TestPacketDataStream
+[530/571] Automatic MOC for target TestPasswordGenerator
+[531/570] Automatic MOC for target TestMumbleProtocol
+[532/569] Building CXX object src/tests/TestPasswordGenerator/CMakeFiles/TestPasswordGenerator.dir/TestPasswordGenerator.cpp.o
+[533/569] Linking CXX executable tests/TestPasswordGenerator
+[534/569] Building CXX object src/tests/TestPacketDataStream/CMakeFiles/TestPacketDataStream.dir/TestPacketDataStream.cpp.o
+[535/569] Linking CXX executable tests/TestPacketDataStream
+[536/569] Automatic MOC for target TestSelfSignedCertificate
+[537/568] Building CXX object src/tests/TestMumbleProtocol/CMakeFiles/TestMumbleProtocol.dir/TestMumbleProtocol.cpp.o
+[538/568] Automatic MOC for target TestServerAddress
+[539/567] Linking CXX executable tests/TestMumbleProtocol
+[540/567] Automatic MOC for target TestSSLLocks
+[541/566] Building CXX object src/tests/TestDatabase/server/CMakeFiles/TestServerDatabase.dir/ServerDatabaseTest.cpp.o
+[542/566] Linking CXX executable tests/TestServerDatabase
+[543/566] Automatic MOC for target TestStdAbs
+[544/565] Building CXX object src/tests/TestSelfSignedCertificate/CMakeFiles/TestSelfSignedCertificate.dir/TestSelfSignedCertificate.cpp.o
+[545/565] Linking CXX executable tests/TestSelfSignedCertificate
+[546/565] Building CXX object src/tests/TestServerAddress/CMakeFiles/TestServerAddress.dir/TestServerAddress.cpp.o
+[547/565] Linking CXX executable tests/TestServerAddress
+[548/565] Automatic MOC for target TestTimer
+[549/564] Building CXX object src/tests/TestSSLLocks/CMakeFiles/TestSSLLocks.dir/TestSSLLocks.cpp.o
+[550/564] Linking CXX executable tests/TestSSLLocks
+[551/564] Automatic MOC for target TestUnresolvedServerAddress
+[552/563] Automatic MOC for target TestVersion
+[553/562] Building CXX object src/tests/TestStdAbs/CMakeFiles/TestStdAbs.dir/TestStdAbs.cpp.o
+[554/562] Linking CXX executable tests/TestStdAbs
+[555/562] Executing delayed configure script configure_files_1.cmake
+[556/562] Executing delayed configure script configure_files_2.cmake
+[557/562] Building CXX object src/tests/TestVersion/CMakeFiles/TestVersion.dir/TestVersion.cpp.o
+[558/562] Linking CXX executable tests/TestVersion
+[559/562] Building CXX object src/tests/TestTimer/CMakeFiles/TestTimer.dir/TestTimer.cpp.o
+[560/562] Linking CXX executable tests/TestTimer
+[561/562] Building CXX object src/tests/TestUnresolvedServerAddress/CMakeFiles/TestUnresolvedServerAddress.dir/TestUnresolvedServerAddress.cpp.o
+[562/562] Linking CXX executable tests/TestUnresolvedServerAddress
