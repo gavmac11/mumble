@@ -53,6 +53,20 @@ def one(data, field, default=None):
     return data.get(field, [default])[-1]
 
 
+def certificate_ban_identifier(peer):
+    """Use the server's opaque UserState hash, as native ban administration does.
+
+    This preserves old-server BanList compatibility without constructing a new
+    weak certificate digest in the fixture. TLS trust remains CA validated and
+    the recovery identity comparison uses SHA256 separately.
+    """
+    identifier = one(peer.users.get(peer.session, {}), 15)
+    if (not isinstance(identifier, bytes) or len(identifier) != 40
+            or any(value not in b'0123456789abcdef' for value in identifier)):
+        raise AssertionError('Server did not supply a valid certificate ban identifier')
+    return identifier.decode('ascii')
+
+
 class Peer:
     def __init__(self, args, name, password='', certificate=None):
         self.args, self.name, self.password, self.certificate = args, name, password, certificate
@@ -139,12 +153,7 @@ async def run(args):
             await admin.send(13, integer(1, channel_id) + integer(2, 0)
                              + blob(3, group) + blob(4, deny) + blob(4, allow))
             banned = await connect(BANNED, join, 'banned')
-            # This is the legacy Mumble wire-protocol ban identifier, not a TLS
-            # trust check. The server uses the DER certificate SHA1 (Server.cpp);
-            # changing it to SHA256 would invalidate the saved-ban rehearsal.
-            # TLS server identity above is recorded with SHA256 independently.
-            banned_hash = hashlib.sha1(ssl.PEM_cert_to_DER_cert(
-                (args.secrets / 'banned.crt').read_text()), usedforsecurity=False).hexdigest()
+            banned_hash = certificate_ban_identifier(banned)
             if args.legacy_ban:
                 # The old server lacks the certificate-only UserRemove extension.
                 # A documentation IP avoids banning every NAT/loopback client.
