@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "fixture_source": "a5575b844e74cc13ac77b8e566cc70debc4a2f92",
+  "server_code_tree": "004733f9266e765b5d32caf2f9be56031d5ac405",
+  "platform": "macOS 26.6.2 ARM64; private loopback 50567",
+  "hosting_tests": {
+    "passed": 62,
+    "failed": 0,
+    "skipped": 0
+  },
+  "native_fixture": "actual registration, room/group/ACL allow+deny, persisted ban identifier and banned certificate rejection passed",
+  "limitations": "Modern server only; historical server seed/restore and fresh combined CodeQL acceptance remain required. No production protocol digest changed, query excluded or alert dismissed."
+}
