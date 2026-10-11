@@ -112,5 +112,24 @@
     "hosted_head": "101d94a0ffee4e00f24b4fbe8a427d620e534e10",
     "hosted_builds_and_preview": "passed; publication skipped",
     "combined_codeql": "failed: one high fixture SHA1 annotation; older master configuration warning"
+  },
+  "latest_save_candidate": {
+    "source_head": "09e9b92a28cdeb3d5dd0eb4e3d51eb512e99eaaa",
+    "evidence": "atomic-transfer-save/revision-09e9b92/validation.json",
+    "mac_enabled_ctest_passed": 41,
+    "linux_enabled_ctest_passed": 41,
+    "windows_transfer_cases_passed": 52,
+    "qualification": "Native automated checks only; new hosted revision and installed GUI/device/shipping acceptance pending"
+  },
+  "pacing_audio_hosted": {
+    "source_head": "17f0807e25f8924948c0c391e96d5742c51f817a",
+    "ci_run": 38104027704,
+    "all_four_builds_and_qr": "passed",
+    "preview_run": 38104027783,
+    "preview": "all package and QR gates passed; release publication skipped",
+    "security_run": 38104027734,
+    "combined_comparison": "passed; zero annotations; no new alerts in changed code",
+    "existing_results_per_analysis": 33,
+    "evidence": "codeql-comparison/validation.json"
   }
 }

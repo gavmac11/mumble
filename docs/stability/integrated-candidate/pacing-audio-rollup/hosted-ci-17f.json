@@ -1,0 +1,49 @@
+{
+  "conclusion": "success",
+  "headSha": "17f0807e25f8924948c0c391e96d5742c51f817a",
+  "jobs": [
+    {
+      "name": "fetch_build_number",
+      "databaseId": 114365615702,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/gavmac11/mumble/actions/runs/38104027704/job/114365615702"
+    },
+    {
+      "name": "build (macos-15, static, arm64)",
+      "databaseId": 114365635955,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/gavmac11/mumble/actions/runs/38104027704/job/114365635955"
+    },
+    {
+      "name": "build (windows-2025-vs2026, static, x86_64)",
+      "databaseId": 114365635968,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/gavmac11/mumble/actions/runs/38104027704/job/114365635968"
+    },
+    {
+      "name": "build (macos-15-intel, static, x86_64)",
+      "databaseId": 114365635973,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/gavmac11/mumble/actions/runs/38104027704/job/114365635973"
+    },
+    {
+      "name": "build (ubuntu-24.04, shared, x86_64)",
+      "databaseId": 114365635996,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/gavmac11/mumble/actions/runs/38104027704/job/114365635996"
+    },
+    {
+      "name": "Decode complete safety QR data",
+      "databaseId": 114370849820,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/gavmac11/mumble/actions/runs/38104027704/job/114370849820"
+    }
+  ],
+  "status": "completed"
+}
