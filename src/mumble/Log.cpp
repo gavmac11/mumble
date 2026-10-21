@@ -971,7 +971,7 @@ void Log::log(MsgType mt, const QString &console, const QString &terse, bool own
 	}
 
 	if (!ownMessage) {
-		if (!(Global::get().mw->isActiveWindow() && Global::get().mw->qdwLog->isVisible())) {
+		if (!(Global::get().mw->qteLog->window()->isActiveWindow() && Global::get().mw->qteLog->isVisible())) {
 			// Message notification with window highlight
 			if (flags & Settings::LogHighlight) {
 				emit highlightSpawned();

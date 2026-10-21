@@ -40,6 +40,7 @@ function(mumble_client_test_runtime test_name)
 endfunction()
 
 if(client)
+	add_subdirectory("TestChatWindow")
 	add_subdirectory("TestServerHandlerCrypt")
 	add_subdirectory("TestAudioWizard")
 	add_subdirectory("TestDatabasePath")

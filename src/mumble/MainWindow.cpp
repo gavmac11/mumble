@@ -14,6 +14,7 @@
 #include "BanEditor.h"
 #include "Cert.h"
 #include "Channel.h"
+#include "ChatWindow.h"
 #include "ConnectDialog.h"
 #include "Connection.h"
 #include "Database.h"
@@ -102,11 +103,13 @@
 #include <QtGui/QImageReader>
 #include <QtGui/QScreen>
 #include <QtGui/QWindow>
+#include <QtWidgets/QDialog>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QScrollBar>
 #include <QtWidgets/QToolTip>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWhatsThis>
 
 #include "widgets/BanDialog.h"
@@ -719,6 +722,7 @@ void MainWindow::setShowDockTitleBars(bool doShow) {
 
 MainWindow::~MainWindow() {
 	m_videoPacketPacer.reset();
+	restoreChatWidgets();
 	delete qwPTTButtonWidget;
 	delete qdwLog->titleBarWidget();
 	delete pmModel;
@@ -1578,12 +1582,21 @@ void MainWindow::storeState(const bool minimalView) {
 		return;
 	}
 
+	// Persist the dock visibility from before popping out, so the next launch has its chat panes.
+	if (m_chatWindow && !minimalView) {
+		qdwLog->setVisible(m_chatLogWasVisible);
+		qdwChat->setVisible(m_chatBarWasVisible);
+	}
 	if (minimalView) {
 		Global::get().s.qbaMinimalViewGeometry = saveGeometry();
 		Global::get().s.qbaMinimalViewState    = saveState(stateVersion());
 	} else {
 		Global::get().s.qbaMainWindowGeometry = saveGeometry();
 		Global::get().s.qbaMainWindowState    = saveState(stateVersion());
+	}
+	if (m_chatWindow) {
+		qdwLog->hide();
+		qdwChat->hide();
 	}
 }
 
@@ -1693,6 +1706,10 @@ void MainWindow::setupView(bool toggle_minimize) {
 		qdwLog->setVisible(false);
 		qdwChat->setVisible(false);
 		qtIconToolbar->setVisible(false);
+	}
+	if (m_chatWindow) {
+		qdwLog->hide();
+		qdwChat->hide();
 	}
 	menuBar()->setVisible(showit);
 
@@ -2441,6 +2458,65 @@ void MainWindow::autocompleteUsername() {
 	qtvUsers->setCurrentIndex(pmModel->index(ClientUser::get(res)));
 }
 
+void MainWindow::on_qaConfigPopOutChat_triggered(bool checked) {
+	if (!checked) {
+		if (m_chatWindow) {
+			m_chatWindow->close();
+		}
+		return;
+	}
+	if (m_chatWindow) {
+		m_chatWindow->show();
+		m_chatWindow->raise();
+		m_chatWindow->activateWindow();
+		return;
+	}
+
+	m_chatLogWasVisible = Global::get().s.bMinimalView || !qdwLog->isHidden();
+	m_chatBarWasVisible = Global::get().s.bMinimalView || !qdwChat->isHidden();
+	m_chatWindow        = new ChatWindow(this);
+	m_chatWindow->setWindowTitle(tr("Mumble Chat"));
+	m_chatWindow->setAttribute(Qt::WA_DeleteOnClose);
+	m_chatWindow->resize(600, 450);
+	auto *layout = new QVBoxLayout(m_chatWindow);
+	// Move the existing widgets so history, drafts, targets, and signal connections survive.
+	layout->addWidget(qteLog, 1);
+	layout->addWidget(qteChat);
+	qteLog->show();
+	qteChat->show();
+	qdwLog->hide();
+	qdwChat->hide();
+	qdwLog->toggleViewAction()->setEnabled(false);
+	qdwChat->toggleViewAction()->setEnabled(false);
+	connect(m_chatWindow, &QDialog::finished, this, &MainWindow::restoreChatWidgets);
+	if (!m_chatWindowGeometry.isEmpty()) {
+		m_chatWindow->restoreGeometry(m_chatWindowGeometry);
+	}
+	m_chatWindow->show();
+	qteChat->setFocus();
+}
+
+void MainWindow::restoreChatWidgets() {
+	if (!m_chatWindow) {
+		return;
+	}
+	m_chatWindowGeometry = m_chatWindow->saveGeometry();
+	m_chatWindow->layout()->removeWidget(qteLog);
+	m_chatWindow->layout()->removeWidget(qteChat);
+	qdwLog->setWidget(qteLog);
+	qdwChat->setWidget(qteChat);
+	qteLog->show();
+	qteChat->show();
+	qdwLog->setVisible(m_chatLogWasVisible && !Global::get().s.bMinimalView);
+	qdwChat->setVisible(m_chatBarWasVisible && !Global::get().s.bMinimalView);
+	qdwLog->toggleViewAction()->setEnabled(true);
+	qdwChat->toggleViewAction()->setEnabled(true);
+	m_chatWindow->hide();
+	m_chatWindow->deleteLater();
+	m_chatWindow = nullptr;
+	qaConfigPopOutChat->setChecked(false);
+}
+
 void MainWindow::on_qmConfig_aboutToShow() {
 	// Don't remove the config, as that messes up OSX.
 	for (QAction *a : qmConfig->actions()) {
@@ -2455,6 +2531,7 @@ void MainWindow::on_qmConfig_aboutToShow() {
 	qmConfig->addAction(qaAudioTTS);
 	qmConfig->addSeparator();
 	qmConfig->addAction(qaConfigMinimal);
+	qmConfig->addAction(qaConfigPopOutChat);
 	qmConfig->addAction(qaFilterToggle);
 
 	qaTalkingUIToggle->setChecked(Global::get().talkingUI && Global::get().talkingUI->isVisible());
@@ -4002,7 +4079,7 @@ void MainWindow::showRaiseWindow() {
 }
 
 void MainWindow::highlightWindow() {
-	QApplication::alert(this);
+	QApplication::alert(qteLog->window());
 }
 
 void MainWindow::on_qaTalkingUIToggle_triggered() {

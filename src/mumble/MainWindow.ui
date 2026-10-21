@@ -817,6 +817,17 @@ the channel's context menu.</string>
     <string>Copies a link to this channel to the clipboard.</string>
    </property>
   </action>
+  <action name="qaConfigPopOutChat">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Pop Out Chat</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the chat history and message input in a separate window</string>
+   </property>
+  </action>
   <action name="qaConfigMinimal">
    <property name="checkable">
     <bool>true</bool>

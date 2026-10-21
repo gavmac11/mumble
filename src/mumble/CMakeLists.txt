@@ -187,6 +187,7 @@ set(MUMBLE_SOURCES
 	"LookConfig.h"
 	"LookConfig.ui"
 	"MainWindow.cpp"
+	"ChatWindow.h"
 	"MainWindow.h"
 	"MainWindow.ui"
 	"Markdown.cpp"
