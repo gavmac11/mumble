@@ -1,0 +1,15 @@
+{
+  "pass": true,
+  "client": "/home/agent/.cache/mumble-upstream-ref/c7a8993caa4b657c93d3c2456e6cf2eaaafe9e85/build/mumble",
+  "server": "/home/agent/.cache/mumble-sync-build/2026-10-21/mumble-server",
+  "identity_prompt_shown": false,
+  "user_list": true,
+  "join_channel": true,
+  "text_both_directions": true,
+  "channel_moves": true,
+  "connected_seconds": 125.43,
+  "observer_frames": 58,
+  "observer_errors": [],
+  "intentional_shutdown": true,
+  "client_exit": -15
+}

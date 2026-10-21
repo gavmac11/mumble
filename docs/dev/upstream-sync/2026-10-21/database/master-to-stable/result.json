@@ -1,0 +1,6 @@
+{
+  "pass": false,
+  "fixture": "/home/agent/.cache/mumble-sync-evidence/2026-10-21/interop-pass-master-server",
+  "server": "/home/agent/.cache/mumble-upstream-ref/dfbac8d3d9c967003e74b4ffc5610f7d45e8f666/build/mumble-server",
+  "error": "AssertionError('Server exited with 1')"
+}

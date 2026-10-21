@@ -620,6 +620,8 @@ message ServerConfig {
 	// Ciphertext upload/aggregate egress budgets, in bytes per second; zero = unlimited.
 	optional uint64 file_transfer_rate = 10;
 	optional uint64 file_transfer_aggregate_rate = 11;
+	// Version 1: protobuf UDP video relay. Absent on official servers.
+	optional uint32 video_relay_version = 12;
 	// Whether using Mumble's recording feature is allowed on the server
 	optional bool recording_allowed = 7;
 }
@@ -664,7 +666,7 @@ message FileTransferControl {
 	// The session IDs of the users this record is routed to.
 	repeated uint32 target_session = 2;
 	// Opaque control payload (handshake frame or AEAD control record).
-	required bytes payload = 3;
+	optional bytes payload = 3;
 }
 
 // Chat file transfer: one encrypted chunk, relayed only to explicit recipients.
@@ -673,13 +675,13 @@ message FileData {
 	// server.
 	optional uint32 actor = 1;
 	// 16 random bytes chosen by the sender identifying the transfer.
-	required bytes transfer_id = 2;
+	optional bytes transfer_id = 2;
 	// Zero-based index of this chunk.
-	required uint64 chunk_index = 3;
+	optional uint64 chunk_index = 3;
 	// Total number of chunks (hint only; the signed manifest is authoritative).
 	optional uint64 chunk_count = 4;
 	// AEAD ciphertext including the 16-byte authentication tag.
-	required bytes data = 5;
+	optional bytes data = 5;
 	// Required for relay version 1; empty targets never broadcast.
 	repeated uint32 target_session = 6;
 	// Server-only refusal to the authenticated sender. Clients cannot set this.

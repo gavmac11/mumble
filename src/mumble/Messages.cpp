@@ -132,8 +132,11 @@ void MainWindow::msgServerSync(const MumbleProto::ServerSync &msg) {
 	Global::get().uiSession = msg.session();
 
 #ifdef USE_FILE_SHARING
-	// First-run identity creation / unlock, then advertise capability.
-	Global::get().mw->bootstrapFileTransferIdentity();
+	// A capability config can precede sync; otherwise onFileTransferAvailabilityChanged()
+	// runs the setup once it arrives.
+	if (Global::get().fileTransferManager && Global::get().fileTransferManager->sendingAvailable()) {
+		bootstrapFileTransferIdentity();
+	}
 #endif
 
 	// Send an initial ping and establish the UDP connection unless TCP mode is forced
@@ -207,7 +210,13 @@ void MainWindow::msgServerSync(const MumbleProto::ServerSync &msg) {
 ///
 /// @param msg The message object
 void MainWindow::msgServerConfig(const MumbleProto::ServerConfig &msg) {
+	if (msg.has_video_relay_version()) {
+		m_videoRelaySupported = msg.video_relay_version() >= 1;
+		updateScreenShareAvailability();
+	}
 #ifdef USE_FILE_SHARING
+	// The manager owns the negotiated capability and emits availabilityChanged(), which
+	// updates the send button and runs the identity setup and capability announcement.
 	if (Global::get().fileTransferManager)
 		Global::get().fileTransferManager->configureRelay(msg);
 #endif

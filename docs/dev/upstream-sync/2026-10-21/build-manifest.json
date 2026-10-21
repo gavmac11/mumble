@@ -1,0 +1,32 @@
+{
+  "fork_production_commit": "ad80032e4",
+  "harness_commit": "1656574af",
+  "upstream": "c7a8993caa4b657c93d3c2456e6cf2eaaafe9e85",
+  "origin_master": "6c22acff6b1ef3fc9a776dd81ccd02108d5804b6",
+  "fork_binaries": {
+    "mumble": "2d48bd155506fc67f0e948c37691e7bd66eca76fda4cfbb730f8c5491e4e1fba",
+    "mumble-server": "3455b42034c0bdba1737cdf46caafb417a2043c59cee3baae5c8dd856f294d05"
+  },
+  "references": [
+    {
+      "sha": "c7a8993caa4b657c93d3c2456e6cf2eaaafe9e85",
+      "source_clean": true,
+      "configuration": "Linux Debug, non-unity, client/server, plugins off, tests off, overlay cross-compile off, LTO off",
+      "binaries": {
+        "mumble": "b9990af7e29983621262c59aee67a53a3aa389920f862f88be9af8cd3ad83380",
+        "mumble-server": "90b60aa6c19507702494925b400dac53b09413933c38c82614d04210bf5fcbd4"
+      },
+      "label": "official master"
+    },
+    {
+      "sha": "dfbac8d3d9c967003e74b4ffc5610f7d45e8f666",
+      "source_clean": true,
+      "configuration": "Linux Debug, non-unity, client/server, plugins off, tests off, overlay cross-compile off, LTO off, BUILD_NUMBER=939",
+      "binaries": {
+        "mumble": "4f37f3db06b4811f9b373b7d7e3ab2125c3742678c56f8127ed97234a7b38fc0",
+        "mumble-server": "2f8b1012665b546b017878912e03097cebb8878e2f648a29fd1766432e5eb0b0"
+      },
+      "label": "v1.5.939"
+    }
+  ]
+}

@@ -636,6 +636,7 @@ void Server::msgAuthenticate(ServerUser *uSource, MumbleProto::Authenticate &msg
 	mpsc.set_recording_allowed(allowRecording);
 	mpsc.set_max_file_transfer_size(iMaxFileSize);
 	mpsc.set_file_transfer_relay_version(1);
+	mpsc.set_video_relay_version(1);
 	mpsc.set_file_transfer_rate(static_cast< uint64_t >(iMaxFileBandwidth > 0 ? qMax(1, iMaxFileBandwidth / 8) : 0));
 	mpsc.set_file_transfer_aggregate_rate(
 		static_cast< uint64_t >(iMaxFileBandwidthAggregate > 0 ? qMax(1, iMaxFileBandwidthAggregate / 8) : 0));
@@ -2714,9 +2715,10 @@ void Server::msgFileData(ServerUser *uSource, MumbleProto::FileData &msg) {
 			failure.set_relay_retry_after_ms(250);
 		sendMessage(uSource, failure);
 	};
-	if (msg.transfer_id().size() != 16 || msg.has_relay_error() || msg.has_relay_retry_after_ms()
-		|| msg.has_relay_accepted() || msg.data().size() < 16 || msg.data().size() > 1024 * 1024 + 16
-		|| msg.target_session_size() == 0 || msg.target_session_size() > 64 || !uSource->bFileTransferCapable) {
+	if (!msg.has_chunk_index() || msg.transfer_id().size() != 16 || msg.has_relay_error()
+		|| msg.has_relay_retry_after_ms() || msg.has_relay_accepted() || msg.data().size() < 16
+		|| msg.data().size() > 1024 * 1024 + 16 || msg.target_session_size() == 0 || msg.target_session_size() > 64
+		|| !uSource->bFileTransferCapable) {
 		refuse("Invalid file relay request");
 		return;
 	}

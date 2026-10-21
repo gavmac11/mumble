@@ -158,6 +158,9 @@ public:
 	/// Whether this client announced the current share to the server. Kept separately from
 	/// ClientUser::bScreenSharing because that flag is only updated after the server echoes it.
 	bool m_selfShareAnnounced = false;
+	/// Whether the connected server advertised video relay support (ServerConfig::video_relay_version).
+	bool m_videoRelaySupported = false;
+	void updateScreenShareAvailability();
 	std::unique_ptr< Mumble::Video::PacketPacer > m_videoPacketPacer;
 	int m_videoPacerConnectionId = 0;
 
@@ -348,6 +351,9 @@ public slots:
 	void on_qtbSendFile_clicked();
 
 	void startFileSend(const QString &path);
+	/// Explains why sending is unavailable and returns false; returns true when sending is possible.
+	bool ensureFileSendAvailable();
+	void updateFileTransferAvailability();
 	void bootstrapFileTransferIdentity();
 	bool promptForFileTransferIdentity();
 	void announceFileTransferCapability();
@@ -388,6 +394,7 @@ public slots:
 							const QString &safetyNumber);
 	void onFilePeerBlocked(unsigned int peerSession, const QString &peerName);
 	void onFilePasswordRequired(const QByteArray &transferId, const QString &fileName);
+	void onFileTransferAvailabilityChanged(bool available);
 #endif
 	void on_gsToggleTalkingUI_triggered(bool, QVariant);
 	void on_gsToggleSearch_triggered(bool, QVariant);

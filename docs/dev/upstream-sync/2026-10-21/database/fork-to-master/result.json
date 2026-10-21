@@ -1,0 +1,7 @@
+{
+  "pass": true,
+  "fixture": "/home/agent/.cache/mumble-sync-evidence/2026-10-21/master-client-fork-server",
+  "server": "/home/agent/.cache/mumble-upstream-ref/c7a8993caa4b657c93d3c2456e6cf2eaaafe9e85/build/mumble-server",
+  "stored_authentication_and_channel": true,
+  "integrity_check": "ok"
+}

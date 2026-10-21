@@ -373,7 +373,7 @@ void FileTransferManager::handleControlMessage(const MumbleProto::FileTransferCo
 }
 
 void FileTransferManager::handleDataMessage(const MumbleProto::FileData &msg) {
-	if (!msg.has_transfer_id() || !msg.has_data() || msg.transfer_id().size() != 16) {
+	if (!msg.has_transfer_id() || !msg.has_chunk_index() || !msg.has_data() || msg.transfer_id().size() != 16) {
 		return;
 	}
 	const unsigned int actor = msg.has_actor() ? msg.actor() : 0;
@@ -772,9 +772,14 @@ QString FileTransferManager::safetyNumberFor(unsigned int peerSession) {
 }
 
 void FileTransferManager::disconnectCleanup() {
-	const quint64 generation = ++m_connectionGeneration;
-	m_relaySupported         = false;
+	m_relaySupported = false;
 	m_relayRate = m_relayAggregateRate = m_relayMaxSize = 0;
+	resetTransfers();
+	updateAvailability();
+}
+
+void FileTransferManager::resetTransfers() {
+	const quint64 generation = ++m_connectionGeneration;
 	if (m_engine) {
 		QMetaObject::invokeMethod(
 			m_engine,
@@ -898,11 +903,25 @@ void FileTransferManager::applyEngineConfig() {
 	const auto config = engineConfig();
 	QMetaObject::invokeMethod(m_engine, [this, config]() { m_engine->setConfig(config); }, Qt::QueuedConnection);
 
-	// Invalidate only on the enabled-to-disabled transition.
+	// Invalidate transfers only on the enabled-to-disabled transition. The server's relay
+	// capability is kept so that re-enabling the feature mid-session works without reconnecting.
 	if (m_featureEnabled && !s.bFTEnabled) {
-		disconnectCleanup();
+		resetTransfers();
 	}
 	m_featureEnabled = s.bFTEnabled;
+	updateAvailability();
+}
+
+bool FileTransferManager::sendingAvailable() const {
+	return m_relaySupported && Global::get().s.bFTEnabled;
+}
+
+void FileTransferManager::updateAvailability() {
+	const bool available = sendingAvailable();
+	if (available != m_sendingAvailable) {
+		m_sendingAvailable = available;
+		emit availabilityChanged(available);
+	}
 }
 
 void FileTransferManager::configureRelay(const MumbleProto::ServerConfig &config) {
@@ -915,13 +934,18 @@ void FileTransferManager::configureRelay(const MumbleProto::ServerConfig &config
 	if (config.has_max_file_transfer_size())
 		m_relayMaxSize = config.max_file_transfer_size();
 	applyEngineConfig();
+	// applyEngineConfig() returns early without an engine; capability still has to be published.
+	updateAvailability();
 }
 
 QString FileTransferManager::sendAvailabilityError() const {
-	if (!m_lastSendError.isEmpty())
-		return m_lastSendError;
+	// Current availability takes precedence over the reason a previous send failed.
+	if (!Global::get().s.bFTEnabled)
+		return tr("File transfers are disabled. Turn on \"Enable file transfers\" in the File Sharing settings.");
 	if (!m_relaySupported)
 		return tr("This server does not support private file delivery. Ask its administrator to update the server.");
+	if (!m_lastSendError.isEmpty())
+		return m_lastSendError;
 	return tr("The file exceeds the server limit, or a selected recipient changed. Check the file size and choose the "
 			  "recipients again.");
 }

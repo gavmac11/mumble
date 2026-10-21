@@ -184,6 +184,47 @@ private slots:
 		QVERIFY(QMetaObject::invokeMethod(manager.m_engine, []() {}, Qt::BlockingQueuedConnection));
 	}
 
+	void availabilityFollowsRelayAndSettingsToggle() {
+		FileTransferManager manager;
+		QSignalSpy changes(&manager, &FileTransferManager::availabilityChanged);
+		QVERIFY(!manager.sendingAvailable());
+		QVERIFY(manager.sendAvailabilityError().contains("does not support"));
+
+		MumbleProto::ServerConfig relay;
+		relay.set_file_transfer_relay_version(1);
+		manager.configureRelay(relay);
+		QVERIFY(manager.sendingAvailable());
+		QCOMPARE(changes.count(), 1);
+		QCOMPARE(changes.takeFirst().at(0).toBool(), true);
+
+		// A repeated capability announcement is not a change.
+		manager.configureRelay(relay);
+		QCOMPARE(changes.count(), 0);
+
+		// Turning the feature off keeps the negotiated relay capability.
+		m_global->s.bFTEnabled = false;
+		manager.applyEngineConfig();
+		QVERIFY(!manager.sendingAvailable());
+		QVERIFY(manager.relaySupported());
+		QVERIFY(manager.sendAvailabilityError().contains("disabled"));
+		QCOMPARE(changes.count(), 1);
+		QCOMPARE(changes.takeFirst().at(0).toBool(), false);
+
+		// Re-enabling mid-session restores availability without a new ServerConfig.
+		m_global->s.bFTEnabled = true;
+		manager.applyEngineConfig();
+		QVERIFY(manager.sendingAvailable());
+		QCOMPARE(changes.count(), 1);
+		QCOMPARE(changes.takeFirst().at(0).toBool(), true);
+
+		manager.disconnectCleanup();
+		QVERIFY(!manager.sendingAvailable());
+		QVERIFY(!manager.relaySupported());
+		QCOMPARE(changes.count(), 1);
+		QCOMPARE(changes.takeFirst().at(0).toBool(), false);
+		QVERIFY(QMetaObject::invokeMethod(manager.m_engine, []() {}, Qt::BlockingQueuedConnection));
+	}
+
 	void repeatedFirstContactsKeepOnePrompt() {
 		FileTransferManager manager;
 		QVERIFY(setupTrustFixture(manager));
@@ -294,6 +335,7 @@ private slots:
 		error.set_actor(42);
 		error.set_transfer_id(id.constData(), static_cast< size_t >(id.size()));
 		error.set_data("");
+		error.set_chunk_index(0);
 		error.set_relay_error("injected peer error");
 		manager.handleDataMessage(error);
 		QVERIFY(QMetaObject::invokeMethod(manager.m_engine, []() {}, Qt::BlockingQueuedConnection));
@@ -301,6 +343,15 @@ private slots:
 		for (const auto &event : updates)
 			QVERIFY(event.first().value< PQFT::FTTransferInfo >().state != PQFT::FTTransferInfo::State::Failed);
 		error.set_actor(41);
+		error.clear_chunk_index();
+		manager.handleDataMessage(error);
+		QVERIFY(QMetaObject::invokeMethod(manager.m_engine, []() {}, Qt::BlockingQueuedConnection));
+		QCoreApplication::sendPostedEvents(&manager, QEvent::MetaCall);
+		for (const auto &event : updates) {
+			QVERIFY(event.first().value< PQFT::FTTransferInfo >().state != PQFT::FTTransferInfo::State::Failed);
+		}
+		// A missing index must not be interpreted as the first chunk, even for relay responses.
+		error.set_chunk_index(0);
 		manager.handleDataMessage(error);
 		QTRY_VERIFY_WITH_TIMEOUT(
 			updates.last().first().value< PQFT::FTTransferInfo >().state == PQFT::FTTransferInfo::State::Failed, 5000);

@@ -120,6 +120,10 @@ public:
 	void applyEngineConfig();
 	void configureRelay(const MumbleProto::ServerConfig &config);
 	QString sendAvailabilityError() const;
+	/// Whether the connected server advertised a file-transfer relay. GUI thread only.
+	bool relaySupported() const { return m_relaySupported; }
+	/// Whether sending is possible right now: the relay is supported and the feature is enabled.
+	bool sendingAvailable() const;
 
 signals:
 	/// Queued from the worker whenever a transfer's state changes; also
@@ -133,6 +137,8 @@ signals:
 	void firstContactCancelled(quint64 promptToken);
 	/// An incoming password-mode transfer needs its password.
 	void passwordRequired(const QByteArray &transferId, const QString &fileName);
+	/// sendingAvailable() changed (server capability, disconnect or the settings toggle).
+	void availabilityChanged(bool available);
 
 private:
 	friend class TestFileTransferManager;
@@ -142,6 +148,9 @@ private:
 	void rejectReceive(const PQFT::FTTransferInfo &info, PQFT::TrustState state);
 	QByteArray serverDigest() const;
 	PQFT::FileTransferEngine::Config engineConfig() const;
+	/// Drop in-flight transfers and prompts without forgetting the server's relay capability.
+	void resetTransfers();
+	void updateAvailability();
 	QString m_lastSendError;
 	// Private dependency seam for isolated trust-store fixtures without a network or personal database.
 	std::function< QByteArray() > m_serverDigestProvider;
@@ -152,6 +161,7 @@ private:
 	quint64 m_relayAggregateRate   = 0;
 	quint64 m_relayMaxSize         = 0;
 	bool m_featureEnabled          = false;
+	bool m_sendingAvailable        = false;
 	quint64 m_connectionGeneration = 0; // GUI thread
 	quint64 m_engineGeneration     = 0; // worker thread
 

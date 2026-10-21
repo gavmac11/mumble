@@ -50,7 +50,7 @@ Libraries: system OpenSSL 3.x (X25519, AES-GCM, HKDF, SHA-384, HMAC), liboqs ≥
 message FileTransferControl {
 	optional uint32 actor = 1;            // sender's session; SET BY SERVER (anti-spoof)
 	repeated uint32 target_session = 2;   // routing targets
-	required bytes payload = 3;           // opaque ≤ 64 KiB (§4 framing inside)
+	optional bytes payload = 3;           // opaque ≤ 64 KiB (§4 framing inside)
 }
 ```
 Murmur handling: authenticated capable senders only; per-user leaky bucket
@@ -63,10 +63,10 @@ The server replaces `actor` and removes unknown fields. No persistence.
 ```
 message FileData {
     optional uint32 actor = 1;           // SET BY SERVER
-    required bytes transfer_id = 2;      // 16 random bytes
-    required uint64 chunk_index = 3;
+    optional bytes transfer_id = 2;      // 16 random bytes
+    optional uint64 chunk_index = 3;
     optional uint64 chunk_count = 4;     // signed manifest is authoritative
-    required bytes data = 5;             // ciphertext + tag, 16 B–1 MiB + 16 B
+    optional bytes data = 5;             // ciphertext + tag, 16 B–1 MiB + 16 B
     repeated uint32 target_session = 6;  // mandatory, never broadcast
     optional string relay_error = 7;    // server-only diagnostic
     optional uint32 relay_retry_after_ms = 8;
@@ -101,6 +101,11 @@ record is written, and the spool is capped at the manifest-implied size
 grow a transfer beyond its signed size.
 
 ### Capability and limits
+- All extension fields are optional on the wire. Handlers enforce payload, transfer ID,
+  chunk index (including explicit zero), and data presence before processing.
+- `ServerConfig.video_relay_version` (12, value 1) enables video sharing. Clients
+  disable sharing until the server advertises support; official servers omit it.
+  Partial config messages preserve the negotiated capability.
 - `UserState.file_transfer_capable` (25) and `file_transfer_delivery_receipts` (26)
   are echoed for current and joining peers; both are required by the new relay/client.
 - `ServerConfig.max_file_transfer_size` (8), `file_transfer_relay_version` (9, value 1),

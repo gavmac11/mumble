@@ -1,0 +1,46 @@
+********* Start testing of TestChatWebM *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 13.2.0), ubuntu 24.04
+PASS   : TestChatWebM::initTestCase()
+PASS   : TestChatWebM::acceptsWebmFileDrop()
+PASS   : TestChatWebM::refusesOversizedWebm()
+PASS   : TestChatWebM::videoToImgRejectsGarbage()
+PASS   : TestChatWebM::videoToImgBudgetTooLarge()
+[matroska,webm @ 0x651e4a0ffbc0] File ended prematurely at pos. 8 (0x8)
+[matroska,webm @ 0x651e4a0ffbc0] EBML header parsing failed
+PASS   : TestChatWebM::placeholderForUndecodableWebm()
+[matroska,webm @ 0x651e4a0ffbc0] File ended prematurely at pos. 8 (0x8)
+[matroska,webm @ 0x651e4a0ffbc0] EBML header parsing failed
+PASS   : TestChatWebM::validationDocumentCreatesNoPlayers()
+PASS   : TestChatWebM::posterDoesNotAutoplay()
+PASS   : TestChatWebM::clickTogglesPlayback()
+[opus @ 0x651e4a180340] Could not update timestamps for skipped samples.
+QINFO  : TestChatWebM::audioPlaybackAdvancesClockAndResumes() audio output: true clock: 140 queued frames: 3 decoder eof: false buffered audio: 73504
+FAIL!  : TestChatWebM::audioPlaybackAdvancesClockAndResumes() 'clockWhilePlaying >= 400' returned FALSE. ()
+   Loc: [/home/agent/.t3/worktrees/mumble/t3-a063923c/src/tests/TestChatWebM/TestChatWebM.cpp(846)]
+PASS   : TestChatWebM::idleAudioRecoveryPreservesQueuedPcm()
+[opus @ 0x651e4a188840] Could not update timestamps for skipped samples.
+FAIL!  : TestChatWebM::loopsAfterEnd() 'player->currentClockMs() > 2000' returned FALSE. (playback clock did not continue past the end of the clip (looping broken))
+   Loc: [/home/agent/.t3/worktrees/mumble/t3-a063923c/src/tests/TestChatWebM/TestChatWebM.cpp(933)]
+[opus @ 0x651e4a144c80] Could not update timestamps for skipped samples.
+[opus @ 0x651e4a144c80] Could not update timestamps for discarded samples.
+FAIL!  : TestChatWebM::resumeAtClipEndRestartsImmediately() QTestLib: This test case check ("player->decoderAtEof()") failed because the requested timeout (3000 ms) was too short, 3300 ms would have been sufficient this time.
+   Loc: [/home/agent/.t3/worktrees/mumble/t3-a063923c/src/tests/TestChatWebM/TestChatWebM.cpp(963)]
+[opus @ 0x651e4a1ae140] Could not update timestamps for skipped samples.
+[opus @ 0x651e4a1ae140] Could not update timestamps for discarded samples.
+FAIL!  : TestChatWebM::pauseResumeKeepsFrameSchedule() QTestLib: This test case check ("player->decoderAtEof()") failed because the requested timeout (3000 ms) was too short, 3250 ms would have been sufficient this time.
+   Loc: [/home/agent/.t3/worktrees/mumble/t3-a063923c/src/tests/TestChatWebM/TestChatWebM.cpp(1002)]
+PASS   : TestChatWebM::silentVideoPacesOnWallClock()
+PASS   : TestChatWebM::releasesPlayerOnClear()
+PASS   : TestChatWebM::retainsPlayerUntilLastReferenceIsRemoved()
+PASS   : TestChatWebM::releasesPlayerOnMaximumBlockEviction()
+PASS   : TestChatWebM::playingCapPausesOldest()
+PASS   : TestChatWebM::totalCapDestroysOldest()
+PASS   : TestChatWebM::evictedVideoIsRecreatedOnToggle()
+PASS   : TestChatWebM::scalesVideoWithChatWindow()
+[opus @ 0x651e4a267780] Could not update timestamps for skipped samples.
+[opus @ 0x651e4a267780] Could not update timestamps for discarded samples.
+PASS   : TestChatWebM::audioDecodesToPcm()
+PASS   : TestChatWebM::pacingMath()
+PASS   : TestChatWebM::cleanupTestCase()
+Totals: 21 passed, 4 failed, 0 skipped, 0 blacklisted, 17044ms
+********* Finished testing of TestChatWebM *********

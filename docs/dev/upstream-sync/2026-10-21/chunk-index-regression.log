@@ -1,0 +1,57 @@
+********* Start testing of TestFileTransferE2E *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 13.2.0), ubuntu 24.04
+Initializing settings from /tmp/TestFileTransferE2E-IqIqCE/server/murmur.ini (basepath /tmp/TestFileTransferE2E-IqIqCE/server)
+MetaParams: TLS cipher preference is "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:AES256-SHA:AES128-SHA"
+<I>2026-10-21 10:15:14.998 SSL: OpenSSL version is 'OpenSSL 3.0.13 30 Jan 2024'
+<W>2026-10-21 10:15:16.160 Performed initial PBKDF2 benchmark. Will use 32000 iterations as default
+<W>2026-10-21 10:15:16.170 Murmur 1.7.0 running on Linux: Ubuntu 24.04.4 LTS [x64]: Booting servers
+<W>2026-10-21 10:15:16.232 Created new server default instance
+PASS   : TestFileTransferE2E::initTestCase()
+<W>2026-10-21 10:15:16.255 0 => Server listening on 0.0.0.0:52187
+<W>2026-10-21 10:15:16.278 0 => Generating new server certificate.
+<W>2026-10-21 10:15:16.386 0 => Not registering server as public
+<W>2026-10-21 10:15:16.407 0 => <0:(-1)> New connection: 127.0.0.1:38220
+<W>2026-10-21 10:15:16.422 0 => <0:(-1)> New connection: 127.0.0.1:38236
+<W>2026-10-21 10:15:16.436 0 => <0:(-1)> Connection closed: The remote host closed the connection [1]
+<W>2026-10-21 10:15:16.455 0 => <0:(-1)> New connection: 127.0.0.1:38238
+== Version:
+release: "file-transfer-e2e"
+version_v2: 4294967296
+<W>2026-10-21 10:15:16.473 0 => <0:(-1)> Client version 0.1.0 ( : file-transfer-e2e)
+== Authenticate:
+username: "index-sender"
+<W>2026-10-21 10:15:16.486 0 => Starting voice thread
+<W>2026-10-21 10:15:16.500 0 => CELT codec switch -7ffffff5 0 (prefer -7ffffff5) (Opus 1)
+<W>2026-10-21 10:15:16.516 0 => <1:index-sender(-1)> Authenticated
+== Version:
+release: "file-transfer-e2e"
+version_v2: 4294967296
+<W>2026-10-21 10:15:16.531 0 => <0:(-1)> Client version 0.1.0 ( : file-transfer-e2e)
+== Authenticate:
+username: "index-receiver"
+<W>2026-10-21 10:15:16.544 0 => <2:index-receiver(-1)> Authenticated
+PASS   : TestFileTransferE2E::missingChunkIndexIsRefused()
+== UserState:
+session: 1
+file_transfer_capable: true
+file_transfer_delivery_receipts: true
+== UserState:
+session: 2
+file_transfer_capable: true
+file_transfer_delivery_receipts: true
+== FileData:
+transfer_id: "iiiiiiiiiiiiiiii"
+data: "dddddddddddddddd"
+target_session: 2
+== FileData:
+transfer_id: "iiiiiiiiiiiiiiii"
+chunk_index: 0
+data: "dddddddddddddddd"
+target_session: 2
+<W>2026-10-21 10:15:16.710 Killing running servers
+<W>2026-10-21 10:15:16.720 0 => Ending voice thread
+<W>2026-10-21 10:15:16.738 0 => Stopped
+<W>2026-10-21 10:15:16.738 Shutting down
+PASS   : TestFileTransferE2E::cleanupTestCase()
+Totals: 3 passed, 0 failed, 0 skipped, 0 blacklisted, 1763ms
+********* Finished testing of TestFileTransferE2E *********

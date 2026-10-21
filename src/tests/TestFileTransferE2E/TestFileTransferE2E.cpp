@@ -162,12 +162,16 @@ public:
 	PQFT::FileTransferEngine &engine() { return m_engine; }
 
 	quint64 receivedFileControl = 0;
-	quint64 receivedFileData	= 0;
+	quint64 receivedFileData    = 0;
 	quint64 relayRetries        = 0;
+	quint64 relayRefusals       = 0;
+
+	bool sendFileData(const MumbleProto::FileData &msg) {
+		return sendMessage(Mumble::Protocol::TCPMessageType::FileData, msg);
+	}
 
 private:
-	template< typename Msg >
-	bool sendMessage(Mumble::Protocol::TCPMessageType type, const Msg &msg) {
+	template< typename Msg > bool sendMessage(Mumble::Protocol::TCPMessageType type, const Msg &msg) {
 		QByteArray payload(static_cast< int >(msg.ByteSizeLong()), Qt::Uninitialized);
 		msg.SerializeWithCachedSizesToArray(reinterpret_cast< unsigned char * >(payload.data()));
 		return sendMessage(type, payload);
@@ -250,6 +254,7 @@ private:
 						break;
 					}
 					if (msg.has_relay_error()) {
+						++relayRefusals;
 						m_engine.relayFailed(
 							QByteArray(msg.transfer_id().data(), static_cast< int >(msg.transfer_id().size())),
 							QString::fromStdString(msg.relay_error()));
@@ -294,6 +299,7 @@ private slots:
 	void endToEndTransfer();
 	void endToEndPasswordTransfer();
 	void capabilityGating();
+	void missingChunkIndexIsRefused();
 	void concurrentTargetedLargeDelivery();
 	void competingSendersRetryAggregateBudget();
 
@@ -306,6 +312,31 @@ private:
 	QDir m_serverDir;
 	QProcess m_murmur;
 };
+
+void TestFileTransferE2E::missingChunkIndexIsRefused() {
+	E2EClient sender("index-sender", m_tempDir.filePath("index-sender.sqlite"), this);
+	E2EClient receiver("index-receiver", m_tempDir.filePath("index-receiver.sqlite"), this);
+	QVERIFY(sender.connectToServer());
+	QVERIFY(receiver.connectToServer());
+	QVERIFY(waitFor([&]() { return sender.ownSession() && receiver.ownSession(); }, 10000));
+	sender.announceCapability();
+	receiver.announceCapability();
+	QVERIFY(waitFor([&]() { return sender.peerIsCapable("index-receiver"); }, 10000));
+
+	MumbleProto::FileData data;
+	data.set_transfer_id(std::string(16, 'i'));
+	data.set_data(std::string(16, 'd'));
+	data.add_target_session(receiver.ownSession());
+	QVERIFY(sender.sendFileData(data));
+	QVERIFY(waitFor([&]() { return sender.relayRefusals == 1; }, 10000));
+	QCOMPARE(receiver.receivedFileData, 0ULL);
+
+	// Explicit zero is the first chunk, whereas absence is malformed.
+	data.set_chunk_index(0);
+	QVERIFY(sender.sendFileData(data));
+	QVERIFY(waitFor([&]() { return receiver.receivedFileData == 1; }, 10000));
+	QCOMPARE(sender.relayRefusals, 1ULL);
+}
 
 void TestFileTransferE2E::initTestCase() {
 	QVERIFY(m_tempDir.isValid());

@@ -1,0 +1,37 @@
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+syscall () at ../sysdeps/unix/sysv/linux/x86_64/syscall.S:38
+
+warning: 38	../sysdeps/unix/sysv/linux/x86_64/syscall.S: No such file or directory
+
+Thread 1 (Thread 0x79d734cfe440 (LWP 3085297) "mumble-server"):
+#0  syscall () at ../sysdeps/unix/sysv/linux/x86_64/syscall.S:38
+#1  0x000079d73836d66a in ??? () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#2  0x000079d738310c2e in g_source_add_poll () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#3  0x00005bcca6c698f1 in Server::stopThread (this=0x5bccb8fd41f0) at /home/agent/.cache/mumble-sync-worktrees/2026-10-21/src/murmur/Server.cpp:325
+#4  0x00005bcca6c699a6 in Server::~Server (this=0x5bccb8fd41f0, __in_chrg=<optimized out>) at /home/agent/.cache/mumble-sync-worktrees/2026-10-21/src/murmur/Server.cpp:336
+#5  0x00005bcca6c69e6a in Server::~Server (this=0x5bccb8fd41f0, __in_chrg=<optimized out>) at /home/agent/.cache/mumble-sync-worktrees/2026-10-21/src/murmur/Server.cpp:360
+#6  0x00005bcca6c4e544 in Meta::killAll (this=0x5bccb8d95bc0) at /home/agent/.cache/mumble-sync-worktrees/2026-10-21/src/murmur/Meta.cpp:1005
+#7  0x00005bcca6ba391a in cleanup (signum=15) at /home/agent/.cache/mumble-sync-worktrees/2026-10-21/src/murmur/main.cpp:98
+#8  0x000079d738045330 in <signal handler called> () at /lib/x86_64-linux-gnu/libc.so.6
+#9  0x000079d73811c87d in __GI___libc_write (nbytes=8, buf=0x7fff0f4e0f40, fd=3) at ../sysdeps/unix/sysv/linux/write.c:26
+#10 __GI___libc_write (fd=3, buf=0x7fff0f4e0f40, nbytes=8) at ../sysdeps/unix/sysv/linux/write.c:24
+#11 0x000079d738362e7b in ??? () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#12 0x000079d738311ae3 in g_source_remove_poll () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#13 0x000079d739731700 in QEventDispatcherGlib::unregisterSocketNotifier(QSocketNotifier*) () at /lib/x86_64-linux-gnu/libQt6Core.so.6
+#14 0x000079d739b0d2d2 in ??? () at /lib/x86_64-linux-gnu/libQt6Network.so.6
+#15 0x000079d739b0c06f in ??? () at /lib/x86_64-linux-gnu/libQt6Network.so.6
+#16 0x000079d739b01627 in ??? () at /lib/x86_64-linux-gnu/libQt6Network.so.6
+#17 0x000079d739b01851 in ??? () at /lib/x86_64-linux-gnu/libQt6Network.so.6
+#18 0x000079d739b0dc42 in ??? () at /lib/x86_64-linux-gnu/libQt6Network.so.6
+#19 0x00005bcca6cc9f6e in ServerApplication::notify (this=0x7fff0f4e2520, receiver=0x5bccb9016bc0, event=0x7fff0f4e2210) at /home/agent/.cache/mumble-sync-worktrees/2026-10-21/src/murmur/ServerApplication.cpp:24
+#20 0x000079d739538448 in QCoreApplication::notifyInternal2(QObject*, QEvent*) () at /lib/x86_64-linux-gnu/libQt6Core.so.6
+#21 0x000079d739739e27 in ??? () at /lib/x86_64-linux-gnu/libQt6Core.so.6
+#22 0x000079d738314635 in ??? () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#23 0x000079d738373bf7 in ??? () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#24 0x000079d738313ad3 in g_main_context_iteration () at /lib/x86_64-linux-gnu/libglib-2.0.so.0
+#25 0x000079d739731611 in QEventDispatcherGlib::processEvents(QFlags<QEventLoop::ProcessEventsFlag>) () at /lib/x86_64-linux-gnu/libQt6Core.so.6
+#26 0x000079d7395429a3 in QEventLoop::exec(QFlags<QEventLoop::ProcessEventsFlag>) () at /lib/x86_64-linux-gnu/libQt6Core.so.6
+#27 0x000079d73953b35e in QCoreApplication::exec() () at /lib/x86_64-linux-gnu/libQt6Core.so.6
+#28 0x00005bcca6ba6e36 in main (argc=4, argv=0x7fff0f4e2d18) at /home/agent/.cache/mumble-sync-worktrees/2026-10-21/src/murmur/main.cpp:541
+[Inferior 1 (process 3085297) detached]

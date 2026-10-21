@@ -1,0 +1,27 @@
+{
+  "pass": true,
+  "failures": [],
+  "additions": [
+    "MumbleProto.UserState.screen_sharing=24",
+    "MumbleProto.UserState.file_transfer_capable=25",
+    "MumbleProto.UserState.file_transfer_delivery_receipts=26",
+    "MumbleProto.ServerConfig.max_file_transfer_size=8",
+    "MumbleProto.ServerConfig.file_transfer_relay_version=9",
+    "MumbleProto.ServerConfig.file_transfer_rate=10",
+    "MumbleProto.ServerConfig.file_transfer_aggregate_rate=11",
+    "MumbleProto.ServerConfig.video_relay_version=12",
+    "message MumbleProto.FileTransferControl",
+    "message MumbleProto.FileData",
+    "message MumbleUDP.Video"
+  ],
+  "transport_extensions": {
+    "TCP": {
+      "FileTransferControl": 27,
+      "FileData": 28
+    },
+    "UDP": {
+      "Video": 2
+    }
+  },
+  "official_protocol_md_exists": false
+}

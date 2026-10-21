@@ -3,6 +3,7 @@
 // that can be found in the LICENSE file at the root of the
 // Mumble source tree or at <https://www.mumble.info/LICENSE>.
 
+#include "Mumble.pb.h"
 #include "MumbleProtocol.h"
 #include "MumbleUDP.pb.h"
 #include "Version.h"
@@ -293,6 +294,24 @@ template< Mumble::Protocol::Role encoderRole, Mumble::Protocol::Role decoderRole
 class TestMumbleProtocol : public QObject {
 	Q_OBJECT
 private slots:
+	void extensionFieldsAreOptional() {
+		for (const google::protobuf::Descriptor *message :
+			 { MumbleProto::FileTransferControl::descriptor(), MumbleProto::FileData::descriptor() }) {
+			for (int i = 0; i < message->field_count(); ++i) {
+				const std::string fieldName(message->field(i)->full_name());
+				QVERIFY2(!message->field(i)->is_required(), fieldName.c_str());
+			}
+		}
+		MumbleProto::FileData data;
+		QVERIFY(data.ParseFromString(""));
+		QVERIFY(!data.has_chunk_index());
+		data.set_chunk_index(0);
+		MumbleProto::FileData decoded;
+		QVERIFY(decoded.ParseFromString(data.SerializeAsString()));
+		QVERIFY(decoded.has_chunk_index());
+		QCOMPARE(decoded.chunk_index(), 0ULL);
+	}
+
 	void test_video_client_to_server() { do_test_video< Mumble::Protocol::Role::Server >(); }
 	void test_video_server_to_client() { do_test_video< Mumble::Protocol::Role::Client >(); }
 

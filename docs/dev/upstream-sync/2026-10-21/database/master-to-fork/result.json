@@ -1,0 +1,7 @@
+{
+  "pass": true,
+  "fixture": "/home/agent/.cache/mumble-sync-evidence/2026-10-21/interop-master-server",
+  "server": "/home/agent/.cache/mumble-sync-build/2026-10-21/mumble-server",
+  "stored_authentication_and_channel": true,
+  "integrity_check": "ok"
+}

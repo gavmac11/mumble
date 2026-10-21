@@ -1,0 +1,10 @@
+********* Start testing of TestFileTransferEngine *********
+Config: Using QtTest library 6.4.2, Qt 6.4.2 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 13.2.0), ubuntu 24.04
+PASS   : TestFileTransferEngine::initTestCase()
+QFATAL : TestFileTransferEngine::selectedPinSurvivesCacheRemoval() ASSERT: "!isEmpty()" in file /usr/include/x86_64-linux-gnu/qt6/QtCore/qlist.h, line 607
+FAIL!  : TestFileTransferEngine::selectedPinSurvivesCacheRemoval() Received a fatal error.
+   Loc: [/usr/include/x86_64-linux-gnu/qt6/QtCore/qlist.h(607)]
+Totals: 1 passed, 1 failed, 0 skipped, 0 blacklisted, 2ms
+********* Finished testing of TestFileTransferEngine *********
+Received signal 6 (SIGABRT)
+         selectedPinSurvivesCacheRemoval function time: 1ms, total time: 2ms
