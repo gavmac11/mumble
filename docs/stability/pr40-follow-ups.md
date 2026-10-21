@@ -38,6 +38,6 @@ non-blocking changes for a separate focused follow-up; none gates this PR.
    `m_readPauseClock` / `m_lastReadDeferral` / `m_frameDeferred` trio and its compound
    restart condition with a single stored episode deadline. The current form already
    required the correction in `cb24200f4`.
-8. **Transport wrapper cleanup** (`src/mumble/PQFileTransfer/engine/FileTransferTransport.h`).
-   After the PR #29 rewrite the `weak_ptr` `queueControl`/`queueChunk` overloads are
-   lock-and-forward wrappers; collapse to one typed overload per operation.
+8. **Transport wrapper cleanup** — resolved by the 2026-10-20 slop audit. The manager's
+   two callbacks lock the captured connection and call `ServerHandler` directly; the
+   forwarding header and tests of a separate fake queue implementation were removed.

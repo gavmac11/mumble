@@ -326,7 +326,6 @@ private:
 	QHash< QByteArray, std::shared_ptr< SendJob > > m_sendJobs;
 	QHash< QByteArray, std::shared_ptr< ReceiveJob > > m_receiveJobs;
 	QHash< unsigned int, PendingHandshake > m_pendingHandshakes;   // responder side, pre-verification
-	quint64 m_nextJobNonce = 0;
 };
 
 } // namespace PQFT

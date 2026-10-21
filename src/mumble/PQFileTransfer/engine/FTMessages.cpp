@@ -21,17 +21,6 @@ QByteArray encodeHandshake(quint8 type, const QByteArray &canonicalBody) {
 	return frame;
 }
 
-QByteArray encodeControl(quint8 type, quint64 seq, const QByteArray &ciphertextAndTag) {
-	if (type < TypeManifest || type > TypeProgress)
-		return QByteArray();
-	QByteArray frame;
-	frame.reserve(9 + ciphertextAndTag.size());
-	frame.append(static_cast< char >((Version << 4) | (type & 0x0f)));
-	frame.append(uint64be(seq));
-	frame.append(ciphertextAndTag);
-	return frame;
-}
-
 bool decodeHeader(const QByteArray &frame, quint8 &type) {
 	if (frame.size() < 1)
 		return false;

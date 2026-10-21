@@ -249,13 +249,6 @@ void ClientUser::setScreenSharing(bool sharing) {
 	emit screenSharingStateChanged();
 }
 
-void ClientUser::setFileTransferCapable(bool capable) {
-	if (bFileTransferCapable == capable)
-		return;
-	bFileTransferCapable = capable;
-	emit fileTransferCapabilityChanged();
-}
-
 void ClientUser::setLocalVolumeAdjustment(float adjustment) {
 	float oldAdjustment = m_localVolume;
 	m_localVolume       = adjustment;

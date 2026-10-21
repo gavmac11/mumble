@@ -614,7 +614,7 @@ void MainWindow::msgUserState(const MumbleProto::UserState &msg) {
 	if (msg.has_file_transfer_delivery_receipts())
 		pDst->bFileTransferDeliveryReceipts = msg.file_transfer_delivery_receipts();
 	if (msg.has_file_transfer_capable()) {
-		pDst->setFileTransferCapable(msg.file_transfer_capable());
+		pDst->bFileTransferCapable = msg.file_transfer_capable();
 	}
 
 	if (msg.has_screen_sharing()) {

@@ -306,7 +306,7 @@ static int inlineWebMDrop(Global &global, MainWindow &window, const QDir &shared
 // connections are singletons. Only disposable generated identities are accepted
 // by the test driver; all production dialog handlers and transports stay wired.
 static int tlsChild(const QStringList &arguments) {
-	const int index = arguments.indexOf(QStringLiteral("--tls-child"));
+	const qsizetype index = arguments.indexOf(QStringLiteral("--tls-child"));
 	if (index < 0 || arguments.size() != index + 7)
 		return 10;
 	const QString role = arguments[index + 1], sharedPath = arguments[index + 2];

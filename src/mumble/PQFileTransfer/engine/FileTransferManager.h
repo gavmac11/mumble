@@ -99,11 +99,6 @@ public:
 	/// Returns false when the peer cannot be resolved. GUI thread only.
 	bool pinPeer(unsigned int peerSession, const QByteArray &shownFingerprint, bool verified);
 
-	/// TOFU state of a channel member for the pre-send dialog (live DB read).
-	PQFT::TrustState trustStateFor(unsigned int peerSession, QByteArray &pinnedFingerprint);
-	/// Safety number of a peer against our identity (for verification UI).
-	QString safetyNumberFor(unsigned int peerSession);
-
 	/// Trust for an incoming file, checked against its captured name and authenticated key.
 	PQFT::TrustState trustStateForTransfer(const PQFT::FTTransferInfo &info, QByteArray &pinnedFingerprint);
 

@@ -86,7 +86,6 @@ public slots:
 	void setPrioritySpeaker(bool priority);
 	void setRecording(bool recording);
 	void setScreenSharing(bool sharing);
-	void setFileTransferCapable(bool capable);
 	void setLocalVolumeAdjustment(float adjustment);
 	void setLocalNickname(const QString &nickname);
 signals:
@@ -95,7 +94,6 @@ signals:
 	void prioritySpeakerStateChanged();
 	void recordingStateChanged();
 	void screenSharingStateChanged();
-	void fileTransferCapabilityChanged();
 	void localVolumeAdjustmentsChanged(float newAdjustment, float oldAdjustment);
 	void localNicknameChanged();
 };

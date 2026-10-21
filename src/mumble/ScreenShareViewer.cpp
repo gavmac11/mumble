@@ -7,7 +7,6 @@
 #include "VideoViewUi.h"
 
 #include <QtCore/QSignalBlocker>
-#include <QtGui/QCloseEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QResizeEvent>
 #include <QtWidgets/QComboBox>
@@ -172,10 +171,6 @@ ScreenShareViewer::ScreenShareViewer(QWidget *parent) : QDialog(parent, Qt::Wind
 	resize(960, 640);
 }
 
-bool ScreenShareViewer::isDismissed() const {
-	return m_dismissed;
-}
-
 void ScreenShareViewer::addStream(quint32 senderSession, const QString &senderName, const QImage &frame) {
 	ScreenShareTile *tile = ensureTile(senderSession, senderName);
 	if (!frame.isNull())
@@ -216,7 +211,6 @@ void ScreenShareViewer::showAndRefresh(quint32 senderSession, const QString &sen
 	ensureTile(senderSession, senderName);
 	if (m_focused)
 		m_participants->setCurrentIndex(m_participants->findData(senderSession));
-	m_dismissed = false;
 	show();
 	raise();
 	activateWindow();
@@ -317,12 +311,6 @@ void ScreenShareViewer::reflowTiles() {
 	}
 
 	m_columnCount = columns;
-}
-
-void ScreenShareViewer::closeEvent(QCloseEvent *event) {
-	// Remember that the user explicitly closed the gallery so new frames don't reopen it.
-	m_dismissed = true;
-	QDialog::closeEvent(event);
 }
 
 void ScreenShareViewer::resizeEvent(QResizeEvent *event) {

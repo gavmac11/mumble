@@ -33,10 +33,6 @@ namespace FTFrame {
 	/// Encode a handshake frame (header + canonical-CBOR body).
 	QByteArray encodeHandshake(quint8 type, const QByteArray &canonicalBody);
 
-	/// Encode a control record: header | u64be(seq) | ciphertext||tag.
-	/// The AAD passed to the AEAD is header||seq (the first 9 bytes).
-	QByteArray encodeControl(quint8 type, quint64 seq, const QByteArray &ciphertextAndTag);
-
 	/// Decode the header byte. Returns false on wrong version or unknown type.
 	bool decodeHeader(const QByteArray &frame, quint8 &type);
 

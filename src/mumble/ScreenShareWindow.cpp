@@ -11,8 +11,8 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QVBoxLayout>
 
-ScreenShareWindow::ScreenShareWindow(quint32 senderSession, const QString &senderName, QWidget *parent)
-	: QDialog(parent, Qt::Window), m_senderSession(senderSession), m_senderName(senderName) {
+ScreenShareWindow::ScreenShareWindow(const QString &senderName, QWidget *parent)
+	: QDialog(parent, Qt::Window), m_senderName(senderName) {
 	setWindowTitle(tr("%1 — shared video").arg(senderName));
 	VideoViewUi::style(this);
 

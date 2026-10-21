@@ -20,7 +20,7 @@ private:
 	Q_DISABLE_COPY(ScreenShareWindow)
 
 public:
-	explicit ScreenShareWindow(quint32 senderSession, const QString &senderName, QWidget *parent = nullptr);
+	explicit ScreenShareWindow(const QString &senderName, QWidget *parent = nullptr);
 
 	/// Show the window and repaint with the last stored frame.
 	void showAndRefresh();
@@ -41,7 +41,6 @@ private:
 	void updateImageDisplay();
 
 	QLabel *m_imageLabel;
-	quint32 m_senderSession;
 	QString m_senderName;
 	QImage m_currentFrame;
 };
