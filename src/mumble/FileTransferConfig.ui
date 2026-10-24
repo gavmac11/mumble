@@ -69,6 +69,43 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="qgbFTIdentity">
+     <property name="title">
+      <string>Contacts and identity</string>
+     </property>
+     <layout class="QVBoxLayout">
+      <item>
+       <widget class="QCheckBox" name="qcbFTRequireVerification">
+        <property name="toolTip">
+         <string>When enabled, the first transfer with someone waits until you have compared safety numbers with them. When disabled, their key is remembered on first use and you can verify them later from their right-click menu. A changed key is always blocked.</string>
+        </property>
+        <property name="text">
+         <string>Ask me to verify new contacts before their first transfer</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout">
+        <item>
+         <widget class="QLabel" name="qlFTIdentityStatus">
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="qpbFTPassphrase">
+          <property name="toolTip">
+           <string>Protect your file-sharing key with a passphrase, which you then enter each time you connect</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="qgbFTAdvanced">
      <property name="title">
       <string>Transfer limits</string>

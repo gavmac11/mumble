@@ -73,6 +73,9 @@ public:
 	std::optional< SendRecipient > sendRecipient(unsigned int session) const;
 	QList< SendRecipient > availableSendRecipients(bool &identityUnavailable) const;
 	bool sendRecipientStillCurrent(const SendRecipient &recipient) const;
+	/// True while an outgoing transfer to this session has not finished. A peer
+	/// accepts one transfer at a time, so further files must wait.
+	bool hasPendingSendTo(unsigned int session) const;
 
 	/// Queue a file for sending to `recipients` (sessions with pinned
 	/// identities). Returns false when prerequisites are missing.
@@ -92,6 +95,11 @@ public:
 	quint64 firstContactToken(unsigned int peerSession) const;
 	bool contactRequestCurrent(unsigned int session, const QByteArray &fingerprint, quint64 token) const;
 	bool resetPeerTrust(const SendRecipient &shown);
+	/// Mark a pinned peer as verified after the user compared safety numbers.
+	bool markPeerVerified(const SendRecipient &shown);
+	/// True when the user verified this peer's file identity on this server.
+	/// Cached; cheap enough for painting the user list.
+	bool isVerifiedPeer(const ClientUser *user) const;
 	QString contactRequestName(quint64 token) const;
 	bool contactRequestSending(quint64 token) const;
 
@@ -125,14 +133,18 @@ signals:
 	/// Queued from the worker whenever a transfer's state changes; also
 	/// raised directly for UI-initiated flows.
 	void transferUpdated(const PQFT::FTTransferInfo &info);
-	/// A peer contacted us for the first time: the mandatory safety-number
-	/// verification must happen before the handshake continues.
+	/// A peer contacted us for the first time while safety-number
+	/// verification is required: it must happen before the handshake continues.
 	void firstContact(unsigned int peerSession, const QByteArray &peerFingerprint, const QString &safetyNumber);
 	/// A pinned peer presented a different identity: hard-blocked.
 	void peerBlocked(unsigned int peerSession, const QString &peerName);
 	void firstContactCancelled(quint64 promptToken);
 	/// An incoming password-mode transfer needs its password.
 	void passwordRequired(const QByteArray &transferId, const QString &fileName);
+	/// The set of verified peers changed.
+	void trustChanged();
+	/// An outgoing transfer slot was released without a final transfer update.
+	void sendSlotsChanged();
 
 private:
 	friend class TestFileTransferManager;
@@ -140,6 +152,10 @@ private:
 	void updateConnectionTransport();
 	void forwardEngineEvent(std::function< void() > event);
 	void rejectReceive(const PQFT::FTTransferInfo &info, PQFT::TrustState state);
+	/// Trust on first use for an incoming transfer whose manifest was verified.
+	/// False when the transfer was rejected.
+	bool adoptFirstUsePin(const PQFT::FTTransferInfo &info);
+	void updateVerifiedNames(const QByteArray &digest);
 	QByteArray serverDigest() const;
 	PQFT::FileTransferEngine::Config engineConfig() const;
 	QString m_lastSendError;
@@ -198,6 +214,7 @@ private:
 	std::shared_ptr< std::atomic< qint64 > > m_inboundBytes = std::make_shared< std::atomic< qint64 > >(0);
 	QSet< QByteArray > m_activeReceived;
 	QSet< QByteArray > m_inboundRejected;
+	QSet< QString > m_verifiedNames;
 };
 
 #endif // MUMBLE_MUMBLE_PQFILETRANSFER_ENGINE_FILETRANSFERMANAGER_H_

@@ -35,6 +35,8 @@ private slots:
 		QVERIFY(m_directory->isValid());
 		m_global                = std::make_unique< Global >(m_directory->filePath("settings.json"));
 		Global::g_global_struct = m_global.get();
+		// Most cases cover the opt-in safety-number prompts; first-use cases turn this off.
+		m_global->s.bFTRequireVerification = true;
 		m_oldM1                 = firstContactFrame();
 		m_newM1                 = firstContactFrame();
 		QVERIFY(!m_oldM1.isEmpty());
@@ -570,11 +572,14 @@ private slots:
 
 	void productionSenderAuthorization_data() {
 		QTest::addColumn< QString >("decision");
-		for (const char *decision : { "accept", "decline", "rename", "changed-pin", "storage-error", "old-relay" })
+		for (const char *decision :
+			 { "accept", "decline", "rename", "changed-pin", "storage-error", "old-relay", "first-use" })
 			QTest::newRow(decision) << QString::fromLatin1(decision);
 	}
 	void productionSenderAuthorization() {
 		QFETCH(QString, decision);
+		const bool firstUse                = decision == QLatin1String("first-use");
+		m_global->s.bFTRequireVerification = !firstUse;
 		FileTransferManager manager;
 		QVERIFY(setupTrustFixture(manager));
 		QVERIFY(manager.m_identity->createIdentity(QStringLiteral("isolated-sender-passphrase")));
@@ -675,15 +680,18 @@ private slots:
 			return PQFT::FTTransferInfo::State::Handshaking;
 		};
 		QTRY_VERIFY_WITH_TIMEOUT(terminal() != PQFT::FTTransferInfo::State::Handshaking, 10000);
-		QCOMPARE(terminal(), decision == QLatin1String("accept") ? PQFT::FTTransferInfo::State::Saved
-																 : PQFT::FTTransferInfo::State::Failed);
-		QCOMPARE(chunks > 0, decision == QLatin1String("accept"));
+		const bool delivered = decision == QLatin1String("accept") || firstUse;
+		QCOMPARE(terminal(), delivered ? PQFT::FTTransferInfo::State::Saved : PQFT::FTTransferInfo::State::Failed);
+		QCOMPARE(chunks > 0, delivered);
+		if (firstUse)
+			QCOMPARE(prompts.size(), 0);
 		if (decision != QLatin1String("storage-error")) {
 			PQFT::PinnedPeer pin;
-			if (decision == QLatin1String("accept")) {
+			if (delivered) {
+				// First use pins the key M4 authenticated, but only a dialog marks it verified.
 				QVERIFY(manager.m_trustStore->lookup(pin, m_serverDigest, selected->name));
 				QCOMPARE(pin.fingerprint, PQFT::identityFingerprint(receiverPublic));
-				QVERIFY(pin.verified);
+				QCOMPARE(pin.verified, !firstUse);
 			} else if (decision != QLatin1String("changed-pin"))
 				QVERIFY(manager.m_trustStore->list().isEmpty());
 		}
@@ -849,6 +857,132 @@ private slots:
 		QVERIFY(receiver.m_rejectedReceived.isEmpty());
 		QVERIFY(receiver.m_savesInFlight.isEmpty());
 		QVERIFY(!QFile::exists(m_directory->filePath("owned-duplicate.bin")));
+	}
+
+	void firstUseM1AloneDoesNotPin() {
+		m_global->s.bFTRequireVerification = false;
+		FileTransferManager manager;
+		QVERIFY(setupTrustFixture(manager));
+		QSignalSpy prompts(&manager, &FileTransferManager::firstContact);
+		deliverControl(manager, m_oldM1);
+		// The handshake proceeds without a prompt (the fixture refuses to sign M2)...
+		QTRY_COMPARE_WITH_TIMEOUT(m_signCalls.load(), 1, 5000);
+		QVERIFY(QMetaObject::invokeMethod(manager.m_engine, []() {}, Qt::BlockingQueuedConnection));
+		QCoreApplication::sendPostedEvents(&manager, QEvent::MetaCall);
+		QCOMPARE(prompts.size(), 0);
+		// ...but an unauthenticated M1 key claim is never written to the trust store.
+		QVERIFY(manager.m_trustStore->list().isEmpty());
+	}
+
+	void receivedFileFirstUse_data() {
+		QTest::addColumn< QString >("existing");
+		QTest::newRow("new-peer") << QStringLiteral("none");
+		QTest::newRow("changed-key") << QStringLiteral("changed");
+	}
+	void receivedFileFirstUse() {
+		QFETCH(QString, existing);
+		m_global->s.bFTRequireVerification = false;
+		PQFT::SigMLDSA65 sig;
+		QByteArray senderPublic;
+		PQFT::SecureBytes senderSecret;
+		QVERIFY(sig.keypair(senderPublic, senderSecret));
+		PQFT::FileTransferEngine sender;
+		FileTransferManager receiver;
+		QVERIFY(setupTrustFixture(receiver));
+		QVERIFY(receiver.m_identity->createDeviceIdentity());
+		const QByteArray senderFp = PQFT::identityFingerprint(senderPublic);
+		const QString name        = m_peer->qsName;
+		const QByteArray other    = PQFT::identityFingerprint(PQFT::extractM1IdentityKey(m_newM1));
+		if (existing == QLatin1String("changed"))
+			QCOMPARE(receiver.m_trustStore->checkAndPin(m_serverDigest, name, other, "earlier key"),
+					 PQFT::TrustState::Pinned);
+		receiver.refreshPinCache();
+		receiver.pushIdentityToEngine();
+		QVERIFY(QMetaObject::invokeMethod(
+			receiver.m_engine,
+			[&]() {
+				receiver.m_engine->setTransport(
+					[&sender](unsigned int, const QByteArray &frame) {
+						QMetaObject::invokeMethod(
+							&sender, [&sender, frame]() { sender.onControlMessage(41, frame); }, Qt::QueuedConnection);
+					},
+					{});
+			},
+			Qt::BlockingQueuedConnection));
+		sender.setIdentity(senderPublic, [&sig, &senderSecret](QByteArray &signature, const QByteArray &message,
+															   const QByteArray &context) {
+			return sig.sign(signature, senderSecret, message, context);
+		});
+		sender.setTransport([&receiver](unsigned int, const QByteArray &frame) { deliverControl(receiver, frame); },
+							[&receiver](const QByteArray &id, quint64 index, quint64 count, const QByteArray &data) {
+								MumbleProto::FileData message;
+								message.set_actor(42);
+								message.set_transfer_id(id.constData(), static_cast< size_t >(id.size()));
+								message.set_chunk_index(index);
+								message.set_chunk_count(count);
+								message.set_data(data.constData(), static_cast< size_t >(data.size()));
+								receiver.handleDataMessage(message);
+							});
+		QFile input(m_directory->filePath("first-use-source.bin"));
+		QVERIFY(input.open(QIODevice::WriteOnly));
+		const QByteArray bytes(32768, 'f');
+		QCOMPARE(input.write(bytes), static_cast< qint64 >(bytes.size()));
+		input.close();
+		QSignalSpy prompts(&receiver, &FileTransferManager::firstContact);
+		QSignalSpy blocked(&receiver, &FileTransferManager::peerBlocked);
+		QSignalSpy updates(&receiver, &FileTransferManager::transferUpdated);
+		QVERIFY(sender.startSend(input.fileName(), "application/octet-stream", false, {},
+								 { { 41, receiver.m_identity->fingerprint() } })
+				> 0);
+		if (existing == QLatin1String("changed")) {
+			// A pinned key that differs is still hard-blocked, prompt or not.
+			QTRY_COMPARE_WITH_TIMEOUT(blocked.size(), 1, 5000);
+			QCOMPARE(prompts.size(), 0);
+			PQFT::PinnedPeer pin;
+			QVERIFY(receiver.m_trustStore->lookup(pin, m_serverDigest, name));
+			QCOMPARE(pin.fingerprint, other);
+			return;
+		}
+		QByteArray transfer;
+		QTRY_VERIFY_WITH_TIMEOUT(
+			[&]() {
+				for (const auto &args : updates) {
+					const auto info = args.first().value< PQFT::FTTransferInfo >();
+					if (info.state == PQFT::FTTransferInfo::State::Ready) {
+						transfer = info.transferId;
+						return true;
+					}
+				}
+				return false;
+			}(),
+			5000);
+		QCOMPARE(prompts.size(), 0);
+		PQFT::PinnedPeer pin;
+		QVERIFY(receiver.m_trustStore->lookup(pin, m_serverDigest, name));
+		QCOMPARE(pin.fingerprint, senderFp);
+		QVERIFY(!pin.verified);
+		QVERIFY(!receiver.isVerifiedPeer(m_peer.get()));
+
+		updates.clear();
+		const QString target = m_directory->filePath("first-use-saved.bin");
+		receiver.saveTransferAs(transfer, target);
+		QTRY_VERIFY_WITH_TIMEOUT(!updates.isEmpty(), 5000);
+		QCOMPARE(updates.last().first().value< PQFT::FTTransferInfo >().state, PQFT::FTTransferInfo::State::Saved);
+		QFile output(target);
+		QVERIFY(output.open(QIODevice::ReadOnly));
+		QCOMPARE(output.readAll(), bytes);
+
+		// Verifying later (user menu) marks the pin verified and updates the cache.
+		QSignalSpy trust(&receiver, &FileTransferManager::trustChanged);
+		const auto shown = receiver.sendRecipient(42);
+		QVERIFY(shown);
+		QCOMPARE(shown->trust, PQFT::TrustState::Pinned);
+		QVERIFY(receiver.markPeerVerified(*shown));
+		QVERIFY(receiver.m_trustStore->lookup(pin, m_serverDigest, name));
+		QVERIFY(pin.verified);
+		QVERIFY(receiver.isVerifiedPeer(m_peer.get()));
+		QCOMPARE(trust.size(), 1);
+		QVERIFY(!receiver.markPeerVerified(*shown)); // stale: trust is now Verified
 	}
 
 	void changedDialogContextDoesNotPin_data() {

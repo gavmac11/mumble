@@ -15,6 +15,15 @@
 
 #include <cstring>
 
+#ifdef Q_OS_WIN
+#	include "win.h"
+
+#	include <dpapi.h>
+#	ifdef _MSC_VER
+#		pragma comment(lib, "crypt32.lib")
+#	endif
+#endif
+
 namespace PQFT {
 namespace {
 
@@ -49,6 +58,66 @@ Argon2Params argon2ParamsFromString(const QString &string) {
 		params.parallelism = parts.at(2).toUInt();
 	}
 	return params;
+}
+
+// kdf_params markers of device-protected identities. Passphrase identities
+// store their Argon2id parameters ("t;m;p") in the same column.
+const QLatin1String DeviceDpapiMarker("device-dpapi");
+const QLatin1String DeviceLocalMarker("device-local");
+
+bool isDeviceMarker(const QString &kdfParams) {
+	return kdfParams == DeviceDpapiMarker || kdfParams == DeviceLocalMarker;
+}
+
+/// Seal the random device key for storage in the `kek_salt` column. On
+/// Windows DPAPI binds it to the user account. Elsewhere it is stored as is,
+/// which matches how Mumble stores its client certificate.
+bool sealDeviceKey(QByteArray &sealed, QString &marker, const QByteArray &key) {
+#ifdef Q_OS_WIN
+	DATA_BLOB input;
+	input.cbData     = static_cast< DWORD >(key.size());
+	input.pbData     = reinterpret_cast< BYTE * >(const_cast< char * >(key.constData()));
+	DATA_BLOB output = {};
+	if (!CryptProtectData(&input, L"Mumble file-transfer identity", nullptr, nullptr, nullptr,
+						  CRYPTPROTECT_UI_FORBIDDEN, &output))
+		return false;
+	sealed = QByteArray(reinterpret_cast< const char * >(output.pbData), static_cast< qsizetype >(output.cbData));
+	LocalFree(output.pbData);
+	marker = DeviceDpapiMarker;
+	return !sealed.isEmpty();
+#else
+	sealed = key;
+	marker = DeviceLocalMarker;
+	return sealed.size() == KeySize;
+#endif
+}
+
+bool openDeviceKey(SecureBytes &key, const QByteArray &sealed, const QString &marker) {
+	if (marker == DeviceLocalMarker) {
+		if (sealed.size() != KeySize)
+			return false;
+		key = SecureBytes::fromByteArray(sealed);
+		return true;
+	}
+#ifdef Q_OS_WIN
+	if (marker == DeviceDpapiMarker && !sealed.isEmpty()) {
+		DATA_BLOB input;
+		input.cbData     = static_cast< DWORD >(sealed.size());
+		input.pbData     = reinterpret_cast< BYTE * >(const_cast< char * >(sealed.constData()));
+		DATA_BLOB output = {};
+		if (!CryptUnprotectData(&input, nullptr, nullptr, nullptr, nullptr, CRYPTPROTECT_UI_FORBIDDEN, &output))
+			return false;
+		QByteArray plain(reinterpret_cast< const char * >(output.pbData), static_cast< qsizetype >(output.cbData));
+		SecureZeroMemory(output.pbData, output.cbData);
+		LocalFree(output.pbData);
+		const bool ok = plain.size() == KeySize;
+		if (ok)
+			key = SecureBytes::fromByteArray(plain);
+		zeroize(plain);
+		return ok;
+	}
+#endif
+	return false;
 }
 
 } // namespace
@@ -142,13 +211,79 @@ bool FileTransferIdentity::ensureSchema(QSqlDatabase db) {
 									  "UNIQUE(`server_digest`, `username`))"));
 }
 
-FileTransferIdentity::FileTransferIdentity(QSqlDatabase db) : m_db(db) { }
+FileTransferIdentity::FileTransferIdentity(QSqlDatabase db) : m_db(db) {
+}
 
 bool FileTransferIdentity::hasIdentity() const {
 	QSqlQuery query(m_db);
 	if (!execIdentityQuery(query, QLatin1String("SELECT COUNT(*) FROM `ft_identity`")))
 		return false;
 	return query.next() && query.value(0).toInt() > 0;
+}
+
+FileTransferIdentity::Protection FileTransferIdentity::protection() const {
+	StoredRow row;
+	if (!loadRow(row))
+		return Protection::None;
+	return isDeviceMarker(row.kdfParams) ? Protection::Device : Protection::Passphrase;
+}
+
+bool FileTransferIdentity::storeWrapped(bool insert, const QByteArray &pubkey, const QByteArray &wrapped,
+										const QByteArray &kekSalt, const QByteArray &nonce, const QString &kdfParams) {
+	QSqlQuery query(m_db);
+	if (insert) {
+		if (!query.prepare(QLatin1String("INSERT INTO `ft_identity` "
+										 "(`id`, `pubkey`, `seckey_enc`, `kek_salt`, `kek_nonce`, "
+										 "`kdf_params`, `created`) VALUES (1, ?, ?, ?, ?, ?, ?)")))
+			return false;
+		query.addBindValue(pubkey);
+		query.addBindValue(wrapped);
+		query.addBindValue(kekSalt);
+		query.addBindValue(nonce);
+		query.addBindValue(kdfParams);
+		query.addBindValue(QDate::currentDate());
+	} else {
+		if (!query.prepare(QLatin1String("UPDATE `ft_identity` SET `seckey_enc` = ?, `kek_salt` = ?, "
+										 "`kek_nonce` = ?, `kdf_params` = ? WHERE `id` = 1 AND `pubkey` = ?")))
+			return false;
+		query.addBindValue(wrapped);
+		query.addBindValue(kekSalt);
+		query.addBindValue(nonce);
+		query.addBindValue(kdfParams);
+		query.addBindValue(pubkey);
+	}
+	if (!execIdentityQuery(query))
+		return false;
+	return insert || query.numRowsAffected() == 1;
+}
+
+bool FileTransferIdentity::createDeviceIdentity() {
+	if (hasIdentity())
+		return false;
+
+	SigMLDSA65 sig;
+	QByteArray publicKey;
+	SecureBytes secretKey;
+	if (!sig.isValid() || !sig.keypair(publicKey, secretKey))
+		return false;
+
+	const SecureBytes kek = SecureBytes::random(KeySize);
+	QByteArray sealed;
+	QString marker;
+	if (kek.size() != KeySize || !sealDeviceKey(sealed, marker, kek.toByteArray()))
+		return false;
+
+	const QByteArray nonce = randomBytes(NonceSize);
+	QByteArray wrapped;
+	if (!aesGcmEncrypt(wrapped, kek.toByteArray(), nonce, secretKey.toByteArray(), identityFingerprint(publicKey)))
+		return false;
+	if (!storeWrapped(true, publicKey, wrapped, sealed, nonce, marker))
+		return false;
+
+	m_publicKey = publicKey;
+	m_secretKey = std::move(secretKey);
+	m_unlocked  = true;
+	return true;
 }
 
 bool FileTransferIdentity::createIdentity(const QString &passphrase) {
@@ -174,23 +309,10 @@ bool FileTransferIdentity::createIdentity(const QString &passphrase) {
 	}
 
 	QByteArray wrapped;
-	if (!aesGcmEncrypt(wrapped, kek.toByteArray(), nonce, secretKey.toByteArray(),
-					   identityFingerprint(publicKey))) {
+	if (!aesGcmEncrypt(wrapped, kek.toByteArray(), nonce, secretKey.toByteArray(), identityFingerprint(publicKey))) {
 		return false;
 	}
-
-	QSqlQuery query(m_db);
-	if (!query.prepare(QLatin1String("INSERT INTO `ft_identity` "
-									 "(`id`, `pubkey`, `seckey_enc`, `kek_salt`, `kek_nonce`, "
-									 "`kdf_params`, `created`) VALUES (1, ?, ?, ?, ?, ?, ?)")))
-		return false;
-	query.addBindValue(publicKey);
-	query.addBindValue(wrapped);
-	query.addBindValue(salt);
-	query.addBindValue(nonce);
-	query.addBindValue(argon2ParamsString(params));
-	query.addBindValue(QDate::currentDate());
-	if (!execIdentityQuery(query))
+	if (!storeWrapped(true, publicKey, wrapped, salt, nonce, argon2ParamsString(params)))
 		return false;
 
 	m_publicKey = publicKey;
@@ -199,44 +321,27 @@ bool FileTransferIdentity::createIdentity(const QString &passphrase) {
 	return true;
 }
 
-bool FileTransferIdentity::loadRow(QByteArray &pubkey, QByteArray &seckeyEnc, QByteArray &salt,
-								   QByteArray &nonce, Argon2Params &params) const {
+bool FileTransferIdentity::loadRow(StoredRow &row) const {
 	QSqlQuery query(m_db);
 	if (!execIdentityQuery(query, QLatin1String("SELECT `pubkey`, `seckey_enc`, `kek_salt`, `kek_nonce`, "
-								   "`kdf_params` FROM `ft_identity` WHERE `id` = 1")))
+												"`kdf_params` FROM `ft_identity` WHERE `id` = 1")))
 		return false;
 	if (!query.next())
 		return false;
 
-	pubkey	 = query.value(0).toByteArray();
-	seckeyEnc = query.value(1).toByteArray();
-	salt	  = query.value(2).toByteArray();
-	nonce	  = query.value(3).toByteArray();
-	params	  = argon2ParamsFromString(query.value(4).toString());
+	row.pubkey    = query.value(0).toByteArray();
+	row.seckeyEnc = query.value(1).toByteArray();
+	row.kekSalt   = query.value(2).toByteArray();
+	row.nonce     = query.value(3).toByteArray();
+	row.kdfParams = query.value(4).toString();
 
-	return pubkey.size() == SigMLDSA65::PublicKeySize && seckeyEnc.size() == SigMLDSA65::SecretKeySize + TagSize
-		   && salt.size() == Argon2SaltSize && nonce.size() == NonceSize && params.withinBounds();
+	return row.pubkey.size() == SigMLDSA65::PublicKeySize && row.seckeyEnc.size() == SigMLDSA65::SecretKeySize + TagSize
+		   && row.nonce.size() == NonceSize;
 }
 
-bool FileTransferIdentity::unlock(const QString &passphrase) {
-	lock();
-	if (passphrase.isEmpty())
-		return false;
-
-	QByteArray pubkey, seckeyEnc, salt, nonce;
-	Argon2Params params;
-	if (!loadRow(pubkey, seckeyEnc, salt, nonce, params))
-		return false;
-
-	QByteArray passphraseBytes = passphrase.toUtf8();
-	SecureBytes kek;
-	if (!argon2idDerive(kek, passphraseBytes, salt, params)) {
-		return false;
-	}
-
+bool FileTransferIdentity::finishUnlock(const StoredRow &row, const QByteArray &kek) {
 	QByteArray plaintext;
-	if (!aesGcmDecrypt(plaintext, kek.toByteArray(), nonce, seckeyEnc,
-					   identityFingerprint(pubkey))) {
+	if (!aesGcmDecrypt(plaintext, kek, row.nonce, row.seckeyEnc, identityFingerprint(row.pubkey))) {
 		return false;
 	}
 	if (plaintext.size() != SigMLDSA65::SecretKeySize) {
@@ -244,10 +349,42 @@ bool FileTransferIdentity::unlock(const QString &passphrase) {
 		return false;
 	}
 
-	m_publicKey = pubkey;
+	m_publicKey = row.pubkey;
 	m_secretKey = SecureBytes::fromByteArray(plaintext);
-	m_unlocked  = true;
+	zeroize(plaintext);
+	m_unlocked = true;
 	return true;
+}
+
+bool FileTransferIdentity::unlock(const QString &passphrase) {
+	lock();
+	if (passphrase.isEmpty())
+		return false;
+
+	StoredRow row;
+	if (!loadRow(row) || isDeviceMarker(row.kdfParams))
+		return false;
+	const Argon2Params params = argon2ParamsFromString(row.kdfParams);
+	if (row.kekSalt.size() != Argon2SaltSize || !params.withinBounds())
+		return false;
+
+	QByteArray passphraseBytes = passphrase.toUtf8();
+	SecureBytes kek;
+	if (!argon2idDerive(kek, passphraseBytes, row.kekSalt, params)) {
+		return false;
+	}
+	return finishUnlock(row, kek.toByteArray());
+}
+
+bool FileTransferIdentity::unlockWithDevice() {
+	lock();
+	StoredRow row;
+	if (!loadRow(row) || !isDeviceMarker(row.kdfParams))
+		return false;
+	SecureBytes kek;
+	if (!openDeviceKey(kek, row.kekSalt, row.kdfParams))
+		return false;
+	return finishUnlock(row, kek.toByteArray());
 }
 
 void FileTransferIdentity::lock() {
@@ -269,8 +406,7 @@ QByteArray FileTransferIdentity::fingerprint() const {
 	return pk.isEmpty() ? QByteArray() : identityFingerprint(pk);
 }
 
-bool FileTransferIdentity::sign(QByteArray &signature, const QByteArray &message,
-								const QByteArray &context) const {
+bool FileTransferIdentity::sign(QByteArray &signature, const QByteArray &message, const QByteArray &context) const {
 	if (!m_unlocked)
 		return false;
 	SigMLDSA65 sig;
@@ -296,16 +432,30 @@ bool FileTransferIdentity::changePassphrase(const QString &newPassphrase) {
 					   identityFingerprint(m_publicKey))) {
 		return false;
 	}
+	return storeWrapped(false, m_publicKey, wrapped, salt, nonce, argon2ParamsString(params));
+}
 
-	QSqlQuery query(m_db);
-	if (!query.prepare(QLatin1String("UPDATE `ft_identity` SET `seckey_enc` = ?, `kek_salt` = ?, "
-									 "`kek_nonce` = ?, `kdf_params` = ? WHERE `id` = 1")))
+bool FileTransferIdentity::removePassphrase() {
+	if (!m_unlocked)
 		return false;
-	query.addBindValue(wrapped);
-	query.addBindValue(salt);
-	query.addBindValue(nonce);
-	query.addBindValue(argon2ParamsString(params));
-	return execIdentityQuery(query);
+
+	const SecureBytes kek = SecureBytes::random(KeySize);
+	QByteArray sealed;
+	QString marker;
+	if (kek.size() != KeySize || !sealDeviceKey(sealed, marker, kek.toByteArray()))
+		return false;
+
+	const QByteArray nonce = randomBytes(NonceSize);
+	QByteArray wrapped;
+	if (!aesGcmEncrypt(wrapped, kek.toByteArray(), nonce, m_secretKey.toByteArray(), identityFingerprint(m_publicKey)))
+		return false;
+	return storeWrapped(false, m_publicKey, wrapped, sealed, nonce, marker);
+}
+
+bool FileTransferIdentity::deleteIdentity() {
+	lock();
+	QSqlQuery query(m_db);
+	return execIdentityQuery(query, QLatin1String("DELETE FROM `ft_identity`"));
 }
 
 } // namespace PQFT

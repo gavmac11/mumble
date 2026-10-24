@@ -33,6 +33,8 @@ private slots:
 	void identityLifecycle();
 	void identityWrongPassphrase();
 	void identityChangePassphrase();
+	void identitySwitchesProtection();
+	void deviceIdentityLifecycle();
 
 	void trustStoreTransitions();
 	void concurrentPinPreservesIdentity_data();
@@ -175,6 +177,77 @@ void TestFTIdentity::identityChangePassphrase() {
 
 	// The key itself survived the re-wrap
 	QCOMPARE(identity.publicKey().size(), PQFT::SigMLDSA65::PublicKeySize);
+}
+
+void TestFTIdentity::identitySwitchesProtection() {
+	PQFT::FileTransferIdentity identity(m_db);
+	QCOMPARE(identity.protection(), PQFT::FileTransferIdentity::Protection::Passphrase);
+	QVERIFY(!identity.unlockWithDevice());
+	QVERIFY(identity.unlock(QString("new passphrase even better")));
+	const QByteArray fingerprint = identity.fingerprint();
+
+	// Removing the passphrase keeps the key pair and unlocks without input.
+	QVERIFY(identity.removePassphrase());
+	QCOMPARE(identity.protection(), PQFT::FileTransferIdentity::Protection::Device);
+	identity.lock();
+	QVERIFY(!identity.unlock(QString("new passphrase even better")));
+	QVERIFY(identity.unlockWithDevice());
+	QCOMPARE(identity.fingerprint(), fingerprint);
+
+	// A passphrase can be chosen again later.
+	QVERIFY(!identity.changePassphrase(QString("short")));
+	QVERIFY(identity.changePassphrase(QString("back to a passphrase")));
+	QCOMPARE(identity.protection(), PQFT::FileTransferIdentity::Protection::Passphrase);
+	identity.lock();
+	QVERIFY(!identity.unlockWithDevice());
+	QVERIFY(!identity.removePassphrase()); // requires an unlocked identity
+	QVERIFY(identity.unlock(QString("back to a passphrase")));
+	QCOMPARE(identity.fingerprint(), fingerprint);
+}
+
+void TestFTIdentity::deviceIdentityLifecycle() {
+	const QString connection = QStringLiteral("ft-device-identity-test");
+	{
+		QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", connection);
+		db.setDatabaseName(m_tempDir.filePath("device-identity.sqlite"));
+		QVERIFY(db.open());
+		QVERIFY(PQFT::FileTransferIdentity::ensureSchema(db));
+
+		PQFT::FileTransferIdentity identity(db);
+		QCOMPARE(identity.protection(), PQFT::FileTransferIdentity::Protection::None);
+		QVERIFY(!identity.unlockWithDevice());
+		QVERIFY(identity.createDeviceIdentity());
+		QVERIFY(identity.isUnlocked());
+		QCOMPARE(identity.protection(), PQFT::FileTransferIdentity::Protection::Device);
+		const QByteArray fingerprint = identity.fingerprint();
+		QCOMPARE(fingerprint.size(), PQFT::HashSize);
+		// One identity per database, whatever the protection.
+		QVERIFY(!identity.createDeviceIdentity());
+		QVERIFY(!identity.createIdentity(QString("another passphrase entirely")));
+
+		// A fresh instance (next launch) unlocks silently with the same key.
+		PQFT::FileTransferIdentity relaunched(db);
+		QVERIFY(!relaunched.isUnlocked());
+		QVERIFY(!relaunched.unlock(QString("any passphrase at all")));
+		QVERIFY(relaunched.unlockWithDevice());
+		QCOMPARE(relaunched.fingerprint(), fingerprint);
+
+		QByteArray signature;
+		const QByteArray message = PQFT::randomBytes(64);
+		QVERIFY(relaunched.sign(signature, message, QByteArray(PQFT::LabelManifestCtx)));
+		PQFT::SigMLDSA65 sig;
+		QVERIFY(sig.verify(relaunched.publicKey(), message, signature, QByteArray(PQFT::LabelManifestCtx)));
+
+		// Starting over removes the identity; a new one has a new key.
+		QVERIFY(relaunched.deleteIdentity());
+		QVERIFY(!relaunched.isUnlocked());
+		QVERIFY(!relaunched.hasIdentity());
+		QCOMPARE(relaunched.protection(), PQFT::FileTransferIdentity::Protection::None);
+		QVERIFY(relaunched.createDeviceIdentity());
+		QVERIFY(relaunched.fingerprint() != fingerprint);
+		db.close();
+	}
+	QSqlDatabase::removeDatabase(connection);
 }
 
 void TestFTIdentity::concurrentPinPreservesIdentity_data() {

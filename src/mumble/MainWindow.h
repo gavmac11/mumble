@@ -18,6 +18,9 @@
 #include "Log.h"
 #ifdef USE_FILE_SHARING
 #	include "PQFileTransfer/engine/FileTransferEngine.h"
+#	include "PQFileTransfer/engine/FileTransferManager.h"
+
+class FilePasswordBar;
 #endif
 #include "MUComboBox.h"
 #include "Mumble.pb.h"
@@ -94,6 +97,24 @@ private:
 	bool m_fileVerificationActive = false;
 	QList< std::function< void() > > m_fileVerificationQueue;
 	void drainFileVerifications();
+	/// Inline prompt above the chat bar for incoming password-protected files
+	FilePasswordBar *m_filePasswordBar = nullptr;
+	/// Files chosen together are sent one after another: each recipient
+	/// accepts a single transfer at a time.
+	struct QueuedFileSend {
+		QString path;
+		QList< FileTransferManager::SendRecipient > recipients;
+		bool passwordMode = false;
+		QByteArray password;
+	};
+	QList< QueuedFileSend > m_fileSendQueue;
+	void drainFileSendQueue();
+	void clearFileSendQueue();
+	/// Unlock or create the identity without asking (device-key identities).
+	bool unlockFileTransferIdentityQuietly();
+	/// Replace the identity with a fresh device-protected one.
+	bool resetFileTransferIdentity();
+	void requestFilePassword(const PQFT::FTTransferInfo &info, bool focus);
 #endif
 	Q_OBJECT
 	Q_DISABLE_COPY(MainWindow)
@@ -348,6 +369,7 @@ public slots:
 	void on_qtbSendFile_clicked();
 
 	void startFileSend(const QString &path);
+	void startFileSends(const QStringList &paths);
 	void bootstrapFileTransferIdentity();
 	bool promptForFileTransferIdentity();
 	void announceFileTransferCapability();

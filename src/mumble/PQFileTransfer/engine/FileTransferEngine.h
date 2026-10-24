@@ -231,6 +231,7 @@ private:
 		bool passwordMode		= false;
 		QByteArray fileKey;   // recovered (possibly after password)
 		bool waitingPassword   = false;
+		int passwordAttempts   = 0;
 		// Own a random, private receive directory; destruction removes unsaved data.
 		std::unique_ptr< QTemporaryDir > tempDirectory;
 		QString tempDir;

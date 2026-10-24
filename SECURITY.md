@@ -55,24 +55,41 @@ persists file data; per-transfer byte accounting is in-memory only.
 ## Identity changes are hard blocks
 
 Fingerprints are pinned per (server certificate digest, username) on first
-verified contact. If a peer later presents a different identity key, the
-transfer is blocked and a loud warning is shown; there are no silent key
-updates. First-use pinning on the sending side pins the peer's
-signature-verified key when no pin exists yet and immediately offers the
-safety-number check — a documented TOFU softening of the strict
-verify-before-first-transfer rule on the initiator side only. The receiving
-side always requires explicit verification before a transfer proceeds: an
-incoming M1 presents an unsigned key claim, so nothing is written to the
-trust store until the safety-number dialog is accepted; declining leaves no
-pin behind and the handshake is never answered.
+contact. If a peer later presents a different identity key, the transfer is
+blocked and a loud warning is shown; there are no silent key updates.
+
+By default the client uses trust on first use (TOFU), like most messengers:
+the first transfer with someone proceeds without a prompt and their key is
+pinned as *not verified*. Only authenticated keys are pinned. The sender pins
+the key the recipient proved in M4. The receiver lets the handshake run but
+pins only after the sender's signed manifest has been verified, so an
+unsigned M1 key claim is never written to the trust store. Users verify a
+contact at any time from their user menu (*Verify file identity…*, QR code or
+60 digits); verified contacts show a shield in the user list, and only they
+qualify for automatic saving.
+
+**Trade-off:** a malicious server can impersonate both sides of the *first*
+transfer between two people who have not verified each other. Once either
+side pins the honest key, any substitution is a hard block. Users who want
+the strict rule enable *Ask me to verify new contacts before their first
+transfer* (Settings → File Sharing). Every first transfer then waits for the
+safety-number dialog; on the receiving side nothing is pinned until it is
+accepted, and declining leaves no pin behind.
 
 ## Operational notes
 
 - Wrong passwords and corrupted data produce one identical generic error —
   there is no oracle.
 - Secrets (session keys, file keys, password-derived keys, identity keys)
-  are zeroized after use; the identity secret key is stored encrypted at
-  rest under an Argon2id-derived AES-256-GCM key.
+  are zeroized after use. The identity secret key is stored encrypted at
+  rest with AES-256-GCM. By default the key-encryption key is a random
+  device key: on Windows it is sealed with DPAPI to the user account; on
+  other platforms it is stored next to the identity, the same protection the
+  Mumble client certificate gets. Users can opt into a passphrase instead
+  (Argon2id-derived key, entered on connect) under Settings → File Sharing.
+- A receiver gets five attempts at a file password before the transfer
+  fails. The receiver already holds everything an offline guess needs, so
+  retries reveal nothing new.
 - Server limits (`filebandwidth`, `filebandwidthaggregate`, `maxfilesize`,
   `filecontrollimit`, `filecontrolburst`) bound abuse but are not a
   substitute for transport security expectations.

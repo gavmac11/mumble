@@ -211,15 +211,21 @@ or replay control messages, or truncate undetected.
 
 ## 8. Identity, safety numbers, TOFU (PQShield §5 verbatim)
 
-- Long-term ML-DSA-65 identity keypair per client; secret key encrypted at rest with an
-  Argon2id-derived AES-256-GCM key; `id_pk` is the fixed 1952-byte FIPS 204 encoding.
+- Long-term ML-DSA-65 identity keypair per client; secret key encrypted at rest with
+  AES-256-GCM under a random device key (DPAPI-sealed on Windows) or, if the user opts
+  in, an Argon2id-derived passphrase key; `id_pk` is the fixed 1952-byte FIPS 204 encoding.
 - `fp = SHA-384("PQShield-fingerprint-v1" ‖ suite_id ‖ id_pk)`.
 - Safety number `H = SHA-384("PQShield-safety-number-v1" ‖ suite_id ‖ u16len(min_fp) ‖
   min_fp ‖ u16len(max_fp) ‖ max_fp)`, lexicographic order on fingerprint bytes. QR code
   carrying full H is primary; fallback text = first 24 bytes of H as a zero-padded
   big-endian integer in 60 decimal digits, 12 groups of 5.
-- First contact MUST be verified out-of-band (QR/in-person/voice) before sending any
-  file content or accepting a transfer; TOFU pin after verification; any fingerprint change ⇒ hard block with a loud
+- Client policy deviation from PQShield §5: by default first contact is trust on first
+  use. The sender pins the key authenticated by M4; the receiver pins the key once the
+  signed manifest verifies (never the unsigned M1 claim). Pins start unverified;
+  out-of-band verification (QR/in-person/voice) marks them verified from the user menu.
+  With the "verify new contacts first" setting, first contact MUST be verified
+  out-of-band before sending any file content or accepting a transfer, and the pin is
+  written only after verification. Any fingerprint change ⇒ hard block with a loud
   warning until explicitly re-verified. Pins are keyed by (server certificate digest,
   username). During the handshake, received identity keys MUST match the pin.
 - Missing/unreadable trust storage fails closed. Sender authorization retains the
@@ -239,7 +245,8 @@ or replay control messages, or truncate undetected.
   limits apply once the manifest arrives.
 - The explicit user-menu identity reset deletes only the displayed expected pin,
   refreshes caches and cancels transfers and pending prompts with that peer. It never adopts a changed key.
-  The next handshake requires out-of-band verification again. Receiving acceptance
+  The next handshake pins on first use again, or requires out-of-band verification
+  under the strict setting. Receiving acceptance
   and manual/automatic saving recheck captured trust; a write already authorized
   before revocation may finish and its complete result is reported truthfully.
 

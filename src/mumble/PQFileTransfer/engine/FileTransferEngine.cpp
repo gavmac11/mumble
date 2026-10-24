@@ -515,8 +515,9 @@ void FileTransferEngine::handleIncomingM1(unsigned int actorSession, const QByte
 	}
 
 	if (pinned.isEmpty()) {
-		// First contact: park the handshake until the user verifies the
-		// safety number (mandatory out-of-band verification, §5).
+		// First contact: park the handshake until the manager decides. It
+		// resumes at once under trust on first use, or after the user verifies
+		// the safety number when verification is required (§5).
 		// One prompt per peer: refuse replacements until its exact request is resolved or expires.
 		if (m_pendingHandshakes.contains(actorSession) || m_pendingHandshakes.size() >= 32)
 			return;
@@ -1595,6 +1596,13 @@ void FileTransferEngine::providePassword(const QByteArray &transferId, QByteArra
 		QByteArray layer1;
 		if (!unwrapPasswordLayer(layer1, job.manifest.wrappedFileKey, pwWrapKey, job.transferId, true, job.manifest.fpA,
 								 job.manifest.fpB, *job.manifest.argon2, job.manifest.argon2Salt)) {
+			// Allow a few retries so a typo does not throw the transfer away. The
+			// receiver already holds everything an offline guess needs, so retries
+			// reveal nothing new; the error text stays the generic one.
+			if (++job.passwordAttempts < MaxPasswordAttempts) {
+				updateReceiveState(job, FTTransferInfo::State::WaitingPassword, genericDecryptionError());
+				return;
+			}
 			updateReceiveState(job, FTTransferInfo::State::Failed, genericDecryptionError());
 			cleanupReceive(jobPtr);
 			return;

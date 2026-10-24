@@ -306,15 +306,18 @@ static int inlineWebMDrop(Global &global, MainWindow &window, const QDir &shared
 // connections are singletons. Only disposable generated identities are accepted
 // by the test driver; all production dialog handlers and transports stay wired.
 static int tlsChild(const QStringList &arguments) {
-	const int index = arguments.indexOf(QStringLiteral("--tls-child"));
+	const qsizetype index = arguments.indexOf(QStringLiteral("--tls-child"));
 	if (index < 0 || arguments.size() != index + 7)
 		return 10;
 	const QString role = arguments[index + 1], sharedPath = arguments[index + 2];
 	const quint16 port                 = arguments[index + 3].toUShort();
 	const QByteArray certificateDigest = arguments[index + 4].toLatin1();
 	const QByteArray serverDigest      = QByteArray::fromHex(arguments[index + 5].toLatin1());
+	// "first-contact" uses the opt-in safety-number dialogs; "first-use" is the
+	// default trust-on-first-use flow, which must not show any dialog.
 	const bool firstContact            = arguments[index + 6] == QStringLiteral("first-contact")
 										 || arguments[index + 6] == QStringLiteral("webm-oversized");
+	const bool firstUse                = arguments[index + 6] == QStringLiteral("first-use");
 	const bool inlineWebM              = arguments[index + 6].startsWith(QStringLiteral("webm-"));
 	const bool oversizedWebM           = arguments[index + 6] == QStringLiteral("webm-oversized");
 	const bool sending                 = role == QStringLiteral("sender");
@@ -332,7 +335,8 @@ static int tlsChild(const QStringList &arguments) {
 		const QByteArray peerFingerprint = readFixtureFile(shared.filePath(peer + ".fingerprint"));
 		if (peerFingerprint.size() != manager->identity()->fingerprint().size())
 			return 14;
-		if (!firstContact) {
+		global.s.bFTRequireVerification = firstContact;
+		if (!firstContact && !firstUse) {
 			if (manager->trustStore()->checkAndPin(serverDigest, peer, peerFingerprint, QString())
 					!= PQFT::TrustState::Pinned
 				|| !manager->trustStore()->markVerified(serverDigest, peer, peerFingerprint))
@@ -482,6 +486,13 @@ static int tlsChild(const QStringList &arguments) {
 			|| (firstContact && (contacts == 0 || acceptedDialogs == 0))
 			|| (!firstContact && (contacts != 0 || acceptedDialogs != 0)))
 			return 23;
+		if (firstUse) {
+			// Both sides remembered the other's key on first use, unverified.
+			PQFT::PinnedPeer pin;
+			if (!manager->trustStore()->lookup(pin, serverDigest, peer) || pin.fingerprint != peerFingerprint
+				|| pin.verified || !window.findChildren< SafetyNumberDialog * >().isEmpty())
+				return 26;
+		}
 		const QUrl card(
 			QStringLiteral("data:application/mumble-file;base64,%1").arg(QString::fromLatin1(transferId.toBase64())));
 		if (window.qteLog->document()->resource(QTextDocument::ImageResource, card).value< QImage >().isNull()
@@ -501,14 +512,15 @@ class TestFileTransferMainWindow : public QObject {
 private slots:
 #ifdef MUMBLE_TEST_MURMUR_BINARY
 	void realClientTransfer_data() {
-		QTest::addColumn< bool >("firstContact");
-		QTest::newRow("preverified") << false;
-		QTest::newRow("first-contact-dialogs") << true;
+		QTest::addColumn< QString >("mode");
+		QTest::newRow("preverified") << QStringLiteral("preverified");
+		QTest::newRow("first-contact-dialogs") << QStringLiteral("first-contact");
+		QTest::newRow("first-use-without-dialogs") << QStringLiteral("first-use");
 	}
 
 	void realClientTransfer() {
-		QFETCH(bool, firstContact);
-		runClients(firstContact, false, false);
+		QFETCH(QString, mode);
+		runClients(mode, false, false);
 	}
 	void inlineWebMDrop_data() {
 		QTest::addColumn< bool >("oversized");
@@ -517,16 +529,16 @@ private slots:
 	}
 	void inlineWebMDrop() {
 		QFETCH(bool, oversized);
-		runClients(false, true, oversized);
+		runClients(QStringLiteral("preverified"), true, oversized);
 	}
 
 private:
-	void runClients(bool firstContact, bool webm, bool oversized) {
+	void runClients(const QString &mode, bool webm, bool oversized) {
 		const QString logs = QDir::current().filePath(QStringLiteral("test-results/file-transfer-main-window"));
 		QVERIFY(QDir().mkpath(logs));
 		const QString suffix =
 			webm ? (oversized ? QStringLiteral("-webm-oversized.log") : QStringLiteral("-webm-small.log"))
-				 : (firstContact ? QStringLiteral("-first-contact.log") : QStringLiteral("-preverified.log"));
+				 : QStringLiteral("-%1.log").arg(mode);
 		// A failed server launch must not leave an earlier run's client logs
 		// looking like evidence from this attempt.
 		for (const QString &role : { QStringLiteral("sender"), QStringLiteral("receiver"), QStringLiteral("server") })
@@ -623,13 +635,12 @@ private:
 		});
 		for (auto *child : { &sender, &receiver }) {
 			child->setProcessChannelMode(QProcess::MergedChannels);
-			child->start(QCoreApplication::applicationFilePath(),
-						 { QStringLiteral("-platform"), QGuiApplication::platformName(), QStringLiteral("--tls-child"),
-						   child == &sender ? QStringLiteral("sender") : QStringLiteral("receiver"), directory.path(),
-						   QString::number(port), QString::fromLatin1(certificateDigest),
-						   QString::fromLatin1(serverDigest),
-						   webm ? (oversized ? QStringLiteral("webm-oversized") : QStringLiteral("webm-small"))
-								: (firstContact ? QStringLiteral("first-contact") : QStringLiteral("preverified")) });
+			child->start(
+				QCoreApplication::applicationFilePath(),
+				{ QStringLiteral("-platform"), QGuiApplication::platformName(), QStringLiteral("--tls-child"),
+				  child == &sender ? QStringLiteral("sender") : QStringLiteral("receiver"), directory.path(),
+				  QString::number(port), QString::fromLatin1(certificateDigest), QString::fromLatin1(serverDigest),
+				  webm ? (oversized ? QStringLiteral("webm-oversized") : QStringLiteral("webm-small")) : mode });
 			QVERIFY(child->waitForStarted(5000));
 		}
 		const bool finished = waitFor(

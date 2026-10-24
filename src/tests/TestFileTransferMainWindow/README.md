@@ -8,9 +8,11 @@ When the server target is enabled, it also starts an owned loopback server on an
 available port and two separate client processes. They use production
 ServerHandler TLS connections, MainWindow protocol handlers, FileTransferManager,
 the worker engine and the real send and safety-number dialogs. A test-only timer
-selects the other generated fixture client and clicks the dialog buttons. Both
-preverified and first-contact transfers must save the 600123-byte input unchanged
-and acknowledge delivery. During transfer, the GUI timer must keep running with
+selects the other generated fixture client and clicks the dialog buttons.
+Preverified, first-contact (opt-in safety-number dialogs) and first-use (default
+trust on first use, no dialog allowed) transfers must save the 600123-byte input
+unchanged and acknowledge delivery. The first-use row also checks that both sides
+pinned the other's key as not verified. During transfer, the GUI timer must keep running with
 no observed gap above two seconds.
 
 All databases, TLS pins, identities, source files and saved files are disposable.

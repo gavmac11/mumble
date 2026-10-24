@@ -10,7 +10,8 @@
 #include "ui_FileTransferConfig.h"
 
 /// Settings page for the chat file-transfer feature (chunking, pacing,
-/// receive limits, download directory).
+/// receive limits, download directory, contact verification and identity
+/// passphrase).
 class FileTransferConfig : public ConfigWidget, public Ui::FileTransferConfig {
 private:
 	Q_OBJECT
@@ -32,6 +33,10 @@ public:
 
 protected slots:
 	void on_qpbFTBrowse_clicked();
+	void on_qpbFTPassphrase_clicked();
+
+private:
+	void updateIdentityStatus();
 };
 
 #endif // MUMBLE_MUMBLE_FILETRANSFERCONFIG_H_

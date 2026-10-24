@@ -250,6 +250,7 @@ UserModel::UserModel(QObject *p) : QAbstractItemModel(p) {
 	qiDeafenedSelf    = QIcon(QLatin1String("skin:deafened_self.svg"));
 	qiDeafenedServer  = QIcon(QLatin1String("skin:deafened_server.svg"));
 	qiAuthenticated   = QIcon(QLatin1String("skin:authenticated.svg"));
+	qiFileVerified    = QIcon(QLatin1String("skin:file_verified.svg"));
 	qiChannel         = QIcon(QLatin1String("skin:channel.svg"));
 	qiActiveChannel   = QIcon(QLatin1String("skin:channel_active.svg"));
 	qiLinkedChannel   = QIcon(QLatin1String("skin:channel_linked.svg"));
@@ -516,6 +517,11 @@ QVariant UserModel::data(const QModelIndex &idx, int role) const {
 					l << qiDeafenedSelf;
 				if (p->iId >= 0 && !item->isListener)
 					l << qiAuthenticated;
+#ifdef USE_FILE_SHARING
+				if (!item->isListener && Global::get().fileTransferManager
+					&& Global::get().fileTransferManager->isVerifiedPeer(p))
+					l << qiFileVerified;
+#endif
 				if (!p->qsFriendName.isEmpty() && !item->isListener)
 					l << qiFriend;
 				return l;

@@ -119,6 +119,9 @@ constexpr quint32 Argon2MaxParallelism = 4;
 /// Minimum password length enforced on the sender side.
 constexpr qsizetype MinPasswordLength = 8;
 
+/// Password attempts a receiver gets before a password-mode transfer fails.
+constexpr int MaxPasswordAttempts = 5;
+
 } // namespace PQFT
 
 #endif // MUMBLE_MUMBLE_PQFILETRANSFER_PQFTCONSTANTS_H_

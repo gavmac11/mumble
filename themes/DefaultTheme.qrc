@@ -24,6 +24,7 @@
     <file alias="default_avatar.svg">Default/default_avatar.svg</file>
     <file alias="disconnect.svg">Default/disconnect.svg</file>
     <file alias="ear.svg">Default/ear.svg</file>
+    <file alias="file_verified.svg">Default/file_verified.svg</file>
     <file alias="filter.svg">Default/filter.svg</file>
     <file alias="filter_off.svg">Default/filter_off.svg</file>
     <file alias="filter_on.svg">Default/filter_on.svg</file>

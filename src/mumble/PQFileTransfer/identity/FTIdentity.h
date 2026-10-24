@@ -41,11 +41,23 @@ QString safetyNumber(const QByteArray &fingerprintA, const QByteArray &fingerpri
 /// 5: hash }. Empty QByteArray on failure.
 QByteArray safetyQrPayload(const QByteArray &fingerprintA, const QByteArray &fingerprintB);
 
-/// Own long-term identity: generated once, secret key stored encrypted at
-/// rest (Argon2id-derived AES-256-GCM) in the client database, unlocked for
-/// the session on demand.
+/// Own long-term identity: generated once and stored encrypted at rest in the
+/// client database. By default the wrapping key is a random device key kept
+/// by the operating system (DPAPI on Windows; elsewhere it sits next to the
+/// identity, the same protection as the Mumble client certificate), so the
+/// identity unlocks without user interaction. Users may opt into a
+/// passphrase (Argon2id-derived AES-256-GCM key) instead.
 class FileTransferIdentity {
 public:
+	enum class Protection {
+		/// No identity row exists.
+		None,
+		/// Unlocks automatically with the device key.
+		Device,
+		/// Requires the user's passphrase to unlock.
+		Passphrase,
+	};
+
 	/// Ensure the tables exist (idempotent).
 	static bool ensureSchema(QSqlDatabase db);
 
@@ -54,14 +66,26 @@ public:
 	/// True when an identity row exists.
 	bool hasIdentity() const;
 
+	/// How the stored identity is protected (None when there is no identity
+	/// or its row cannot be read).
+	Protection protection() const;
+
+	/// Generate a fresh identity keypair protected by the device key. Fails
+	/// if an identity already exists. Leaves the identity unlocked.
+	bool createDeviceIdentity();
+
 	/// Generate a fresh identity keypair and store it encrypted under
 	/// `passphrase`. Fails (returns false) if an identity already exists or
 	/// the passphrase is too weak (< MinPasswordLength).
 	bool createIdentity(const QString &passphrase);
 
-	/// Load and decrypt the secret key. False on wrong passphrase (or
-	/// corruption — indistinguishable by design).
+	/// Load and decrypt the secret key of a passphrase-protected identity.
+	/// False on wrong passphrase (or corruption — indistinguishable by
+	/// design) and for device-protected identities.
 	bool unlock(const QString &passphrase);
+
+	/// Load and decrypt the secret key of a device-protected identity.
+	bool unlockWithDevice();
 
 	/// True while the secret key is decrypted in memory.
 	bool isUnlocked() const;
@@ -75,12 +99,30 @@ public:
 	/// Sign with the unlocked identity key (context-separated ML-DSA).
 	bool sign(QByteArray &signature, const QByteArray &message, const QByteArray &context) const;
 
-	/// Change the passphrase of the stored identity (requires unlock first).
+	/// Protect the stored identity with a new passphrase (requires unlock
+	/// first). Works for both device- and passphrase-protected identities.
 	bool changePassphrase(const QString &newPassphrase);
 
+	/// Switch the stored identity back to device protection (requires unlock
+	/// first). The key pair, and therefore the fingerprint, stays the same.
+	bool removePassphrase();
+
+	/// Forget the stored identity entirely (used when the passphrase is
+	/// lost). Peers that pinned the old key will see it as changed.
+	bool deleteIdentity();
+
 private:
-	bool loadRow(QByteArray &pubkey, QByteArray &seckeyEnc, QByteArray &salt, QByteArray &nonce,
-				 Argon2Params &params) const;
+	struct StoredRow {
+		QByteArray pubkey;
+		QByteArray seckeyEnc;
+		QByteArray kekSalt;
+		QByteArray nonce;
+		QString kdfParams;
+	};
+	bool loadRow(StoredRow &row) const;
+	bool storeWrapped(bool insert, const QByteArray &pubkey, const QByteArray &wrapped, const QByteArray &kekSalt,
+					  const QByteArray &nonce, const QString &kdfParams);
+	bool finishUnlock(const StoredRow &row, const QByteArray &kek);
 
 	QSqlDatabase m_db;
 	QByteArray m_publicKey;
