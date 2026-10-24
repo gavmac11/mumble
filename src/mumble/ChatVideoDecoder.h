@@ -47,6 +47,9 @@ class ChatVideoDecoder : public QObject {
 	Q_OBJECT
 
 public:
+	/// Default audio output rate (S16LE stereo)
+	static constexpr int DEFAULT_AUDIO_SAMPLE_RATE = 48000;
+
 	struct VideoFrame {
 		QImage image;
 		/// Presentation timestamp of the frame, relative to the start of the stream.
@@ -57,7 +60,7 @@ public:
 	};
 
 	struct AudioChunk {
-		/// Decoded audio, resampled to S16LE, 48 kHz, stereo
+		/// Decoded audio, resampled to S16LE stereo at the rate passed to open()
 		QByteArray pcm;
 		/// Presentation timestamp of the first sample, relative to the start of the stream
 		qint64 ptsMs = -1;
@@ -84,7 +87,8 @@ public:
 	/// Opens the given WebM data for playback.
 	/// @param videoData The raw WebM container data
 	/// @param decodeAudio Whether the audio stream (if any) should be decoded as well
-	bool open(const QByteArray &videoData, bool decodeAudio);
+	/// @param audioSampleRate The rate decoded audio is resampled to
+	bool open(const QByteArray &videoData, bool decodeAudio, int audioSampleRate = DEFAULT_AUDIO_SAMPLE_RATE);
 	/// Closes and frees all FFmpeg state. Safe to call from any state.
 	void close();
 
@@ -120,9 +124,8 @@ signals:
 private:
 	static constexpr int MAX_BURST_VIDEO_FRAMES = 3;
 	static constexpr qint64 MAX_BURST_AUDIO_MS  = 300;
-	/// Output format the audio is resampled to: S16LE, 48 kHz, stereo
-	static constexpr int AUDIO_OUT_SAMPLE_RATE = 48000;
-	static constexpr int AUDIO_OUT_CHANNELS    = 2;
+	/// Output format the audio is resampled to: S16LE stereo
+	static constexpr int AUDIO_OUT_CHANNELS = 2;
 
 	struct StreamContext {
 		AVCodecContext *codecCtx = nullptr;
@@ -150,6 +153,7 @@ private:
 
 	QByteArray m_videoData;
 	bool m_decodeAudio      = false;
+	int m_audioSampleRate   = DEFAULT_AUDIO_SAMPLE_RATE;
 	qint64 m_durationMs     = 0;
 	int m_videoStreamIndex  = -1;
 	int m_audioStreamIndex  = -1;

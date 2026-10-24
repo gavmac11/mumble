@@ -15,13 +15,20 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPolygonF>
 
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 #include <QtCore/QCoreApplication>
 #include <QtCore/QFile>
 #include <QtCore/QIODevice>
+#endif
+#ifdef USE_CHAT_WEBM_AUDIO
 #include <QtMultimedia/QAudioDevice>
 #include <QtMultimedia/QAudioSink>
 #include <QtMultimedia/QMediaDevices>
+// Sink states and errors (QAudio::IdleState, ...)
+#	define CHAT_SINK_NS QAudio
+#elif defined(USE_CHAT_WEBM_MIXER_AUDIO)
+#include "ChatVideoMixerSink.h"
+#	define CHAT_SINK_NS ChatVideoMixerSink
 #endif
 
 namespace {
@@ -31,19 +38,18 @@ bool webmDebugEnabled() {
 	return enabled;
 }
 
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 /// Dumps the PCM that is fed into the audio sink, for debugging (MUMBLE_WEBM_DEBUG)
 void dumpAudioChunk(const QByteArray &pcm) {
 	static QFile dump(QStringLiteral("/tmp/webm_pcm_%1.raw").arg(QCoreApplication::applicationPid()));
-	if (!dump.isOpen()) {
-		dump.open(QIODevice::WriteOnly | QIODevice::Append);
-	}
+	if (!dump.isOpen() && !dump.open(QIODevice::WriteOnly | QIODevice::Append))
+		return;
 	dump.write(pcm);
 }
-#endif // USE_CHAT_WEBM_AUDIO
+#endif // MUMBLE_CHAT_WEBM_HAS_AUDIO
 } // namespace
 
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 ChatVideoAudioSource::ChatVideoAudioSource(QObject *parent) : QIODevice(parent) {
 	open(ReadOnly);
 }
@@ -82,7 +88,7 @@ qint64 ChatVideoAudioSource::readData(char *data, qint64 maxlen) {
 qint64 ChatVideoAudioSource::writeData(const char *, qint64) {
 	return 0;
 }
-#endif // USE_CHAT_WEBM_AUDIO
+#endif // MUMBLE_CHAT_WEBM_HAS_AUDIO
 
 ChatVideoPlayer *ChatVideoPlayer::create(const QUrl &url, const QByteArray &videoData, QImage poster, QObject *parent) {
 	if (poster.isNull() || !ChatVideoDecoder::isSupported())
@@ -97,7 +103,7 @@ ChatVideoPlayer::ChatVideoPlayer(const QUrl &url, const QByteArray &videoData, Q
 }
 
 ChatVideoPlayer::~ChatVideoPlayer() {
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 	if (m_sink) {
 		m_sink->stop();
 		delete m_sink;
@@ -147,7 +153,7 @@ bool ChatVideoPlayer::ensureWorker() {
 	if (m_thread)
 		return true;
 
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 	const bool decodeAudio = ensureAudioSink();
 #else
 	const bool decodeAudio = false;
@@ -156,10 +162,15 @@ bool ChatVideoPlayer::ensureWorker() {
 	// The decoder is opened on the GUI thread and only then handed over to its
 	// worker thread - afterwards it is exclusively used from that thread.
 	m_decoder = new ChatVideoDecoder();
-	if (!m_decoder->open(m_videoData, decodeAudio)) {
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
+	const int audioRate = audioSampleRate();
+#else
+	const int audioRate = ChatVideoDecoder::DEFAULT_AUDIO_SAMPLE_RATE;
+#endif
+	if (!m_decoder->open(m_videoData, decodeAudio, audioRate)) {
 		delete m_decoder;
 		m_decoder = nullptr;
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 		if (m_sink) {
 			m_sink->stop();
 			delete m_sink;
@@ -171,7 +182,7 @@ bool ChatVideoPlayer::ensureWorker() {
 		return false;
 	}
 
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 	if (decodeAudio && !m_decoder->decodingAudio()) {
 		// The clip carries no decodable audio (a silent video, or an audio codec
 		// this FFmpeg build lacks). The audio clock would never advance in that
@@ -184,6 +195,10 @@ bool ChatVideoPlayer::ensureWorker() {
 		m_audioSource = nullptr;
 		m_wallPaced   = true;
 	}
+#endif
+
+#ifdef USE_CHAT_WEBM_MIXER_AUDIO
+	m_decoderAudioRate = audioRate;
 #endif
 
 	m_thread = new QThread(this);
@@ -200,6 +215,10 @@ bool ChatVideoPlayer::ensureWorker() {
 }
 
 #ifdef USE_CHAT_WEBM_AUDIO
+int ChatVideoPlayer::audioSampleRate() const {
+	return ChatVideoDecoder::DEFAULT_AUDIO_SAMPLE_RATE;
+}
+
 bool ChatVideoPlayer::ensureAudioSink() {
 	if (m_sink)
 		return m_audioSource != nullptr;
@@ -266,10 +285,42 @@ bool ChatVideoPlayer::ensureAudioSink() {
 	m_sink = sink;
 	return true;
 }
+#elif defined(USE_CHAT_WEBM_MIXER_AUDIO)
+int ChatVideoPlayer::audioSampleRate() const {
+	return m_sink ? m_sink->sampleRate() : ChatVideoDecoder::DEFAULT_AUDIO_SAMPLE_RATE;
+}
+
+bool ChatVideoPlayer::ensureAudioSink() {
+	if (m_sink)
+		return m_audioSource != nullptr;
+
+	ChatVideoMixerSink *sink = ChatVideoMixerSink::create(this);
+	// A replacement sink (after an audio output restart) has to run at the rate
+	// the decoder already resamples to, or the audio would play at the wrong pitch.
+	if (sink && m_decoderAudioRate != 0 && sink->sampleRate() != m_decoderAudioRate) {
+		delete sink;
+		sink = nullptr;
+	}
+	if (!sink) {
+		qWarning("ChatVideoPlayer: no audio output - playing without sound");
+		delete m_audioSource;
+		m_audioSource = nullptr;
+		return false;
+	}
+
+	if (!m_audioSource)
+		m_audioSource = new ChatVideoAudioSource(this);
+	sink->start(m_audioSource);
+	if (webmDebugEnabled()) {
+		qInfo("ChatVideoPlayer: mixer audio opened (%d Hz)", sink->sampleRate());
+	}
+	m_sink = sink;
+	return true;
+}
 #endif
 
 qint64 ChatVideoPlayer::timeSourceMs() const {
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 	// The amount of audio the sink actually played is the master clock. It only
 	// ever gets consulted while m_wallPaced is false - once the audio ran dry
 	// (everything played out), the wall clock takes over, see presentTick().
@@ -281,7 +332,7 @@ qint64 ChatVideoPlayer::timeSourceMs() const {
 
 void ChatVideoPlayer::rebaseClock() {
 	m_tsAudioBase = 0;
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 	if (m_audioSource)
 		m_tsAudioBase = m_sink->processedUSecs() / 1000;
 #endif
@@ -293,7 +344,7 @@ void ChatVideoPlayer::rebaseClock() {
 qint64 ChatVideoPlayer::currentClockMs() const {
 	const qint64 source = timeSourceMs();
 	qint64 base;
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 	base = (m_audioSource && !m_wallPaced) ? m_tsAudioBase : m_tsWallBase;
 #else
 	base = m_tsWallBase;
@@ -302,7 +353,7 @@ qint64 ChatVideoPlayer::currentClockMs() const {
 }
 
 bool ChatVideoPlayer::hasAudioOutput() const {
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 	return m_audioSource != nullptr;
 #else
 	return false;
@@ -310,7 +361,7 @@ bool ChatVideoPlayer::hasAudioOutput() const {
 }
 
 qsizetype ChatVideoPlayer::bufferedAudioBytes() const {
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 	return m_audioSource ? m_audioSource->bufferedBytes() : 0;
 #else
 	return 0;
@@ -343,7 +394,7 @@ void ChatVideoPlayer::start() {
 		// has no decodable audio) the wall clock paces playback from the start.
 		m_wallPaced = !hasAudioOutput();
 	} else if (m_decoderAtEof && m_videoQueue.isEmpty()
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 			   && (!m_audioSource || bufferedAudioBytes() == 0)
 #endif
 	) {
@@ -360,8 +411,8 @@ void ChatVideoPlayer::start() {
 	// suspended) and the clock base latched at pause time restores the position.
 	rebaseClock();
 
-#ifdef USE_CHAT_WEBM_AUDIO
-	if (m_sink && m_sink->state() == QAudio::SuspendedState)
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
+	if (m_sink && m_sink->state() == CHAT_SINK_NS::SuspendedState)
 		m_sink->resume();
 #endif
 
@@ -384,8 +435,8 @@ void ChatVideoPlayer::pause() {
 
 	m_state = Paused;
 
-#ifdef USE_CHAT_WEBM_AUDIO
-	if (m_sink && m_sink->state() != QAudio::SuspendedState)
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
+	if (m_sink && m_sink->state() != CHAT_SINK_NS::SuspendedState)
 		m_sink->suspend();
 #endif
 
@@ -429,7 +480,7 @@ void ChatVideoPlayer::onDecoderVideoFrame(const QImage &image, qint64 ptsMs) {
 
 void ChatVideoPlayer::onDecoderAudioChunk(const QByteArray &pcm, qint64, qint64) {
 	m_workRequested = false;
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 	if (!m_audioSource || m_state != Playing)
 		return;
 
@@ -461,7 +512,7 @@ void ChatVideoPlayer::keepDecoderFed() {
 		return;
 
 	const bool videoHungry = m_videoQueue.size() <= 1;
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 	const bool audioHungry = m_audioSource && bufferedAudioBytes() < MAX_AUDIO_BUFFER_BYTES / 3;
 #else
 	const bool audioHungry = false;
@@ -473,7 +524,7 @@ void ChatVideoPlayer::keepDecoderFed() {
 void ChatVideoPlayer::maybeLoop(qint64 clockMs) {
 	if (!m_decoderAtEof || !m_videoQueue.isEmpty())
 		return;
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 	if (m_audioSource && bufferedAudioBytes() > 0)
 		return;
 #endif
@@ -509,13 +560,29 @@ void ChatVideoPlayer::presentTick() {
 	if (m_state != Playing)
 		return;
 
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef USE_CHAT_WEBM_MIXER_AUDIO
+	// The audio output dropped the stream (it was restarted or wiped, e.g. after
+	// an audio settings change). Re-attach to the current output, keeping the
+	// clock position; fall back to the wall clock if that is impossible.
+	if (m_audioSource && !m_wallPaced && m_sink->error() == ChatVideoMixerSink::FatalError) {
+		qWarning("ChatVideoPlayer: audio output was restarted - re-attaching");
+		m_clockBaseMs = currentClockMs();
+		m_sink->stop();
+		delete m_sink;
+		m_sink = nullptr;
+		if (!ensureAudioSink())
+			m_wallPaced = true;
+		rebaseClock();
+	}
+#endif
+
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 	// Pull-mode sinks do not resume pulling by themselves after an underrun (the
 	// sink went Idle and never reads the source again). A fresh sink object is
 	// created instead of restarting the old one - cycling stop()/start() on a
 	// live sink proved fragile. The clock is re-based around the restart so
 	// playback continues seamlessly.
-	if (m_audioSource && !m_wallPaced && m_sink->state() == QAudio::IdleState
+	if (m_audioSource && !m_wallPaced && m_sink->state() == CHAT_SINK_NS::IdleState
 		&& bufferedAudioBytes() > 0) {
 		if (webmDebugEnabled()) {
 			qInfo("ChatVideoPlayer: reviving idle audio sink");
@@ -541,7 +608,7 @@ void ChatVideoPlayer::presentTick() {
 	// position, so that the last frames can still become due and looping can
 	// kick in.
 	if (!m_wallPaced && m_audioSource && m_decoderAtEof && bufferedAudioBytes() == 0
-		&& m_sink->state() != QAudio::ActiveState) {
+		&& m_sink->state() != CHAT_SINK_NS::ActiveState) {
 		m_wallPaced   = true;
 		m_clockBaseMs += m_sink->processedUSecs() / 1000 - m_tsAudioBase;
 		rebaseClock();
@@ -554,7 +621,7 @@ void ChatVideoPlayer::presentTick() {
 
 	const qint64 clockMs = currentClockMs();
 	if (webmDebugEnabled() && (++m_debugTick % 33) == 0) {
-#ifdef USE_CHAT_WEBM_AUDIO
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 		qInfo("ChatVideoPlayer: tick clock=%lldms queue=%lld audioBuf=%lld delivered=%lld eof=%d",
 			  static_cast< long long >(clockMs), static_cast< long long >(m_videoQueue.size()),
 			  static_cast< long long >(bufferedAudioBytes()),

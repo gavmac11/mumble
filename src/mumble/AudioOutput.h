@@ -124,6 +124,10 @@ public:
 
 	void addFrameToBuffer(ClientUser *sender, const Mumble::Protocol::AudioData &audioData);
 	AudioOutputToken playSample(const QString &filename, float volume, bool loop = false);
+	/// Mixes an externally fed, non-speech buffer like a sample. Takes ownership:
+	/// the buffer is deleted once its prepareSampleBuffer() returns false, or
+	/// when this output is wiped or destroyed.
+	AudioOutputToken addSampleBuffer(AudioOutputBuffer *buffer);
 	void run() Q_DECL_OVERRIDE = 0;
 	virtual bool isAlive() const;
 	const float *getSpeakerPos(unsigned int &nspeakers);

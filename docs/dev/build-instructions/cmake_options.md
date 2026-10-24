@@ -58,8 +58,9 @@ Build the included version of Speex instead of looking for one on the system.
 
 Build support for playing WebM videos (VP8/VP9/AV1) embedded in chat messages.
 Requires `screen-sharing=ON`, libavformat and libswresample. On Windows these
-libraries and their runtime DLLs come from `FFMPEG_DIR`. Audio playback is
-enabled when Qt Multimedia is available; otherwise videos play silently.
+libraries and their runtime DLLs come from `FFMPEG_DIR`. Audio
+plays through Qt Multimedia when available, otherwise through Mumble's own audio
+output (the mixer used for notification sounds).
 (Default: ON)
 
 ### client

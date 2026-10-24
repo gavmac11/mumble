@@ -15,17 +15,25 @@
 
 #ifdef USE_CHAT_WEBM
 
-#ifdef USE_CHAT_WEBM_AUDIO
+// Chat video audio goes through Qt Multimedia's QAudioSink when available
+// (USE_CHAT_WEBM_AUDIO), otherwise through Mumble's own audio mixer
+// (USE_CHAT_WEBM_MIXER_AUDIO, see ChatVideoMixerSink).
+#if defined(USE_CHAT_WEBM_AUDIO) || defined(USE_CHAT_WEBM_MIXER_AUDIO)
+#	define MUMBLE_CHAT_WEBM_HAS_AUDIO
+#endif
+
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 #	include <QtCore/QIODevice>
 #	include <QtCore/QMutex>
 #endif
 
 class ChatVideoDecoder;
 class QAudioSink;
+class ChatVideoMixerSink;
 class QThread;
 
-#ifdef USE_CHAT_WEBM_AUDIO
-/// Audio source for the QAudioSink, operated in pull mode: the sink reads at its
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
+/// Audio source for the sink, operated in pull mode: the sink reads at its
 /// own pace (from the audio thread), which avoids the push-mode write sizing
 /// problems of some Qt 6.4 backends (observed as garbled playback).
 class ChatVideoAudioSource : public QIODevice {
@@ -41,6 +49,8 @@ public:
 	qint64 bytesAvailable() const Q_DECL_OVERRIDE;
 	/// Bytes handed to the sink so far (diagnostics)
 	qint64 deliveredBytes() const { return m_delivered; }
+	/// Thread-safe read that bypasses QIODevice's own buffering (mixer sink)
+	qint64 take(char *data, qint64 maxlen) { return readData(data, maxlen); }
 
 protected:
 	qint64 readData(char *data, qint64 maxlen) Q_DECL_OVERRIDE;
@@ -102,7 +112,7 @@ public:
 	qsizetype queuedVideoFrames() const { return m_videoQueue.size(); }
 	/// Whether the decoder has decoded the whole stream already
 	bool decoderAtEof() const { return m_decoderAtEof; }
-	/// Whether audio is being played through a QAudioSink
+	/// Whether audio is being played (through QAudioSink or the Mumble mixer)
 	bool hasAudioOutput() const;
 	/// Amount of audio data waiting to be fed into the sink (bytes)
 	qsizetype bufferedAudioBytes() const;
@@ -150,9 +160,11 @@ private:
 	void start();
 	/// Sets up the decode worker thread (lazily, on first start)
 	bool ensureWorker();
-#ifdef USE_CHAT_WEBM_AUDIO
-	/// Sets up the QAudioSink (lazily, on first start); returns whether audio is available
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
+	/// Sets up the audio sink (lazily, on first start); returns whether audio is available
 	bool ensureAudioSink();
+	/// Sample rate the decoder has to produce audio in for the current sink
+	int audioSampleRate() const;
 #endif
 	/// The raw time source the clock is based on
 	qint64 timeSourceMs() const;
@@ -182,7 +194,13 @@ private:
 	QList< TimedFrame > m_videoQueue;
 
 #ifdef USE_CHAT_WEBM_AUDIO
-	QAudioSink *m_sink               = nullptr;
+	QAudioSink *m_sink = nullptr;
+#elif defined(USE_CHAT_WEBM_MIXER_AUDIO)
+	ChatVideoMixerSink *m_sink = nullptr;
+	/// Rate the decoder was opened with (a replacement sink has to match it)
+	int m_decoderAudioRate = 0;
+#endif
+#ifdef MUMBLE_CHAT_WEBM_HAS_AUDIO
 	ChatVideoAudioSource *m_audioSource = nullptr;
 #endif
 	/// Stream time the current loop iteration started at (0 for the first one).

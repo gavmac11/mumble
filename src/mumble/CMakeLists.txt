@@ -1128,13 +1128,19 @@ if(screen-sharing)
 			"ChatVideoPlayer.cpp"
 		)
 		target_compile_definitions(mumble_client_lib PUBLIC "USE_CHAT_WEBM")
-		# Audio is optional; without Qt Multimedia the wall clock paces silent playback.
+		# Audio plays through Qt Multimedia when available. Otherwise (e.g. the static
+		# Windows build) it is mixed into Mumble's own audio output instead.
 		find_package(Qt6 COMPONENTS Multimedia QUIET)
 		if(Qt6Multimedia_FOUND)
 			target_link_libraries(mumble_client_lib PUBLIC Qt6::Multimedia)
 			target_compile_definitions(mumble_client_lib PUBLIC "USE_CHAT_WEBM_AUDIO")
 		else()
-			message(STATUS "Qt6 Multimedia not found - chat WebM videos will play without sound")
+			message(STATUS "Qt6 Multimedia not found - chat WebM audio plays through the Mumble audio output")
+			target_sources(mumble_client_lib PRIVATE
+				"ChatVideoMixerSink.h"
+				"ChatVideoMixerSink.cpp"
+			)
+			target_compile_definitions(mumble_client_lib PUBLIC "USE_CHAT_WEBM_MIXER_AUDIO")
 		endif()
 	endif()
 endif()

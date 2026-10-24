@@ -152,11 +152,12 @@ void ChatVideoDecoder::closeCodec(StreamContext &ctx) {
 	}
 }
 
-bool ChatVideoDecoder::open(const QByteArray &videoData, bool decodeAudio) {
+bool ChatVideoDecoder::open(const QByteArray &videoData, bool decodeAudio, int audioSampleRate) {
 	// Keep a reference to the data (QByteArrays share their buffer, so this is
 	// cheap) so that reopen() can start over without the caller's help.
 	m_videoData  = videoData;
 	m_decodeAudio = decodeAudio;
+	m_audioSampleRate = audioSampleRate > 0 ? audioSampleRate : DEFAULT_AUDIO_SAMPLE_RATE;
 	return openInternal();
 }
 
@@ -427,7 +428,7 @@ bool ChatVideoDecoder::decodeAudioStep(AudioChunk &audioChunk, bool flush) {
 			if (av_opt_set_chlayout(m_swrCtx, "in_chlayout", &frameLayout, 0) >= 0
 				&& av_opt_set_chlayout(m_swrCtx, "out_chlayout", &outLayout, 0) >= 0
 				&& av_opt_set_int(m_swrCtx, "in_sample_rate", m_audio.frame->sample_rate, 0) >= 0
-				&& av_opt_set_int(m_swrCtx, "out_sample_rate", AUDIO_OUT_SAMPLE_RATE, 0) >= 0
+				&& av_opt_set_int(m_swrCtx, "out_sample_rate", m_audioSampleRate, 0) >= 0
 				&& av_opt_set_sample_fmt(m_swrCtx, "in_sample_fmt",
 										  static_cast< AVSampleFormat >(m_audio.frame->format), 0)
 					   >= 0
@@ -465,7 +466,7 @@ bool ChatVideoDecoder::decodeAudioStep(AudioChunk &audioChunk, bool flush) {
 		pcm.resize(outSamples * BYTES_PER_SAMPLE);
 		audioChunk.pcm        = pcm;
 		audioChunk.ptsMs      = streamPtsToMs(m_audio.frame->best_effort_timestamp, m_audioStreamIndex);
-		audioChunk.durationMs = static_cast< qint64 >(outSamples) * 1000 / AUDIO_OUT_SAMPLE_RATE;
+		audioChunk.durationMs = static_cast< qint64 >(outSamples) * 1000 / m_audioSampleRate;
 		return true;
 	}
 	return false;
